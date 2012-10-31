@@ -1,8 +1,8 @@
 package Tasks;
 
 import java.io.Serializable;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Task implements Serializable{
@@ -13,6 +13,7 @@ public class Task implements Serializable{
 	//private int taskDeadline;
 	private String description;
 	private boolean requiresPhoto;
+	private ArrayList<Requirement> requirements;
 	//private int time;
 	//private Status taskStatus;
 	//private Visibility taskVisibility;
@@ -78,6 +79,26 @@ public class Task implements Serializable{
 	public void setRequiresPhoto(boolean requiresPhoto){
 		
 		this.requiresPhoto = requiresPhoto;
+	}
+
+	public ArrayList<Requirement> getRequirements() {
+		return requirements;
+	}
+
+	public void setRequirements(ArrayList<Requirement> requirements) {
+		this.requirements = requirements;
+	}
+	
+	public void deleteRequirement(int requirement){
+		
+		requirements.remove(requirement);
+		
+	}
+	
+	public void editRequirement(int requirement, String newText){
+		
+		requirements.get(requirement).setText(newText);
+		
 	}
 	
 	//Sets the string in specific order for log entry in application.
