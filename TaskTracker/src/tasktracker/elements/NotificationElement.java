@@ -2,7 +2,7 @@ package tasktracker.elements;
 
 import java.util.*;
 
-import tasktracker.NotificationType;
+import tasktracker.enums.NotificationType;
 
 
 /**
