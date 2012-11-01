@@ -1,4 +1,4 @@
-package cmput301f12t08.tasktracker;
+package tasktracker;
 
 import cmput301f12t08.tasktracker.R;
 import android.os.Bundle;

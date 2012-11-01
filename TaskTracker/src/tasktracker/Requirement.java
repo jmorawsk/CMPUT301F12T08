@@ -1,8 +1,13 @@
-package Tasks;
+package tasktracker;
 
 import java.io.Serializable;
 
-public class Requirement implements Serializable {
+/**
+ * 
+ * @author jasiewsk
+ *
+ */
+public abstract class Requirement implements Serializable {
 	
 	//Will add abstract content property to allow for the viewing
 	//of our requirements.

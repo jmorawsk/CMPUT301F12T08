@@ -1,4 +1,4 @@
-package cmput301f12t08.tasktracker;
+package tasktracker;
 
 public enum NotificationType {
 	FulfillmentReport, InformDelete, InformEdit, InformMembership;
