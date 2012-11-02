@@ -14,15 +14,15 @@ public class TaskElement implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	private String name;
-	private Date datecreated;
-	//private int taskDeadline;
 	private String description;
+	private Date datecreated;
 	private boolean requiresPhoto;
 	private ArrayList<Requirement> requirements;
 	//private int time;
 	//private Status taskStatus;
 	//private Visibility taskVisibility;
 	//private User taskCreator;
+	//private int taskDeadline;
 	
 	public TaskElement(String name, Date date, String description, boolean requiresPhoto) {  
         this.setName(name);
