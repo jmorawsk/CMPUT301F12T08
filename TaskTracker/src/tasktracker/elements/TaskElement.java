@@ -7,54 +7,58 @@ import tasktracker.*;
 
 /**
  * 
- * @author jasiewsk
+ * @author Katherine Jasniewski
+ * Edits: Jeanine Bonot
  *
  */
 public class TaskElement implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
+	
+	// Used to generate the task ID number.
+	private static int _taskCount = 0;
+	
 	private String name;
 	private String description;
-	private Date datecreated;
-	private boolean requiresPhoto;
-	private ArrayList<Requirement> requirements;
+	private int id;
+	private Date creationDate;
+	private List<Requirement> requirements;
+	
 	//private int time;
 	//private Status taskStatus;
 	//private Visibility taskVisibility;
 	//private User taskCreator;
 	//private int taskDeadline;
 	
-	public TaskElement(String name, Date date, String description, boolean requiresPhoto) {  
-        this.setName(name);
-		this.setDate(date);  
-        this.setDescription(description);
-        this.setRequiresPhoto(requiresPhoto);
+	public TaskElement(User creator, String name, Date date, String description, List<Requirement> requirements) {  
+        this.name = name;
+        this.creationDate = date;
+        this.description = description;
+        this.requirements = requirements;
+        
+        this.id = ++_taskCount;
     }
 	
 	public String getName(){
-		
 		return name;
 	}
 	
 	public void setName(String name){
-		
 		this.name = name;
 	}
 
 	public Date getDate() {
-		return datecreated;
-	}
-
-	public void setDate(Date date) {
-		this.datecreated = date;
+		return creationDate;
 	}
 	
-	//formats the date to display properly
+	public int getID(){
+		return this.id;
+	}
+
 	public String stringDate(){
-		
-		
+
 		SimpleDateFormat dateformat = new SimpleDateFormat ("yyyy-MM-dd");
-		String stringdate = dateformat.format(datecreated).toString();
+		String stringdate = dateformat.format(creationDate).toString();
 		System.out.println( "Test String Date: '" + stringdate + "'");
 		return stringdate;
 	}
@@ -65,28 +69,9 @@ public class TaskElement implements Serializable{
 
 	public void setDescription(String description) {
 		this.description = description;
-	} 
-
-	//public int getTime() {
-	//	return time;
-	//}
-
-	//public void setTime(int time) {
-	//	this.time = time;
-	//}
-	
-	public boolean getRequiresPhoto(){
-		
-		return requiresPhoto;
-		
-	}
-	
-	public void setRequiresPhoto(boolean requiresPhoto){
-		
-		this.requiresPhoto = requiresPhoto;
 	}
 
-	public ArrayList<Requirement> getRequirements() {
+	public List<Requirement> getRequirements() {
 		return requirements;
 	}
 
