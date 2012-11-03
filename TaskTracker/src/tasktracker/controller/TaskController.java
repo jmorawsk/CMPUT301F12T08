@@ -23,6 +23,7 @@ public final class TaskController implements LocalObjectController<TaskElement>{
 
 	private static final String FILENAME = "file.sav";
 	private static final String DIRECTORIES = "/TaskTracker/Tasks";
+	
 	/**
 	 * Delete the TaskTracker's file, if it exists.
 	 * 
@@ -34,48 +35,7 @@ public final class TaskController implements LocalObjectController<TaskElement>{
 		File file = new File(sdDir.getAbsolutePath() + DIRECTORIES, FILENAME);
 		return file.delete();
 	}
-
-	/**
-	 * Gets the file for reading/writing.
-	 * @return The file for reading/writing.
-	 */
-	private static File getFile() {
-		File sdDir = Environment.getExternalStorageDirectory();
-		File dir = new File(sdDir.getAbsolutePath() + DIRECTORIES);
-		dir.mkdirs();
-		return new File(dir, FILENAME);
-	}
-
-	/**
-	 * Serialize the task element into the file system.
-	 * @param task The task to be saved.
-	 */
-	public void writeFile(TaskElement element) {
-		try {
-			ObjectOutputStream oos = getOOS(TaskController.getFile());
-			oos.writeObject(element);
-			oos.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Get the proper ObjectOutputStream for writing.
-	 * @param storageFile The file that will be used for serialization.
-	 * @return The proper ObjectOutputStream depending on whether a file is being appended to an existing file.
-	 * @throws IOException
-	 */
-	private static ObjectOutputStream getOOS(File storageFile)
-			throws IOException {
-
-		if (storageFile.exists())
-			return new AppendableObjectOutputStream(new FileOutputStream(
-					storageFile, true));
-		else
-			return new ObjectOutputStream(new FileOutputStream(storageFile));
-	}
-
+	
 	/**
 	 * Read the log entries from the file.
 	 * @return A list of TaskElement items from the file.
@@ -101,7 +61,49 @@ public final class TaskController implements LocalObjectController<TaskElement>{
 
 		return entries;
 	}
+	
+	/**
+	 * Serialize the task element into the file system.
+	 * @param task The task to be saved.
+	 */
+	public void writeFile(TaskElement element) {
+		try {
+			ObjectOutputStream oos = getOOS(TaskController.getFile());
+			oos.writeObject(element);
+			oos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
+
+	/**
+	 * Gets the file for reading/writing.
+	 * @return The file for reading/writing.
+	 */
+	private static File getFile() {
+		File sdDir = Environment.getExternalStorageDirectory();
+		File dir = new File(sdDir.getAbsolutePath() + DIRECTORIES);
+		dir.mkdirs();
+		return new File(dir, FILENAME);
+	}
+	
+	/**
+	 * Get the proper ObjectOutputStream for writing.
+	 * @param storageFile The file that will be used for serialization.
+	 * @return The proper ObjectOutputStream depending on whether a file is being appended to an existing file.
+	 * @throws IOException
+	 */
+	private static ObjectOutputStream getOOS(File storageFile)
+			throws IOException {
+
+		if (storageFile.exists())
+			return new AppendableObjectOutputStream(new FileOutputStream(
+					storageFile, true));
+		else
+			return new ObjectOutputStream(new FileOutputStream(storageFile));
+	}
+	
 	/**
 	 * An ObjectOutputStream class that does not create a new header.  Used to append objects to an existing file.
 	 * Source: StackOverflow on StreamCorruptedException and appending to files.
