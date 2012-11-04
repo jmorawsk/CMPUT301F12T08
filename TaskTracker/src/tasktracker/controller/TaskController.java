@@ -10,7 +10,7 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.ArrayList;
 
-import tasktracker.elements.TaskElement;
+import tasktracker.model.elements.TaskElement;
 
 import android.os.Environment;
 
@@ -21,6 +21,7 @@ import android.os.Environment;
  */
 public final class TaskController implements LocalObjectController<TaskElement>{
 
+	// TODO: Need to set up so that tests are saved differently from final product.
 	private static final String FILENAME = "file.sav";
 	private static final String DIRECTORIES = "/TaskTracker/Tasks";
 	

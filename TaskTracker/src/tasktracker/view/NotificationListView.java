@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.View;
 
 import java.util.*;
-import tasktracker.elements.*;
+import tasktracker.model.elements.NotificationElement;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 
