@@ -3,7 +3,7 @@ package tasktracker.view;
 import android.os.Bundle;
 import android.app.Activity;
 import java.text.*;
-import java.util.Calendar;
+import java.util.*;
 
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,7 +20,10 @@ public class CreateTaskView extends Activity {
 	private EditText name;
 	private EditText deadline;
 	private EditText description;
-	private EditText otherMembers;	
+	private EditText otherMembers;
+	
+	// Create dummy user for production.
+	private static final User CREATOR = new User("DebugUser");
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -36,10 +39,7 @@ public class CreateTaskView extends Activity {
 	}
 
 	protected void onResume(){
-		super.onResume();
-
-		
-		
+		super.onResume();		
 	}
 	
 	/**
@@ -59,12 +59,27 @@ public class CreateTaskView extends Activity {
 	class handleButton_Save implements OnClickListener{
 
 		@Override
-		public void onClick(View arg0) {
-		
-			TaskElement = new TaskElement();
+		public void onClick(View view) {
 			
-			DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-			Calendar cal = Calendar.getInstance();
+			if (CreateTaskView.this.hasEmptyFields())
+			{
+				// TODO: Unable to save
+				return;				
+			}
+			
+			TaskElement task = createTask();
+			// TODO: Save task
+		}
+		
+		private TaskElement createTask(){
+			String name = CreateTaskView.this.name.getText().toString();
+			String descr = CreateTaskView.this.name.getText().toString();
+			Date dateCreated = Calendar.getInstance().getTime();
+			List<Requirement> reqs = new ArrayList<Requirement>();
+			// TODO: add requirements
+			
+			//TODO: Find out how to quickly access user information
+			return new TaskElement(CREATOR, name, dateCreated, descr, reqs);
 		}
 		
 	}
