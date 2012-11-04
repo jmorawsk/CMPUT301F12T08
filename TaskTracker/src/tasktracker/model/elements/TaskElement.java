@@ -3,6 +3,7 @@ package tasktracker.model.elements;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
 import tasktracker.*;
 
 /**
@@ -23,6 +24,7 @@ public class TaskElement implements Serializable{
 	private int id;
 	private Date creationDate;
 	private List<Requirement> requirements;
+	private User creator;
 	
 	//private int time;
 	//private Status taskStatus;
@@ -30,13 +32,22 @@ public class TaskElement implements Serializable{
 	//private User taskCreator;
 	//private int taskDeadline;
 	
-	public TaskElement(User creator, String name, Date date, String description, List<Requirement> requirements) {  
-        this.name = name;
-        this.creationDate = date;
-        this.description = description;
-        this.requirements = requirements;
+	public TaskElement(User creator, Date date){
+		this(creator, "Untitled", date, "", new ArrayList<Requirement>());
+	}
+	
+	public TaskElement(User creator, String name, Date date, String description, List<Requirement> arrayList) {  
         
+		// Required Elements
+		this.creator = creator;
+        this.creationDate = date;
         this.id = ++_taskCount;
+        
+        // Optional Elements
+		this.name = name;
+        this.description = description;
+        this.requirements = arrayList;
+        
     }
 	
 	public String getName(){

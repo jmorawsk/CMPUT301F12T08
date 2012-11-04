@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
 import tasktracker.elements.*;
+import tasktracker.model.elements.Requirement;
+import tasktracker.model.elements.TaskElement;
+import tasktracker.model.elements.User;
 /**
  * An activity that allows a user to create a task.
  * 
@@ -36,6 +39,7 @@ public class CreateTaskView extends Activity {
 		otherMembers = (EditText) findViewById(R.id.otherMembers);
 
 		Button saveButton = (Button) findViewById(R.id.saveButton);
+		saveButton.setOnClickListener(new handleButton_Save());
 	}
 
 	protected void onResume(){
@@ -71,15 +75,16 @@ public class CreateTaskView extends Activity {
 			// TODO: Save task
 		}
 		
-		private TaskElement createTask(){
-			String name = CreateTaskView.this.name.getText().toString();
-			String descr = CreateTaskView.this.name.getText().toString();
-			Date dateCreated = Calendar.getInstance().getTime();
-			List<Requirement> reqs = new ArrayList<Requirement>();
-			// TODO: add requirements
+		private TaskElement createTask(){			
 			
 			//TODO: Find out how to quickly access user information
-			return new TaskElement(CREATOR, name, dateCreated, descr, reqs);
+			TaskElement task = new TaskElement(CREATOR, Calendar.getInstance().getTime());
+			
+			task.setDescription(CreateTaskView.this.name.getText().toString());
+			task.setName(CreateTaskView.this.name.getText().toString());
+			// TODO: add requirements
+			
+			return task;
 		}
 		
 	}
