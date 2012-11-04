@@ -18,21 +18,64 @@ package tasktracker.view;
  * specific language governing permissions and limitations under the License.
  */
 
+import java.util.*;
+
+import android.R;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.*;
+import android.widget.AdapterView.OnItemClickListener;
+import tasktracker.model.elements.*;
 
 public class TaskListView extends Activity {
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-    }
+	private ListView taskListView;
+	private List<TaskElement> tasks;
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main, menu);
-        return true;
-    }
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+
+		taskListView = (ListView) findViewById(R.id.taskList);
+
+		taskListView.setOnItemClickListener(new handleList_Click());
+
+	}
+
+	/**
+	 * A handler for clicking on a task item. Shows a menu of possible controls.
+	 * 
+	 * @author Jeanine Bonot
+	 * 
+	 */
+	class handleList_Click implements OnItemClickListener {
+
+		@Override
+		public void onItemClick(AdapterView<?> myAdapter, View myView,
+				int myItemInt, long mylng) {
+			// TODO Auto-generated method stub
+			showItemMenu(myView, myItemInt);
+		}
+
+		/**
+		 * Displays the menu for a given task.
+		 * 
+		 * @param view
+		 *            The selected task element.
+		 * @param index
+		 *            The index of the task in the ListView.
+		 */
+		private void showItemMenu(View view, final int index) {
+			PopupMenu menu = new PopupMenu(TaskListView.this, view);
+			menu.getMenuInflater().inflate(R.menu.popup, menu.getMenu());
+
+			// TODO: Create menu content, set OnMenuItemClickListener, update
+			// tasks upon deletion
+		}
+
+	}
 }
