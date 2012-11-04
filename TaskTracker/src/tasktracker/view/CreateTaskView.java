@@ -78,7 +78,7 @@ public class CreateTaskView extends Activity {
 		private TaskElement createTask(){			
 			
 			//TODO: Find out how to quickly access user information
-			TaskElement task = new TaskElement(CREATOR, Calendar.getInstance().getTime());
+			TaskElement task = new TaskElement(CREATOR);
 			
 			task.setDescription(CreateTaskView.this.name.getText().toString());
 			task.setName(CreateTaskView.this.name.getText().toString());
