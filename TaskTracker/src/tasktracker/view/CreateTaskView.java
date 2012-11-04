@@ -44,7 +44,7 @@ import java.util.*;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
-import tasktracker.elements.*;
+import tasktracker.model.elements.*;
 import tasktracker.model.elements.Requirement;
 import tasktracker.model.elements.TaskElement;
 import tasktracker.model.elements.User;
