@@ -1,4 +1,4 @@
-package tasktracker.elements;
+package tasktracker.model.elements;
 
 import java.io.Serializable;
 

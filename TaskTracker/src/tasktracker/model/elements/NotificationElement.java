@@ -1,7 +1,8 @@
-package tasktracker.elements;
+package tasktracker.model.elements;
 
 import java.util.*;
 import tasktracker.enums.*;
+import tasktracker.model.enums.NotificationType;
 
 /**
  * A notification

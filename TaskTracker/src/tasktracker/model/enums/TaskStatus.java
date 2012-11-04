@@ -1,4 +1,4 @@
-package tasktracker.enums;
+package tasktracker.model.enums;
 
 /**
  * An enum to indicate the status of a task.  Can be expanded in the future.
