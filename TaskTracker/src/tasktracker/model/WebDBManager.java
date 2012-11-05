@@ -49,13 +49,11 @@ public class WebDBManager extends DBManager
     }
     
     /**
-     * Updates a task on the database.
+     * Adds a task to the webserver.
      * Returns a string array.
-     * The array contains the properties of the updated task.
+     * The array contains the properties of the added task.
      * Order of returned properties should conform to task class.
-     * @param newSummary        the new summary for the task
-     * @param newDescription    the new description of the task
-     * @param id                the id of the task to be updated    
+     * @param task        the new task to be added 
      * @return  an array of task property values.
      */
     public String[] insertTask(Task task){
