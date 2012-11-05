@@ -45,7 +45,9 @@ public class Task implements Serializable {
 	// Properties that will not change
 	private final Date creationDate;
 	private final User creator;
-	private final int id;
+	
+	//db needs to set id
+	private String id;
 
 	// Properties that may change
 	private String name;
@@ -89,7 +91,9 @@ public class Task implements Serializable {
 		// Required Elements
 		this.creator = creator;
 		this.creationDate = date;
-		this.id = ++_taskCount;
+		
+		//id should be null until set by db
+		this.id = null;
 
 		// Changeable elements
 		this.name = name;
@@ -115,8 +119,13 @@ public class Task implements Serializable {
 		return this.creationDate;
 	}
 
-	/** Gets the task ID number */
-	public int getID() {
+	
+	/** Gets the task ID  */
+        public void setID(String newID) {
+                this.id = newID;
+        }
+	/** Gets the task ID  */
+	public String getID() {
 		return this.id;
 	}
 
