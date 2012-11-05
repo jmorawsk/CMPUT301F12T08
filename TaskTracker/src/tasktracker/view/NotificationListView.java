@@ -45,14 +45,9 @@ public class NotificationListView extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_notification_list_view);
 
+		// Assign ListView and its item click listener
 		this.notificationsList = (ListView) findViewById(R.id.notificationsList);
 		this.notificationsList.setOnItemClickListener(new handleList_Click());
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_notification_list_view, menu);
-		return true;
 	}
 
 	/**

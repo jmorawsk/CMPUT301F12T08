@@ -22,13 +22,14 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * An interface that manages the local file storage of objects.
+ * An interface that manages the local file storage of objects. Will be used for
+ * tasks and requirements.
  * 
  * @author jbonot
  * 
  */
 public interface LocalObjectController<T extends Serializable> {
-	
+
 	/**
 	 * Delete the TaskTracker's file, if it exists.
 	 * 
@@ -37,8 +38,10 @@ public interface LocalObjectController<T extends Serializable> {
 	 */
 	public boolean deleteFile();
 
+	/** Writes an object to the file */
 	public void writeFile(T object);
 
+	/** Reads an object from the file */
 	public List<T> readFile();
 
 }

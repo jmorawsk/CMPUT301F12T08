@@ -30,6 +30,12 @@ import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import tasktracker.model.elements.*;
 
+/**
+ * An activity that displays a list of tasks that a user can view and fulfill.
+ * 
+ * @author Jeanine Bonot
+ * 
+ */
 public class TaskListView extends Activity {
 
 	private ListView taskListView;
@@ -40,8 +46,8 @@ public class TaskListView extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		// Assign ListView and its on item click listener.
 		taskListView = (ListView) findViewById(R.id.taskList);
-
 		taskListView.setOnItemClickListener(new handleList_Click());
 
 	}

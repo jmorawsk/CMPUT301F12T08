@@ -25,13 +25,13 @@ import java.util.*;
  * A class representing a task requirement. Currently, each requirement has one
  * item, but will be expanded to allow for multiple items (photos).
  * 
- * @author Katherine Jasniewskie
+ * @author Katherine Jasniewski
  * @author Jeanine Bonot
  * 
  */
 public abstract class Requirement implements Serializable {
 
-	// Will add abstract content property to allow for the viewing
+	// TODO: Add abstract content property to allow for the viewing
 	// of our requirements.
 
 	private static final long serialVersionUID = 1L;

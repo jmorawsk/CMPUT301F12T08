@@ -48,6 +48,7 @@ import tasktracker.model.elements.*;
 import tasktracker.model.elements.Requirement;
 import tasktracker.model.elements.Task;
 import tasktracker.model.elements.User;
+
 /**
  * An activity that allows a user to create a task.
  * 
@@ -55,12 +56,12 @@ import tasktracker.model.elements.User;
  * 
  */
 public class CreateTaskView extends Activity {
-	
+
 	private EditText name;
 	private EditText deadline;
 	private EditText description;
 	private EditText otherMembers;
-	
+
 	// Create dummy user for production.
 	private static final User CREATOR = new User("DebugUser");
 
@@ -69,27 +70,36 @@ public class CreateTaskView extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_task_view);
 
+		// Assign EditText fields
 		name = (EditText) findViewById(R.id.name);
 		deadline = (EditText) findViewById(R.id.deadline);
 		description = (EditText) findViewById(R.id.description);
 		otherMembers = (EditText) findViewById(R.id.otherMembers);
 
+		// Assign listener to Save button
 		Button saveButton = (Button) findViewById(R.id.saveButton);
 		saveButton.setOnClickListener(new handleButton_Save());
 	}
 
-	private List<User> parseOtherMembers(){
+	/**
+	 * Parses through the string of task members and puts the members into a
+	 * list.
+	 * 
+	 * @return The list of members.
+	 */
+	private List<User> parseOtherMembers() {
 		List<User> members = new ArrayList<User>();
-		
+
 		// TODO: Parse through string for user information, run checks
 		return members;
 	}
-	
+
 	/**
 	 * Checks if any of the required fields has been left empty.
+	 * 
 	 * @return True if a required field has been left empty, false otherwise.
 	 */
-	private boolean hasEmptyFields(){
+	private boolean hasEmptyFields() {
 		if (name.getText().toString() == "")
 			return true;
 		if (deadline.getText().toString() == "")
@@ -98,48 +108,48 @@ public class CreateTaskView extends Activity {
 			return true;
 		return false;
 	}
-	
+
 	/**
 	 * A handler for the save button.
+	 * 
 	 * @author Jeanine Bonot
-	 *
+	 * 
 	 */
-	class handleButton_Save implements OnClickListener{
+	class handleButton_Save implements OnClickListener {
 
 		/**
 		 * Creates and saves a new task.
 		 */
 		@Override
 		public void onClick(View view) {
-			
-			if (CreateTaskView.this.hasEmptyFields())
-			{
+
+			if (CreateTaskView.this.hasEmptyFields()) {
 				// TODO: Unable to save
-				return;				
+				return;
 			}
-			
+
 			Task task = createTask();
 			// TODO: Save task
 		}
-		
+
 		/**
 		 * Create a task based on the creator's input.
+		 * 
 		 * @return The task created with the creator's input.
 		 */
-		private Task createTask(){			
-			
-			//TODO: Find out how to quickly access user information
+		private Task createTask() {
+
+			// TODO: Find out how to quickly access user information
 			Task task = new Task(CREATOR);
-			
+
 			task.setDescription(CreateTaskView.this.name.getText().toString());
 			task.setName(CreateTaskView.this.name.getText().toString());
 			// TODO: add requirements
 			// TODO: add other members
-			
+
 			return task;
 		}
-		
+
 	}
-	
-	
+
 }
