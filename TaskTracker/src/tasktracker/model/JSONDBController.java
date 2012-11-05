@@ -22,6 +22,7 @@ public class JSONDBController extends DBManager
     private static Gson gson = new Gson();
     //index of 'content' for objects in database
     static int contentIndex = 1;
+    static int idIndex = 2;
     //location of our webserver
     static String webAddress = "http://crowdsourcer.softwareprocess.es/F12/CMPUT301F12T08/";
 
@@ -139,18 +140,18 @@ public class JSONDBController extends DBManager
 
     /**
      * Gets a task from the database.
-     * Returns a string array.
-     * The array contains the properties of the task.
-     * Order of returned properties should conform to task class.
+     * Returns the task
      * @param id       the id of the task to be updated    
-     * @return  an array of task property values.
+     * @return  the task, with updated id.
      */
     public Task getTask(String id){
         Task myTask = null;
-        String myContent = getTaskAsArray(id)[contentIndex];
+        String[] taskArray =  getTaskAsArray(id);
+        String myContent = taskArray[contentIndex];
+        String taskID = taskArray[idIndex];
 
         myTask = gson.fromJson(myContent, Task.class);
-
+        myTask.setID(taskID);
         return myTask;
     }
     /**
@@ -160,6 +161,10 @@ public class JSONDBController extends DBManager
      * Order of returned properties should conform to task class.
      * @param id       the id of the task to be updated    
      * @return  an array of task property values.
+     *          0       summary
+     *          1       content
+     *          2       id
+     *          3       description
      */
     public String[] getTaskAsArray(String id){
         String getCommand = "action=" + "get"

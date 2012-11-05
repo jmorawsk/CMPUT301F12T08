@@ -44,10 +44,8 @@ import java.util.*;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
+import tasktracker.model.WebDBManager;
 import tasktracker.model.elements.*;
-import tasktracker.model.elements.Requirement;
-import tasktracker.model.elements.Task;
-import tasktracker.model.elements.User;
 
 /**
  * An activity that allows a user to create a task.
@@ -61,6 +59,7 @@ public class CreateTaskView extends Activity {
 	private EditText deadline;
 	private EditText description;
 	private EditText otherMembers;
+	private WebDBManager webManager;
 
 	// Create dummy user for production.
 	private static final User CREATOR = new User("DebugUser");
@@ -70,6 +69,9 @@ public class CreateTaskView extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_task_view);
 
+		//
+		webManager = new WebDBManager();
+		
 		// Assign EditText fields
 		name = (EditText) findViewById(R.id.name);
 		deadline = (EditText) findViewById(R.id.deadline);
@@ -130,6 +132,7 @@ public class CreateTaskView extends Activity {
 
 			Task task = createTask();
 			// TODO: Save task
+			webManager.insertTask(task);
 		}
 
 		/**
