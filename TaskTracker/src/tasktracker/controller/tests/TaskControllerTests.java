@@ -42,4 +42,25 @@ public class TaskControllerTests {
 		controller = new TaskController();
 	}
 	
+	/** Test the delete method */
+	@Test
+	public void testDelete(){
+		// TODO: File exists
+		// TODO: File does not exist
+	}
+	
+	/** Tests the readFile method */
+	@Test
+	public void testReadFile(){
+		// TODO: File exists
+		// TODO: File does not exist
+	}
+	
+	/** Tests the writeFile method */
+	@Test
+	public void testWriteFile(){
+		// TODO: File exists
+		// TODO: File does not exist
+	}
+	
 }
