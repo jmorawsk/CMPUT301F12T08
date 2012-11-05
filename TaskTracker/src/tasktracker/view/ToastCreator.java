@@ -36,12 +36,17 @@ import android.widget.Toast;
 * @author Kurtis Morin: kmorin1
 * 
 * April 06, 2012
+* @author Jeanine Bonot
 * 
 */
-
+// NOV2012 - Jeanine Bonot - Modified to use TaskTracker layouts.  Added documentation.
 public class ToastCreator {
 	private Context context;
 	
+	/**
+	 * Creates a new instance of the ToastCreator class.
+	 * @param ctx The context of the toast.
+	 */
 	public ToastCreator(Context ctx) {
         this.context = ctx;
     }
@@ -52,22 +57,24 @@ public class ToastCreator {
 	 * displayed we create a string and use this method to give
 	 * the user feedback.
 	 * 
-	 * @param string
+	 * @param string The message string.
 	 */
 	public void toaster(String string) {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
 		
-		View layout = (ViewGroup) inflater.inflate(R.layout.toast_layout, null);
-
-		ImageView image = (ImageView) layout.findViewById(R.id.toast_image);
-		image.setImageResource(R.drawable.info_notice);
-		TextView text = (TextView) layout.findViewById(R.id.toast_text);
-		text.setText(string);
+		// TODO: Create layout
+		// View layout = (ViewGroup) inflater.inflate(R.layout.toast_layout,
+		// null);
+		//
+		// ImageView image = (ImageView) layout.findViewById(R.id.toast_image);
+		// image.setImageResource(R.drawable.info_notice);
+		// TextView text = (TextView) layout.findViewById(R.id.toast_text);
+		// text.setText(string);
 
 		Toast toast = new Toast(context);
 		toast.setGravity(Gravity.CENTER_VERTICAL, Gravity.CENTER_HORIZONTAL, 0);
 		toast.setDuration(Toast.LENGTH_SHORT);
-		toast.setView(layout);
+		// toast.setView(layout);
 		toast.show();	
 	}
 }
