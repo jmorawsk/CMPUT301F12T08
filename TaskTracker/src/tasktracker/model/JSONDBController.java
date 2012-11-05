@@ -114,6 +114,30 @@ public class JSONDBController extends DBManager
     }
 
     /**
+     * Updates a task on the database.
+     * Returns the updated task
+     * The array contains the properties of the updated task.
+     * Order of returned properties should conform to task class.
+     * @param task        the updated task  
+     * @return  the task
+     */
+    public Task updateTask(Task task){
+        String myContent = null;
+        Task myTask = null;
+        
+        String updateCommand = "action=" + "update"
+                + "&summary=" + task.getName().replace(' ', '+')
+                + "&content=" + myContent
+                + "&description=" + task.getDescription().replace(' ', '+')
+                + "&id=" + task.getID();
+        myContent = JSONDBParser.parseJSONObject(executeAction(updateCommand))[contentIndex];
+        
+        myTask = gson.fromJson(myContent, Task.class);
+
+        return myTask;
+    }
+
+    /**
      * Gets a task from the database.
      * Returns a string array.
      * The array contains the properties of the task.
@@ -126,7 +150,7 @@ public class JSONDBController extends DBManager
         String myContent = getTaskAsArray(id)[contentIndex];
 
         myTask = gson.fromJson(myContent, Task.class);
-        
+
         return myTask;
     }
     /**
@@ -142,7 +166,7 @@ public class JSONDBController extends DBManager
                 + "&id=" + id;
         return JSONDBParser.parseJSONObject(executeAction(getCommand));
     }
-    
+
     /**
      * Removes a task from the webserver.
      * Returns a string array.

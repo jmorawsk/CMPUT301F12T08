@@ -63,6 +63,16 @@ public abstract class DBManager
     public abstract String[] updateTask(String newSummary, String newDescription, String id);
 
     /**
+     * Updates a task on the database.
+     * Returns the updated task
+     * The array contains the properties of the updated task.
+     * Order of returned properties should conform to task class.
+     * @param task        the updated task  
+     * @return  the task
+     */
+    public abstract Task updateTask(Task task);
+    
+    /**
      * Gets a task from the database.
      * Returns the task.
      * @param id       the id of the task to be updated    

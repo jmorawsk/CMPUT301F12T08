@@ -77,6 +77,18 @@ public class LocalDBManager extends DBManager
     }
 
     /**
+     * Updates a task on the database.
+     * Returns the updated task
+     * The array contains the properties of the updated task.
+     * Order of returned properties should conform to task class.
+     * @param task        the updated task  
+     * @return  the task
+     */
+    public Task updateTask(Task task){
+        return controller.updateTask(task);
+    }
+    
+    /**
      * Gets a task from the webserver.
      * Returns a string array.
      * The array contains the properties of the task.

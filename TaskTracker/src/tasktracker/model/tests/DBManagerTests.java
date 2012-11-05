@@ -18,12 +18,15 @@ package tasktracker.model.tests;
  * specific language governing permissions and limitations under the License.
  */
 
+import java.util.Date;
+
 import org.junit.*;
 
 import tasktracker.model.*;
+import tasktracker.model.elements.Task;
 
 /**
- * 
+ * Tests for the webdbmanager
  * @author Jason
  *
  */
@@ -35,9 +38,22 @@ public class DBManagerTests {
 
         myDBManager = new WebDBManager();
     }
-    /** Tests the equals method */
+    /** Tests nuke all method */
     @Test
-    public void testEquals(){
-        myDBManager.
+    public void testNukeAll(){
+        myDBManager.nukeAll();
+        String[][] result = myDBManager.listTasksAsArrays();
+        Assert.assertEquals(result,null);
+    }
+    @Test
+    public void testAddAndGetTask(){
+        myDBManager.nukeAll();
+        String[][] result = myDBManager.listTasksAsArrays();
+
+
+//        Date theDate = new Date();
+//        Task task1 = new Task("Task 1", theDate, "This is a task that was created", false);
+        Assert.assertEquals(result,null);
+
     }
 }
