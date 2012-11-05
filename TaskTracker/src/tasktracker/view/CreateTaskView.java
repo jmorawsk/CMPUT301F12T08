@@ -69,7 +69,7 @@ public class CreateTaskView extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_task_view);
 
-		//
+		//Initialize our webManager
 		webManager = new WebDBManager();
 		
 		// Assign EditText fields
@@ -132,6 +132,7 @@ public class CreateTaskView extends Activity {
 
 			Task task = createTask();
 			// TODO: Save task
+			//call this
 			webManager.insertTask(task);
 		}
 
