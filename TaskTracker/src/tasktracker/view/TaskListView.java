@@ -20,7 +20,7 @@ package tasktracker.view;
 
 import java.util.*;
 
-import android.R;
+//import android.R;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
@@ -77,7 +77,7 @@ public class TaskListView extends Activity {
 		 */
 		private void showItemMenu(View view, final int index) {
 			PopupMenu menu = new PopupMenu(TaskListView.this, view);
-			menu.getMenuInflater().inflate(R.menu.popup, menu.getMenu());
+			//menu.getMenuInflater().inflate(R.menu.popup, menu.getMenu());
 
 			// TODO: Create menu content, set OnMenuItemClickListener, update
 			// tasks upon deletion
