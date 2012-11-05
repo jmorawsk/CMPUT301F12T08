@@ -33,7 +33,7 @@ import tasktracker.model.elements.*;
 public class TaskListView extends Activity {
 
 	private ListView taskListView;
-	private List<TaskElement> tasks;
+	private List<Task> tasks;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

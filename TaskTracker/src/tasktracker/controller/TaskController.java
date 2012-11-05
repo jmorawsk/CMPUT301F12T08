@@ -28,7 +28,7 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.ArrayList;
 
-import tasktracker.model.elements.TaskElement;
+import tasktracker.model.elements.Task;
 
 import android.os.Environment;
 
@@ -37,7 +37,7 @@ import android.os.Environment;
  * @author jbonot
  *
  */
-public final class TaskController implements LocalObjectController<TaskElement>{
+public final class TaskController implements LocalObjectController<Task>{
 
 	// TODO: Need to set up so that tests are saved differently from final product.
 	private static final String FILENAME = "file.sav";
@@ -59,15 +59,15 @@ public final class TaskController implements LocalObjectController<TaskElement>{
 	 * Read the log entries from the file.
 	 * @return A list of TaskElement items from the file.
 	 */
-	public List<TaskElement> readFile() {
-		ArrayList<TaskElement> entries = new ArrayList<TaskElement>();
+	public List<Task> readFile() {
+		ArrayList<Task> entries = new ArrayList<Task>();
 
 		try {
 			FileInputStream fis = new FileInputStream(TaskController.getFile());
 			ObjectInputStream ois = new ObjectInputStream(fis);
 
-			TaskElement entry;
-			while ((entry = (TaskElement) ois.readObject()) != null)
+			Task entry;
+			while ((entry = (Task) ois.readObject()) != null)
 				entries.add(entry);
 
 			ois.close();
@@ -85,7 +85,7 @@ public final class TaskController implements LocalObjectController<TaskElement>{
 	 * Serialize the task element into the file system.
 	 * @param task The task to be saved.
 	 */
-	public void writeFile(TaskElement element) {
+	public void writeFile(Task element) {
 		try {
 			ObjectOutputStream oos = getOOS(TaskController.getFile());
 			oos.writeObject(element);

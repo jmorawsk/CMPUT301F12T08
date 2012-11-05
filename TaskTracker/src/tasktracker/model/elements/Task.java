@@ -21,17 +21,21 @@ package tasktracker.model.elements;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import tasktracker.model.enums.*;
-
 
 /**
- * A class that represents a task.
+ * A class that represents a task. Every task has a creator, and is to be
+ * fulfilled by a task member.
  * 
  * @author Katherine Jasniewski
  * @author Jeanine Bonot
  * 
  */
-public class TaskElement implements Serializable {
+public class Task implements Serializable {
+
+	/** Indicates the task's status */
+	public enum Status {
+		Unfulfilled, Fulfilled
+	};
 
 	private static final long serialVersionUID = 1L;
 
@@ -48,7 +52,7 @@ public class TaskElement implements Serializable {
 	private String description;
 	private List<Requirement> requirements;
 	private List<User> otherMembers;
-	private TaskStatus status;
+	private Status status;
 
 	// private Status taskStatus;
 	// private Visibility taskVisibility;
@@ -60,7 +64,7 @@ public class TaskElement implements Serializable {
 	 * @param creator
 	 *            The task creator.
 	 */
-	public TaskElement(User creator) {
+	public Task(User creator) {
 		this(creator, "Untitled", Calendar.getInstance().getTime(), "",
 				new ArrayList<Requirement>());
 	}
@@ -68,14 +72,19 @@ public class TaskElement implements Serializable {
 	/**
 	 * Creates a new instance of the TaskElement class.
 	 * 
-	 * @param creator The task creator.
-	 * @param name The task name.
-	 * @param date The task creation date.
-	 * @param description A description of the task.
-	 * @param requirements The list of task requirements.
+	 * @param creator
+	 *            The task creator.
+	 * @param name
+	 *            The task name.
+	 * @param date
+	 *            The task creation date.
+	 * @param description
+	 *            A description of the task.
+	 * @param requirements
+	 *            The list of task requirements.
 	 */
-	public TaskElement(User creator, String name, Date date,
-			String description, List<Requirement> requirements) {
+	public Task(User creator, String name, Date date, String description,
+			List<Requirement> requirements) {
 
 		// Required Elements
 		this.creator = creator;
@@ -86,7 +95,7 @@ public class TaskElement implements Serializable {
 		this.name = name;
 		this.description = description;
 		this.requirements = requirements;
-		this.status = TaskStatus.Unfulfilled;
+		this.status = Status.Unfulfilled;
 		this.otherMembers = null;
 
 	}
@@ -145,29 +154,30 @@ public class TaskElement implements Serializable {
 		requirements.remove(requirement);
 		// TODO: Should be finding the specific requirement, not use indices.
 	}
-	
+
 	/** Gets the members of the task, including the task creator */
-	public List<User> getMembers(){
+	public List<User> getMembers() {
 		return this.otherMembers;
 	}
-	
+
 	/** Sets the members of the task, including the task creator */
-	public void setMembers(List<User> otherMembers){
+	public void setMembers(List<User> otherMembers) {
 		this.otherMembers = otherMembers;
 		this.otherMembers.add(this.creator);
 	}
-	
+
 	/**
-	 *  Fulfill a task by completing the task's requirements.
+	 * Fulfill a task by completing the task's requirements.
+	 * 
 	 * @return True if the task was successfully fulfilled, false otherwise.
 	 */
-	public boolean fulfill(){
-		for (Requirement req : this.requirements){
+	public boolean fulfill() {
+		for (Requirement req : this.requirements) {
 			if (!req.fulfill())
 				return false;
 		}
-		
-		this.status = TaskStatus.Fulfilled;
+
+		this.status = Status.Fulfilled;
 		return true;
 	}
 

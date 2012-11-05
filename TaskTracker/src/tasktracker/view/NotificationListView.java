@@ -25,7 +25,7 @@ import android.view.Menu;
 import android.view.View;
 
 import java.util.*;
-import tasktracker.model.elements.NotificationElement;
+import tasktracker.model.elements.Notification;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -38,7 +38,7 @@ import android.widget.AdapterView.OnItemClickListener;
 public class NotificationListView extends Activity {
 
 	private ListView notificationsList;
-	private List<NotificationElement> notifications;
+	private List<Notification> notifications;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

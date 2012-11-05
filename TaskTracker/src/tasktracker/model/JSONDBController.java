@@ -15,7 +15,7 @@ import java.net.URLEncoder;
 
 
 
-import tasktracker.model.elements.TaskElement;
+import tasktracker.model.elements.Task;
 
 
 public class JSONDBController
@@ -29,7 +29,7 @@ public class JSONDBController
         String listCommand = "action=" + "list";
         return JSONDBParser.parseJSONArray(executeAction(listCommand));
     }
-    public static TaskElement[] listTasks(){
+    public static Task[] listTasks(){
         String listCommand = "action=" + "list";
         //return JSONDBParser.parseJSONArray(executeAction(listCommand));
         return null;
@@ -43,7 +43,7 @@ public class JSONDBController
     }
     
     //TODO
-    public static String[] insertTask(TaskElement task){
+    public static String[] insertTask(Task task){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos;
         try
@@ -77,8 +77,8 @@ public class JSONDBController
         return JSONDBParser.parseJSONObject(executeAction(updateCommand));
     }
 
-    public static TaskElement getTask(String id){
-        TaskElement myTask = null;
+    public static Task getTask(String id){
+        Task myTask = null;
         String myContent = getTaskAsArray(id)[contentIndex];
         ByteArrayInputStream bais = new ByteArrayInputStream(myContent.getBytes());
         System.out.println("Content:" + bais.toString());
@@ -86,7 +86,7 @@ public class JSONDBController
         try
         {
             ObjectInputStream ois = new ObjectInputStream(bais);
-            myTask = (TaskElement) ois.readObject();
+            myTask = (Task) ois.readObject();
         } catch (IOException e)
         {
             System.out.println("Error 1");

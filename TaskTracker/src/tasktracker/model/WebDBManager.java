@@ -1,7 +1,7 @@
 package tasktracker.model;
 
 
-import tasktracker.model.elements.TaskElement;
+import tasktracker.model.elements.Task;
 
 public class WebDBManager extends DBManager
 {
@@ -20,7 +20,7 @@ public class WebDBManager extends DBManager
     public String[][] listTasksAsArrays(){
         return JSONDBController.listTasksAsArrays();
     } 
-    public TaskElement[] listTasks(){
+    public Task[] listTasks(){
         return JSONDBController.listTasks();
     }
     
@@ -38,7 +38,7 @@ public class WebDBManager extends DBManager
         return JSONDBController.insertTask(summary,description);
     }
     
-    public String[] insertTask(TaskElement task){
+    public String[] insertTask(Task task){
         return JSONDBController.insertTask(task);
     }
 
@@ -68,7 +68,7 @@ public class WebDBManager extends DBManager
         return JSONDBController.getTaskAsArray(id);
     }
     
-    public TaskElement getTask(String id){
+    public Task getTask(String id){
         return JSONDBController.getTask(id);
     }
     /**

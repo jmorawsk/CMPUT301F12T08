@@ -1,6 +1,6 @@
 package tasktracker.model;
 
-import tasktracker.model.elements.TaskElement;
+import tasktracker.model.elements.Task;
 
 public abstract class DBManager
 {
@@ -18,7 +18,7 @@ public abstract class DBManager
      */
     public abstract String[][] listTasksAsArrays();
     
-    public abstract TaskElement[] listTasks();
+    public abstract Task[] listTasks();
 
     /**
      * Adds a task to the database.
@@ -31,7 +31,7 @@ public abstract class DBManager
      */
     public abstract String[] insertTask(String summary, String description);
     
-    public abstract String[] insertTask(TaskElement task);
+    public abstract String[] insertTask(Task task);
 
     /**
      * Updates a task on the database.
@@ -53,7 +53,7 @@ public abstract class DBManager
      * @param id       the id of the task to be updated    
      * @return  an array of task property values.
      */
-    public abstract TaskElement getTask(String id);
+    public abstract Task getTask(String id);
     
     /**
      * Removes a task from the database.

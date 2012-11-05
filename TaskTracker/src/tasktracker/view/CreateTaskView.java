@@ -46,7 +46,7 @@ import android.view.View.OnClickListener;
 import android.widget.*;
 import tasktracker.model.elements.*;
 import tasktracker.model.elements.Requirement;
-import tasktracker.model.elements.TaskElement;
+import tasktracker.model.elements.Task;
 import tasktracker.model.elements.User;
 /**
  * An activity that allows a user to create a task.
@@ -118,7 +118,7 @@ public class CreateTaskView extends Activity {
 				return;				
 			}
 			
-			TaskElement task = createTask();
+			Task task = createTask();
 			// TODO: Save task
 		}
 		
@@ -126,10 +126,10 @@ public class CreateTaskView extends Activity {
 		 * Create a task based on the creator's input.
 		 * @return The task created with the creator's input.
 		 */
-		private TaskElement createTask(){			
+		private Task createTask(){			
 			
 			//TODO: Find out how to quickly access user information
-			TaskElement task = new TaskElement(CREATOR);
+			Task task = new Task(CREATOR);
 			
 			task.setDescription(CreateTaskView.this.name.getText().toString());
 			task.setName(CreateTaskView.this.name.getText().toString());

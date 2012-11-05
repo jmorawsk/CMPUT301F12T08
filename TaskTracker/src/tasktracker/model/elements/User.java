@@ -18,8 +18,6 @@ package tasktracker.model.elements;
  * specific language governing permissions and limitations under the License.
  */
 
-import tasktracker.model.enums.NotificationType;
-
 /**
  * An application user. The user has a username (currently optional) and a
  * unique ID number. The user is able to fulfill tasks of which they are a
@@ -94,7 +92,7 @@ public class User {
 	 * @param task
 	 *            The task to fulfill.
 	 */
-	public void fulfillTask(TaskElement task) {
+	public void fulfillTask(Task task) {
 		if (!task.getMembers().contains(this)) {
 			// User is not a member, cannot fulfill this task.
 			// TODO: Notify user that they are unable to fulfill task.
@@ -103,8 +101,8 @@ public class User {
 
 		if (task.fulfill()) {
 			// Task has been fulfilled, notify the creator.
-			NotificationElement notification = new NotificationElement(
-					this.name, task, NotificationType.FulfillmentReport);
+			Notification notification = new Notification(
+					this.name, task, Notification.Type.FulfillmentReport);
 			// TODO: Send notification.
 		}
 	}

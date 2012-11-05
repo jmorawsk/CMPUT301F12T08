@@ -19,7 +19,6 @@ package tasktracker.model.elements;
  */
 
 import java.util.*;
-import tasktracker.model.enums.NotificationType;
 
 /**
  * NotificationElement class
@@ -32,12 +31,27 @@ import tasktracker.model.enums.NotificationType;
  * @author Jeanine Bonot
  * 
  */
-public class NotificationElement {
+public class Notification {
+
+	/** Indicates the type of notification */
+	public enum Type {
+		// Task has been fulfilled.
+		FulfillmentReport,
+
+		// Task has been deleted.
+		InformDelete,
+
+		// Task has been edited.
+		InformEdit,
+
+		// User has become a member of a task.
+		InformMembership
+	};
 
 	private long timeInMillis;
 	private boolean viewed;
 	private String message;
-	private TaskElement task;
+	private Task task;
 	private String sender;
 
 	/**
@@ -50,8 +64,7 @@ public class NotificationElement {
 	 * @param type
 	 *            The type of notification.
 	 */
-	public NotificationElement(String sender, TaskElement task,
-			NotificationType type) {
+	public Notification(String sender, Task task, Type type) {
 		this.sender = sender;
 		this.viewed = false;
 		this.timeInMillis = Calendar.getInstance().getTimeInMillis();
@@ -77,7 +90,7 @@ public class NotificationElement {
 	}
 
 	/** Gets the task associated with the notification */
-	public TaskElement getTaskElement() {
+	public Task getTaskElement() {
 		return this.task;
 	}
 
@@ -93,7 +106,7 @@ public class NotificationElement {
 	 * @param type
 	 *            The type of notification being sent
 	 */
-	private void setMessage(NotificationType type) {
+	private void setMessage(Type type) {
 		switch (type) {
 		case FulfillmentReport:
 			// TODO: add date
