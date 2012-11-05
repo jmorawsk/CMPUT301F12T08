@@ -13,17 +13,17 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
 
-
-
 import tasktracker.model.elements.Task;
 
-
+/**
+ * A class for interacting with a JSON web database (webserver)
+ * @author Jason
+ *
+ */
 public class JSONDBController
 {
     static int contentIndex = 1;
     static String webAddress = "http://crowdsourcer.softwareprocess.es/F12/CMPUT301F12T08/";
-
-    //static String webAddress = "http://crowdsourcer.softwareprocess.es/F12/Team1/";
 
     public static String[][] listTasksAsArrays(){
         String listCommand = "action=" + "list";

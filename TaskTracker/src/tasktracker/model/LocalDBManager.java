@@ -4,12 +4,17 @@ package tasktracker.model;
 import tasktracker.model.elements.Task;
 
 /**
- * NOT COMPLETE
+ * A class for interacting with a local database
+ * Currently set up to interact with a JSON database  (webserver)
+ * Incomplete: This should be changed to a local db (SQL?)
+ * @author Jason
+ *
  */
 public class LocalDBManager extends DBManager
 {
-    
+
     /**
+     * Queries the webserver for all tasks.
      * Returns an array of string arrays. Index first by the task
      * you want to look at, and then by the property of the task.
      * Order of properties should conform to task class.
@@ -18,15 +23,20 @@ public class LocalDBManager extends DBManager
      */
     public String[][] listTasksAsArrays(){
         return JSONDBController.listTasksAsArrays();
-    }
-    @Override
-    public Task[] listTasks()
-    {
+    } 
+    /**
+     * Queries the database for all tasks.
+     * Returns an array of tasks.
+     * Returns null if there are no tasks stored
+     * @return an array of tasks
+     */
+    public Task[] listTasks(){
         return JSONDBController.listTasks();
     }
+    
 
     /**
-     * Adds a task.
+     * Adds a task to the webserver.
      * Returns a string array.
      * The array contains the properties of the added task.
      * Order of returned properties should conform to task class.
@@ -38,12 +48,22 @@ public class LocalDBManager extends DBManager
         return JSONDBController.insertTask(summary,description);
     }
     
+    /**
+     * Updates a task on the database.
+     * Returns a string array.
+     * The array contains the properties of the updated task.
+     * Order of returned properties should conform to task class.
+     * @param newSummary        the new summary for the task
+     * @param newDescription    the new description of the task
+     * @param id                the id of the task to be updated    
+     * @return  an array of task property values.
+     */
     public String[] insertTask(Task task){
         return JSONDBController.insertTask(task);
     }
 
     /**
-     * Updates a task.
+     * Updates a task on the webserver.
      * Returns a string array.
      * The array contains the properties of the updated task.
      * Order of returned properties should conform to task class.
@@ -57,7 +77,7 @@ public class LocalDBManager extends DBManager
     }
 
     /**
-     * Gets a task.
+     * Gets a task from the webserver.
      * Returns a string array.
      * The array contains the properties of the task.
      * Order of returned properties should conform to task class.
@@ -68,11 +88,19 @@ public class LocalDBManager extends DBManager
         return JSONDBController.getTaskAsArray(id);
     }
     
+    /**
+     * Gets a task from the database.
+     * Returns a string array.
+     * The array contains the properties of the task.
+     * Order of returned properties should conform to task class.
+     * @param id       the id of the task to be updated    
+     * @return  an array of task property values.
+     */
     public Task getTask(String id){
         return JSONDBController.getTask(id);
     }
     /**
-     * Removes a task.
+     * Removes a task from the webserver.
      * Returns a string array.
      * The array contains the id the task in index 0.
      * The array contains a message at index 1
@@ -85,9 +113,10 @@ public class LocalDBManager extends DBManager
         return JSONDBController.removeTask(id);
     }
 
+    /**
+     * Removes all tasks from the database.
+     */
     protected String nukeAll(){
         return JSONDBController.nukeAll();
     }
-
-    
 }

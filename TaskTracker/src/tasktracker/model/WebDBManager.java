@@ -3,11 +3,15 @@ package tasktracker.model;
 
 import tasktracker.model.elements.Task;
 
+/**
+ * A class for interacting with a web database (webserver)
+ * Currently set up to interact with a JSON database
+ * Does this by calling JSONDBController
+ * @author Jason
+ *
+ */
 public class WebDBManager extends DBManager
 {
-    String webAddress = "http://crowdsourcer.softwareprocess.es/F12/CMPUT301F12T08/";
-
-    //static String webAddress = "http://crowdsourcer.softwareprocess.es/F12/Team1/";
 
     /**
      * Queries the webserver for all tasks.
@@ -20,6 +24,12 @@ public class WebDBManager extends DBManager
     public String[][] listTasksAsArrays(){
         return JSONDBController.listTasksAsArrays();
     } 
+    /**
+     * Queries the database for all tasks.
+     * Returns an array of tasks.
+     * Returns null if there are no tasks stored
+     * @return an array of tasks
+     */
     public Task[] listTasks(){
         return JSONDBController.listTasks();
     }
@@ -38,6 +48,16 @@ public class WebDBManager extends DBManager
         return JSONDBController.insertTask(summary,description);
     }
     
+    /**
+     * Updates a task on the database.
+     * Returns a string array.
+     * The array contains the properties of the updated task.
+     * Order of returned properties should conform to task class.
+     * @param newSummary        the new summary for the task
+     * @param newDescription    the new description of the task
+     * @param id                the id of the task to be updated    
+     * @return  an array of task property values.
+     */
     public String[] insertTask(Task task){
         return JSONDBController.insertTask(task);
     }
@@ -68,6 +88,14 @@ public class WebDBManager extends DBManager
         return JSONDBController.getTaskAsArray(id);
     }
     
+    /**
+     * Gets a task from the database.
+     * Returns a string array.
+     * The array contains the properties of the task.
+     * Order of returned properties should conform to task class.
+     * @param id       the id of the task to be updated    
+     * @return  an array of task property values.
+     */
     public Task getTask(String id){
         return JSONDBController.getTask(id);
     }
@@ -85,6 +113,9 @@ public class WebDBManager extends DBManager
         return JSONDBController.removeTask(id);
     }
 
+    /**
+     * Removes all tasks from the database.
+     */
     protected String nukeAll(){
         return JSONDBController.nukeAll();
     }

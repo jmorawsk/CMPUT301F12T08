@@ -2,12 +2,15 @@ package tasktracker.model;
 
 import tasktracker.model.elements.Task;
 
+/**
+ * An abstract class for interacting with a database
+ * These methods should be implemented by classes that
+ * interact with some type of database
+ * @author Jason
+ *
+ */
 public abstract class DBManager
 {
-    String webAddress = "http://crowdsourcer.softwareprocess.es/F12/CMPUT301F12T08/";
-
-    //static String webAddress = "http://crowdsourcer.softwareprocess.es/F12/Team1/";
-
     /**
      * Queries the database for all tasks.
      * Returns an array of string arrays. Index first by the task
@@ -18,6 +21,12 @@ public abstract class DBManager
      */
     public abstract String[][] listTasksAsArrays();
     
+    /**
+     * Queries the database for all tasks.
+     * Returns an array of tasks.
+     * Returns null if there are no tasks stored
+     * @return an array of tasks
+     */
     public abstract Task[] listTasks();
 
     /**
@@ -31,6 +40,14 @@ public abstract class DBManager
      */
     public abstract String[] insertTask(String summary, String description);
     
+    /**
+     * Adds a task to the database.
+     * Returns a string array.
+     * The array contains the properties of the added task.
+     * Order of returned properties should conform to task class.
+     * @param task           the task to be added
+     * @return  an array of task property values.
+     */
     public abstract String[] insertTask(Task task);
 
     /**
@@ -63,9 +80,12 @@ public abstract class DBManager
      * -the message is 'removed' if this was succesful
      * Order of returned properties should conform to task class.
      * @param id
-     * @return
+     * @return a string array with completion message
      */
     public abstract String[] removeTask(String id);
 
+    /**
+     * Removes all tasks from the database.
+     */
     protected abstract String nukeAll();
 }
