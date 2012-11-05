@@ -146,14 +146,15 @@ public class TaskElement implements Serializable {
 		// TODO: Should be finding the specific requirement, not use indices.
 	}
 	
-	/** Gets the members of the task, aside from the task creator */
+	/** Gets the members of the task, including the task creator */
 	public List<User> getMembers(){
 		return this.otherMembers;
 	}
 	
-	/** Sets the members of the task, aside from the task creator */
+	/** Sets the members of the task, including the task creator */
 	public void setMembers(List<User> otherMembers){
 		this.otherMembers = otherMembers;
+		this.otherMembers.add(this.creator);
 	}
 	
 	/**
@@ -165,6 +166,8 @@ public class TaskElement implements Serializable {
 			if (!req.fulfill())
 				return false;
 		}
+		
+		this.status = TaskStatus.Fulfilled;
 		return true;
 	}
 

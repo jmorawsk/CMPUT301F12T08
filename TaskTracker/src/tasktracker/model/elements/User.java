@@ -1,5 +1,7 @@
 package tasktracker.model.elements;
 
+import tasktracker.model.enums.NotificationType;
+
 /**
  * TaskTracker
  * 
@@ -19,24 +21,26 @@ package tasktracker.model.elements;
  */
 
 /**
- * An application user.
+ * An application user. The user has a username (currently optional) and a
+ * unique ID number. The user is able to fulfill tasks of which they are a
+ * member.
  * 
  * @author Jeanine Bonot
  * 
  */
 public class User {
 	private static int _userCount = 0;
-	
+
 	private String name;
 	private int id;
-	
+
 	/**
 	 * Creates a new instance of the User class and assigns an ID number.
 	 */
-	public User(){
+	public User() {
 		this.id = ++_userCount;
 	}
-	
+
 	/**
 	 * Creates a new instance of the User class.
 	 * 
@@ -44,11 +48,9 @@ public class User {
 	 *            The name of the user.
 	 */
 	public User(String name) {
-		if (!this.assignName(name)){
+		if (!this.assignName(name)) {
 			// Assignment was unsuccessful, notify app user.
-		}
-		else
-		{
+		} else {
 			this.id = ++_userCount;
 		}
 
@@ -56,6 +58,7 @@ public class User {
 
 	/**
 	 * Gets the name of the user.
+	 * 
 	 * @return The name of the user.
 	 */
 	public String getName() {
@@ -70,15 +73,38 @@ public class User {
 	 * @return True if the new name was set, false otherwise.
 	 */
 	public void setName(String name) {
-		
-		if (!this.assignName(name)){
+
+		if (!this.assignName(name)) {
 			// Notify user that nothing was changed.
 		}
 
 	}
-	
-	public int getID(){
+
+	/** Gets the ID number of the user */
+	public int getID() {
 		return this.id;
+	}
+
+	/**
+	 * Fulfill a task. Checks that the user is a member of the task, then goes
+	 * through each of the task's requirements and fulfills them.
+	 * 
+	 * @param task
+	 *            The task to fulfill.
+	 */
+	public void fulfillTask(TaskElement task) {
+		if (!task.getMembers().contains(this)) {
+			// User is not a member, cannot fulfill this task.
+			// TODO: Notify user that they are unable to fulfill task.
+			return;
+		}
+
+		if (task.fulfill()) {
+			// Task has been fulfilled, notify the creator.
+			NotificationElement notification = new NotificationElement(
+					this.name, task, NotificationType.FulfillmentReport);
+			// TODO: Send notification.
+		}
 	}
 
 	/**
