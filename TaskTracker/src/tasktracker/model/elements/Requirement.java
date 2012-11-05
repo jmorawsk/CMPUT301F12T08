@@ -35,7 +35,7 @@ public abstract class Requirement implements Serializable {
 	// of our requirements.
 
 	private static final long serialVersionUID = 1L;
-	private Date timeStamp;
+	protected Date timeStamp;
 
 	/**
 	 * Creates a new instance of the Requirement class and assigns a default
