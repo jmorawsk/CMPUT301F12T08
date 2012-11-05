@@ -35,10 +35,12 @@ public class User {
 	private int id;
 
 	/**
-	 * Creates a new instance of the User class and assigns an ID number.
+	 * Creates a new instance of the User class. A unique ID number is assigned
+	 * and the name is set to a default value.
 	 */
 	public User() {
 		this.id = ++_userCount;
+		this.name = "user" + this.id;
 	}
 
 	/**
@@ -116,6 +118,8 @@ public class User {
 	 */
 	private boolean assignName(String name) {
 		// TODO: Check online database.
+		
+		// TODO: Must check that the user has not tried to use name "user<int>"
 		this.name = name;
 		return true;
 	}
