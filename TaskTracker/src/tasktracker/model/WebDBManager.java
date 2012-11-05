@@ -12,7 +12,7 @@ import tasktracker.model.elements.Task;
  */
 public class WebDBManager extends DBManager
 {
-
+    DBManager controller = new JSONDBController();
     /**
      * Queries the webserver for all tasks.
      * Returns an array of string arrays. Index first by the task
@@ -22,7 +22,7 @@ public class WebDBManager extends DBManager
      * @return an array of arrays of task property values
      */
     public String[][] listTasksAsArrays(){
-        return JSONDBController.listTasksAsArrays();
+        return controller.listTasksAsArrays();
     } 
     /**
      * Queries the database for all tasks.
@@ -31,7 +31,7 @@ public class WebDBManager extends DBManager
      * @return an array of tasks
      */
     public Task[] listTasks(){
-        return JSONDBController.listTasks();
+        return controller.listTasks();
     }
     
 
@@ -45,7 +45,7 @@ public class WebDBManager extends DBManager
      * @return  an array of task property values.
      */
     public String[] insertTask(String summary, String description){
-        return JSONDBController.insertTask(summary,description);
+        return controller.insertTask(summary,description);
     }
     
     /**
@@ -57,7 +57,7 @@ public class WebDBManager extends DBManager
      * @return  an array of task property values.
      */
     public String[] insertTask(Task task){
-        return JSONDBController.insertTask(task);
+        return controller.insertTask(task);
     }
 
     /**
@@ -71,7 +71,7 @@ public class WebDBManager extends DBManager
      * @return  an array of task property values.
      */
     public String[] updateTask(String newSummary, String newDescription, String id){
-        return JSONDBController.updateTask(newSummary,newDescription,id);
+        return controller.updateTask(newSummary,newDescription,id);
     }
 
     /**
@@ -83,7 +83,7 @@ public class WebDBManager extends DBManager
      * @return  an array of task property values.
      */
     public String[] getTaskAsArray(String id){
-        return JSONDBController.getTaskAsArray(id);
+        return controller.getTaskAsArray(id);
     }
     
     /**
@@ -95,7 +95,7 @@ public class WebDBManager extends DBManager
      * @return  an array of task property values.
      */
     public Task getTask(String id){
-        return JSONDBController.getTask(id);
+        return controller.getTask(id);
     }
     /**
      * Removes a task from the webserver.
@@ -108,13 +108,13 @@ public class WebDBManager extends DBManager
      * @return
      */
     public String[] removeTask(String id){
-        return JSONDBController.removeTask(id);
+        return controller.removeTask(id);
     }
 
     /**
      * Removes all tasks from the database.
      */
     protected String nukeAll(){
-        return JSONDBController.nukeAll();
+        return controller.nukeAll();
     }
 }

@@ -64,13 +64,21 @@ public abstract class DBManager
 
     /**
      * Gets a task from the database.
+     * Returns the task.
+     * @param id       the id of the task to be updated    
+     * @return  the desired task.
+     */
+    public abstract Task getTask(String id);
+    
+    /**
+     * Gets a task from the database.
      * Returns a string array.
      * The array contains the properties of the task.
      * Order of returned properties should conform to task class.
      * @param id       the id of the task to be updated    
      * @return  an array of task property values.
      */
-    public abstract Task getTask(String id);
+    public abstract String[] getTaskAsArray(String id);
     
     /**
      * Removes a task from the database.

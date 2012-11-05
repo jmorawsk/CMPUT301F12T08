@@ -16,7 +16,7 @@ import tasktracker.model.elements.Task;
  * @author Jason
  *
  */
-public class JSONDBController
+public class JSONDBController extends DBManager
 {
     // JSON Utilities
     private static Gson gson = new Gson();
@@ -32,19 +32,22 @@ public class JSONDBController
      * Order of properties should conform to task class.
      * Returns null if there are no tasks stored
      * @return an array of arrays of task property values
+     *          0       summary
+     *          1       id
      */
-    public static String[][] listTasksAsArrays(){
+    public String[][] listTasksAsArrays(){
         //command in JSON
         String listCommand = "action=" + "list";
         return JSONDBParser.parseJSONArray(executeAction(listCommand));
     } 
     /**
+     * INCOMPLETE: DO NOT USE
      * Queries the database for all tasks.
      * Returns an array of tasks.
      * Returns null if there are no tasks stored
      * @return an array of tasks
      */
-    public static Task[] listTasks(){
+    public Task[] listTasks(){
         //command in JSON
         String listCommand = "action=" + "list";
         //TODO
@@ -61,8 +64,12 @@ public class JSONDBController
      * @param summary           the summary for the task
      * @param description       the description of the task
      * @return  an array of task property values.
+     *          0       summary
+     *          1       content
+     *          2       id
+     *          3       description
      */
-    public static String[] insertTask(String summary, String description){
+    public String[] insertTask(String summary, String description){
         //command in JSON
         String insertCommand = "action=" + "post"
                 + "&summary=" + summary.replace(' ', '+')
@@ -78,7 +85,7 @@ public class JSONDBController
      *          2       id
      *          3       description
      */
-    public static String[] insertTask(Task task){
+    public String[] insertTask(Task task){
         String content = null;
         content = gson.toJson(task);
         String insertCommand = "action=" + "post"
@@ -98,7 +105,7 @@ public class JSONDBController
      * @param id                the id of the task to be updated    
      * @return  an array of task property values.
      */
-    public static String[] updateTask(String newSummary, String newDescription, String id){
+    public String[] updateTask(String newSummary, String newDescription, String id){
         String updateCommand = "action=" + "update"
                 + "&summary=" + newSummary.replace(' ', '+')
                 + "&description=" + newDescription .replace(' ', '+')
@@ -114,7 +121,7 @@ public class JSONDBController
      * @param id       the id of the task to be updated    
      * @return  an array of task property values.
      */
-    public static Task getTask(String id){
+    public Task getTask(String id){
         Task myTask = null;
         String myContent = getTaskAsArray(id)[contentIndex];
 
@@ -130,7 +137,7 @@ public class JSONDBController
      * @param id       the id of the task to be updated    
      * @return  an array of task property values.
      */
-    public static String[] getTaskAsArray(String id){
+    public String[] getTaskAsArray(String id){
         String getCommand = "action=" + "get"
                 + "&id=" + id;
         return JSONDBParser.parseJSONObject(executeAction(getCommand));
@@ -146,7 +153,7 @@ public class JSONDBController
      * @param id        the id of the task to be removed
      * @return
      */
-    public static String[] removeTask(String id){
+    public String[] removeTask(String id){
         String getCommand = "action=" + "remove"
                 + "&id=" + id;
         return JSONDBParser.parseJSONObject(executeAction(getCommand));
@@ -155,7 +162,7 @@ public class JSONDBController
     /**
      * Removes all tasks from the database
      */
-    protected static String nukeAll(){
+    protected String nukeAll(){
         String nukeCommand = "action=" + "nuke"
                 + "&key=" + "judgedredd";
         return executeAction(nukeCommand);
@@ -165,7 +172,7 @@ public class JSONDBController
      * @param action    the action to execute on the page
      * @return a string for the result of the action
      */
-    protected static String executeAction(String action){
+    protected String executeAction(String action){
         URI uri = null;
         //construct our uri
         try
@@ -186,7 +193,7 @@ public class JSONDBController
         return readFromURL(uri.toASCIIString());
 
     }
-    protected static String oldExecuteAction(String action){
+    protected String oldExecuteAction(String action){
         return readFromURL(webAddress + "?" + action);
 
     }
@@ -195,7 +202,7 @@ public class JSONDBController
      * @param URL the string of the url for the webpage
      * @return a string of what is on the webpage
      */
-    protected static String readFromURL(String url){
+    protected String readFromURL(String url){
         String readLine = null;
         try
         {
