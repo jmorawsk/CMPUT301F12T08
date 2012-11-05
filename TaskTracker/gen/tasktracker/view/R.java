@@ -19,12 +19,13 @@ public final class R {
         public static final int buttonHome=0x7f070008;
         public static final int buttonNotify=0x7f07000a;
         public static final int deadline=0x7f070002;
-        public static final int delete=0x7f07000d;
+        public static final int delete=0x7f07000e;
         public static final int description=0x7f070004;
-        public static final int menu_settings=0x7f07000e;
+        public static final int listView1=0x7f07000c;
+        public static final int menu_settings=0x7f07000f;
         public static final int name=0x7f070001;
         public static final int notificationsList=0x7f07000b;
-        public static final int open=0x7f07000c;
+        public static final int open=0x7f07000d;
         public static final int otherMembers=0x7f070005;
         public static final int saveButton=0x7f070006;
         public static final int taskList=0x7f070007;
@@ -35,6 +36,7 @@ public final class R {
         public static final int activity_create_task_view=0x7f030000;
         public static final int activity_homepage=0x7f030001;
         public static final int activity_notification_list_view=0x7f030002;
+        public static final int list_item=0x7f030003;
     }
     public static final class menu {
         public static final int acitivity_task_list_view=0x7f060000;

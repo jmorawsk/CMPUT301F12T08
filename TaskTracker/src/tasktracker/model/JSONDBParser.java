@@ -1,5 +1,7 @@
 package tasktracker.model;
 
+import java.io.Console;
+
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -65,6 +67,7 @@ public class JSONDBParser
             for (int n = 0; n<array.size();n++){
                 myJSONObject=(JSONObject)array.get(n);
                 parsedString[n] = parseJSONObject(myJSONObject.toJSONString());
+                //System.out.println("Line " +n+ ": " +parsedString[n]);
             }
         } catch (ParseException e)
         {

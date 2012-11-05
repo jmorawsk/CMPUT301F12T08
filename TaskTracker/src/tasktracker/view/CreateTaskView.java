@@ -133,7 +133,7 @@ public class CreateTaskView extends Activity {
 			// TODO: Save task
 			//call this
 			webManager.insertTask(task);
-			
+			finish();
 		}
 
 		/**

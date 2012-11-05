@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
+import tasktracker.model.WebDBManager;
 import tasktracker.model.elements.*;
 
 /**
@@ -38,8 +39,11 @@ import tasktracker.model.elements.*;
 public class TaskListView extends Activity {
 
 	private ListView taskListView;
-	private List<Task> tasks;
+	//private List<Task> tasks;
+	//private List<String> tasks;
+	private String[] tasks = new String[0];
 	
+        private WebDBManager webManager;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -49,9 +53,13 @@ public class TaskListView extends Activity {
 		// Assign ListView and its on item click listener.
 		taskListView = (ListView) findViewById(R.id.taskList);
 		
-		
-		
-		//taskListView.setAdapter(adapter)
+		//TODO: read from database and display
+//		String[][] webTasks = webManager.listTasksAsArrays();
+//		for(int n=0;n<webTasks.length;n++){
+//		    tasks.add(webTasks[n][0]);
+//		}
+//		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.list_item, tasks);
+//		taskListView.setAdapter(adapter);
 		
 		taskListView.setOnItemClickListener(new handleList_Click());
 		Button buttonCreate = (Button) findViewById(R.id.buttonCreate);

@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 import com.google.gson.Gson;
 
@@ -242,26 +243,44 @@ public class JSONDBController extends DBManager
      * @return a string of what is on the webpage
      */
     protected String readFromURL(String url){
-        String readLine = null;
+//        String readLine = null;
+//        try
+//        {
+//            URL webServer;
+//            webServer =new URL(url);
+//
+//            BufferedReader in = new BufferedReader(
+//                    new InputStreamReader(webServer.openStream()));
+//
+//            String inputLine;
+//            while ((inputLine = in.readLine()) != null){
+//                readLine = inputLine;
+//            }
+//
+//            in.close();
+//        } catch (IOException e)
+//        {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+//        return readLine;
+        ReadFromURL myReadFromURL = new ReadFromURL();
+        myReadFromURL.execute(url);
+        
+        String result = null;
         try
         {
-            URL webServer;
-            webServer =new URL(url);
-
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(webServer.openStream()));
-
-            String inputLine;
-            while ((inputLine = in.readLine()) != null){
-                readLine = inputLine;
-            }
-
-            in.close();
-        } catch (IOException e)
+            result = myReadFromURL.get();
+        } catch (InterruptedException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (ExecutionException e)
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return readLine;
+        
+        return result;
     }
 }
