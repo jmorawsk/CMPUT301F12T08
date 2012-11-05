@@ -1,17 +1,13 @@
 package tasktracker.model;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLEncoder;
+
+import com.google.gson.Gson;
 
 import tasktracker.model.elements.Task;
 
@@ -22,6 +18,8 @@ import tasktracker.model.elements.Task;
  */
 public class JSONDBController
 {
+    // JSON Utilities
+    private static Gson gson = new Gson();
     //index of 'content' for objects in database
     static int contentIndex = 1;
     //location of our webserver
@@ -71,31 +69,22 @@ public class JSONDBController
                 + "&description=" + description.replace(' ', '+');
         return JSONDBParser.parseJSONObject(executeAction(insertCommand));
     }
-    
-    //TODO
+    /**
+     * A method for adding a task to the JSON db
+     * @param task the task to be added
+     * @return a string array of what was added to the db
+     *          0       summary
+     *          1       content
+     *          2       id
+     *          3       description
+     */
     public static String[] insertTask(Task task){
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ObjectOutputStream oos;
-        try
-        {
-            oos = new ObjectOutputStream(baos);
-            oos.writeObject(task);
-            oos.flush();
-        } catch (IOException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        String content = null;
+        content = gson.toJson(task);
         String insertCommand = "action=" + "post"
                 + "&summary=" + task.getDescription().replace(' ', '+')
-                + "&content=" + baos.toByteArray()
+                + "&content=" + content
                 + "&description=" + task.getDescription().replace(' ', '+');
-//        System.out.println("Test:" + baos.toString());
-//        System.out.println("Output:" + baos.toByteArray().toString());
-//        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-//        System.out.println("Input:" + bais.toString());
-        
-
         return JSONDBParser.parseJSONObject(executeAction(insertCommand));
     }
 
@@ -128,26 +117,9 @@ public class JSONDBController
     public static Task getTask(String id){
         Task myTask = null;
         String myContent = getTaskAsArray(id)[contentIndex];
-        ByteArrayInputStream bais = new ByteArrayInputStream(myContent.getBytes());
-        System.out.println("Content:" + bais.toString());
 
-        try
-        {
-            ObjectInputStream ois = new ObjectInputStream(bais);
-            myTask = (Task) ois.readObject();
-        } catch (IOException e)
-        {
-            System.out.println("Error 1");
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (ClassNotFoundException e)
-        {
-
-            System.out.println("Error 2");
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        //return JSONDBParser.parseJSONObject(executeAction(getCommand));
+        myTask = gson.fromJson(myContent, Task.class);
+        
         return myTask;
     }
     /**
@@ -195,6 +167,7 @@ public class JSONDBController
      */
     protected static String executeAction(String action){
         URI uri = null;
+        //construct our uri
         try
         {
             uri = new URI(
@@ -209,11 +182,12 @@ public class JSONDBController
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        //actually make web request
         return readFromURL(uri.toASCIIString());
 
     }
-    protected static String oldexecuteAction(String action){
-        return readFromURL(webAddress + action);
+    protected static String oldExecuteAction(String action){
+        return readFromURL(webAddress + "?" + action);
 
     }
     /**
@@ -221,22 +195,19 @@ public class JSONDBController
      * @param URL the string of the url for the webpage
      * @return a string of what is on the webpage
      */
-    protected static String readFromURL(String URL){
+    protected static String readFromURL(String url){
         String readLine = null;
         try
         {
-            System.out.println(URL);
             URL webServer;
-            webServer =new URL(URL);
-            //System.out.println(URLEncoder.encode(URL,"UTF-8"));
-            //webServer = new URL(URLEncoder.encode(URL,"UTF-8"));
+            webServer =new URL(url);
+
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(webServer.openStream()));
 
             String inputLine;
             while ((inputLine = in.readLine()) != null){
                 readLine = inputLine;
-                //System.out.println(readLine);
             }
 
             in.close();
