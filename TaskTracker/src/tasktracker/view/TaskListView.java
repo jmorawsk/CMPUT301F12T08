@@ -23,6 +23,7 @@ import java.util.*;
 //import android.R;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.View;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
@@ -38,6 +39,7 @@ public class TaskListView extends Activity {
 
 	private ListView taskListView;
 	private List<Task> tasks;
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,27 @@ public class TaskListView extends Activity {
 
 		// Assign ListView and its on item click listener.
 		taskListView = (ListView) findViewById(R.id.taskList);
+		
+		
+		
+		//taskListView.setAdapter(adapter)
+		
 		taskListView.setOnItemClickListener(new handleList_Click());
+		Button buttonCreate = (Button) findViewById(R.id.buttonCreate);
+		
+		buttonCreate.setOnClickListener(new View.OnClickListener()
+                {
+                    
+                    @Override
+                    public void onClick(View v)
+                    {
+                    
+                        // TODO Auto-generated method stub
+                        Intent i = new Intent(getApplicationContext(), CreateTaskView.class);
+                        
+                        startActivity(i);
+                    }
+                });
 
 	}
 

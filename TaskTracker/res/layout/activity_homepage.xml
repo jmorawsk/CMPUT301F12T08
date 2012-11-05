@@ -3,22 +3,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-
-
     <ListView
         android:id="@+id/taskList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="32dp" >
+        android:layout_below="@+id/buttonHome"
+        android:layout_centerHorizontal="true" >
+
     </ListView>
 
-    <TextView
-        android:id="@+id/textView1"
+    <Button
+        android:id="@+id/buttonHome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:text="TextView" />
+        android:layout_alignParentTop="true"
+        android:text="Home" />
+
+    <Button
+        android:id="@+id/buttonCreate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/buttonHome"
+        android:text="Create" />
+
+    <Button
+        android:id="@+id/buttonNotify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/buttonCreate"
+        android:text="Notifications" />
 
 </RelativeLayout>
