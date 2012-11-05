@@ -3,16 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <menu
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
 
-        <item
-            android:id="@+id/menu_save"
-            android:showAsAction="ifRoom|withText"
-            android:title="@string/home"/>
-    </menu>
 
     <ListView
         android:id="@+id/taskList"
@@ -22,5 +13,12 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp" >
     </ListView>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:text="TextView" />
 
 </RelativeLayout>

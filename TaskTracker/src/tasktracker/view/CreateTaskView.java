@@ -132,7 +132,7 @@ public class CreateTaskView extends Activity {
 			Task task = createTask();
 			// TODO: Save task
 			//call this
-			//webManager.insertTask(task);
+			webManager.insertTask(task);
 		}
 
 		/**

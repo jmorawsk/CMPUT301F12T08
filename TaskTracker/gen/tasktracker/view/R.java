@@ -16,16 +16,15 @@ public final class R {
     }
     public static final class id {
         public static final int deadline=0x7f070002;
-        public static final int delete=0x7f07000b;
+        public static final int delete=0x7f07000a;
         public static final int description=0x7f070004;
-        public static final int menu_save=0x7f070007;
-        public static final int menu_settings=0x7f07000c;
+        public static final int menu_settings=0x7f07000b;
         public static final int name=0x7f070001;
-        public static final int notificationsList=0x7f070009;
-        public static final int open=0x7f07000a;
+        public static final int notificationsList=0x7f070008;
+        public static final int open=0x7f070009;
         public static final int otherMembers=0x7f070005;
         public static final int saveButton=0x7f070006;
-        public static final int taskList=0x7f070008;
+        public static final int taskList=0x7f070007;
         public static final int textView1=0x7f070000;
         public static final int textView2=0x7f070003;
     }
