@@ -1,7 +1,5 @@
 package tasktracker.model.elements;
 
-import tasktracker.model.enums.NotificationType;
-
 /**
  * TaskTracker
  * 
@@ -19,6 +17,8 @@ import tasktracker.model.enums.NotificationType;
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the 
  * specific language governing permissions and limitations under the License.
  */
+
+import tasktracker.model.enums.NotificationType;
 
 /**
  * An application user. The user has a username (currently optional) and a
@@ -110,6 +110,24 @@ public class User {
 	}
 
 	/**
+	 * Checks if objects (Users) are equal based on their ID number.
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (this.getClass() == obj.getClass())
+			return false;
+
+		User other = (User) obj;
+		if (this.id != other.id)
+			return false;
+		return true;
+	}
+
+	/**
 	 * Sets the name if the name is available in the system.
 	 * 
 	 * @param name
@@ -118,7 +136,7 @@ public class User {
 	 */
 	private boolean assignName(String name) {
 		// TODO: Check online database.
-		
+
 		// TODO: Must check that the user has not tried to use name "user<int>"
 		this.name = name;
 		return true;
