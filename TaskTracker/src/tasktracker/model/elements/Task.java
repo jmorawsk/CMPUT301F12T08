@@ -122,11 +122,8 @@ public class Task implements Serializable {
 
 	/** Gets the date in the format of a String */
 	public String stringDate() {
-
 		SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
-		String stringdate = dateformat.format(creationDate).toString();
-		System.out.println("Test String Date: '" + stringdate + "'");
-		return stringdate;
+		return dateformat.format(creationDate).toString();
 	}
 
 	/** Gets the text description of the task */
@@ -178,6 +175,24 @@ public class Task implements Serializable {
 		}
 
 		this.status = Status.Fulfilled;
+		return true;
+	}
+	
+	/**
+	 * Checks if objects (Tasks) are equal based on their ID number.
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (this.getClass() == obj.getClass())
+			return false;
+
+		Task other = (Task) obj;
+		if (this.id != other.id)
+			return false;
 		return true;
 	}
 
