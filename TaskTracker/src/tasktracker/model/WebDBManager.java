@@ -21,6 +21,7 @@ public class WebDBManager extends DBManager
      * Returns null if there are no tasks stored
      * @return an array of arrays of task property values
      */
+    @Override
     public String[][] listTasksAsArrays(){
         return controller.listTasksAsArrays();
     } 
@@ -30,6 +31,7 @@ public class WebDBManager extends DBManager
      * Returns null if there are no tasks stored
      * @return an array of tasks
      */
+    @Override
     public Task[] listTasks(){
         return controller.listTasks();
     }
@@ -44,6 +46,7 @@ public class WebDBManager extends DBManager
      * @param description       the description of the task
      * @return  an array of task property values.
      */
+    @Override
     public String[] insertTask(String summary, String description){
         return controller.insertTask(summary,description);
     }
@@ -56,6 +59,7 @@ public class WebDBManager extends DBManager
      * @param task        the new task to be added 
      * @return  an array of task property values.
      */
+    @Override
     public String[] insertTask(Task task){
         return controller.insertTask(task);
     }
@@ -70,6 +74,7 @@ public class WebDBManager extends DBManager
      * @param id                the id of the task to be updated    
      * @return  an array of task property values.
      */
+    @Override
     public String[] updateTask(String newSummary, String newDescription, String id){
         return controller.updateTask(newSummary,newDescription,id);
     }
@@ -82,6 +87,7 @@ public class WebDBManager extends DBManager
      * @param task        the updated task  
      * @return  the task
      */
+    @Override
     public Task updateTask(Task task){
         return controller.updateTask(task);
     }
@@ -94,6 +100,7 @@ public class WebDBManager extends DBManager
      * @param id       the id of the task to be updated    
      * @return  an array of task property values.
      */
+    @Override
     public String[] getTaskAsArray(String id){
         return controller.getTaskAsArray(id);
     }
@@ -106,6 +113,7 @@ public class WebDBManager extends DBManager
      * @param id       the id of the task to be updated    
      * @return  an array of task property values.
      */
+    @Override
     public Task getTask(String id){
         return controller.getTask(id);
     }
@@ -119,6 +127,7 @@ public class WebDBManager extends DBManager
      * @param id
      * @return
      */
+    @Override
     public String[] removeTask(String id){
         return controller.removeTask(id);
     }
@@ -126,6 +135,7 @@ public class WebDBManager extends DBManager
     /**
      * Removes all tasks from the database.
      */
+    @Override
     public String nukeAll(){
         return controller.nukeAll();
     }

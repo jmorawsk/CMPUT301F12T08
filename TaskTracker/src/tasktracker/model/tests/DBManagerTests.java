@@ -18,12 +18,9 @@ package tasktracker.model.tests;
  * specific language governing permissions and limitations under the License.
  */
 
-import java.util.Date;
-
 import org.junit.*;
 
 import tasktracker.model.*;
-import tasktracker.model.elements.Task;
 
 /**
  * Tests for the webdbmanager

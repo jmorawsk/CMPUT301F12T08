@@ -19,9 +19,6 @@ package tasktracker.controller.tests;
  */
 
 import org.junit.*;
-import static org.junit.Assert.*;
-
-import tasktracker.model.elements.*;
 import tasktracker.controller.*;
 
 /**

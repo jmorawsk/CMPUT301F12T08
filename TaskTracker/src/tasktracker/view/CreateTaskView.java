@@ -38,7 +38,6 @@ package tasktracker.view;
 
 import android.os.Bundle;
 import android.app.Activity;
-import java.text.*;
 import java.util.*;
 
 import android.view.View;
@@ -133,7 +132,7 @@ public class CreateTaskView extends Activity {
 			Task task = createTask();
 			// TODO: Save task
 			//call this
-			webManager.insertTask(task);
+			//webManager.insertTask(task);
 		}
 
 		/**

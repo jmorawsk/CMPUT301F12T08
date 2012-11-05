@@ -47,7 +47,8 @@ public class PhotoRequirement extends Requirement {
 	 * Fulfill the requirement by adding a photo.
 	 * @return True if the photo 
 	 */
-	public boolean fulfill() {
+	@Override
+    public boolean fulfill() {
 		// TODO: Prompt user to take a photo and set it here.
 		
 		// Set photo with a dummy image.

@@ -45,7 +45,8 @@ public class TextRequirement extends Requirement {
 	 * 
 	 * @return true if the
 	 */
-	public boolean fulfill() {
+	@Override
+    public boolean fulfill() {
 		// TODO: Prompt user to add text.
 		// TODO: Text must not be left empty (or contain only whitespace)
 		return super.fulfill();

@@ -36,6 +36,7 @@ public class JSONDBController extends DBManager
      *          0       summary
      *          1       id
      */
+    @Override
     public String[][] listTasksAsArrays(){
         //command in JSON
         String listCommand = "action=" + "list";
@@ -48,6 +49,7 @@ public class JSONDBController extends DBManager
      * Returns null if there are no tasks stored
      * @return an array of tasks
      */
+    @Override
     public Task[] listTasks(){
         //command in JSON
         String listCommand = "action=" + "list";
@@ -70,6 +72,7 @@ public class JSONDBController extends DBManager
      *          2       id
      *          3       description
      */
+    @Override
     public String[] insertTask(String summary, String description){
         //command in JSON
         String insertCommand = "action=" + "post"
@@ -86,6 +89,7 @@ public class JSONDBController extends DBManager
      *          2       id
      *          3       description
      */
+    @Override
     public String[] insertTask(Task task){
         String content = null;
         content = gson.toJson(task);
@@ -106,6 +110,7 @@ public class JSONDBController extends DBManager
      * @param id                the id of the task to be updated    
      * @return  an array of task property values.
      */
+    @Override
     public String[] updateTask(String newSummary, String newDescription, String id){
         String updateCommand = "action=" + "update"
                 + "&summary=" + newSummary.replace(' ', '+')
@@ -122,6 +127,7 @@ public class JSONDBController extends DBManager
      * @param task        the updated task  
      * @return  the task
      */
+    @Override
     public Task updateTask(Task task){
         String myContent = null;
         Task myTask = null;
@@ -144,6 +150,7 @@ public class JSONDBController extends DBManager
      * @param id       the id of the task to be updated    
      * @return  the task, with updated id.
      */
+    @Override
     public Task getTask(String id){
         Task myTask = null;
         String[] taskArray =  getTaskAsArray(id);
@@ -166,6 +173,7 @@ public class JSONDBController extends DBManager
      *          2       id
      *          3       description
      */
+    @Override
     public String[] getTaskAsArray(String id){
         String getCommand = "action=" + "get"
                 + "&id=" + id;
@@ -182,6 +190,7 @@ public class JSONDBController extends DBManager
      * @param id        the id of the task to be removed
      * @return
      */
+    @Override
     public String[] removeTask(String id){
         String getCommand = "action=" + "remove"
                 + "&id=" + id;
@@ -191,6 +200,7 @@ public class JSONDBController extends DBManager
     /**
      * Removes all tasks from the database
      */
+    @Override
     public String nukeAll(){
         String nukeCommand = "action=" + "nuke"
                 + "&key=" + "judgedredd";
