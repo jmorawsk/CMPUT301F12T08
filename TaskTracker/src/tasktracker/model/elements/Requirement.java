@@ -19,32 +19,50 @@ package tasktracker.model.elements;
  */
 
 import java.io.Serializable;
+import java.util.*;
 
 /**
+ * A class representing a task requirement. Currently, each requirement has one
+ * item, but will be expanded to allow for multiple items (photos).
  * 
- * @author jasiewsk
- *
+ * @author Katherine Jasniewskie
+ * @author Jeanine Bonot
+ * 
  */
 public abstract class Requirement implements Serializable {
-	
-	//Will add abstract content property to allow for the viewing
-	//of our requirements.
-	
+
+	// Will add abstract content property to allow for the viewing
+	// of our requirements.
+
 	private static final long serialVersionUID = 1L;
-	private String text;
-	
-	public Requirement(String text){
-		
-		this.text = text;
+	private Date timeStamp;
+
+	/**
+	 * Creates a new instance of the Requirement class and assigns a default
+	 * value to the time stamp.
+	 */
+	public Requirement() {
+		this.timeStamp = new Date(0);
 	}
 
-	public String getText() {
-		return text;
+	/**
+	 * Gets the time stamp of the requirement.
+	 * 
+	 * @return The date the requirement was fulfilled,
+	 */
+	public Date getTimeStamp() {
+		return this.timeStamp;
 	}
 
-	public void setText(String text) {
-		this.text = text;
+	/**
+	 * Fulfill a requirement with a time stamp. Should be overwritten by each
+	 * subclass for further implementation.
+	 * 
+	 * @return True if the user has fulfilled the requirement, false otherwise.
+	 */
+	public boolean fulfill() {
+		this.timeStamp = new Date();
+		return true;
 	}
-	
-	
+
 }

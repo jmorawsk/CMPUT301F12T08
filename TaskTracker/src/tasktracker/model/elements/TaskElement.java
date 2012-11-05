@@ -155,6 +155,18 @@ public class TaskElement implements Serializable {
 	public void setMembers(List<User> otherMembers){
 		this.otherMembers = otherMembers;
 	}
+	
+	/**
+	 *  Fulfill a task by completing the task's requirements.
+	 * @return True if the task was successfully fulfilled, false otherwise.
+	 */
+	public boolean fulfill(){
+		for (Requirement req : this.requirements){
+			if (!req.fulfill())
+				return false;
+		}
+		return true;
+	}
 
 	// Sets the string in specific order for log entry in application.
 	// public String toString() {
