@@ -34,10 +34,10 @@
                     <ListView
                         android:id="@+id/notificationsList"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@android:id/tabs" >
+                        android:layout_height="wrap_content" >
+                        <!-- android:layout_below="@android:id/tabs" > -->
 
-                        android:layout_height="396dp" >
+                        <!-- android:layout_height="396dp" > -->
 
                     </ListView>
 

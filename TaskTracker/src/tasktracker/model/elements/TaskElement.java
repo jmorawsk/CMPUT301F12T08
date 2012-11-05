@@ -47,6 +47,7 @@ public class TaskElement implements Serializable {
 	private String name;
 	private String description;
 	private List<Requirement> requirements;
+	private List<User> otherMembers;
 	private TaskStatus status;
 
 	// private Status taskStatus;
@@ -86,6 +87,7 @@ public class TaskElement implements Serializable {
 		this.description = description;
 		this.requirements = requirements;
 		this.status = TaskStatus.Unfulfilled;
+		this.otherMembers = null;
 
 	}
 
@@ -142,6 +144,16 @@ public class TaskElement implements Serializable {
 	public void deleteRequirement(int requirement) {
 		requirements.remove(requirement);
 		// TODO: Should be finding the specific requirement, not use indices.
+	}
+	
+	/** Gets the members of the task, aside from the task creator */
+	public List<User> getMembers(){
+		return this.otherMembers;
+	}
+	
+	/** Sets the members of the task, aside from the task creator */
+	public void setMembers(List<User> otherMembers){
+		this.otherMembers = otherMembers;
 	}
 
 	// Sets the string in specific order for log entry in application.

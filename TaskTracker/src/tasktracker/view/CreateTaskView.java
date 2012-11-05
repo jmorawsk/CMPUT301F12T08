@@ -78,12 +78,15 @@ public class CreateTaskView extends Activity {
 		saveButton.setOnClickListener(new handleButton_Save());
 	}
 
-	protected void onResume(){
-		super.onResume();		
+	private List<User> parseOtherMembers(){
+		List<User> members = new ArrayList<User>();
+		
+		// TODO: Parse through string for user information, run checks
+		return members;
 	}
 	
 	/**
-	 * 
+	 * Checks if any of the required fields has been left empty.
 	 * @return True if a required field has been left empty, false otherwise.
 	 */
 	private boolean hasEmptyFields(){
@@ -96,8 +99,16 @@ public class CreateTaskView extends Activity {
 		return false;
 	}
 	
+	/**
+	 * A handler for the save button.
+	 * @author Jeanine Bonot
+	 *
+	 */
 	class handleButton_Save implements OnClickListener{
 
+		/**
+		 * Creates and saves a new task.
+		 */
 		@Override
 		public void onClick(View view) {
 			
@@ -111,6 +122,10 @@ public class CreateTaskView extends Activity {
 			// TODO: Save task
 		}
 		
+		/**
+		 * Create a task based on the creator's input.
+		 * @return The task created with the creator's input.
+		 */
 		private TaskElement createTask(){			
 			
 			//TODO: Find out how to quickly access user information
@@ -119,6 +134,7 @@ public class CreateTaskView extends Activity {
 			task.setDescription(CreateTaskView.this.name.getText().toString());
 			task.setName(CreateTaskView.this.name.getText().toString());
 			// TODO: add requirements
+			// TODO: add other members
 			
 			return task;
 		}

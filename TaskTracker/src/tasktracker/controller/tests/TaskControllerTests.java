@@ -24,6 +24,11 @@ import static org.junit.Assert.*;
 import tasktracker.model.elements.*;
 import tasktracker.controller.*;
 
+/**
+ * Tests the TaskController class.
+ * @author Jeanine Bonot
+ *
+ */
 public class TaskControllerTests {
 	
 	private TaskController controller;
