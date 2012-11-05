@@ -95,5 +95,5 @@ public abstract class DBManager
     /**
      * Removes all tasks from the database.
      */
-    protected abstract String nukeAll();
+    public abstract String nukeAll();
 }

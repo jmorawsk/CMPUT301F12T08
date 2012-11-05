@@ -162,7 +162,7 @@ public class JSONDBController extends DBManager
     /**
      * Removes all tasks from the database
      */
-    protected String nukeAll(){
+    public String nukeAll(){
         String nukeCommand = "action=" + "nuke"
                 + "&key=" + "judgedredd";
         return executeAction(nukeCommand);

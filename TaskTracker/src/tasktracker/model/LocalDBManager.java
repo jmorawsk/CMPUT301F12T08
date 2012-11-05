@@ -116,7 +116,7 @@ public class LocalDBManager extends DBManager
     /**
      * Removes all tasks from the database.
      */
-    protected String nukeAll(){
+    public String nukeAll(){
         return controller.nukeAll();
     }
 }
