@@ -3,82 +3,148 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:text="@string/newTask"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+    <RelativeLayout
+        android:id="@+id/buttons"
+        android:layout_width="fill_parent"
+        android:layout_height="60dp" >
 
-    <EditText
-        android:id="@+id/name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView1"
-        android:layout_marginTop="24dp"
-        android:ems="10"
-        android:hint="@string/taskName"
-        android:inputType="textPersonName"
-        android:text="@string/taskName" />
+        <Button
+            android:id="@+id/buttonMyTasks"
+            android:layout_width="106dp"
+            android:layout_height="match_parent"
+            android:text="@string/myTasks"
+            android:textSize="14dp" />
 
-    <EditText
-        android:id="@+id/deadline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/name"
-        android:layout_marginTop="50dp"
-        android:layout_toRightOf="@+id/textView1"
-        android:ems="10"
-        android:hint="@string/dateEntry"
-        android:inputType="date" />
+        <Button
+            android:id="@+id/buttonCreateTask"
+            android:layout_width="106dp"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_toRightOf="@+id/buttonMyTasks"
+            android:enabled="false"
+            android:text="@string/create_a_task"
+            android:textSize="14dp" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/deadline"
-        android:layout_alignBottom="@+id/deadline"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="16dp"
-        android:text="@string/deadline" />
+        <Button
+            android:id="@+id/buttonNotifications"
+            android:layout_width="106dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@+id/buttonCreateTask"
+            android:text="@string/notifications"
+            android:textSize="14dp" />
+    </RelativeLayout>
 
-    <EditText
-        android:id="@+id/description"
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/deadline"
-        android:layout_marginTop="54dp"
-        android:ems="10"
-        android:hint="@string/taskDescription"
-        android:inputType="textMultiLine"
-        android:singleLine="false" />
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/buttons"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp" >
 
-    <EditText
-        android:id="@+id/otherMembers"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="68dp"
-        android:ems="10"
-        android:hint="@string/otherMembers"
-        android:inputType="textMultiLine" >
+        <EditText
+            android:id="@+id/taskName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="16dp"
+            android:hint="@string/taskNameHint"
+            android:inputType="text"
+            android:textSize="20dp"
+            android:textStyle="bold" />
 
-        <requestFocus />
-    </EditText>
+        <TextView
+            android:id="@+id/viewDeadline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/taskName"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="12dp"
+            android:text="@string/deadline" />
 
-    <Button
-        android:id="@+id/saveButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="16dp"
-        android:text="@string/createTask" />
+        <EditText
+            android:id="@+id/editDeadline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/taskName"
+            android:layout_marginBottom="8dp"
+            android:layout_toRightOf="@+id/viewDeadline"
+            android:hint="@string/dateFormat"
+            android:inputType="date"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/viewDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editDeadline"
+            android:text="@string/taskDescription" />
+
+        <EditText
+            android:id="@+id/editDescription"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_below="@+id/viewDescription"
+            android:layout_marginBottom="8dp"
+            android:gravity="center_vertical|top"
+            android:hint="@string/taskDescriptionHint"
+            android:inputType="textMultiLine"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            android:scrollbarStyle="insideInset"
+            android:scrollbars="vertical"
+            android:singleLine="false"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/viewRequirements"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editDescription"
+            android:text="@string/requirements" />
+
+        <CheckBox
+            android:id="@+id/checkBoxText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/viewRequirements"
+            android:layout_marginBottom="8dp"
+            android:checked="true"
+            android:text="@string/text" />
+
+        <CheckBox
+            android:id="@+id/checkBoxPhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/viewRequirements"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@id/checkBoxText"
+            android:text="@string/photo" />
+
+        <TextView
+            android:id="@+id/viewOtherMembers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/checkBoxPhoto"
+            android:text="@string/otherMembers" />
+
+        <EditText
+            android:id="@+id/otherMembers"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@+id/viewOtherMembers"
+            android:gravity="center_vertical|top"
+            android:hint="@string/otherMembersHint"
+            android:inputType="textMultiLine"
+            android:textSize="14dp" />
+
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="@string/createTask" />
+    </RelativeLayout>
 
 </RelativeLayout>

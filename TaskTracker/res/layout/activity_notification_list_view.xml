@@ -3,21 +3,61 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <ListView
-        android:id="@+id/notificationsList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" >
-    </ListView>
+    <RelativeLayout
+        android:id="@+id/buttons"
+        android:layout_width="fill_parent"
+        android:layout_height="60dp" >
 
-    <ImageButton
+        <Button
+            android:id="@+id/buttonMyTasks"
+            android:layout_width="106dp"
+            android:layout_height="match_parent"
+            android:text="@string/myTasks"
+            android:textSize="14dp" />
+
+        <Button
+            android:id="@+id/buttonCreateTask"
+            android:layout_width="106dp"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_toRightOf="@+id/buttonMyTasks"
+            android:text="@string/create_a_task"
+            android:textSize="14dp" />
+
+        <Button
+            android:id="@+id/buttonNotifications"
+            android:layout_width="106dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@+id/buttonCreateTask"
+            android:enabled="false"
+            android:text="@string/notifications"
+            android:textSize="14dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:contentDescription="@string/descr_overflow_button"
-        android:onClick="showPopup"
-        android:src="@drawable/ic_action_search" />
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/buttons"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp" >
+
+        <ListView
+            android:id="@+id/notificationsList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true" >
+        </ListView>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:contentDescription="@string/descr_overflow_button"
+            android:onClick="showPopup"
+            android:src="@drawable/ic_action_search" />
+    </RelativeLayout>
 
 </RelativeLayout>
