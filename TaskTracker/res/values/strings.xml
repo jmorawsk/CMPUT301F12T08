@@ -1,19 +1,28 @@
 <resources>
 
     <string name="app_name">TaskTracker</string>
-    <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_create_task_view">CreateTaskView</string>
     <string name="home">Home</string>
-    <string name="newTask">New Task</string>
+    <string name="myTasks">My Tasks</string>
+    <string name="create_a_task">Create a Task</string>
+    <string name="notifications">Notifications</string>
     <string name="taskName">Task Name</string>
-    <string name="dateEntry">dd-mm-yyyy</string>
+    <string name="taskNameHint">New Task Name</string>
+    <string name="dateFormat">yyyy-mm-dd</string>
     <string name="deadline">Deadline:</string>
-    <string name="taskDescription">Task Description</string>
-    <string name="otherMembers">Other Members</string>
+    <string name="taskDescription">Task Description:</string>
+    <string name="taskDescriptionHint">Enter a description.</string>
+    <string name="otherMembers">Other Members:</string>
+    <string name="otherMembersHint">e.g., bond, jdoe, mjane</string>
+    <string name="requirements">Requirements:</string>
+    <string name="text">Text</string>
+    <string name="photo">Photo</string>
     <string name="createTask">Create Task</string>
     <string name="title_activity_notification_list_view">NotificationListView</string>
-	<string name="descr_overflow_button">Temp descr overflow button</string>
-    
+    <string name="descr_overflow_button">Temp descr overflow button</string>
+    <string name="creationInfo">Created on [date] by [creator].</string>
+    <string name="fulfill">Fulfill this task</string>
+
 </resources>
