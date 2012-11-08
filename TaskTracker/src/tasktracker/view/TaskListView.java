@@ -39,11 +39,11 @@ import tasktracker.model.elements.*;
 public class TaskListView extends Activity {
 
 	private ListView taskListView;
-	//private List<Task> tasks;
-	//private List<String> tasks;
+	// private List<Task> tasks;
+	// private List<String> tasks;
 	private String[] tasks = new String[0];
-	
-        private WebDBManager webManager;
+
+	private WebDBManager webManager;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -52,31 +52,37 @@ public class TaskListView extends Activity {
 
 		// Assign ListView and its on item click listener.
 		taskListView = (ListView) findViewById(R.id.taskList);
-		
-		//TODO: read from database and display
-//		String[][] webTasks = webManager.listTasksAsArrays();
-//		for(int n=0;n<webTasks.length;n++){
-//		    tasks.add(webTasks[n][0]);
-//		}
-//		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.list_item, tasks);
-//		taskListView.setAdapter(adapter);
-		
+
+		// TODO: read from database and display
+		// String[][] webTasks = webManager.listTasksAsArrays();
+		// for(int n=0;n<webTasks.length;n++){
+		// tasks.add(webTasks[n][0]);
+		// }
+		// ArrayAdapter<String> adapter = new
+		// ArrayAdapter<String>(this,R.layout.list_item, tasks);
+		// taskListView.setAdapter(adapter);
+
 		taskListView.setOnItemClickListener(new handleList_Click());
-		Button buttonCreate = (Button) findViewById(R.id.buttonCreate);
-		
-		buttonCreate.setOnClickListener(new View.OnClickListener()
-                {
-                    
-                    @Override
-                    public void onClick(View v)
-                    {
-                    
-                        // TODO Auto-generated method stub
-                        Intent i = new Intent(getApplicationContext(), CreateTaskView.class);
-                        
-                        startActivity(i);
-                    }
-                });
+		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
+		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
+
+		buttonCreate.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View v) {
+				Intent i = new Intent(getApplicationContext(),
+						CreateTaskView.class);
+				startActivity(i);
+			}
+		});
+
+		buttonNotifications.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View v) {
+				Intent i = new Intent(getApplicationContext(), NotificationListView.class);
+				startActivity(i);
+
+			}
+		});
 
 	}
 
@@ -88,7 +94,6 @@ public class TaskListView extends Activity {
 	 */
 	class handleList_Click implements OnItemClickListener {
 
-		@Override
 		public void onItemClick(AdapterView<?> myAdapter, View myView,
 				int myItemInt, long mylng) {
 			// TODO Auto-generated method stub
@@ -105,7 +110,7 @@ public class TaskListView extends Activity {
 		 */
 		private void showItemMenu(View view, final int index) {
 			PopupMenu menu = new PopupMenu(TaskListView.this, view);
-			//menu.getMenuInflater().inflate(R.menu.popup, menu.getMenu());
+			// menu.getMenuInflater().inflate(R.menu.popup, menu.getMenu());
 
 			// TODO: Create menu content, set OnMenuItemClickListener, update
 			// tasks upon deletion

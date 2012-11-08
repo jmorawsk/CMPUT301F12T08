@@ -69,13 +69,13 @@ public class CreateTaskView extends Activity {
 		setContentView(R.layout.activity_create_task_view);
 
 		//Initialize our webManager
-		webManager = new WebDBManager();
+		this.webManager = new WebDBManager();
 		
 		// Assign EditText fields
-		name = (EditText) findViewById(R.id.name);
-		deadline = (EditText) findViewById(R.id.deadline);
-		description = (EditText) findViewById(R.id.description);
-		otherMembers = (EditText) findViewById(R.id.otherMembers);
+		this.name = (EditText) findViewById(R.id.taskName);
+		this.deadline = (EditText) findViewById(R.id.editDeadline);
+		this.description = (EditText) findViewById(R.id.editDescription);
+		this.otherMembers = (EditText) findViewById(R.id.otherMembers);
 
 		// Assign listener to Save button
 		Button saveButton = (Button) findViewById(R.id.saveButton);
@@ -121,7 +121,6 @@ public class CreateTaskView extends Activity {
 		/**
 		 * Creates and saves a new task.
 		 */
-		@Override
 		public void onClick(View view) {
 
 			if (CreateTaskView.this.hasEmptyFields()) {

@@ -49,7 +49,6 @@ public final class TaskController implements LocalObjectController<Task>{
 	 * @return Returns true if the file was successfully deleted, false
 	 *         otherwise.
 	 */
-	@Override
     public boolean deleteFile() {
 		File sdDir = Environment.getExternalStorageDirectory();
 		File file = new File(sdDir.getAbsolutePath() + DIRECTORIES, FILENAME);
@@ -60,7 +59,6 @@ public final class TaskController implements LocalObjectController<Task>{
 	 * Read the log entries from the file.
 	 * @return A list of TaskElement items from the file.
 	 */
-	@Override
     public List<Task> readFile() {
 		ArrayList<Task> entries = new ArrayList<Task>();
 
@@ -87,7 +85,6 @@ public final class TaskController implements LocalObjectController<Task>{
 	 * Serialize the task element into the file system.
 	 * @param task The task to be saved.
 	 */
-	@Override
     public void writeFile(Task element) {
 		try {
 			ObjectOutputStream oos = getOOS(TaskController.getFile());

@@ -21,6 +21,7 @@ package tasktracker.view;
 //import android.R;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.View;
 
 import java.util.*;
@@ -47,6 +48,28 @@ public class NotificationListView extends Activity {
 		// Assign ListView and its item click listener
 		this.notificationsList = (ListView) findViewById(R.id.notificationsList);
 		this.notificationsList.setOnItemClickListener(new handleList_Click());
+
+		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
+		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
+
+		buttonMyTasks.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View v) {
+				Intent i = new Intent(getApplicationContext(),
+						TaskListView.class);
+				startActivity(i);
+
+			}
+		});
+		
+		buttonCreate.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View v) {
+				Intent i = new Intent(getApplicationContext(),
+						CreateTaskView.class);
+				startActivity(i);
+			}
+		});
 	}
 
 	/**
@@ -54,7 +77,6 @@ public class NotificationListView extends Activity {
 	 */
 	class handleList_Click implements OnItemClickListener {
 
-		@Override
 		public void onItemClick(AdapterView<?> myAdapter, View myView,
 				int myItemInt, long mylng) {
 			// TODO Auto-generated method stub
@@ -71,7 +93,7 @@ public class NotificationListView extends Activity {
 		 */
 		private void showItemMenu(View view, final int index) {
 			PopupMenu menu = new PopupMenu(NotificationListView.this, view);
-			//menu.getMenuInflater().inflate(R.menu.popup, menu.getMenu());
+			// menu.getMenuInflater().inflate(R.menu.popup, menu.getMenu());
 
 			// TODO: Create menu content, set OnMenuItemClickListener, update
 			// notifications upon deletion
