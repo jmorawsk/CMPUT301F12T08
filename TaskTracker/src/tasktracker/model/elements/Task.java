@@ -204,6 +204,14 @@ public class Task implements Serializable {
 			return false;
 		return true;
 	}
+	
+	public String toString(){
+		String string = "";
+		string.concat("\"" + this.getName() + "\" ");
+		string.concat("by " + this.creator + "\n");
+		string.concat("Deadline: " + this.stringDate());
+		return string;
+	}
 
 	// Sets the string in specific order for log entry in application.
 	// public String toString() {
