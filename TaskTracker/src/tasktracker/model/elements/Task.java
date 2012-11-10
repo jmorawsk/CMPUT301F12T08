@@ -22,6 +22,8 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import android.content.ContentValues;
+
 /**
  * A class that represents a task. Every task has a creator, and is to be
  * fulfilled by a task member.
@@ -30,35 +32,33 @@ import java.util.*;
  * @author Jeanine Bonot
  * 
  */
-public class Task implements Serializable {
+public class Task implements Serializable{
 
-	/** Indicates the task's status */
-	public enum Status {
-		Unfulfilled, Fulfilled
-	};
-
+	public static final String DATABASE_TABLE = "tasks";  // For SQL table
 	private static final long serialVersionUID = 1L;
 
-	// Used to generate the task ID number.
-	private static int _taskCount = 0;
+	public static final String ID = "_id";
+	public static final String TASK = "task";
+	public static final String DATE = "date";
+	public static final String CREATOR = "creator";
+	public static final String TEXT = "text";
+	public static final String REQUIRESTEXT = "requiresText";
+	public static final String REQUIRESPHOTO = "requiresPhoto";
+	public static final String OTHERMEMBERS = "otherMembers";
+	public static final String PHOTO = "photo";
+	public static final String STATUS = "status";
 
-	// Properties that will not change
-	private final Date creationDate;
-	private final User creator;
-	
-	//db needs to set id
-	private String id;
+	private final Date _creationDate;
+	private final User _creator;
 
 	// Properties that may change
-	private String name;
-	private String description;
-	private List<Requirement> requirements;
-	private List<User> otherMembers;
-	private Status status;
-
-	// private Status taskStatus;
-	// private Visibility taskVisibility;
-	// private int taskDeadline;
+	private String _id; // Instantiated by database.
+	private String _name;
+	private String _description;
+	private boolean _requiresText;
+	private boolean _requiresPhoto;
+	private List<User> _otherMembers;
+	private boolean _idSet;
 
 	/**
 	 * Creates a new instance of the TaskElement class.
@@ -67,8 +67,8 @@ public class Task implements Serializable {
 	 *            The task creator.
 	 */
 	public Task(User creator) {
-		this(creator, "Untitled", Calendar.getInstance().getTime(), "",
-				new ArrayList<Requirement>());
+		this(creator, "Untitled", Calendar.getInstance().getTime(), "", true,
+				false, "");
 	}
 
 	/**
@@ -86,90 +86,85 @@ public class Task implements Serializable {
 	 *            The list of task requirements.
 	 */
 	public Task(User creator, String name, Date date, String description,
-			List<Requirement> requirements) {
+			boolean requiresText, boolean requiresPhoto, String otherMembers) {
 
 		// Required Elements
-		this.creator = creator;
-		this.creationDate = date;
-		
-		//id should be null until set by db
-		this.id = null;
+		_creator = creator;
+		_creationDate = date;
+
+		// id should be null until set by db
+		_idSet = false;
 
 		// Changeable elements
-		this.name = name;
-		this.description = description;
-		this.requirements = requirements;
-		this.status = Status.Unfulfilled;
-		this.otherMembers = null;
+		_name = name;
+		_description = description;
+		_requiresText = requiresText;
+		_requiresPhoto = requiresPhoto;
+		_otherMembers = null;
 
 	}
 
 	/** Gets the task name */
 	public String getName() {
-		return name;
+		return _name;
 	}
 
 	/** Sets the task name */
 	public void setName(String name) {
-		this.name = name;
+		_name = name;
 	}
 
 	/** Gets the date the task was created */
-	public Date getDateCreated() {
-		return this.creationDate;
+	public String getDateCreated() {
+		return new SimpleDateFormat("yyyy-MM-dd").format(_creationDate.getTime());
 	}
 
-	
-	/** Gets the task ID  */
-        public void setID(String newID) {
-                this.id = newID;
-        }
-	/** Gets the task ID  */
+	/**
+	 * Sets the task ID if it has not yet been done so already.
+	 * 
+	 * @return true if the ID was set, false if the ID has already been set
+	 */
+	public boolean setID(String newID) {
+		if (!_idSet) {
+			_id = newID;
+			return true;
+		}
+		return false;
+	}
+
+	/** Gets the task ID */
 	public String getID() {
-		return this.id;
+		return _id;
 	}
 
 	/** Gets the date in the format of a String */
 	public String stringDate() {
 		SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
-		return dateformat.format(creationDate).toString();
+		return dateformat.format(_creationDate).toString();
 	}
 
 	/** Gets the text description of the task */
 	public String getDescription() {
-		return description;
+		return _description;
 	}
 
 	/** Sets the text description of the task */
 	public void setDescription(String description) {
-		this.description = description;
+		_description = description;
 	}
 
 	/** Gets the list of task requirements */
-	public List<Requirement> getRequirements() {
-		return requirements;
-	}
 
-	/** Sets the list of task requirements. */
-	public void setRequirements(List<Requirement> requirements) {
-		this.requirements = requirements;
-	}
-
-	/** Deletes a requirement according to its index */
-	public void deleteRequirement(int requirement) {
-		requirements.remove(requirement);
-		// TODO: Should be finding the specific requirement, not use indices.
-	}
 
 	/** Gets the members of the task, including the task creator */
 	public List<User> getMembers() {
-		return this.otherMembers;
+		return _otherMembers;
 	}
 
 	/** Sets the members of the task, including the task creator */
 	public void setMembers(List<User> otherMembers) {
-		this.otherMembers = otherMembers;
-		this.otherMembers.add(this.creator);
+		_otherMembers = otherMembers;
+		_otherMembers.add(_creator);
 	}
 
 	/**
@@ -178,15 +173,14 @@ public class Task implements Serializable {
 	 * @return True if the task was successfully fulfilled, false otherwise.
 	 */
 	public boolean fulfill() {
-		for (Requirement req : this.requirements) {
-			if (!req.fulfill())
-				return false;
-		}
+//		for (Requirement req : _requirements) {
+//			if (!req.fulfill())
+//				return false;
+//		}
 
-		this.status = Status.Fulfilled;
 		return true;
 	}
-	
+
 	/**
 	 * Checks if objects (Tasks) are equal based on their ID number.
 	 */
@@ -200,17 +194,28 @@ public class Task implements Serializable {
 			return false;
 
 		Task other = (Task) obj;
-		if (this.id != other.id)
+		if (_id != other._id)
 			return false;
 		return true;
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		String string = "";
 		string.concat("\"" + this.getName() + "\" ");
-		string.concat("by " + this.creator + "\n");
+		string.concat("by " + _creator + "\n");
 		string.concat("Deadline: " + this.stringDate());
 		return string;
+	}
+
+	public ContentValues getContentValues() {
+		ContentValues initialValues = new ContentValues();
+		initialValues.put(TASK, _name);
+		initialValues.put(DATE, getDateCreated());
+		initialValues.put(CREATOR, _creator.getName());
+		initialValues.put(TEXT, _description);
+		initialValues.put(REQUIRESPHOTO, _requiresPhoto);
+		initialValues.put(REQUIRESTEXT, _requiresText);
+		return initialValues;
 	}
 
 	// Sets the string in specific order for log entry in application.
