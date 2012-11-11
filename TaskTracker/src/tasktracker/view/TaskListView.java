@@ -24,9 +24,11 @@ import java.util.*;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.view.View;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
+import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.WebDBManager;
 import tasktracker.model.elements.*;
 
@@ -44,6 +46,8 @@ public class TaskListView extends Activity {
 	private String[] tasks = new String[0];
 
 	private WebDBManager webManager;
+	private DatabaseAdapter _dbHelper;
+	private Cursor _cursor;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -66,6 +70,8 @@ public class TaskListView extends Activity {
 		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
 		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
 
+		_dbHelper = new DatabaseAdapter(this);
+
 		buttonCreate.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
@@ -78,11 +84,49 @@ public class TaskListView extends Activity {
 		buttonNotifications.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
-				Intent i = new Intent(getApplicationContext(), NotificationListView.class);
+				Intent i = new Intent(getApplicationContext(),
+						NotificationListView.class);
 				startActivity(i);
 
 			}
 		});
+
+	}
+
+	protected void onStart() {
+		super.onStart();
+
+		_dbHelper.open();
+		fillData();
+
+	}
+
+	protected void onStop() {
+		super.onStop();
+
+		_dbHelper.close();
+		_cursor.close();
+	}
+
+	/** Function call to retrieve all the task names from the database.
+	 * Utilizes the simple cursor adapter to bind it to the listview */
+	private void fillData() {
+
+		// TODO: Get alternative for deprecated methods/constructors
+		
+		
+		_cursor = _dbHelper.fetchAllTasks();
+		startManagingCursor(_cursor);
+
+		// Create an array to specify the fields we want to display in the list
+		String[] from = new String[] { DatabaseAdapter.TASK };
+		int[] to = new int[] { R.id.taskName };
+
+		// Create an array adapter and set it to display
+		SimpleCursorAdapter adapter =
+			new SimpleCursorAdapter(this, R.layout.task_entry, _cursor, from, to);
+
+		taskListView.setAdapter(adapter);
 
 	}
 

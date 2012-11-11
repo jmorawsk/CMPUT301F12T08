@@ -50,16 +50,15 @@ public class DatabaseModel {
 	 */
 
 	private static final String DATABASE_CREATE_TASKS = "CREATE TABLE tasks("
-			+ "_id TEXT primary key, " + "task TEXT NOT NULL, "
-			+ "date TEXT NOT NULL, " + "creator TEXT NOT NULL, "
+			+ "_id integer primary key autoincrement, " + "task TEXT NOT NULL, "
+			+ "date TEXT NOT NULL, " + "user TEXT NOT NULL, "
 			+ "text TEXT, " + "requiresPhoto INTEGER, "
-			+ "requiresText INTEGER, " + "status INTEGER, "
-			+ "otherMembers TEXT);";
+			+ "requiresText INTEGER, " + "status INTEGER);";
 
-	private static final String DATABASE_CREATE_TASKFULFILLMENTS = "CREATE TABLE taskFulfillments("
+	private static final String DATABASE_CREATE_FULFILLMENTS = "CREATE TABLE fulfillments("
 			+ "_id integer primary key autoincrement, "
 			+ "task TEXT NOT NULL,"
-			+ "fulfiller TEXT NOT NULL, "
+			+ "user TEXT NOT NULL, "
 			+ "date TEXT NOT NULL "
 			+ "text TEXT);";
 
@@ -67,6 +66,11 @@ public class DatabaseModel {
 			+ "_id integer primary key autoincrement, "
 			+ "photo BLOB NOT NULL, " + "task TEXT NOT NULL "
 			+ "date TEXT NOT NULL);";
+
+	private static final String DATABASE_CREATE_MEMBERS = "CREATE TABLE members("
+			+ "_id integer primary key autoincrement, "
+			+ "task TEXT NOT NULL,"
+			+ "user TEXT NOT NULL);";
 
 	private static final String DATABASE_NAME = "data";
 	private static final int DATABASE_VERSION = 2;
@@ -82,7 +86,8 @@ public class DatabaseModel {
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL(DATABASE_CREATE_TASKS);
-			db.execSQL(DATABASE_CREATE_TASKFULFILLMENTS);
+			db.execSQL(DATABASE_CREATE_MEMBERS);
+			db.execSQL(DATABASE_CREATE_FULFILLMENTS);
 			db.execSQL(DATABASE_CREATE_PHOTOS);
 		}
 
@@ -90,9 +95,10 @@ public class DatabaseModel {
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			Log.w(NAME, "Upgrading database from version " + oldVersion
 					+ " to " + newVersion + ", which will destroy all old data");
-			db.execSQL("DROP TABLE IF EXISTS photo");
-			db.execSQL("DROP TABLE IF EXISTS task");
-			db.execSQL("DROP TABLE IF EXISTS taskFulfillment");
+			db.execSQL("DROP TABLE IF EXISTS tasks");
+			db.execSQL("DROP TABLE IF EXISTS members");
+			db.execSQL("DROP TABLE IF EXISTS fulfillments");
+			db.execSQL("DROP TABLE IF EXISTS photos");
 			onCreate(db);
 		}
 	}

@@ -18,6 +18,7 @@ package tasktracker.controller;
  */
 
 import tasktracker.model.DatabaseModel;
+import tasktracker.model.elements.Task;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -47,8 +48,7 @@ public class DatabaseAdapter {
 	public static final String ID = "_id";
 	public static final String TASK = "task";
 	public static final String DATE = "date";
-	public static final String CREATOR = "creator";
-	public static final String FULFILLER = "fulfiller";
+	public static final String USER = "user";
 	public static final String TEXT = "text";
 	public static final String REQUIRESTEXT = "requiresText";
 	public static final String REQUIRESPHOTO = "requiresPhoto";
@@ -56,11 +56,12 @@ public class DatabaseAdapter {
 	public static final String PHOTO = "photo";
 	public static final String STATUS = "status";
 
-	private SQLiteDatabase mDb;
+	private SQLiteDatabase db;
 
 	private static final String DATABASE_TABLE_PHOTOS = "photos";
 	private static final String DATABASE_TABLE_TASKS = "tasks";
-	private static final String DATABASE_TABLE_TASKFULFILLMENTS = "taskFulfillments";
+	private static final String DATABASE_TABLE_FULFILLMENTS = "fulfillments";
+	private static final String DATABASE_TABLE_MEMBERS = "members";
 
 	/**
 	 * Constructor - takes the context to allow the database to be
@@ -107,13 +108,14 @@ public class DatabaseAdapter {
 	 *            the photo in byte array format
 	 * @return rowId or -1 if failed
 	 */
-	public long createPhotoEntry(String date, String task, byte[] photo) {
+	public long insertPhoto(String date, String task, byte[] photo) {
 		ContentValues initialValues = new ContentValues();
-		initialValues.put(DATE, date);
+		
 		initialValues.put(TASK, task);
+		initialValues.put(DATE, date);
 		initialValues.put(PHOTO, photo);
 
-		return mDb.insert(DATABASE_TABLE_PHOTOS, null, initialValues);
+		return db.insert(DATABASE_TABLE_PHOTOS, null, initialValues);
 	}
 
 	/**
@@ -125,22 +127,17 @@ public class DatabaseAdapter {
 	 *            the name of the task
 	 * @return rowId or -1 if failed
 	 */
-	public long createTask(String task, String date, String creator,
-			String text, int requiresPhoto, int requiresText, int status,
-			String otherMembers) {
-
-		// TODO: Too many parameters --> Send an object instead?
+	public long insertTask(String task, String date, String creator, String text, int reqsPhoto, int reqsText) {
 		ContentValues initialValues = new ContentValues();
+		
 		initialValues.put(TASK, task);
 		initialValues.put(DATE, date);
-		initialValues.put(CREATOR, creator);
+		initialValues.put(USER, creator);
 		initialValues.put(TEXT, text);
-		initialValues.put(REQUIRESPHOTO, requiresPhoto);
-		initialValues.put(REQUIRESTEXT, requiresText);
-		initialValues.put(STATUS, status);
-		initialValues.put(OTHERMEMBERS, otherMembers);
-
-		return mDb.insert(DATABASE_TABLE_TASKS, null, initialValues);
+		initialValues.put(REQUIRESPHOTO, reqsPhoto);
+		initialValues.put(REQUIRESTEXT, reqsText);
+		
+		return db.insert(DATABASE_TABLE_TASKS, null, initialValues);
 	}
 
 	/**
@@ -154,15 +151,34 @@ public class DatabaseAdapter {
 	 * @param text
 	 * @return rowId of -1 if failed
 	 */
-	public long createTaskFulfillment(String task, String fulfiller,
+	public long insertFulfillment(String task, String fulfiller,
 			String date, String text) {
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(TASK, task);
-		initialValues.put(FULFILLER, fulfiller);
+		initialValues.put(USER, fulfiller);
 		initialValues.put(DATE, date);
 		initialValues.put(TEXT, text);
 
-		return mDb.insert(DATABASE_TABLE_TASKFULFILLMENTS, null, initialValues);
+		return db.insert(DATABASE_TABLE_FULFILLMENTS, null, initialValues);
+	}
+
+	/**
+	 * Create a new entry using the information provided. If the entry is
+	 * successfully created return the new rowId for that entry, otherwise
+	 * return a -1 to indicate failure.
+	 * 
+	 * @param task
+	 * @param fulfiller
+	 * @param date
+	 * @param text
+	 * @return rowId of -1 if failed
+	 */
+	public long insertMember(String task, String member) {
+		ContentValues initialValues = new ContentValues();
+		initialValues.put(TASK, task);
+		initialValues.put(USER, member);
+
+		return db.insert(DATABASE_TABLE_MEMBERS, null, initialValues);
 	}
 
 	/**
@@ -173,7 +189,7 @@ public class DatabaseAdapter {
 	 * @return true if deleted, false otherwise
 	 */
 	public boolean deletePhoto(long rowId) {
-		return mDb.delete(DATABASE_TABLE_PHOTOS, ID + "=" + rowId, null) > 0;
+		return db.delete(DATABASE_TABLE_PHOTOS, ID + "=" + rowId, null) > 0;
 	}
 
 	/**
@@ -184,7 +200,7 @@ public class DatabaseAdapter {
 	 * @return true if deleted, false otherwise
 	 */
 	public boolean deleteTask(long rowId) {
-		return mDb.delete(DATABASE_TABLE_TASKS, ID + "=" + rowId, null) > 0;
+		return db.delete(DATABASE_TABLE_TASKS, ID + "=" + rowId, null) > 0;
 	}
 
 	/**
@@ -195,7 +211,19 @@ public class DatabaseAdapter {
 	 * @return true if deleted, false otherwise
 	 */
 	public boolean deleteTaskFulfillment(long rowId) {
-		return mDb.delete(DATABASE_TABLE_TASKFULFILLMENTS, ID + "=" + rowId,
+		return db.delete(DATABASE_TABLE_FULFILLMENTS, ID + "=" + rowId,
+				null) > 0;
+	}
+
+	/**
+	 * Delete the entry with the given rowId
+	 * 
+	 * @param rowId
+	 *            id of entry to delete
+	 * @return true if deleted, false otherwise
+	 */
+	public boolean deleteMember(long rowId) {
+		return db.delete(DATABASE_TABLE_FULFILLMENTS, ID + "=" + rowId,
 				null) > 0;
 	}
 
@@ -208,7 +236,7 @@ public class DatabaseAdapter {
 	 * @return true if deleted, false otherwise
 	 */
 	public boolean deletePhotosInFolder(String task) {
-		return mDb.delete(DATABASE_TABLE_PHOTOS, TASK + "='" + task + "'",
+		return db.delete(DATABASE_TABLE_PHOTOS, TASK + "='" + task + "'",
 				null) > 0;
 	}
 
@@ -218,7 +246,7 @@ public class DatabaseAdapter {
 	 * @return Cursor over all folders
 	 */
 	public Cursor fetchAllTasks() {
-		return mDb.query(DATABASE_TABLE_TASKS, new String[] { ID, TASK },
+		return db.query(DATABASE_TABLE_TASKS, new String[] { ID, TASK },
 				null, null, null, null, null);
 	}
 
@@ -267,7 +295,7 @@ public class DatabaseAdapter {
 	 *            Takes in the SQL database
 	 */
 	public void setMDb(SQLiteDatabase mDb) {
-		this.mDb = mDb;
+		this.db = mDb;
 	}
 
 }

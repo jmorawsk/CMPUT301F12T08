@@ -48,7 +48,7 @@ public class Task implements Serializable{
 	public static final String PHOTO = "photo";
 	public static final String STATUS = "status";
 
-	private final Date _creationDate;
+	private final String _creationDate;
 	private final User _creator;
 
 	// Properties that may change
@@ -90,7 +90,7 @@ public class Task implements Serializable{
 
 		// Required Elements
 		_creator = creator;
-		_creationDate = date;
+		_creationDate = new SimpleDateFormat("yyyy-MM-dd").format(date.getTime());
 
 		// id should be null until set by db
 		_idSet = false;
@@ -112,11 +112,6 @@ public class Task implements Serializable{
 	/** Sets the task name */
 	public void setName(String name) {
 		_name = name;
-	}
-
-	/** Gets the date the task was created */
-	public String getDateCreated() {
-		return new SimpleDateFormat("yyyy-MM-dd").format(_creationDate.getTime());
 	}
 
 	/**
@@ -154,8 +149,6 @@ public class Task implements Serializable{
 	}
 
 	/** Gets the list of task requirements */
-
-
 	/** Gets the members of the task, including the task creator */
 	public List<User> getMembers() {
 		return _otherMembers;
@@ -210,7 +203,7 @@ public class Task implements Serializable{
 	public ContentValues getContentValues() {
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(TASK, _name);
-		initialValues.put(DATE, getDateCreated());
+		initialValues.put(DATE, _creationDate);
 		initialValues.put(CREATOR, _creator.getName());
 		initialValues.put(TEXT, _description);
 		initialValues.put(REQUIRESPHOTO, _requiresPhoto);
@@ -218,10 +211,4 @@ public class Task implements Serializable{
 		return initialValues;
 	}
 
-	// Sets the string in specific order for log entry in application.
-	// public String toString() {
-
-	// DecimalFormat df = new DecimalFormat ("#0.00");
-	// return this.stringDate() + " \n" + description;
-	// }
 }
