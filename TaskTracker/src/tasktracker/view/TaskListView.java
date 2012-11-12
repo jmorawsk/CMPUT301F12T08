@@ -123,8 +123,8 @@ public class TaskListView extends Activity {
 		int[] to = new int[] { R.id.taskName };
 
 		// Create an array adapter and set it to display
-		SimpleCursorAdapter adapter =
-			new SimpleCursorAdapter(this, R.layout.task_entry, _cursor, from, to);
+		CursorAdapter adapter =
+			new SimpleCursorAdapter(this, R.layout.task_entry, _cursor, from, to, 0);
 
 		taskListView.setAdapter(adapter);
 
