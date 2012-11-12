@@ -22,6 +22,8 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import tasktracker.controller.DatabaseAdapter;
+
 import android.content.ContentValues;
 
 /**
@@ -32,21 +34,10 @@ import android.content.ContentValues;
  * @author Jeanine Bonot
  * 
  */
-public class Task implements Serializable{
+public class Task implements Serializable {
 
-	public static final String DATABASE_TABLE = "tasks";  // For SQL table
+	public static final String DATABASE_TABLE = "tasks"; // For SQL table
 	private static final long serialVersionUID = 1L;
-
-	public static final String ID = "_id";
-	public static final String TASK = "task";
-	public static final String DATE = "date";
-	public static final String CREATOR = "creator";
-	public static final String TEXT = "text";
-	public static final String REQUIRESTEXT = "requiresText";
-	public static final String REQUIRESPHOTO = "requiresPhoto";
-	public static final String OTHERMEMBERS = "otherMembers";
-	public static final String PHOTO = "photo";
-	public static final String STATUS = "status";
 
 	private final String _creationDate;
 	private final User _creator;
@@ -90,7 +81,8 @@ public class Task implements Serializable{
 
 		// Required Elements
 		_creator = creator;
-		_creationDate = new SimpleDateFormat("yyyy-MM-dd").format(date.getTime());
+		_creationDate = new SimpleDateFormat("yyyy-MM-dd").format(date
+				.getTime());
 
 		// id should be null until set by db
 		_idSet = false;
@@ -166,10 +158,10 @@ public class Task implements Serializable{
 	 * @return True if the task was successfully fulfilled, false otherwise.
 	 */
 	public boolean fulfill() {
-//		for (Requirement req : _requirements) {
-//			if (!req.fulfill())
-//				return false;
-//		}
+		// for (Requirement req : _requirements) {
+		// if (!req.fulfill())
+		// return false;
+		// }
 
 		return true;
 	}
@@ -202,12 +194,12 @@ public class Task implements Serializable{
 
 	public ContentValues getContentValues() {
 		ContentValues initialValues = new ContentValues();
-		initialValues.put(TASK, _name);
-		initialValues.put(DATE, _creationDate);
-		initialValues.put(CREATOR, _creator.getName());
-		initialValues.put(TEXT, _description);
-		initialValues.put(REQUIRESPHOTO, _requiresPhoto);
-		initialValues.put(REQUIRESTEXT, _requiresText);
+		initialValues.put(DatabaseAdapter.TASK, _name);
+		initialValues.put(DatabaseAdapter.DATE, _creationDate);
+		initialValues.put(DatabaseAdapter.USER, _creator.getName());
+		initialValues.put(DatabaseAdapter.TEXT, _description);
+		initialValues.put(DatabaseAdapter.REQUIRESPHOTO, _requiresPhoto);
+		initialValues.put(DatabaseAdapter.REQUIRESTEXT, _requiresText);
 		return initialValues;
 	}
 

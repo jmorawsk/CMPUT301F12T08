@@ -18,7 +18,12 @@ package tasktracker.model.elements;
  * specific language governing permissions and limitations under the License.
  */
 
+import java.text.SimpleDateFormat;
 import java.util.*;
+
+import tasktracker.controller.DatabaseAdapter;
+
+import android.content.ContentValues;
 
 /**
  * NotificationElement class
@@ -48,11 +53,11 @@ public class Notification {
 		InformMembership
 	};
 
-	private long timeInMillis;
-	private boolean viewed;
-	private String message;
-	private Task task;
-	private String sender;
+	private String _date;
+	private boolean _viewed;
+	private Task _task;
+	private String _sender;
+	private Type _type;
 
 	/**
 	 * Creates a new instance of the Notification class.
@@ -65,38 +70,27 @@ public class Notification {
 	 *            The type of notification.
 	 */
 	public Notification(String sender, Task task, Type type) {
-		this.sender = sender;
-		this.viewed = false;
-		this.timeInMillis = Calendar.getInstance().getTimeInMillis();
-		this.setMessage(type);
+		Date date = Calendar.getInstance().getTime();
+
+		_sender = sender;
+		_viewed = false;
+		_date = new SimpleDateFormat("yyyy-MM-dd").format(date);
+		_type = type;
 	}
 
 	/** Mark the notification as viewed by the receiver */
 	public void markAsViewed() {
-		this.viewed = true;
+		_viewed = true;
 	}
 
 	/** Checks if the receiver viewed the notification */
 	public boolean hasBeenViewed() {
-		return this.viewed;
-	}
-
-	/**
-	 * Gets the time the notification was created in milliseconds. Used for
-	 * sorting multiple notifications.
-	 */
-	public long getTimeInMillis() {
-		return this.timeInMillis;
+		return _viewed;
 	}
 
 	/** Gets the task associated with the notification */
 	public Task getTaskElement() {
-		return this.task;
-	}
-
-	/** Gets the notification's message string */
-	public String getMessage() {
-		return this.message;
+		return _task;
 	}
 
 	/**
@@ -106,23 +100,30 @@ public class Notification {
 	 * @param type
 	 *            The type of notification being sent
 	 */
-	private void setMessage(Type type) {
-		switch (type) {
+	public String getMessage() {
+		switch (_type) {
 		case FulfillmentReport:
-			// TODO: add date
-			this.message = String.format(
-					"\"%s\" was fulfilled by %s on <Date>",
-					this.task.getName(), this.sender);
-			break;
+			return String.format("\"%s\" was fulfilled by %s on %s.",
+					_task.getName(), _sender, _date);
 		case InformDelete:
-			// TODO: Set message
-			break;
+			return String.format("%s deleted \"%s\".", _sender, _task.getName());
 		case InformEdit:
-			// TODO: Set message
-			break;
+			return String.format("%s made changes to \"%s\".", _sender, _task.getName());
 		case InformMembership:
-			// TODO: Set message
-			break;
+			return String.format("%s has made you a member of \"%s\".", _sender, _task.getName());
+		default:
+			return String.format("Unknown notification for \"%s\".", _task.getName());
 		}
 	}
+
+	public ContentValues getContentValues() {
+		ContentValues initialValues = new ContentValues();
+		initialValues.put(DatabaseAdapter.TASK, _task.getName());
+		initialValues.put(DatabaseAdapter.DATE, _date);
+		initialValues.put(DatabaseAdapter.USER, _sender);
+		initialValues.put(DatabaseAdapter.TYPE, _type.ordinal());
+		initialValues.put(DatabaseAdapter.VIEWED, false);
+		return initialValues;
+	}
+
 }

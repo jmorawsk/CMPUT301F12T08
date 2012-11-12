@@ -50,17 +50,15 @@ public class DatabaseModel {
 	 */
 
 	private static final String DATABASE_CREATE_TASKS = "CREATE TABLE tasks("
-			+ "_id integer primary key autoincrement, " + "task TEXT NOT NULL, "
-			+ "date TEXT NOT NULL, " + "user TEXT NOT NULL, "
-			+ "text TEXT, " + "requiresPhoto INTEGER, "
-			+ "requiresText INTEGER, " + "status INTEGER);";
+			+ "_id integer primary key autoincrement, "
+			+ "task TEXT NOT NULL, " + "date TEXT NOT NULL, "
+			+ "user TEXT NOT NULL, " + "text TEXT, "
+			+ "requiresPhoto INTEGER, " + "requiresText INTEGER);";
 
 	private static final String DATABASE_CREATE_FULFILLMENTS = "CREATE TABLE fulfillments("
 			+ "_id integer primary key autoincrement, "
 			+ "task TEXT NOT NULL,"
-			+ "user TEXT NOT NULL, "
-			+ "date TEXT NOT NULL "
-			+ "text TEXT);";
+			+ "user TEXT NOT NULL, " + "date TEXT NOT NULL " + "text TEXT);";
 
 	private static final String DATABASE_CREATE_PHOTOS = "CREATE TABLE photos("
 			+ "_id integer primary key autoincrement, "
@@ -69,8 +67,13 @@ public class DatabaseModel {
 
 	private static final String DATABASE_CREATE_MEMBERS = "CREATE TABLE members("
 			+ "_id integer primary key autoincrement, "
-			+ "task TEXT NOT NULL,"
-			+ "user TEXT NOT NULL);";
+			+ "task TEXT NOT NULL, " + "user TEXT NOT NULL);";
+
+	private static final String DATABASE_CREATE_NOTIFICATIONS = "CREATE TABLE notifications("
+			+ "_id integer primary key autoincrement, "
+			+ "task TEXT NOT NULL, "
+			+ "date TEXT NOT NULL, "
+			+ "user TEXT NOT NULL, " + "type INTEGER, " + "viewed INTEGER);";
 
 	private static final String DATABASE_NAME = "data";
 	private static final int DATABASE_VERSION = 2;
@@ -89,6 +92,7 @@ public class DatabaseModel {
 			db.execSQL(DATABASE_CREATE_MEMBERS);
 			db.execSQL(DATABASE_CREATE_FULFILLMENTS);
 			db.execSQL(DATABASE_CREATE_PHOTOS);
+			db.execSQL(DATABASE_CREATE_NOTIFICATIONS);
 		}
 
 		@Override
@@ -99,6 +103,7 @@ public class DatabaseModel {
 			db.execSQL("DROP TABLE IF EXISTS members");
 			db.execSQL("DROP TABLE IF EXISTS fulfillments");
 			db.execSQL("DROP TABLE IF EXISTS photos");
+			db.execSQL("DROP TABLE IF EXISTS notifications");
 			onCreate(db);
 		}
 	}

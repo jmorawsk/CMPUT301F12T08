@@ -54,7 +54,8 @@ public class DatabaseAdapter {
 	public static final String REQUIRESPHOTO = "requiresPhoto";
 	public static final String OTHERMEMBERS = "otherMembers";
 	public static final String PHOTO = "photo";
-	public static final String STATUS = "status";
+	public static final String TYPE = "type";
+	public static final String VIEWED = "viewed";
 
 	private SQLiteDatabase db;
 
