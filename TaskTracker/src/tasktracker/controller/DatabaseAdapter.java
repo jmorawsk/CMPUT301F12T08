@@ -54,7 +54,6 @@ public class DatabaseAdapter {
 	public static final String REQUIRESPHOTO = "requiresPhoto";
 	public static final String OTHERMEMBERS = "otherMembers";
 	public static final String PHOTO = "photo";
-	public static final String TYPE = "type";
 	public static final String VIEWED = "viewed";
 
 	private SQLiteDatabase db;
@@ -63,6 +62,7 @@ public class DatabaseAdapter {
 	private static final String DATABASE_TABLE_TASKS = "tasks";
 	private static final String DATABASE_TABLE_FULFILLMENTS = "fulfillments";
 	private static final String DATABASE_TABLE_MEMBERS = "members";
+	private static final String DATABASE_TABLE_NOTIFICATIONS = "notifications";
 
 	/**
 	 * Constructor - takes the context to allow the database to be
@@ -111,7 +111,7 @@ public class DatabaseAdapter {
 	 */
 	public long insertPhoto(String date, String task, byte[] photo) {
 		ContentValues initialValues = new ContentValues();
-		
+
 		initialValues.put(TASK, task);
 		initialValues.put(DATE, date);
 		initialValues.put(PHOTO, photo);
@@ -128,16 +128,17 @@ public class DatabaseAdapter {
 	 *            the name of the task
 	 * @return rowId or -1 if failed
 	 */
-	public long insertTask(String task, String date, String creator, String text, int reqsPhoto, int reqsText) {
+	public long insertTask(String task, String date, String creator,
+			String text, int reqsPhoto, int reqsText) {
 		ContentValues initialValues = new ContentValues();
-		
+
 		initialValues.put(TASK, task);
 		initialValues.put(DATE, date);
 		initialValues.put(USER, creator);
 		initialValues.put(TEXT, text);
 		initialValues.put(REQUIRESPHOTO, reqsPhoto);
 		initialValues.put(REQUIRESTEXT, reqsText);
-		
+
 		return db.insert(DATABASE_TABLE_TASKS, null, initialValues);
 	}
 
@@ -152,8 +153,8 @@ public class DatabaseAdapter {
 	 * @param text
 	 * @return rowId of -1 if failed
 	 */
-	public long insertFulfillment(String task, String fulfiller,
-			String date, String text) {
+	public long insertFulfillment(String task, String fulfiller, String date,
+			String text) {
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(TASK, task);
 		initialValues.put(USER, fulfiller);
@@ -161,6 +162,29 @@ public class DatabaseAdapter {
 		initialValues.put(TEXT, text);
 
 		return db.insert(DATABASE_TABLE_FULFILLMENTS, null, initialValues);
+	}
+
+	/**
+	 * Create a new entry using the information provided. If the entry is
+	 * successfully created return the new rowId for that entry, otherwise
+	 * return a -1 to indicate failure.
+	 * 
+	 * @param task
+	 * @param fulfiller
+	 * @param date
+	 * @param text
+	 * @return rowId of -1 if failed
+	 */
+	public long insertNotification(String task, String date, String sender,
+			String message) {
+		ContentValues initialValues = new ContentValues();
+		initialValues.put(DatabaseAdapter.TASK, task);
+		initialValues.put(DatabaseAdapter.DATE, date);
+		initialValues.put(DatabaseAdapter.USER, sender);
+		initialValues.put(DatabaseAdapter.TEXT, message);
+		initialValues.put(DatabaseAdapter.VIEWED, false);
+
+		return db.insert(DATABASE_TABLE_NOTIFICATIONS, null, initialValues);
 	}
 
 	/**
@@ -211,9 +235,8 @@ public class DatabaseAdapter {
 	 *            id of entry to delete
 	 * @return true if deleted, false otherwise
 	 */
-	public boolean deleteTaskFulfillment(long rowId) {
-		return db.delete(DATABASE_TABLE_FULFILLMENTS, ID + "=" + rowId,
-				null) > 0;
+	public boolean deleteFulfillment(long rowId) {
+		return db.delete(DATABASE_TABLE_FULFILLMENTS, ID + "=" + rowId, null) > 0;
 	}
 
 	/**
@@ -224,8 +247,18 @@ public class DatabaseAdapter {
 	 * @return true if deleted, false otherwise
 	 */
 	public boolean deleteMember(long rowId) {
-		return db.delete(DATABASE_TABLE_FULFILLMENTS, ID + "=" + rowId,
-				null) > 0;
+		return db.delete(DATABASE_TABLE_MEMBERS, ID + "=" + rowId, null) > 0;
+	}
+
+	/**
+	 * Delete the entry with the given rowId
+	 * 
+	 * @param rowId
+	 *            id of entry to delete
+	 * @return true if deleted, false otherwise
+	 */
+	public boolean deleteNotification(long rowId) {
+		return db.delete(DATABASE_TABLE_NOTIFICATIONS, ID + "=" + rowId, null) > 0;
 	}
 
 	/**
@@ -237,8 +270,17 @@ public class DatabaseAdapter {
 	 * @return true if deleted, false otherwise
 	 */
 	public boolean deletePhotosInFolder(String task) {
-		return db.delete(DATABASE_TABLE_PHOTOS, TASK + "='" + task + "'",
-				null) > 0;
+		return db.delete(DATABASE_TABLE_PHOTOS, TASK + "='" + task + "'", null) > 0;
+	}
+
+	/**
+	 * Return a Cursor over the list of all of the tasks of which the user is a member.
+	 * 
+	 * @return Cursor over all of the user's tasks.
+	 */
+	public Cursor fetchAllTasks() {
+		return db.query(DATABASE_TABLE_TASKS, new String[] { ID, TASK }, null,
+				null, null, null, null);
 	}
 
 	/**
@@ -246,9 +288,11 @@ public class DatabaseAdapter {
 	 * 
 	 * @return Cursor over all folders
 	 */
-	public Cursor fetchAllTasks() {
-		return db.query(DATABASE_TABLE_TASKS, new String[] { ID, TASK },
-				null, null, null, null, null);
+	public Cursor fetchUserNotifications(String receiver) {
+		String condition = USER + "='" + receiver + "'";
+		return db.query(DATABASE_TABLE_NOTIFICATIONS, new String[] { ID, TASK,
+				USER, TEXT, VIEWED }, condition, null, null, null,
+				null);
 	}
 
 	/**
@@ -263,29 +307,13 @@ public class DatabaseAdapter {
 	public Cursor fetchPhoto(long rowId) throws SQLException {
 		// TODO: Modify to match TaskTracker
 		Cursor mCursor = null;
-//		Cursor mCursor = mDb.query(true, DATABASE_TABLE_PHOTOS, new String[] {
-//				ID, DATE, FOLDER, TAG, ANNOTATE, PHOTO }, ID + "=" + rowId,
-//				null, null, null, null, null);
-//		if (mCursor != null) {
-//			mCursor.moveToFirst();
-//		}
-		return mCursor;
-	}
-
-	/**
-	 * Returns a Cursor that points to data with the requested folder name
-	 * 
-	 * @param folder
-	 *            retrieve photos with given folder name
-	 * @return Cursor that traverses photos with given folder name
-	 */
-	public Cursor fetchPhotosInFolder(String folder) {
-		Cursor mCursor = null;
-		// TODO: Modify to match TaskTracker
-//		mCursor = mDb.query(DATABASE_TABLE_PHOTOS, new String[] { ID,
-//				DATE, FOLDER, TAG, ANNOTATE, PHOTO }, FOLDER + "='" + folder
-//				+ "'", null, null, null, null, null);
-
+		// Cursor mCursor = mDb.query(true, DATABASE_TABLE_PHOTOS, new String[]
+		// {
+		// ID, DATE, FOLDER, TAG, ANNOTATE, PHOTO }, ID + "=" + rowId,
+		// null, null, null, null, null);
+		// if (mCursor != null) {
+		// mCursor.moveToFirst();
+		// }
 		return mCursor;
 	}
 

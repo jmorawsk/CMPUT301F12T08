@@ -116,12 +116,12 @@ public class Notification {
 		}
 	}
 
-	public ContentValues getContentValues() {
+	public ContentValues getContentValues(User receiver) {
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(DatabaseAdapter.TASK, _task.getName());
 		initialValues.put(DatabaseAdapter.DATE, _date);
-		initialValues.put(DatabaseAdapter.USER, _sender);
-		initialValues.put(DatabaseAdapter.TYPE, _type.ordinal());
+		initialValues.put(DatabaseAdapter.USER, receiver.getName());
+		initialValues.put(DatabaseAdapter.TEXT, getMessage());
 		initialValues.put(DatabaseAdapter.VIEWED, false);
 		return initialValues;
 	}

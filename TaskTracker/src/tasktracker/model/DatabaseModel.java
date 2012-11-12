@@ -73,7 +73,9 @@ public class DatabaseModel {
 			+ "_id integer primary key autoincrement, "
 			+ "task TEXT NOT NULL, "
 			+ "date TEXT NOT NULL, "
-			+ "user TEXT NOT NULL, " + "type INTEGER, " + "viewed INTEGER);";
+			+ "user TEXT NOT NULL, "
+			+ "text TEXT NOT NULL, "
+			+ "viewed INTEGER);";
 
 	private static final String DATABASE_NAME = "data";
 	private static final int DATABASE_VERSION = 2;
