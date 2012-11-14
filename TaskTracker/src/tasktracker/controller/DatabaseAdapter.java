@@ -141,6 +141,12 @@ public class DatabaseAdapter {
 
 		return db.insert(DATABASE_TABLE_TASKS, null, initialValues);
 	}
+	
+	public long insertTask(Task task){
+		ContentValues initialValues = task.getContentValues();
+		return db.insert(DATABASE_TABLE_TASKS, null, initialValues);
+	}
+	
 
 	/**
 	 * Create a new entry using the information provided. If the entry is

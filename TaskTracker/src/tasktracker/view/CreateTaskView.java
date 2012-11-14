@@ -43,6 +43,7 @@ import java.util.*;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
+import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.WebDBManager;
 import tasktracker.model.elements.*;
 
@@ -55,12 +56,12 @@ import tasktracker.model.elements.*;
 public class CreateTaskView extends Activity {
 
 	private EditText name;
-	private EditText deadline;
 	private EditText description;
 	private EditText otherMembers;
 	private CheckBox text;
 	private CheckBox photo;
 	private WebDBManager webManager;
+	private DatabaseAdapter dbHelper;
 
 	// Create dummy user for production.
 	private static final User CREATOR = new User("DebugUser");
@@ -70,12 +71,12 @@ public class CreateTaskView extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_task_view);
 
-		//Initialize our webManager
+		// Initialize our webManager
 		this.webManager = new WebDBManager();
-		
+		this.dbHelper = new DatabaseAdapter(this);
+
 		// Assign EditText fields
 		this.name = (EditText) findViewById(R.id.taskName);
-		this.deadline = (EditText) findViewById(R.id.editDeadline);
 		this.description = (EditText) findViewById(R.id.editDescription);
 		this.otherMembers = (EditText) findViewById(R.id.otherMembers);
 		this.text = (CheckBox) findViewById(R.id.checkBoxText);
@@ -87,16 +88,20 @@ public class CreateTaskView extends Activity {
 	}
 
 	/**
-	 * Parses through the string of task members and puts the members into a
-	 * list.
+	 * Parses through the string of task members and puts the members into an
+	 * array.
 	 * 
-	 * @return The list of members.
+	 * @return The array of members.
 	 */
-	private List<User> parseOtherMembers() {
-		List<User> members = new ArrayList<User>();
-
-		// TODO: Parse through string for user information, run checks
-		return members;
+	private String[] parseOtherMembers(String creator) {
+		
+		String memberString = otherMembers.getText().toString();
+		// Add creator to list
+		memberString = memberString.concat(", " + creator);
+		
+		String[] memberArray = memberString.split("(\\s+)?,(\\s+)?");
+		// TODO: Check individual members and flag whitespace
+		return memberArray;
 	}
 
 	/**
@@ -106,8 +111,6 @@ public class CreateTaskView extends Activity {
 	 */
 	private boolean hasEmptyFields() {
 		if (name.getText().toString() == "")
-			return true;
-		if (deadline.getText().toString() == "")
 			return true;
 		if (description.getText().toString() == "")
 			return true;
@@ -133,9 +136,18 @@ public class CreateTaskView extends Activity {
 			}
 
 			Task task = createTask();
-			// TODO: Save task
-			//call this
+
 			webManager.insertTask(task);
+			dbHelper.insertTask(task);
+			String[] members = CreateTaskView.this.parseOtherMembers(task.getCreator());
+			// TODO: Only add to webManager if members.length > 1;
+			
+			
+			dbHelper.insertMember(task.getName(), task.getCreator());
+			for (String member : members) {
+				dbHelper.insertMember(task.getName(), member);
+			}
+
 			finish();
 		}
 
@@ -148,9 +160,10 @@ public class CreateTaskView extends Activity {
 
 			// TODO: Find out how to quickly access user information
 			Task task = new Task(CREATOR.getName());
-			
+
 			TaskContent content = new TaskContent();
-			content.setDescription(CreateTaskView.this.description.getText().toString());
+			content.setDescription(CreateTaskView.this.description.getText()
+					.toString());
 			content.setName(CreateTaskView.this.name.getText().toString());
 			content.setPhotoRequirement(CreateTaskView.this.photo.isChecked());
 			content.setTextRequirement(CreateTaskView.this.text.isChecked());

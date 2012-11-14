@@ -110,6 +110,10 @@ public class Task implements Serializable {
 		_id = value;
 
 	}
+	
+	public String getCreator(){
+		return _creator;
+	}
 
 	/** Gets the task ID */
 	public String getID() {
@@ -124,11 +128,17 @@ public class Task implements Serializable {
 		return _content;
 	}
 
+	// For local DB
 	public ContentValues getContentValues() {
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(DatabaseAdapter.USER, _creator);
 		_content.putValues(initialValues);
 		return initialValues;
+	}
+	
+	public static String[] getMemberList(String string){
+		String[] members = string.split("(\\s+)?,(\\s+)?");
+		return members;
 	}
 
 }
