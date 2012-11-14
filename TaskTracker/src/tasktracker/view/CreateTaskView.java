@@ -94,11 +94,11 @@ public class CreateTaskView extends Activity {
 	 * @return The array of members.
 	 */
 	private String[] parseOtherMembers(String creator) {
-		
+
 		String memberString = otherMembers.getText().toString();
 		// Add creator to list
 		memberString = memberString.concat(", " + creator);
-		
+
 		String[] memberArray = memberString.split("(\\s+)?,(\\s+)?");
 		// TODO: Check individual members and flag whitespace
 		return memberArray;
@@ -137,13 +137,17 @@ public class CreateTaskView extends Activity {
 
 			Task task = createTask();
 
-			webManager.insertTask(task);
+			String[] members = CreateTaskView.this.parseOtherMembers(task
+					.getCreator());
+			
+
 			dbHelper.insertTask(task);
-			String[] members = CreateTaskView.this.parseOtherMembers(task.getCreator());
-			// TODO: Only add to webManager if members.length > 1;
 			
-			
-			dbHelper.insertMember(task.getName(), task.getCreator());
+			// Only add to web database if Creator has added members
+			if (members.length > 1) {
+				webManager.insertTask(task);
+			}
+
 			for (String member : members) {
 				dbHelper.insertMember(task.getName(), member);
 			}

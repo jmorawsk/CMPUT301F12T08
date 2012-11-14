@@ -24,5 +24,7 @@
     <string name="descr_overflow_button">Temp descr overflow button</string>
     <string name="creationInfo">Created on [date] by [creator].</string>
     <string name="fulfill">Fulfill this task</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_task_view">TaskView</string>
 
 </resources>
