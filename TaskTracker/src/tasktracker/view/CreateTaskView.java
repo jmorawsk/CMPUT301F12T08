@@ -43,7 +43,6 @@ import java.util.*;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
-import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.WebDBManager;
 import tasktracker.model.elements.*;
 
@@ -61,7 +60,6 @@ public class CreateTaskView extends Activity {
 	private CheckBox text;
 	private CheckBox photo;
 	private WebDBManager webManager;
-	private DatabaseAdapter dbHelper;
 
 	// Create dummy user for production.
 	private static final User CREATOR = new User("DebugUser");
@@ -73,7 +71,6 @@ public class CreateTaskView extends Activity {
 
 		// Initialize our webManager
 		this.webManager = new WebDBManager();
-		this.dbHelper = new DatabaseAdapter(this);
 
 		// Assign EditText fields
 		this.name = (EditText) findViewById(R.id.taskName);
@@ -141,7 +138,6 @@ public class CreateTaskView extends Activity {
 					.getCreator());
 			
 
-			dbHelper.insertTask(task);
 			
 			// Only add to web database if Creator has added members
 			if (members.length > 1) {
@@ -149,7 +145,6 @@ public class CreateTaskView extends Activity {
 			}
 
 			for (String member : members) {
-				dbHelper.insertMember(task.getName(), member);
 			}
 
 			finish();

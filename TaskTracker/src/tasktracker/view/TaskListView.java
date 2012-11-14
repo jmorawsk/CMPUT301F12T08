@@ -28,7 +28,6 @@ import android.database.Cursor;
 import android.view.View;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
-import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.WebDBManager;
 import tasktracker.model.elements.*;
 
@@ -46,7 +45,6 @@ public class TaskListView extends Activity {
 	private String[] tasks = new String[0];
 
 	private WebDBManager webManager;
-	private DatabaseAdapter _dbHelper;
 	private Cursor _cursor;
 
 	@Override
@@ -69,8 +67,6 @@ public class TaskListView extends Activity {
 		taskListView.setOnItemClickListener(new handleList_Click());
 		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
 		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
-
-		_dbHelper = new DatabaseAdapter(this);
 
 		buttonCreate.setOnClickListener(new View.OnClickListener() {
 
@@ -95,8 +91,6 @@ public class TaskListView extends Activity {
 
 	protected void onStart() {
 		super.onStart();
-
-		_dbHelper.open();
 		fillData();
 
 	}
@@ -104,7 +98,6 @@ public class TaskListView extends Activity {
 	protected void onStop() {
 		super.onStop();
 
-		_dbHelper.close();
 		_cursor.close();
 	}
 
@@ -115,18 +108,17 @@ public class TaskListView extends Activity {
 		// TODO: Get alternative for deprecated methods/constructors
 		
 		
-		_cursor = _dbHelper.fetchAllTasks();
 		startManagingCursor(_cursor);
 
-		// Create an array to specify the fields we want to display in the list
-		String[] from = new String[] { DatabaseAdapter.TASK };
-		int[] to = new int[] { R.id.taskName };
-
-		// Create an array adapter and set it to display
-		CursorAdapter adapter =
-			new SimpleCursorAdapter(this, R.layout.task_entry, _cursor, from, to, 0);
-
-		taskListView.setAdapter(adapter);
+//		// Create an array to specify the fields we want to display in the list
+//		String[] from = new String[] { DatabaseAdapter.TASK };
+//		int[] to = new int[] { R.id.taskName };
+//
+//		// Create an array adapter and set it to display
+//		CursorAdapter adapter =
+//			new SimpleCursorAdapter(this, R.layout.task_entry, _cursor, from, to, 0);
+//
+//		taskListView.setAdapter(adapter);
 
 	}
 

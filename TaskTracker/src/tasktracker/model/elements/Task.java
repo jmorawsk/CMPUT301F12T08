@@ -24,8 +24,6 @@ import java.util.*;
 
 import org.apache.http.message.BasicNameValuePair;
 
-import tasktracker.controller.DatabaseAdapter;
-
 import android.content.ContentValues;
 
 /**
@@ -50,6 +48,8 @@ public class Task implements Serializable {
 	private String _description;
 	private boolean _requiresText;
 	private boolean _requiresPhoto;
+	private List<PhotoRequirement> _photos;
+	private TextRequirement _text;
 
 	public Task() {
 		_creator = null;
@@ -147,12 +147,12 @@ public class Task implements Serializable {
 		return _requiresPhoto;
 	}
 
-	// For local DB
-	public ContentValues getContentValues() {
-		ContentValues initialValues = new ContentValues();
-		initialValues.put(DatabaseAdapter.USER, _creator);
-		// _content.putValues(initialValues);
-		return initialValues;
+	public void addPhotos(PhotoRequirement value) {
+		_photos.add(value);
+	}
+
+	public List<PhotoRequirement> getPhotos() {
+		return _photos;
 	}
 
 	public static String[] getMemberList(String string) {

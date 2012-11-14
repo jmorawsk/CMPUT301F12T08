@@ -21,8 +21,6 @@ package tasktracker.model.elements;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import tasktracker.controller.DatabaseAdapter;
-
 import android.content.ContentValues;
 
 /**
@@ -114,16 +112,6 @@ public class Notification {
 		default:
 			return String.format("Unknown notification for \"%s\".", _task.getName());
 		}
-	}
-
-	public ContentValues getContentValues(User receiver) {
-		ContentValues initialValues = new ContentValues();
-		initialValues.put(DatabaseAdapter.TASK, _task.getName());
-		initialValues.put(DatabaseAdapter.DATE, _date);
-		initialValues.put(DatabaseAdapter.USER, receiver.getName());
-		initialValues.put(DatabaseAdapter.TEXT, getMessage());
-		initialValues.put(DatabaseAdapter.VIEWED, false);
-		return initialValues;
 	}
 
 }
