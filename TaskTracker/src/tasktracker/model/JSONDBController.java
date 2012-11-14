@@ -16,6 +16,7 @@ import org.json.simple.parser.ParseException;
 import com.google.gson.Gson;
 
 import tasktracker.model.elements.Task;
+import tasktracker.model.elements.TaskContent;
 
 /**
  * A class for interacting with a JSON web database (webserver)
@@ -155,12 +156,10 @@ public class JSONDBController extends DBManager {
 	 */
 	@Override
 	public String[] insertTask(Task task) {
-		String content = null;
-		content = gson.toJson(task);
-		String insertCommand = "action=" + "post" + "&summary="
-				+ task.getDescription().replace(' ', '+') + "&content="
-				+ content + "&description="
-				+ task.getDescription().replace(' ', '+');
+		String content = gson.toJson(task.getContent());
+		String insertCommand = "action=" + "post" + "&summary=task"
+				+ "&content=" + content.toString() + "&description="
+				+ task.getName().replace(' ', '+');
 		return parseJSONObject(executeAction(insertCommand));
 	}
 
@@ -200,10 +199,9 @@ public class JSONDBController extends DBManager {
 		String myContent = null;
 		Task myTask = null;
 
-		String updateCommand = "action=" + "update" + "&summary="
-				+ task.getName().replace(' ', '+') + "&content=" + myContent
-				+ "&description=" + task.getDescription().replace(' ', '+')
-				+ "&id=" + task.getID();
+		String updateCommand = "action=" + "update" + "&summary=task"
+				+ "&content=" + myContent + "&description="
+				+ task.getName().replace(' ', '+') + "&id=" + task.getID();
 		myContent = parseJSONObject(executeAction(updateCommand))[contentIndex];
 
 		myTask = gson.fromJson(myContent, Task.class);

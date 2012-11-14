@@ -22,6 +22,8 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import org.apache.http.message.BasicNameValuePair;
+
 import tasktracker.controller.DatabaseAdapter;
 
 import android.content.ContentValues;
@@ -39,17 +41,17 @@ public class Task implements Serializable {
 	public static final String DATABASE_TABLE = "tasks"; // For SQL table
 	private static final long serialVersionUID = 1L;
 
-	private final String _creationDate;
-	private final User _creator;
+	private final String _creator;
 
 	// Properties that may change
 	private String _id; // Instantiated by database.
 	private String _name;
-	private String _description;
-	private boolean _requiresText;
-	private boolean _requiresPhoto;
-	private List<User> _otherMembers;
-	private boolean _idSet;
+	private TaskContent _content;
+
+	public Task() {
+		_creator = null;
+		// Do nothing.
+	}
 
 	/**
 	 * Creates a new instance of the TaskElement class.
@@ -57,9 +59,8 @@ public class Task implements Serializable {
 	 * @param creator
 	 *            The task creator.
 	 */
-	public Task(User creator) {
-		this(creator, "Untitled", Calendar.getInstance().getTime(), "", true,
-				false, "");
+	public Task(String creator) {
+		this(creator, "Untitled", "", true, false);
 	}
 
 	/**
@@ -76,23 +77,17 @@ public class Task implements Serializable {
 	 * @param requirements
 	 *            The list of task requirements.
 	 */
-	public Task(User creator, String name, Date date, String description,
-			boolean requiresText, boolean requiresPhoto, String otherMembers) {
+	public Task(String creator, String name, String description,
+			boolean requiresText, boolean requiresPhoto) {
 
-		// Required Elements
-		_creator = creator;
-		_creationDate = new SimpleDateFormat("yyyy-MM-dd").format(date
+		Date date = Calendar.getInstance().getTime();
+		String dateString = new SimpleDateFormat("yyyy-MM-dd").format(date
 				.getTime());
 
-		// id should be null until set by db
-		_idSet = false;
-
-		// Changeable elements
+		_creator = creator;
 		_name = name;
-		_description = description;
-		_requiresText = requiresText;
-		_requiresPhoto = requiresPhoto;
-		_otherMembers = null;
+		_content = new TaskContent(name, dateString, description, requiresText,
+				requiresPhoto);
 
 	}
 
@@ -102,8 +97,8 @@ public class Task implements Serializable {
 	}
 
 	/** Sets the task name */
-	public void setName(String name) {
-		_name = name;
+	public void setName(String value) {
+		_name = value;
 	}
 
 	/**
@@ -111,12 +106,9 @@ public class Task implements Serializable {
 	 * 
 	 * @return true if the ID was set, false if the ID has already been set
 	 */
-	public boolean setID(String newID) {
-		if (!_idSet) {
-			_id = newID;
-			return true;
-		}
-		return false;
+	public void setID(String value) {
+		_id = value;
+
 	}
 
 	/** Gets the task ID */
@@ -124,82 +116,18 @@ public class Task implements Serializable {
 		return _id;
 	}
 
-	/** Gets the date in the format of a String */
-	public String stringDate() {
-		SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
-		return dateformat.format(_creationDate).toString();
+	public void setContent(TaskContent value) {
+		_content = value;
 	}
 
-	/** Gets the text description of the task */
-	public String getDescription() {
-		return _description;
-	}
-
-	/** Sets the text description of the task */
-	public void setDescription(String description) {
-		_description = description;
-	}
-
-	/** Gets the list of task requirements */
-	/** Gets the members of the task, including the task creator */
-	public List<User> getMembers() {
-		return _otherMembers;
-	}
-
-	/** Sets the members of the task, including the task creator */
-	public void setMembers(List<User> otherMembers) {
-		_otherMembers = otherMembers;
-		_otherMembers.add(_creator);
-	}
-
-	/**
-	 * Fulfill a task by completing the task's requirements.
-	 * 
-	 * @return True if the task was successfully fulfilled, false otherwise.
-	 */
-	public boolean fulfill() {
-		// for (Requirement req : _requirements) {
-		// if (!req.fulfill())
-		// return false;
-		// }
-
-		return true;
-	}
-
-	/**
-	 * Checks if objects (Tasks) are equal based on their ID number.
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (this.getClass() == obj.getClass())
-			return false;
-
-		Task other = (Task) obj;
-		if (_id != other._id)
-			return false;
-		return true;
-	}
-
-	public String toString() {
-		String string = "";
-		string.concat("\"" + this.getName() + "\" ");
-		string.concat("by " + _creator + "\n");
-		string.concat("Deadline: " + this.stringDate());
-		return string;
+	public TaskContent getContent() {
+		return _content;
 	}
 
 	public ContentValues getContentValues() {
 		ContentValues initialValues = new ContentValues();
-		initialValues.put(DatabaseAdapter.TASK, _name);
-		initialValues.put(DatabaseAdapter.DATE, _creationDate);
-		initialValues.put(DatabaseAdapter.USER, _creator.getName());
-		initialValues.put(DatabaseAdapter.TEXT, _description);
-		initialValues.put(DatabaseAdapter.REQUIRESPHOTO, _requiresPhoto);
-		initialValues.put(DatabaseAdapter.REQUIRESTEXT, _requiresText);
+		initialValues.put(DatabaseAdapter.USER, _creator);
+		_content.putValues(initialValues);
 		return initialValues;
 	}
 

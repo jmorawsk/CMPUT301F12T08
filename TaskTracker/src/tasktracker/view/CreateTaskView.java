@@ -58,6 +58,8 @@ public class CreateTaskView extends Activity {
 	private EditText deadline;
 	private EditText description;
 	private EditText otherMembers;
+	private CheckBox text;
+	private CheckBox photo;
 	private WebDBManager webManager;
 
 	// Create dummy user for production.
@@ -76,6 +78,8 @@ public class CreateTaskView extends Activity {
 		this.deadline = (EditText) findViewById(R.id.editDeadline);
 		this.description = (EditText) findViewById(R.id.editDescription);
 		this.otherMembers = (EditText) findViewById(R.id.otherMembers);
+		this.text = (CheckBox) findViewById(R.id.checkBoxText);
+		this.photo = (CheckBox) findViewById(R.id.checkBoxPhoto);
 
 		// Assign listener to Save button
 		Button saveButton = (Button) findViewById(R.id.saveButton);
@@ -143,12 +147,13 @@ public class CreateTaskView extends Activity {
 		private Task createTask() {
 
 			// TODO: Find out how to quickly access user information
-			Task task = new Task(CREATOR);
-
-			task.setDescription(CreateTaskView.this.name.getText().toString());
-			task.setName(CreateTaskView.this.name.getText().toString());
-			// TODO: add requirements
-			// TODO: add other members
+			Task task = new Task(CREATOR.getName());
+			
+			TaskContent content = new TaskContent();
+			content.setDescription(CreateTaskView.this.description.getText().toString());
+			content.setName(CreateTaskView.this.name.getText().toString());
+			content.setPhotoRequirement(CreateTaskView.this.photo.isChecked());
+			content.setTextRequirement(CreateTaskView.this.text.isChecked());
 
 			return task;
 		}

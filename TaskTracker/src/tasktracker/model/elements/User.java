@@ -85,27 +85,27 @@ public class User {
 		return this.id;
 	}
 
-	/**
-	 * Fulfill a task. Checks that the user is a member of the task, then goes
-	 * through each of the task's requirements and fulfills them.
-	 * 
-	 * @param task
-	 *            The task to fulfill.
-	 */
-	public void fulfillTask(Task task) {
-		if (!task.getMembers().contains(this)) {
-			// User is not a member, cannot fulfill this task.
-			// TODO: Notify user that they are unable to fulfill task.
-			return;
-		}
-
-		if (task.fulfill()) {
-			// Task has been fulfilled, notify the creator.
-			Notification notification = new Notification(
-					this.name, task, Notification.Type.FulfillmentReport);
-			// TODO: Send notification.
-		}
-	}
+//	/**
+//	 * Fulfill a task. Checks that the user is a member of the task, then goes
+//	 * through each of the task's requirements and fulfills them.
+//	 * 
+//	 * @param task
+//	 *            The task to fulfill.
+//	 */
+//	public void fulfillTask(Task task) {
+//		if (!task.getMembers().contains(this)) {
+//			// User is not a member, cannot fulfill this task.
+//			// TODO: Notify user that they are unable to fulfill task.
+//			return;
+//		}
+//
+//		if (task.fulfill()) {
+//			// Task has been fulfilled, notify the creator.
+//			Notification notification = new Notification(
+//					this.name, task, Notification.Type.FulfillmentReport);
+//			// TODO: Send notification.
+//		}
+//	}
 
 	/**
 	 * Checks if objects (Users) are equal based on their ID number.
