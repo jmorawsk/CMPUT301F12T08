@@ -22,10 +22,6 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import org.apache.http.message.BasicNameValuePair;
-
-import android.content.ContentValues;
-
 /**
  * A class that represents a task. Every task has a creator, and is to be
  * fulfilled by a task member.
@@ -42,19 +38,17 @@ public class Task implements Serializable {
 	private final String _creator;
 
 	// Properties that may change
-	private String _id; // Instantiated by database.
+	private String _id;
 	private String _name;
 	private String _creationDate;
 	private String _description;
+	private String _otherMembers;
 	private boolean _requiresText;
 	private boolean _requiresPhoto;
+	private boolean _fulfilled;
 	private List<PhotoRequirement> _photos;
 	private TextRequirement _text;
 
-	public Task() {
-		_creator = null;
-		// Do nothing.
-	}
 
 	/**
 	 * Creates a new instance of the TaskElement class.
@@ -89,7 +83,13 @@ public class Task implements Serializable {
 
 		_creator = creator;
 		_name = name;
-
+		_requiresText = requiresText;
+		_requiresPhoto = requiresPhoto;
+		_fulfilled = false;
+		
+		if (requiresPhoto){
+			_photos = new ArrayList<PhotoRequirement>();
+		}
 	}
 
 	/**
@@ -119,7 +119,7 @@ public class Task implements Serializable {
 		return _name;
 	}
 
-	public String getDate() {
+	public String getDateCreated() {
 		return _creationDate;
 	}
 
@@ -147,17 +147,45 @@ public class Task implements Serializable {
 		return _requiresPhoto;
 	}
 
-	public void addPhotos(PhotoRequirement value) {
+	public void addPhoto(PhotoRequirement value) {
+		if (_photos == null){
+			// Cannot add photo
+			return;
+		}
 		_photos.add(value);
 	}
 
 	public List<PhotoRequirement> getPhotos() {
 		return _photos;
 	}
+	
+	public void setText(TextRequirement value){
+		_text = value;
+	}
+	
+	public TextRequirement getText(){
+		return _text;
+	}
+	
+	public String getOtherMembers(){
+		return _otherMembers;
+	}
+	
+	public void setOtheMembers(String value){
+		_otherMembers = value;
+	}
+	
+	public boolean isFulfilled(){
+		return _fulfilled;
+	}
+	
+	public void markAsFulfilled(){
+		_fulfilled = true;
+	}
 
-	public static String[] getMemberList(String string) {
-		String[] members = string.split("(\\s+)?,(\\s+)?");
-		return members;
+	public String[] getMemberList(String string) {
+		String allMembers = _otherMembers.concat(", " + _creator);
+		return allMembers.split("(\\s+)?,(\\s+)?");
 	}
 
 }
