@@ -3,37 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <RelativeLayout
-        android:id="@+id/buttons"
-        android:layout_width="fill_parent"
-        android:layout_height="60dp" >
-
-        <Button
-            android:id="@+id/buttonMyTasks"
-            android:layout_width="106dp"
-            android:layout_height="match_parent"
-            android:text="@string/myTasks"
-            android:textSize="14dp" />
-
-        <Button
-            android:id="@+id/buttonCreateTask"
-            android:layout_width="106dp"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:layout_toRightOf="@+id/buttonMyTasks"
-            android:enabled="false"
-            android:text="@string/create_a_task"
-            android:textSize="14dp" />
-
-        <Button
-            android:id="@+id/buttonNotifications"
-            android:layout_width="106dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_toRightOf="@+id/buttonCreateTask"
-            android:text="@string/notifications"
-            android:textSize="14dp" />
-    </RelativeLayout>
+    <include layout="@layout/toolbar"
+        android:id="@+id/buttons"/>
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -52,7 +23,7 @@
             android:inputType="text"
             android:textSize="20dp"
             android:textStyle="bold" />
-
+        <!--
         <TextView
             android:id="@+id/viewDeadline"
             android:layout_width="wrap_content"
@@ -72,12 +43,13 @@
             android:hint="@string/dateFormat"
             android:inputType="date"
             android:textSize="14dp" />
+        -->
 
         <TextView
             android:id="@+id/viewDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/editDeadline"
+            android:layout_below="@+id/taskName"
             android:text="@string/taskDescription" />
 
         <EditText
