@@ -16,7 +16,6 @@ import org.json.simple.parser.ParseException;
 import com.google.gson.Gson;
 
 import tasktracker.model.elements.Task;
-import tasktracker.model.elements.TaskContent;
 
 /**
  * A class for interacting with a JSON web database (webserver)
@@ -156,7 +155,7 @@ public class JSONDBController extends DBManager {
 	 */
 	@Override
 	public String[] insertTask(Task task) {
-		String content = gson.toJson(task.getContent());
+		String content = gson.toJson(task);
 		String insertCommand = "action=" + "post" + "&summary=task"
 				+ "&content=" + content.toString() + "&description="
 				+ task.getName().replace(' ', '+');

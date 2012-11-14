@@ -46,7 +46,10 @@ public class Task implements Serializable {
 	// Properties that may change
 	private String _id; // Instantiated by database.
 	private String _name;
-	private TaskContent _content;
+	private String _creationDate;
+	private String _description;
+	private boolean _requiresText;
+	private boolean _requiresPhoto;
 
 	public Task() {
 		_creator = null;
@@ -81,24 +84,12 @@ public class Task implements Serializable {
 			boolean requiresText, boolean requiresPhoto) {
 
 		Date date = Calendar.getInstance().getTime();
-		String dateString = new SimpleDateFormat("yyyy-MM-dd").format(date
+		_creationDate = new SimpleDateFormat("yyyy-MM-dd").format(date
 				.getTime());
 
 		_creator = creator;
 		_name = name;
-		_content = new TaskContent(name, dateString, description, requiresText,
-				requiresPhoto);
 
-	}
-
-	/** Gets the task name */
-	public String getName() {
-		return _name;
-	}
-
-	/** Sets the task name */
-	public void setName(String value) {
-		_name = value;
 	}
 
 	/**
@@ -110,8 +101,8 @@ public class Task implements Serializable {
 		_id = value;
 
 	}
-	
-	public String getCreator(){
+
+	public String getCreator() {
 		return _creator;
 	}
 
@@ -120,23 +111,51 @@ public class Task implements Serializable {
 		return _id;
 	}
 
-	public void setContent(TaskContent value) {
-		_content = value;
+	public void setName(String value) {
+		_name = value;
 	}
 
-	public TaskContent getContent() {
-		return _content;
+	public String getName() {
+		return _name;
+	}
+
+	public String getDate() {
+		return _creationDate;
+	}
+
+	public void setDescription(String value) {
+		_description = value;
+	}
+
+	public String getDescription() {
+		return _description;
+	}
+
+	public void setTextRequirement(boolean value) {
+		_requiresText = value;
+	}
+
+	public boolean requiresText() {
+		return _requiresText;
+	}
+
+	public void setPhotoRequirement(boolean value) {
+		_requiresPhoto = value;
+	}
+
+	public boolean requiresPhoto() {
+		return _requiresPhoto;
 	}
 
 	// For local DB
 	public ContentValues getContentValues() {
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(DatabaseAdapter.USER, _creator);
-		_content.putValues(initialValues);
+		// _content.putValues(initialValues);
 		return initialValues;
 	}
-	
-	public static String[] getMemberList(String string){
+
+	public static String[] getMemberList(String string) {
 		String[] members = string.split("(\\s+)?,(\\s+)?");
 		return members;
 	}

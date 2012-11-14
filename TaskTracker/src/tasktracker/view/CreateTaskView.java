@@ -165,12 +165,11 @@ public class CreateTaskView extends Activity {
 			// TODO: Find out how to quickly access user information
 			Task task = new Task(CREATOR.getName());
 
-			TaskContent content = new TaskContent();
-			content.setDescription(CreateTaskView.this.description.getText()
+			task.setDescription(CreateTaskView.this.description.getText()
 					.toString());
-			content.setName(CreateTaskView.this.name.getText().toString());
-			content.setPhotoRequirement(CreateTaskView.this.photo.isChecked());
-			content.setTextRequirement(CreateTaskView.this.text.isChecked());
+			task.setName(CreateTaskView.this.name.getText().toString());
+			task.setPhotoRequirement(CreateTaskView.this.photo.isChecked());
+			task.setTextRequirement(CreateTaskView.this.text.isChecked());
 
 			return task;
 		}

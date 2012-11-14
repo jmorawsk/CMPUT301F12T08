@@ -14,11 +14,8 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 
 import tasktracker.model.elements.Task;
-import tasktracker.model.elements.TaskContent;
-import tasktracker.model.elements.User;
 
 import com.google.gson.Gson;
 
@@ -146,8 +143,7 @@ public class CrowdClient {
 		List<BasicNameValuePair> nvps = new ArrayList<BasicNameValuePair>();
 		nvps.add(new BasicNameValuePair("action", "post"));
 		nvps.add(new BasicNameValuePair("summary", taskP.getName()));
-		nvps.add(new BasicNameValuePair("content", gson.toJson(taskP
-				.getContent())));
+		nvps.add(new BasicNameValuePair("content", gson.toJson(taskP)));
 
 		httpPost.setEntity(new UrlEncodedFormEntity(nvps));
 		HttpResponse response = httpclient.execute(httpPost);
@@ -168,7 +164,7 @@ public class CrowdClient {
 		return newTask;
 	}
 
-	public void nukeAll() throws Exception{
+	public void nukeAll() throws Exception {
 
 		List<BasicNameValuePair> nvps = new ArrayList<BasicNameValuePair>();
 		nvps.add(new BasicNameValuePair("action", "nuke"));
@@ -182,37 +178,38 @@ public class CrowdClient {
 
 		System.out.println(status);
 	}
-	
-	public void testServiceMethods(){
+
+	public void testServiceMethods() {
 
 		// Example Simple Task
 		Task task = initializeTask();
 
 		try {
-		Task newT = this.insertTask(task);
-		System.out.println("Inserted Task -> " + newT.getID());
+			Task newT = this.insertTask(task);
+			System.out.println("Inserted Task -> " + newT.getID());
 
-		Task newTClone = this.getTask(newT.getID());
-		System.out.println("Double Checking by Listing -> " + newTClone.getID());
+			Task newTClone = this.getTask(newT.getID());
+			System.out.println("Double Checking by Listing -> "
+					+ newTClone.getID());
 
-		String lot= this.listTasks();
-		System.out.println("List of Tasks in the CrowdSourcer -> " + lot);
+			String lot = this.listTasks();
+			System.out.println("List of Tasks in the CrowdSourcer -> " + lot);
 
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// httpPost.releaseConnection();
 		}
-		catch(Exception e){
-		e.printStackTrace();
-		}
-		finally {
-		//httpPost.releaseConnection();
-		}
-		}
+	}
 
-		/**
-		* Initializes a simple mock task
-		* @return
-		*/
-		private Task initializeTask() {
-		Task t = new Task("Creator", "Task Name", "Task Description", true, false);
+	/**
+	 * Initializes a simple mock task
+	 * 
+	 * @return
+	 */
+	private Task initializeTask() {
+		Task t = new Task("Creator", "Task Name", "Task Description", true,
+				false);
 		return t;
-		}
+	}
 }
