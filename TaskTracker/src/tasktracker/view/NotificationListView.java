@@ -39,12 +39,21 @@ public class NotificationListView extends Activity {
 
 	private ListView notificationsList;
 	private List<Notification> notifications;
+	
+	/** The current app user */
+	private String _user;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_notification_list_view);
 
+		Bundle extras = getIntent().getExtras();
+		if (extras != null){
+			_user = extras.getString("USER");
+		}
+		
+		
 		// Assign ListView and its item click listener
 		this.notificationsList = (ListView) findViewById(R.id.notificationsList);
 		this.notificationsList.setOnItemClickListener(new handleList_Click());
@@ -57,9 +66,10 @@ public class NotificationListView extends Activity {
 		buttonMyTasks.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
-				Intent i = new Intent(getApplicationContext(),
+				Intent intent = new Intent(getApplicationContext(),
 						TaskListView.class);
-				startActivity(i);
+				intent.putExtra("USER", _user);
+				startActivity(intent);
 
 			}
 		});
@@ -67,9 +77,10 @@ public class NotificationListView extends Activity {
 		buttonCreate.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
-				Intent i = new Intent(getApplicationContext(),
+				Intent intent = new Intent(getApplicationContext(),
 						CreateTaskView.class);
-				startActivity(i);
+				intent.putExtra("USER", _user);
+				startActivity(intent);
 			}
 		});
 	}

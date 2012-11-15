@@ -42,8 +42,8 @@ public class Task implements Serializable {
 	private String _name;
 	private String _creationDate;
 	private String _description;
-	private String _otherMembers;
 	private String _fulfiller;
+	private String _otherMembersString;
 	private boolean _requiresText;
 	private boolean _requiresPhoto;
 	private boolean _fulfilled;
@@ -59,8 +59,8 @@ public class Task implements Serializable {
 	public Task(String creator) {
 		this(creator, "Untitled", "", true, false);
 	}
-	
-	public Task(String creator, String name, String description){
+
+	public Task(String creator, String name, String description) {
 		this(creator, name, description, true, false);
 	}
 
@@ -162,21 +162,20 @@ public class Task implements Serializable {
 	}
 
 	public String getOtherMembers() {
-		return _otherMembers;
+		return _otherMembersString;
 	}
 
 	public void setOtherMembers(String value) {
-		_otherMembers = value;
+		_otherMembersString = value;
 	}
-	
-	public String getFulfiller(){
+
+	public String getFulfiller() {
 		return _fulfiller;
 	}
 
 	public boolean isFulfilled() {
 		return _fulfilled;
 	}
-	
 
 	public void markAsFulfilled(String fulfiller) {
 		_fulfiller = fulfiller;
@@ -191,14 +190,13 @@ public class Task implements Serializable {
 		_photos.add(value);
 	}
 
-	public String[] getMemberList() {
-		String allMembers = _otherMembers.concat(", " + _creator);
-		return allMembers.split("(\\s+)?,(\\s+)?");
+	public String[] getOtherMembersArray() {
+		return _otherMembersString.split("(\\s+)?,(\\s+)?");
 	}
-	
+
 	/**
-	 * Returns a string that represents this task. This string format will
-	 * be used in the Task List View screen.
+	 * Returns a string that represents this task. This string format will be
+	 * used in the Task List View screen.
 	 */
 	public String toString() {
 		return "\"" + _name + "\" by " + _creator;

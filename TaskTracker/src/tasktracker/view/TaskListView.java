@@ -46,12 +46,20 @@ public class TaskListView extends Activity {
 	// private List<String> tasks;
 	private String[] tasks = new String[0];
 
+	/** The current app user */
+	private String _user;
+	
 	private WebDBManager webManager;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_list_view);
+
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			_user = extras.getString("USER");
+		}
 
 		// Assign ListView and its on item click listener.
 		taskListView = (ListView) findViewById(R.id.taskList);
@@ -74,18 +82,20 @@ public class TaskListView extends Activity {
 		buttonCreate.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
-				Intent i = new Intent(getApplicationContext(),
+				Intent intent = new Intent(getApplicationContext(),
 						CreateTaskView.class);
-				startActivity(i);
+				intent.putExtra("USER", _user);
+				startActivity(intent);
 			}
 		});
 
 		buttonNotifications.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
-				Intent i = new Intent(getApplicationContext(),
+				Intent intent = new Intent(getApplicationContext(),
 						NotificationListView.class);
-				startActivity(i);
+				intent.putExtra("USER", _user);
+				startActivity(intent);
 
 			}
 		});

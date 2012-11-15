@@ -65,7 +65,8 @@ public class CreateTaskView extends Activity {
 	private CheckBox _photo;
 	private WebDBManager _webManager;
 
-	private String _creator;
+	/** The current app user */
+	private String _user;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -73,7 +74,7 @@ public class CreateTaskView extends Activity {
 		setContentView(R.layout.activity_create_task_view);
 
 		// TODO: Get creator information
-		_creator = "Debugger";
+		_user = "Debugger";
 
 		// Initialize our webManager
 		_webManager = new WebDBManager();
@@ -97,6 +98,7 @@ public class CreateTaskView extends Activity {
 			public void onClick(View v) {
 				Intent intent = new Intent(getApplicationContext(),
 						TaskListView.class);
+				intent.putExtra("USER", _user);
 				startActivity(intent);
 			}
 		});
@@ -106,6 +108,7 @@ public class CreateTaskView extends Activity {
 			public void onClick(View v) {
 				Intent intent = new Intent(getApplicationContext(),
 						NotificationListView.class);
+				intent.putExtra("USER", _user);
 				startActivity(intent);
 			}
 		});
@@ -127,8 +130,8 @@ public class CreateTaskView extends Activity {
 				}
 
 				// Only add to web database if Creator has added members
-				String[] members = task.getMemberList();
-				if (members.length > 1) {
+				String others = task.getOtherMembers();
+				if (others == null) {
 					_webManager.insertTask(task);
 				}
 
@@ -163,7 +166,7 @@ public class CreateTaskView extends Activity {
 	private Task createTask() {
 
 		// TODO: Find out how to quickly access user information
-		Task task = new Task(_creator);
+		Task task = new Task(_user);
 
 		task.setDescription(_description.getText().toString());
 		task.setName(_name.getText().toString());
