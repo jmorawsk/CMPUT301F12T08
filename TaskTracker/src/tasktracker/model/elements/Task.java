@@ -43,12 +43,12 @@ public class Task implements Serializable {
 	private String _creationDate;
 	private String _description;
 	private String _otherMembers;
+	private String _fulfiller;
 	private boolean _requiresText;
 	private boolean _requiresPhoto;
 	private boolean _fulfilled;
 	private List<PhotoRequirement> _photos;
 	private TextRequirement _text;
-
 
 	/**
 	 * Creates a new instance of the TaskElement class.
@@ -86,10 +86,8 @@ public class Task implements Serializable {
 		_requiresText = requiresText;
 		_requiresPhoto = requiresPhoto;
 		_fulfilled = false;
-		
-		if (requiresPhoto){
-			_photos = new ArrayList<PhotoRequirement>();
-		}
+
+		_photos = new ArrayList<PhotoRequirement>();
 	}
 
 	/**
@@ -147,40 +145,46 @@ public class Task implements Serializable {
 		return _requiresPhoto;
 	}
 
+	public List<PhotoRequirement> getPhotos() {
+		return _requiresPhoto ? _photos : null;
+	}
+
+	public void setText(TextRequirement value) {
+		_text = value;
+	}
+
+	public TextRequirement getText() {
+		return _text;
+	}
+
+	public String getOtherMembers() {
+		return _otherMembers;
+	}
+
+	public void setOtheMembers(String value) {
+		_otherMembers = value;
+	}
+	
+	public String getFulfiller(){
+		return _fulfiller;
+	}
+
+	public boolean isFulfilled() {
+		return _fulfilled;
+	}
+	
+
+	public void markAsFulfilled(String fulfiller) {
+		_fulfiller = fulfiller;
+		_fulfilled = true;
+	}
+
 	public void addPhoto(PhotoRequirement value) {
-		if (_photos == null){
+		if (_photos == null) {
 			// Cannot add photo
 			return;
 		}
 		_photos.add(value);
-	}
-
-	public List<PhotoRequirement> getPhotos() {
-		return _photos;
-	}
-	
-	public void setText(TextRequirement value){
-		_text = value;
-	}
-	
-	public TextRequirement getText(){
-		return _text;
-	}
-	
-	public String getOtherMembers(){
-		return _otherMembers;
-	}
-	
-	public void setOtheMembers(String value){
-		_otherMembers = value;
-	}
-	
-	public boolean isFulfilled(){
-		return _fulfilled;
-	}
-	
-	public void markAsFulfilled(){
-		_fulfilled = true;
 	}
 
 	public String[] getMemberList(String string) {
