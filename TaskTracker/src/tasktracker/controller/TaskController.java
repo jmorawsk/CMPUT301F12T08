@@ -34,32 +34,35 @@ import android.os.Environment;
 
 /**
  * Manages the passing of information between the application and the database.
- * @author jbonot
- *
+ * 
+ * @author Jeanine Bonot
+ * 
  */
-public final class TaskController{
+public class TaskController {
 
-	// TODO: Need to set up so that tests are saved differently from final product.
+	// TODO: Need to set up so that tests are saved differently from final
+	// product.
 	private static final String FILENAME = "file_tasks.sav";
 	private static final String DIRECTORIES = "/TaskTracker/Tasks";
-	
+
 	/**
 	 * Delete the TaskTracker's file, if it exists.
 	 * 
 	 * @return Returns true if the file was successfully deleted, false
 	 *         otherwise.
 	 */
-    public static boolean deleteFile() {
+	public static boolean deleteFile() {
 		File sdDir = Environment.getExternalStorageDirectory();
 		File file = new File(sdDir.getAbsolutePath() + DIRECTORIES, FILENAME);
 		return file.delete();
 	}
-	
+
 	/**
 	 * Read the log entries from the file.
+	 * 
 	 * @return A list of TaskElement items from the file.
 	 */
-    public static List<Task> readFile() {
+	public static List<Task> readFile() {
 		ArrayList<Task> entries = new ArrayList<Task>();
 
 		try {
@@ -80,13 +83,16 @@ public final class TaskController{
 
 		return entries;
 	}
-	
+
 	/**
 	 * Serialize the task element into the file system.
-	 * @param task The task to be saved.
+	 * 
+	 * @param task
+	 *            The task to be saved.
 	 * @return True if the write was successful, false otherwise.
 	 */
-    public static boolean writeFile(Task element) {
+	public static boolean writeFile(Task element) {
+
 		try {
 			ObjectOutputStream oos = getOOS(TaskController.getFile());
 			oos.writeObject(element);
@@ -95,13 +101,13 @@ public final class TaskController{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		return false;
 	}
 
-
 	/**
 	 * Gets the file for reading/writing.
+	 * 
 	 * @return The file for reading/writing.
 	 */
 	private static File getFile() {
@@ -110,11 +116,14 @@ public final class TaskController{
 		dir.mkdirs();
 		return new File(dir, FILENAME);
 	}
-	
+
 	/**
 	 * Get the proper ObjectOutputStream for writing.
-	 * @param storageFile The file that will be used for serialization.
-	 * @return The proper ObjectOutputStream depending on whether a file is being appended to an existing file.
+	 * 
+	 * @param storageFile
+	 *            The file that will be used for serialization.
+	 * @return The proper ObjectOutputStream depending on whether a file is
+	 *         being appended to an existing file.
 	 * @throws IOException
 	 */
 	private static ObjectOutputStream getOOS(File storageFile)
@@ -126,10 +135,11 @@ public final class TaskController{
 		else
 			return new ObjectOutputStream(new FileOutputStream(storageFile));
 	}
-	
+
 	/**
-	 * An ObjectOutputStream class that does not create a new header.  Used to append objects to an existing file.
-	 * Source: StackOverflow on StreamCorruptedException and appending to files.
+	 * An ObjectOutputStream class that does not create a new header. Used to
+	 * append objects to an existing file. Source: StackOverflow on
+	 * StreamCorruptedException and appending to files.
 	 */
 	private static class AppendableObjectOutputStream extends
 			ObjectOutputStream {

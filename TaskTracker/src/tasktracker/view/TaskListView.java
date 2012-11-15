@@ -43,6 +43,7 @@ public class TaskListView extends Activity {
 
 	private ListView taskListView;
 	private List<Task> taskList;
+	// private List<String> tasks;
 	private String[] tasks = new String[0];
 
 	private WebDBManager webManager;
@@ -88,18 +89,18 @@ public class TaskListView extends Activity {
 
 			}
 		});
-		
+
 		setDebugStuff();
 
 	}
-	
-	void setDebugStuff(){
+
+	void setDebugStuff() {
 		Button deleteFile = (Button) findViewById(R.id.debugButton);
 
 		deleteFile.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
-				if (TaskController.deleteFile()){
+				if (TaskController.deleteFile()) {
 					showToast("Deleted file on SD");
 				} else {
 					showToast("Failed to delete file from SD");
@@ -114,7 +115,6 @@ public class TaskListView extends Activity {
 		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
 		toast.show();
 	}
-	
 
 	protected void onStart() {
 		super.onStart();

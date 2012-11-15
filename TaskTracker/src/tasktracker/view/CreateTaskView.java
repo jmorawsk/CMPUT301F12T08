@@ -56,6 +56,8 @@ import tasktracker.model.elements.*;
  */
 public class CreateTaskView extends Activity {
 
+	private static final TaskController TASK_MANAGER = new TaskController();
+
 	private EditText _name;
 	private EditText _description;
 	private EditText _otherMembers;
@@ -123,7 +125,7 @@ public class CreateTaskView extends Activity {
 				} else {
 					showToast("Failed to write to file.");
 				}
-				
+
 				// Only add to web database if Creator has added members
 				String[] members = task.getMemberList();
 				if (members.length > 1) {
