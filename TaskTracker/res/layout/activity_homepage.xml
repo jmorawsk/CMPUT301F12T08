@@ -3,37 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <RelativeLayout
+    <include
         android:id="@+id/buttons"
-        android:layout_width="fill_parent"
-        android:layout_height="60dp" >
-
-        <Button
-            android:id="@+id/buttonMyTasks"
-            android:layout_width="106dp"
-            android:layout_height="match_parent"
-            android:enabled="false"
-            android:text="@string/myTasks"
-            android:textSize="14dp" />
-
-        <Button
-            android:id="@+id/buttonCreateTask"
-            android:layout_width="106dp"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:layout_toRightOf="@+id/buttonMyTasks"
-            android:text="@string/create_a_task"
-            android:textSize="14dp" />
-
-        <Button
-            android:id="@+id/buttonNotifications"
-            android:layout_width="106dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_toRightOf="@+id/buttonCreateTask"
-            android:text="@string/notifications"
-            android:textSize="14dp" />
-    </RelativeLayout>
+        layout="@layout/toolbar" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
