@@ -65,9 +65,12 @@ public class TaskListView extends Activity {
 		// taskListView.setAdapter(adapter);
 
 		taskListView.setOnItemClickListener(new handleList_Click());
+		
+		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
 		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
 		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
-
+		buttonMyTasks.setActivated(false);
+		
 		buttonCreate.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {

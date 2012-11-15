@@ -3,7 +3,11 @@ package tasktracker.view;
 import tasktracker.model.elements.Task;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -46,5 +50,37 @@ public class TaskView extends Activity {
 		
 		_photo = (CheckBox) findViewById(R.id.checkBoxPhoto);
 		_photo.setChecked(task.requiresPhoto());
+		
+		// Assign Buttons
+		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
+		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
+		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
+		
+		buttonMyTasks.setOnClickListener(new OnClickListener(){
+			
+			public void onClick(View v){
+				Intent intent = new Intent(getApplicationContext(),
+						TaskListView.class);
+				startActivity(intent);
+			}
+		});
+
+		buttonCreate.setOnClickListener(new OnClickListener(){
+			
+			public void onClick(View v){
+				Intent intent = new Intent(getApplicationContext(),
+						CreateTaskView.class);
+				startActivity(intent);
+			}
+		});
+		
+		buttonNotifications.setOnClickListener(new OnClickListener(){
+			
+			public void onClick(View v){
+				Intent intent = new Intent(getApplicationContext(),
+						NotificationListView.class);
+				startActivity(intent);
+			}
+		});
 	}
 }

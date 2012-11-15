@@ -84,19 +84,54 @@ public class CreateTaskView extends Activity {
 		_text = (CheckBox) findViewById(R.id.checkBoxText);
 		_photo = (CheckBox) findViewById(R.id.checkBoxPhoto);
 		
-		// Set toolbar buttons
-		Button myTasks = (Button) findViewById(R.id.buttonMyTasks);
-		Button createTask = (Button) findViewById(R.id.buttonCreateTask);
-		Button notifications = (Button) findViewById(R.id.buttonNotifications);
+		// Assign Buttons
+		Button saveButton = (Button) findViewById(R.id.saveButton);
+		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
+		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
+		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
+		buttonCreate.setActivated(false);
 
-
-		myTasks.setOnClickListener(new handleButton_myTasks());
-		createTask.setActivated(false);
-		notifications.setOnClickListener(new handleButton_notifications());
+		buttonMyTasks.setOnClickListener(new OnClickListener(){
+			
+			public void onClick(View v){
+				Intent intent = new Intent(getApplicationContext(),
+						TaskListView.class);
+				startActivity(intent);
+			}
+		});
+		
+		buttonNotifications.setOnClickListener(new OnClickListener(){
+			
+			public void onClick(View v){
+				Intent intent = new Intent(getApplicationContext(),
+						NotificationListView.class);
+				startActivity(intent);
+			}
+		});
 		
 		// Assign listener to Save button
-		Button saveButton = (Button) findViewById(R.id.saveButton);
-		saveButton.setOnClickListener(new handleButton_Save());
+		saveButton.setOnClickListener(new OnClickListener(){
+
+			public void onClick(View view) {
+
+				if (CreateTaskView.this.hasEmptyFields()) {
+					// TODO: Unable to save
+					return;
+				}
+
+				Task task = createTask();
+				TASK_MANAGER.writeFile(task);
+
+				// Only add to web database if Creator has added members
+				String[] members = task.getMemberList();
+				if (members.length > 1) {
+					_webManager.insertTask(task);
+				}
+
+				finish();
+			}
+
+		});
 	}
 
 	/**
@@ -130,57 +165,6 @@ public class CreateTaskView extends Activity {
 
 		return task;
 	}
-
-	/**
-	 * A handler for the save button.
-	 * 
-	 * @author Jeanine Bonot
-	 * 
-	 */
-	class handleButton_Save implements OnClickListener {
-
-		/**
-		 * Creates and saves a new task.
-		 */
-		public void onClick(View view) {
-
-			if (CreateTaskView.this.hasEmptyFields()) {
-				// TODO: Unable to save
-				return;
-			}
-
-			Task task = createTask();
-			TASK_MANAGER.writeFile(task);
-
-			// Only add to web database if Creator has added members
-			String[] members = task.getMemberList();
-			if (members.length > 1) {
-				_webManager.insertTask(task);
-			}
-
-			finish();
-		}
-
-	}
 	
-	class handleButton_myTasks implements OnClickListener {
-
-		public void onClick(View v) {
-			Intent intent = new Intent(CreateTaskView.this,
-					TaskListView.class);
-			startActivity(intent);
-			
-		}
-		
-	}
-	
-	class handleButton_notifications implements OnClickListener {
-		
-		public void onClick(View v){
-			Intent intent = new Intent(CreateTaskView.this,
-					NotificationListView.class);
-			startActivity(intent);
-		}
-	}
 
 }
