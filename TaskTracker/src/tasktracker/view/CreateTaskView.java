@@ -43,6 +43,7 @@ import java.util.*;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
+import tasktracker.controller.TaskController;
 import tasktracker.model.WebDBManager;
 import tasktracker.model.elements.*;
 
@@ -54,51 +55,38 @@ import tasktracker.model.elements.*;
  */
 public class CreateTaskView extends Activity {
 
-	private EditText name;
-	private EditText description;
-	private EditText otherMembers;
-	private CheckBox text;
-	private CheckBox photo;
-	private WebDBManager webManager;
+	private static final TaskController TASK_MANAGER = new TaskController();
 
-	// Create dummy user for production.
-	private static final User CREATOR = new User("DebugUser");
+	private EditText _name;
+	private EditText _description;
+	private EditText _otherMembers;
+	private CheckBox _text;
+	private CheckBox _photo;
+	private WebDBManager _webManager;
+	
+	private String _creator;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_task_view);
 
+		// TODO: Get creator information
+		_creator = "DebugginCreator";
+		
 		// Initialize our webManager
-		this.webManager = new WebDBManager();
+		_webManager = new WebDBManager();
 
 		// Assign EditText fields
-		this.name = (EditText) findViewById(R.id.taskName);
-		this.description = (EditText) findViewById(R.id.editDescription);
-		this.otherMembers = (EditText) findViewById(R.id.otherMembers);
-		this.text = (CheckBox) findViewById(R.id.checkBoxText);
-		this.photo = (CheckBox) findViewById(R.id.checkBoxPhoto);
+		_name = (EditText) findViewById(R.id.taskName);
+		_description = (EditText) findViewById(R.id.editDescription);
+		_otherMembers = (EditText) findViewById(R.id.otherMembers);
+		_text = (CheckBox) findViewById(R.id.checkBoxText);
+		_photo = (CheckBox) findViewById(R.id.checkBoxPhoto);
 
 		// Assign listener to Save button
 		Button saveButton = (Button) findViewById(R.id.saveButton);
 		saveButton.setOnClickListener(new handleButton_Save());
-	}
-
-	/**
-	 * Parses through the string of task members and puts the members into an
-	 * array.
-	 * 
-	 * @return The array of members.
-	 */
-	private String[] parseOtherMembers(String creator) {
-
-		String memberString = otherMembers.getText().toString();
-		// Add creator to list
-		memberString = memberString.concat(", " + creator);
-
-		String[] memberArray = memberString.split("(\\s+)?,(\\s+)?");
-		// TODO: Check individual members and flag whitespace
-		return memberArray;
 	}
 
 	/**
@@ -107,11 +95,30 @@ public class CreateTaskView extends Activity {
 	 * @return True if a required field has been left empty, false otherwise.
 	 */
 	private boolean hasEmptyFields() {
-		if (name.getText().toString() == "")
+		if (_name.getText().toString() == "")
 			return true;
-		if (description.getText().toString() == "")
+		if (_description.getText().toString() == "")
 			return true;
 		return false;
+	}
+
+	/**
+	 * Create a task based on the creator's input.
+	 * 
+	 * @return The task created with the creator's input.
+	 */
+	private Task createTask() {
+
+		// TODO: Find out how to quickly access user information
+		Task task = new Task(_creator);
+
+		task.setDescription(_description.getText().toString());
+		task.setName(_name.getText().toString());
+		task.setPhotoRequirement(_photo.isChecked());
+		task.setTextRequirement(_text.isChecked());
+		task.setOtherMembers(_otherMembers.toString());
+
+		return task;
 	}
 
 	/**
@@ -133,40 +140,15 @@ public class CreateTaskView extends Activity {
 			}
 
 			Task task = createTask();
+			TASK_MANAGER.writeFile(task);
 
-			String[] members = CreateTaskView.this.parseOtherMembers(task
-					.getCreator());
-			
-
-			
 			// Only add to web database if Creator has added members
+			String[] members = task.getMemberList();
 			if (members.length > 1) {
-				webManager.insertTask(task);
-			}
-
-			for (String member : members) {
+				_webManager.insertTask(task);
 			}
 
 			finish();
-		}
-
-		/**
-		 * Create a task based on the creator's input.
-		 * 
-		 * @return The task created with the creator's input.
-		 */
-		private Task createTask() {
-
-			// TODO: Find out how to quickly access user information
-			Task task = new Task(CREATOR.getName());
-
-			task.setDescription(CreateTaskView.this.description.getText()
-					.toString());
-			task.setName(CreateTaskView.this.name.getText().toString());
-			task.setPhotoRequirement(CreateTaskView.this.photo.isChecked());
-			task.setTextRequirement(CreateTaskView.this.text.isChecked());
-
-			return task;
 		}
 
 	}

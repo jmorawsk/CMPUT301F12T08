@@ -161,7 +161,7 @@ public class Task implements Serializable {
 		return _otherMembers;
 	}
 
-	public void setOtheMembers(String value) {
+	public void setOtherMembers(String value) {
 		_otherMembers = value;
 	}
 	
@@ -187,7 +187,7 @@ public class Task implements Serializable {
 		_photos.add(value);
 	}
 
-	public String[] getMemberList(String string) {
+	public String[] getMemberList() {
 		String allMembers = _otherMembers.concat(", " + _creator);
 		return allMembers.split("(\\s+)?,(\\s+)?");
 	}
