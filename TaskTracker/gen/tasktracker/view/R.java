@@ -15,40 +15,38 @@ public final class R {
         public static final int ic_launcher=0x7f020001;
     }
     public static final class id {
-        public static final int buttonCreateTask=0x7f07000b;
-        public static final int buttonMyTasks=0x7f07000a;
-        public static final int buttonNotifications=0x7f07000c;
+        public static final int buttonCreateTask=0x7f070012;
+        public static final int buttonMyTasks=0x7f070011;
+        public static final int buttonNotifications=0x7f070013;
         public static final int buttons=0x7f070000;
         public static final int checkBoxPhoto=0x7f070006;
         public static final int checkBoxText=0x7f070005;
-        public static final int creationInfo=0x7f070011;
-        public static final int delete=0x7f070016;
+        public static final int creationInfo=0x7f07000d;
+        public static final int debugButton=0x7f07000c;
+        public static final int delete=0x7f070015;
         public static final int editDescription=0x7f070003;
-        public static final int fulfillButton=0x7f070012;
-        public static final int listView1=0x7f07000f;
-        public static final int menu_settings=0x7f070017;
-        public static final int notificationsList=0x7f07000e;
-        public static final int open=0x7f070015;
+        public static final int fulfillButton=0x7f07000e;
+        public static final int menu_settings=0x7f070016;
+        public static final int notificationsList=0x7f07000a;
+        public static final int open=0x7f070014;
         public static final int otherMembers=0x7f070008;
         public static final int saveButton=0x7f070009;
-        public static final int taskList=0x7f07000d;
+        public static final int taskList=0x7f07000b;
         public static final int taskName=0x7f070001;
-        public static final int task_name=0x7f070010;
-        public static final int toast_layout_root=0x7f070013;
-        public static final int toast_text=0x7f070014;
+        public static final int toast_layout_root=0x7f07000f;
+        public static final int toast_text=0x7f070010;
         public static final int viewDescription=0x7f070002;
         public static final int viewOtherMembers=0x7f070007;
         public static final int viewRequirements=0x7f070004;
     }
     public static final class layout {
         public static final int activity_create_task_view=0x7f030000;
-        public static final int activity_homepage=0x7f030001;
-        public static final int activity_notification_list_view=0x7f030002;
-        public static final int list_item=0x7f030003;
-        public static final int task_entry=0x7f030004;
-        public static final int task_view=0x7f030005;
-        public static final int toast_layout=0x7f030006;
-        public static final int toolbar=0x7f030007;
+        public static final int activity_notification_list_view=0x7f030001;
+        public static final int activity_task_list_view=0x7f030002;
+        public static final int activity_task_view=0x7f030003;
+        public static final int list_item=0x7f030004;
+        public static final int toast_layout=0x7f030005;
+        public static final int toolbar=0x7f030006;
     }
     public static final class menu {
         public static final int acitivity_task_list_view=0x7f060000;

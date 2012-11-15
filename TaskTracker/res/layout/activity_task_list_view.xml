@@ -17,8 +17,18 @@
         <ListView
             android:id="@+id/taskList"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/debugButton" >
         </ListView>
+
+        <!-- Only exists for debugging purposes -->
+        <Button
+            android:id="@+id/debugButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="8dp"
+            android:text="delete file on SD" />
     </RelativeLayout>
 
 </RelativeLayout>

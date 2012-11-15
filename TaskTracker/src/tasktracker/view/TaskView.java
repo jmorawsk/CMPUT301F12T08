@@ -30,7 +30,7 @@ public class TaskView extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.task_view);
+		setContentView(R.layout.activity_task_view);
 		
 		// TODO: Task must be stored from listview (in intent) when item is selected.
 		Task task = (Task) savedInstanceState.get("Task");

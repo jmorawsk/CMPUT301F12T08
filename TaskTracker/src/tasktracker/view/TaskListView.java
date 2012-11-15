@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
@@ -49,10 +50,11 @@ public class TaskListView extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_homepage);
+		setContentView(R.layout.activity_task_list_view);
 
 		// Assign ListView and its on item click listener.
 		taskListView = (ListView) findViewById(R.id.taskList);
+		taskListView.setOnItemClickListener(new handleList_Click());
 
 		// TODO: read from database and display
 		// String[][] webTasks = webManager.listTasksAsArrays();
@@ -63,12 +65,10 @@ public class TaskListView extends Activity {
 		// ArrayAdapter<String>(this,R.layout.list_item, tasks);
 		// taskListView.setAdapter(adapter);
 
-		taskListView.setOnItemClickListener(new handleList_Click());
-
 		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
 		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
 		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
-		buttonMyTasks.setActivated(false);
+		buttonMyTasks.setEnabled(false);
 
 		buttonCreate.setOnClickListener(new View.OnClickListener() {
 
@@ -88,16 +88,55 @@ public class TaskListView extends Activity {
 
 			}
 		});
+		
+		setDebugStuff();
 
 	}
+	
+	void setDebugStuff(){
+		Button deleteFile = (Button) findViewById(R.id.debugButton);
+
+		deleteFile.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View v) {
+				if (TaskController.deleteFile()){
+					showToast("Deleted file on SD");
+				} else {
+					showToast("Failed to delete file from SD");
+				}
+			}
+		});
+	}
+
+	private void showToast(String message) {
+		Toast toast = Toast.makeText(getApplicationContext(), message,
+				Toast.LENGTH_LONG);
+		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+		toast.show();
+	}
+	
 
 	protected void onStart() {
 		super.onStart();
 		taskList = TaskController.readFile();
+		if (taskList.size() == 0)
+			taskList = createDummies();
 		ArrayAdapter<Task> adapter = new ArrayAdapter<Task>(this,
 				R.layout.list_item, taskList);
 		taskListView.setAdapter(adapter);
 
+	}
+
+	/** Creates a dummy array if SD fails */
+	List<Task> createDummies() {
+		List<Task> list = new ArrayList<Task>();
+		list.add(new Task("Me", "Not from SD", "Task Description"));
+		list.add(new Task("Me", "Still not from SD", "Task Description"));
+		list.add(new Task("Me", "Why isn't it from SD?", "Task Description"));
+		list.add(new Task("Me", "Help", "Task Description"));
+		list.add(new Task("now", "This should be working", "Task Description"));
+		list.add(new Task("You", "No", "Task Description"));
+		return list;
 	}
 
 	protected void onStop() {

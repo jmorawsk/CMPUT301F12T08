@@ -52,7 +52,7 @@ public class NotificationListView extends Activity {
 		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
 		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
 		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
-		buttonNotifications.setActivated(false);
+		buttonNotifications.setEnabled(false);
 
 		buttonMyTasks.setOnClickListener(new View.OnClickListener() {
 

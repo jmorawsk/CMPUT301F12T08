@@ -59,6 +59,10 @@ public class Task implements Serializable {
 	public Task(String creator) {
 		this(creator, "Untitled", "", true, false);
 	}
+	
+	public Task(String creator, String name, String description){
+		this(creator, name, description, true, false);
+	}
 
 	/**
 	 * Creates a new instance of the TaskElement class.
@@ -190,6 +194,14 @@ public class Task implements Serializable {
 	public String[] getMemberList() {
 		String allMembers = _otherMembers.concat(", " + _creator);
 		return allMembers.split("(\\s+)?,(\\s+)?");
+	}
+	
+	/**
+	 * Returns a string that represents this task. This string format will
+	 * be used in the Task List View screen.
+	 */
+	public String toString() {
+		return "\"" + _name + "\" by " + _creator;
 	}
 
 }

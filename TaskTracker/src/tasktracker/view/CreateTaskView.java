@@ -40,6 +40,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
@@ -61,7 +62,7 @@ public class CreateTaskView extends Activity {
 	private CheckBox _text;
 	private CheckBox _photo;
 	private WebDBManager _webManager;
-	
+
 	private String _creator;
 
 	@Override
@@ -71,7 +72,7 @@ public class CreateTaskView extends Activity {
 
 		// TODO: Get creator information
 		_creator = "Debugger";
-		
+
 		// Initialize our webManager
 		_webManager = new WebDBManager();
 
@@ -81,45 +82,48 @@ public class CreateTaskView extends Activity {
 		_otherMembers = (EditText) findViewById(R.id.otherMembers);
 		_text = (CheckBox) findViewById(R.id.checkBoxText);
 		_photo = (CheckBox) findViewById(R.id.checkBoxPhoto);
-		
+
 		// Assign Buttons
 		Button saveButton = (Button) findViewById(R.id.saveButton);
 		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
 		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
 		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
-		buttonCreate.setActivated(false);
+		buttonCreate.setEnabled(false);
 
-		buttonMyTasks.setOnClickListener(new OnClickListener(){
-			
-			public void onClick(View v){
+		buttonMyTasks.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
 				Intent intent = new Intent(getApplicationContext(),
 						TaskListView.class);
 				startActivity(intent);
 			}
 		});
-		
-		buttonNotifications.setOnClickListener(new OnClickListener(){
-			
-			public void onClick(View v){
+
+		buttonNotifications.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
 				Intent intent = new Intent(getApplicationContext(),
 						NotificationListView.class);
 				startActivity(intent);
 			}
 		});
-		
+
 		// Assign listener to Save button
-		saveButton.setOnClickListener(new OnClickListener(){
+		saveButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View view) {
-
-				if (CreateTaskView.this.hasEmptyFields()) {
-					// TODO: Unable to save
+				if (hasEmptyFields()) {
+					showToast("You have empty fields");
 					return;
 				}
 
 				Task task = createTask();
-				TaskController.writeFile(task);
-
+				if (TaskController.writeFile(task)) {
+					showToast("Wrote to file");
+				} else {
+					showToast("Failed to write to file.");
+				}
+				
 				// Only add to web database if Creator has added members
 				String[] members = task.getMemberList();
 				if (members.length > 1) {
@@ -138,10 +142,14 @@ public class CreateTaskView extends Activity {
 	 * @return True if a required field has been left empty, false otherwise.
 	 */
 	private boolean hasEmptyFields() {
-		if (_name.getText().toString() == "")
+		String name = _name.getText().toString();
+		String description = _description.getText().toString();
+		if (name == "")
 			return true;
-		if (_description.getText().toString() == "")
+		if (description == "")
 			return true;
+
+		showToast("Name: " + name + "\nDescription: " + description);
 		return false;
 	}
 
@@ -163,6 +171,12 @@ public class CreateTaskView extends Activity {
 
 		return task;
 	}
-	
+
+	private void showToast(String message) {
+		Toast toast = Toast.makeText(getApplicationContext(), message,
+				Toast.LENGTH_LONG);
+		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+		toast.show();
+	}
 
 }

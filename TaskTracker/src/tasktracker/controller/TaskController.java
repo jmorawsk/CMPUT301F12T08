@@ -40,7 +40,7 @@ import android.os.Environment;
 public final class TaskController{
 
 	// TODO: Need to set up so that tests are saved differently from final product.
-	private static final String FILENAME = "file.sav";
+	private static final String FILENAME = "file_tasks.sav";
 	private static final String DIRECTORIES = "/TaskTracker/Tasks";
 	
 	/**
@@ -84,15 +84,19 @@ public final class TaskController{
 	/**
 	 * Serialize the task element into the file system.
 	 * @param task The task to be saved.
+	 * @return True if the write was successful, false otherwise.
 	 */
-    public static void writeFile(Task element) {
+    public static boolean writeFile(Task element) {
 		try {
 			ObjectOutputStream oos = getOOS(TaskController.getFile());
 			oos.writeObject(element);
 			oos.close();
+			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		return false;
 	}
 
 
