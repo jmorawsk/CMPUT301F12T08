@@ -28,6 +28,7 @@ import android.database.Cursor;
 import android.view.View;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
+import tasktracker.controller.TaskController;
 import tasktracker.model.WebDBManager;
 import tasktracker.model.elements.*;
 
@@ -40,8 +41,7 @@ import tasktracker.model.elements.*;
 public class TaskListView extends Activity {
 
 	private ListView taskListView;
-	// private List<Task> tasks;
-	// private List<String> tasks;
+	private List<Task> taskList;
 	private String[] tasks = new String[0];
 
 	private WebDBManager webManager;
@@ -64,12 +64,12 @@ public class TaskListView extends Activity {
 		// taskListView.setAdapter(adapter);
 
 		taskListView.setOnItemClickListener(new handleList_Click());
-		
+
 		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
 		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
 		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
 		buttonMyTasks.setActivated(false);
-		
+
 		buttonCreate.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
@@ -93,21 +93,15 @@ public class TaskListView extends Activity {
 
 	protected void onStart() {
 		super.onStart();
-		fillData();
+		taskList = TaskController.readFile();
+		ArrayAdapter<Task> adapter = new ArrayAdapter<Task>(this,
+				R.layout.list_item, taskList);
+		taskListView.setAdapter(adapter);
 
 	}
 
 	protected void onStop() {
 		super.onStop();
-
-	}
-
-	/** Function call to retrieve all the task names from the database.
-	 * Utilizes the simple cursor adapter to bind it to the listview */
-	private void fillData() {
-
-		// TODO: Get alternative for deprecated methods/constructors
-		
 
 	}
 

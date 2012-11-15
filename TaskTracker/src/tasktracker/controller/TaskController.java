@@ -37,7 +37,7 @@ import android.os.Environment;
  * @author jbonot
  *
  */
-public final class TaskController implements LocalObjectController<Task>{
+public final class TaskController{
 
 	// TODO: Need to set up so that tests are saved differently from final product.
 	private static final String FILENAME = "file.sav";
@@ -49,7 +49,7 @@ public final class TaskController implements LocalObjectController<Task>{
 	 * @return Returns true if the file was successfully deleted, false
 	 *         otherwise.
 	 */
-    public boolean deleteFile() {
+    public static boolean deleteFile() {
 		File sdDir = Environment.getExternalStorageDirectory();
 		File file = new File(sdDir.getAbsolutePath() + DIRECTORIES, FILENAME);
 		return file.delete();
@@ -59,7 +59,7 @@ public final class TaskController implements LocalObjectController<Task>{
 	 * Read the log entries from the file.
 	 * @return A list of TaskElement items from the file.
 	 */
-    public List<Task> readFile() {
+    public static List<Task> readFile() {
 		ArrayList<Task> entries = new ArrayList<Task>();
 
 		try {
@@ -85,7 +85,7 @@ public final class TaskController implements LocalObjectController<Task>{
 	 * Serialize the task element into the file system.
 	 * @param task The task to be saved.
 	 */
-    public void writeFile(Task element) {
+    public static void writeFile(Task element) {
 		try {
 			ObjectOutputStream oos = getOOS(TaskController.getFile());
 			oos.writeObject(element);
