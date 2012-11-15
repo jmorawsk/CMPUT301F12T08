@@ -38,7 +38,7 @@ package tasktracker.view;
 
 import android.os.Bundle;
 import android.app.Activity;
-import java.util.*;
+import android.content.Intent;
 
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -72,7 +72,7 @@ public class CreateTaskView extends Activity {
 		setContentView(R.layout.activity_create_task_view);
 
 		// TODO: Get creator information
-		_creator = "DebugginCreator";
+		_creator = "Debugger";
 		
 		// Initialize our webManager
 		_webManager = new WebDBManager();
@@ -83,7 +83,17 @@ public class CreateTaskView extends Activity {
 		_otherMembers = (EditText) findViewById(R.id.otherMembers);
 		_text = (CheckBox) findViewById(R.id.checkBoxText);
 		_photo = (CheckBox) findViewById(R.id.checkBoxPhoto);
+		
+		// Set toolbar buttons
+		Button myTasks = (Button) findViewById(R.id.buttonMyTasks);
+		Button createTask = (Button) findViewById(R.id.buttonCreateTask);
+		Button notifications = (Button) findViewById(R.id.buttonNotifications);
 
+
+		myTasks.setOnClickListener(new handleButton_myTasks());
+		createTask.setActivated(false);
+		notifications.setOnClickListener(new handleButton_notifications());
+		
 		// Assign listener to Save button
 		Button saveButton = (Button) findViewById(R.id.saveButton);
 		saveButton.setOnClickListener(new handleButton_Save());
@@ -151,6 +161,26 @@ public class CreateTaskView extends Activity {
 			finish();
 		}
 
+	}
+	
+	class handleButton_myTasks implements OnClickListener {
+
+		public void onClick(View v) {
+			Intent intent = new Intent(CreateTaskView.this,
+					TaskListView.class);
+			startActivity(intent);
+			
+		}
+		
+	}
+	
+	class handleButton_notifications implements OnClickListener {
+		
+		public void onClick(View v){
+			Intent intent = new Intent(CreateTaskView.this,
+					NotificationListView.class);
+			startActivity(intent);
+		}
 	}
 
 }
