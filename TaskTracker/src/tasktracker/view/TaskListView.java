@@ -45,7 +45,6 @@ public class TaskListView extends Activity {
 	private String[] tasks = new String[0];
 
 	private WebDBManager webManager;
-	private Cursor _cursor;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -101,7 +100,6 @@ public class TaskListView extends Activity {
 	protected void onStop() {
 		super.onStop();
 
-		_cursor.close();
 	}
 
 	/** Function call to retrieve all the task names from the database.
@@ -110,18 +108,6 @@ public class TaskListView extends Activity {
 
 		// TODO: Get alternative for deprecated methods/constructors
 		
-		
-		startManagingCursor(_cursor);
-
-//		// Create an array to specify the fields we want to display in the list
-//		String[] from = new String[] { DatabaseAdapter.TASK };
-//		int[] to = new int[] { R.id.taskName };
-//
-//		// Create an array adapter and set it to display
-//		CursorAdapter adapter =
-//			new SimpleCursorAdapter(this, R.layout.task_entry, _cursor, from, to, 0);
-//
-//		taskListView.setAdapter(adapter);
 
 	}
 
