@@ -3,8 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <include layout="@layout/toolbar"
-        android:id="@+id/buttons"/>
+    <include
+        android:id="@+id/buttons"
+        layout="@layout/toolbar" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -104,7 +105,7 @@
         <EditText
             android:id="@+id/otherMembers"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="90dp"
             android:layout_below="@+id/viewOtherMembers"
             android:gravity="center_vertical|top"
             android:hint="@string/otherMembersHint"
@@ -115,7 +116,8 @@
             android:id="@+id/saveButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/otherMembers"
+            android:layout_marginTop="8dp"
             android:text="@string/createTask" />
     </RelativeLayout>
 

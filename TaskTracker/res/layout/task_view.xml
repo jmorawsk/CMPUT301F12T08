@@ -3,8 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <include layout="@layout/toolbar"
-        android:id="@+id/buttons"/>
+    <include
+        android:id="@+id/buttons"
+        layout="@layout/toolbar" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -39,7 +40,7 @@
             android:layout_marginBottom="8dp"
             android:layout_toRightOf="@+id/viewDeadline"
             android:hint="@string/dateFormat"
-            android:textSize="14dp" />
+            android:textSize="14dp" />
         -->
 
         <TextView
@@ -102,17 +103,19 @@
         <TextView
             android:id="@+id/otherMembers"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="80dp"
             android:layout_below="@+id/viewOtherMembers"
             android:gravity="center_vertical|top"
             android:hint="@string/otherMembersHint"
+            android:scrollbars="vertical"
             android:textSize="14dp" />
 
         <TextView
             android:id="@+id/creationInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/fulfillButton"
+            android:layout_below="@+id/otherMembers"
+            android:layout_marginTop="12dp"
             android:gravity="center_vertical|center_horizontal"
             android:text="@string/creationInfo"
             android:textSize="14dp"
@@ -122,7 +125,7 @@
             android:id="@+id/fulfillButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/creationInfo"
             android:text="@string/fulfill" />
     </RelativeLayout>
 
