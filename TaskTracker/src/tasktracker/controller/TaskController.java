@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import tasktracker.model.elements.Task;
 
 import android.os.Environment;
+import android.util.Log;
 
 /**
  * Manages the passing of information between the application and the database.
@@ -42,7 +43,7 @@ public class TaskController {
 
 	// TODO: Need to set up so that tests are saved differently from final
 	// product.
-	private static final String FILENAME = "file_tasks.sav";
+	private static final String FILENAME = "file.sav";
 	private static final String DIRECTORIES = "/TaskTracker/Tasks";
 
 	/**
@@ -54,7 +55,11 @@ public class TaskController {
 	public static boolean deleteFile() {
 		File sdDir = Environment.getExternalStorageDirectory();
 		File file = new File(sdDir.getAbsolutePath() + DIRECTORIES, FILENAME);
-		return file.delete();
+
+		boolean result = file.delete();
+		Log.d("DeleteFile", String.valueOf(result));
+
+		return result;
 	}
 
 	/**
@@ -99,6 +104,7 @@ public class TaskController {
 			oos.close();
 			return true;
 		} catch (IOException e) {
+			Log.e("TaskController - WriteFile", e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -111,10 +117,28 @@ public class TaskController {
 	 * @return The file for reading/writing.
 	 */
 	private static File getFile() {
+		String state = Environment.getExternalStorageState();
+		if (Environment.MEDIA_MOUNTED.equals(state)) {
+			Log.d("Test", "sdcard mounted and writable");
+		} else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+			Log.d("Test", "sdcard mounted readonly");
+		} else {
+			Log.d("Test", "sdcard state: " + state);
+		}
+
 		File sdDir = Environment.getExternalStorageDirectory();
 		File dir = new File(sdDir.getAbsolutePath() + DIRECTORIES);
 		dir.mkdirs();
-		return new File(dir, FILENAME);
+		File file = new File(dir, FILENAME);
+		state = Environment.getExternalStorageState();
+		if (Environment.MEDIA_MOUNTED.equals(state)) {
+			Log.d("Test", "sdcard mounted and writable");
+		} else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+			Log.d("Test", "sdcard mounted readonly");
+		} else {
+			Log.d("Test", "sdcard state: " + state);
+		}
+		return file;
 	}
 
 	/**
