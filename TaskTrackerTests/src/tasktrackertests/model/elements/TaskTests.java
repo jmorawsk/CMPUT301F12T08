@@ -1,4 +1,4 @@
-package tasktracker.controller.tests;
+package tasktrackertests.model.elements;
 
 /**
  * TaskTracker
@@ -19,45 +19,43 @@ package tasktracker.controller.tests;
  */
 
 import org.junit.*;
-import tasktracker.controller.*;
 
 /**
- * Tests the TaskController class.
+ * Tests the Task object.
  * @author Jeanine Bonot
  *
  */
-public class TaskControllerTests {
-	
-	private TaskController controller;
-	
-	/**
-	 * This method is run before each test.
-	 * @throws Exception
-	 */
-	@Before
-	public void  setUp() throws Exception {
-		controller = new TaskController();
-	}
-	
-	/** Test the delete method */
+public class TaskTests {
+
+	/** Tests the equals method */
 	@Test
-	public void testDelete(){
-		// TODO: File exists
-		// TODO: File does not exist
+	public void testEquals(){
+		// TODO: Two diff tasks with same info.
+	}
+	/** Tests the fulfill method */
+	@Test
+	public void testFulfill(){
+		// TODO: Requirements fulfilled
+		// TODO: Requirements unfulfilled
+		// TODO: With no requirements
 	}
 	
-	/** Tests the readFile method */
+	/** Tests the setMembers method */
 	@Test
-	public void testReadFile(){
-		// TODO: File exists
-		// TODO: File does not exist
+	public void testSetMembers(){
+		// TODO: No other members other than creator
+		// TODO: One other member
+		// TODO: Duplicate members
 	}
 	
-	/** Tests the writeFile method */
+	/** Tests the setRequirements method */
 	@Test
-	public void testWriteFile(){
-		// TODO: File exists
-		// TODO: File does not exist
+	public void testSetRequirements(){
+		// TODO: No requirements
+		// TODO: Text requirement only
+		// TODO: Text and photo requirement
+		// TODO: Duplicate requirements
 	}
+	
 	
 }

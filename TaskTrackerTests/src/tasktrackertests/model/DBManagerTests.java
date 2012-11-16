@@ -1,4 +1,4 @@
-package tasktracker.model.tests;
+package tasktrackertests.model;
 
 /**
  * TaskTracker
