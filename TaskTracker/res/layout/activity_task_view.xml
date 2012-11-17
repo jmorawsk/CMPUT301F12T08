@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="16dp"
-            android:text="@string/taskNameHint"
+            android:text="@string/hint_taskName"
             android:textSize="20dp"
             android:textStyle="bold" />
         <!--
@@ -40,7 +40,7 @@
             android:layout_marginBottom="8dp"
             android:layout_toRightOf="@+id/viewDeadline"
             android:hint="@string/dateFormat"
-            android:textSize="14dp" />
+            android:textSize="14dp" />
         -->
 
         <TextView
@@ -59,7 +59,7 @@
             android:layout_below="@+id/taskName"
             android:layout_marginBottom="8dp"
             android:layout_toRightOf="@+id/statusHeading"
-            android:text="@string/status"
+            android:hint="@string/default_status"
             android:textSize="14dp" />
 
         <TextView
@@ -67,16 +67,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/statusHeading"
-            android:text="@string/taskDescription" />
+            android:text="@string/heading_taskDescription" />
 
         <TextView
-            android:id="@+id/editDescription"
+            android:id="@+id/description"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_below="@+id/viewDescription"
             android:layout_marginBottom="8dp"
             android:gravity="center_vertical|top"
-            android:hint="@string/taskDescriptionHint"
+            android:hint="@string/default_description"
             android:scrollbarAlwaysDrawVerticalTrack="true"
             android:scrollbarStyle="insideInset"
             android:scrollbars="vertical"
@@ -87,8 +87,8 @@
             android:id="@+id/viewRequirements"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/editDescription"
-            android:text="@string/requirements" />
+            android:layout_below="@+id/description"
+            android:text="@string/heading_requirements" />
 
         <CheckBox
             android:id="@+id/checkBoxText"
@@ -113,19 +113,19 @@
             android:text="@string/photo" />
 
         <TextView
-            android:id="@+id/viewOtherMembers"
+            android:id="@+id/heading_Members"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/checkBoxPhoto"
-            android:text="@string/otherMembers" />
+            android:text="@string/heading_allMembers" />
 
         <TextView
-            android:id="@+id/otherMembers"
+            android:id="@+id/members"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_below="@+id/viewOtherMembers"
+            android:layout_height="60dp"
+            android:layout_below="@+id/heading_Members"
             android:gravity="center_vertical|top"
-            android:hint="@string/otherMembersHint"
+            android:hint="@string/default_members"
             android:scrollbars="vertical"
             android:textSize="14dp" />
 
@@ -133,10 +133,10 @@
             android:id="@+id/creationInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/otherMembers"
+            android:layout_below="@+id/members"
             android:layout_marginTop="12dp"
             android:gravity="center_vertical|center_horizontal"
-            android:text="@string/creationInfo"
+            android:text="@string/default_creationInfo"
             android:textSize="14dp"
             android:textStyle="italic" />
 
@@ -145,7 +145,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/creationInfo"
-            android:text="@string/fulfill" />
+            android:text="@string/button_fulfill" />
     </RelativeLayout>
 
 </RelativeLayout>

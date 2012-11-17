@@ -161,7 +161,7 @@ public class Task implements Serializable {
 		return _text;
 	}
 
-	public String getOtherMembers() {
+	public String getMembers() {
 		return _otherMembersString;
 	}
 

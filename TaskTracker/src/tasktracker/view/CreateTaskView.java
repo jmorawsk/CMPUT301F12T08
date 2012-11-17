@@ -130,7 +130,7 @@ public class CreateTaskView extends Activity {
 				}
 
 				// Only add to web database if Creator has added members
-				String others = task.getOtherMembers();
+				String others = task.getMembers();
 				if (others == null) {
 					_webManager.insertTask(task);
 				}

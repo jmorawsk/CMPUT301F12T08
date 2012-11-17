@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="16dp"
-            android:hint="@string/taskNameHint"
+            android:hint="@string/hint_taskName"
             android:inputType="text"
             android:textSize="20dp"
             android:textStyle="bold" />
@@ -40,7 +40,7 @@
             android:layout_below="@+id/taskName"
             android:layout_marginBottom="8dp"
             android:layout_toRightOf="@+id/viewDeadline"
-            android:hint="@string/dateFormat"
+            android:hint="@string/hint_dateFormat"
             android:inputType="date"
             android:textSize="14dp" />
         -->
@@ -50,7 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/taskName"
-            android:text="@string/taskDescription" />
+            android:text="@string/heading_taskDescription" />
 
         <EditText
             android:id="@+id/editDescription"
@@ -59,7 +59,7 @@
             android:layout_below="@+id/viewDescription"
             android:layout_marginBottom="8dp"
             android:gravity="center_vertical|top"
-            android:hint="@string/taskDescriptionHint"
+            android:hint="@string/hint_taskDescription"
             android:inputType="textMultiLine"
             android:scrollbarAlwaysDrawVerticalTrack="true"
             android:scrollbarStyle="insideInset"
@@ -72,7 +72,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/editDescription"
-            android:text="@string/requirements" />
+            android:text="@string/heading_requirements" />
 
         <CheckBox
             android:id="@+id/checkBoxText"
@@ -99,7 +99,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/checkBoxPhoto"
-            android:text="@string/otherMembers" />
+            android:text="@string/heading_otherMembers" />
 
         <EditText
             android:id="@+id/otherMembers"
@@ -107,7 +107,7 @@
             android:layout_height="50dp"
             android:layout_below="@+id/viewOtherMembers"
             android:gravity="center_vertical|top"
-            android:hint="@string/otherMembersHint"
+            android:hint="@string/hint_otherMembers"
             android:inputType="textMultiLine"
             android:textSize="14dp" />
 
