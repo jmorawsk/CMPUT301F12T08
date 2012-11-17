@@ -36,6 +36,8 @@ package tasktracker.view;
  * specific language governing permissions and limitations under the License.
  */
 
+import java.util.List;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -117,8 +119,8 @@ public class CreateTaskView extends Activity {
 		saveButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View view) {
+				
 				if (hasEmptyFields()) {
-					showToast("You have empty fields");
 					return;
 				}
 
@@ -130,8 +132,8 @@ public class CreateTaskView extends Activity {
 				}
 
 				// Only add to web database if Creator has added members
-				String others = task.getMembers();
-				if (others == null) {
+				List<String> others = task.getOtherMembers();
+				if (others.size() > 0 || others != null) {
 					_webManager.insertTask(task);
 				}
 
@@ -147,16 +149,19 @@ public class CreateTaskView extends Activity {
 	 * @return True if a required field has been left empty, false otherwise.
 	 */
 	private boolean hasEmptyFields() {
-		String name = _name.getText().toString();
-		String description = _description.getText().toString();
-		if (name == "")
+		if (_name.getText().toString().matches("")) {
+			showToast("Your task must have a name");
 			return true;
-		if (description == "")
+		}
+		
+		if (_description.getText().toString().matches("")) {
+			showToast("Your task must have a description");
 			return true;
+		}
 
-		showToast("Name: " + name + "\nDescription: " + description);
 		return false;
 	}
+	
 
 	/**
 	 * Create a task based on the creator's input.

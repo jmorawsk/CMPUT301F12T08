@@ -3,22 +3,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <include layout="@layout/toolbar"
-        android:id="@+id/buttons"/>
+    <include
+        android:id="@+id/buttons"
+        layout="@layout/toolbar" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_below="@+id/buttons"
+        android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp" >
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp" >
 
         <EditText
             android:id="@+id/taskName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:layout_marginTop="16dp"
             android:hint="@string/hint_taskName"
             android:inputType="text"
             android:textSize="20dp"
@@ -55,7 +57,7 @@
         <EditText
             android:id="@+id/editDescription"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="110dp"
             android:layout_below="@+id/viewDescription"
             android:layout_marginBottom="8dp"
             android:gravity="center_vertical|top"
@@ -104,7 +106,7 @@
         <EditText
             android:id="@+id/otherMembers"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="70dp"
             android:layout_below="@+id/viewOtherMembers"
             android:gravity="center_vertical|top"
             android:hint="@string/hint_otherMembers"
@@ -116,6 +118,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_below="@+id/otherMembers"
             android:text="@string/createTask" />
     </RelativeLayout>
 
