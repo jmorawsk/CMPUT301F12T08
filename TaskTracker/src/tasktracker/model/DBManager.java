@@ -29,6 +29,7 @@ public abstract class DBManager
      */
     public abstract Task[] listTasks();
 
+    
     /**
      * Adds a task to the database.
      * Returns a string array.

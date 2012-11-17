@@ -91,6 +91,7 @@ public class JSONDBController extends DBManager {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+                //System.out.println(parsedString);
 		return parsedString;
 	}
 
@@ -108,7 +109,7 @@ public class JSONDBController extends DBManager {
 		String listCommand = "action=" + "list";
 		return parseJSONArray(executeAction(listCommand));
 	}
-
+	
 	/**
 	 * INCOMPLETE: DO NOT USE Queries the database for all tasks. Returns an
 	 * array of tasks. Returns null if there are no tasks stored
@@ -142,6 +143,7 @@ public class JSONDBController extends DBManager {
 		String insertCommand = "action=" + "post" + "&summary="
 				+ summary.replace(' ', '+') + "&description="
 				+ description.replace(' ', '+');
+		//System.out.println(insertCommand);
 		return parseJSONObject(executeAction(insertCommand));
 	}
 
@@ -286,6 +288,7 @@ public class JSONDBController extends DBManager {
 			e.printStackTrace();
 		}
 		// actually make web request
+		System.out.println(uri);
 		return readFromURL(uri.toASCIIString());
 
 	}
@@ -303,40 +306,39 @@ public class JSONDBController extends DBManager {
 	 * @return a string of what is on the webpage
 	 */
 	protected String readFromURL(String url) {
-		// String readLine = null;
-		// try
-		// {
-		// URL webServer;
-		// webServer =new URL(url);
-		//
-		// BufferedReader in = new BufferedReader(
-		// new InputStreamReader(webServer.openStream()));
-		//
-		// String inputLine;
-		// while ((inputLine = in.readLine()) != null){
-		// readLine = inputLine;
-		// }
-		//
-		// in.close();
-		// } catch (IOException e)
-		// {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		// return readLine;
-		ReadFromURL myReadFromURL = new ReadFromURL();
-		myReadFromURL.execute(url);
-
-		String result = null;
-		try {
-			result = myReadFromURL.get();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}
-
-		return result;
+		 String readLine = null;
+		 try
+		 {
+		 URL webServer;
+		 webServer =new URL(url);
+		
+		 BufferedReader in = new BufferedReader(
+		 new InputStreamReader(webServer.openStream()));
+		
+		 String inputLine;
+		 while ((inputLine = in.readLine()) != null){
+		 readLine = inputLine;
+		 }
+		
+		 in.close();
+		 } catch (IOException e)
+		 {
+		 // TODO Auto-generated catch block
+		 e.printStackTrace();
+		 }
+		 return readLine;
+//		ReadFromURL myReadFromURL = new ReadFromURL();
+//		myReadFromURL.execute(url);
+//
+//		String result = null;
+//		try {
+//			result = myReadFromURL.get();
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		} catch (ExecutionException e) {
+//			e.printStackTrace();
+//		}
+//		return result;
 	}
 
 }
