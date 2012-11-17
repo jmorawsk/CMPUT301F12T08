@@ -22,6 +22,8 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import android.util.Log;
+
 /**
  * A class that represents a task. Every task has a creator, and is to be
  * fulfilled by a task member.
