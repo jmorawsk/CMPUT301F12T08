@@ -61,8 +61,6 @@ import tasktracker.model.elements.*;
  */
 public class CreateTaskView extends Activity {
 
-	private static final TaskController TASK_MANAGER = new TaskController();
-
 	private EditText _name;
 	private EditText _description;
 	private EditText _otherMembers;
@@ -122,24 +120,22 @@ public class CreateTaskView extends Activity {
 		saveButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View view) {
-				
+
 				if (hasEmptyFields()) {
 					return;
 				}
 
 				Task task = createTask();
-				if (TaskController.writeFile(task)) {
-					showToast("Wrote to file");
-				} else {
-					showToast("Failed to write to file.");
-				}
 
-				// Only add to web database if Creator has added members
+				// Only add to web database if Creator has added members,
+				// otherwise save to SD
 				List<String> others = task.getOtherMembers();
 				if (others != null && others.size() > 0) {
 					Log.d("DEBUG", "others.size()\t" + others.size());
 					contactWebserver webRequest = new contactWebserver();
 					webRequest.execute(task);
+				} else {
+					TaskController.writeFile(task);
 				}
 
 				finish();
@@ -158,7 +154,7 @@ public class CreateTaskView extends Activity {
 			showToast("Your task must have a name");
 			return true;
 		}
-		
+
 		if (_description.getText().toString().matches("")) {
 			showToast("Your task must have a description");
 			return true;
@@ -166,7 +162,6 @@ public class CreateTaskView extends Activity {
 
 		return false;
 	}
-	
 
 	/**
 	 * Create a task based on the creator's input.
@@ -193,32 +188,31 @@ public class CreateTaskView extends Activity {
 		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
 		toast.show();
 	}
-	
-	private class contactWebserver extends AsyncTask<Task, Void, Void>
-	    {
-	        @Override
-	        protected Void doInBackground(Task... tasks) {
 
-	            for (Task task:tasks){
-	                _webManager.insertTask(task);
-	            }
-	            //webTaskList = new ArrayList<Task>();
-//	            System.out.println("testing");
-//	            String[][] results = webManager.listTasksAsArrays();
-//	            String id;
-//	            Task newTask;
-//	            for(int n=0; n<results.length; n++)
-//	            {
-//	                if(results[n].length>1)
-//	                {
-//	                    System.out.println("index =" +n);
-//	                    id = results[n][1];
-//	                    newTask = webManager.getTask(id);
-//	                    webTaskList.add(newTask);
-//	                }
-//	            }
-	            return null;
-	        }
-	    }
+	private class contactWebserver extends AsyncTask<Task, Void, Void> {
+		@Override
+		protected Void doInBackground(Task... tasks) {
+
+			for (Task task : tasks) {
+				_webManager.insertTask(task);
+			}
+			// webTaskList = new ArrayList<Task>();
+			// System.out.println("testing");
+			// String[][] results = webManager.listTasksAsArrays();
+			// String id;
+			// Task newTask;
+			// for(int n=0; n<results.length; n++)
+			// {
+			// if(results[n].length>1)
+			// {
+			// System.out.println("index =" +n);
+			// id = results[n][1];
+			// newTask = webManager.getTask(id);
+			// webTaskList.add(newTask);
+			// }
+			// }
+			return null;
+		}
+	}
 
 }
