@@ -42,7 +42,6 @@ public class PhotoPicker extends Activity {
 
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				//cancelBogoPic();
 				takeAPhoto();
 			}
 
@@ -68,9 +67,9 @@ public class PhotoPicker extends Activity {
 	
 	public void takeAPhoto(){
 		
-		Intent intent = new Intent(getApplicationContext(), PhotoPicker.class);
-		startActivityForResult(intent,101);
-		
+		Intent intent = new Intent(getApplicationContext(), Camera.class);
+		//startActivityForResult(intent,101);
+		startActivity(intent);
 	}
 	
 
@@ -92,48 +91,13 @@ public class PhotoPicker extends Activity {
                 cursor.close();
 
 
-                Bitmap yourSelectedImage = BitmapFactory.decodeFile(filePath);
+                Bitmap theSelectedImage = BitmapFactory.decodeFile(filePath);
 
                 Toast.makeText(PhotoPicker.this, "selected", 2000).show();
             }
 		}
-//		
-		//switch (requestCode) {
 
-//		case 1:
-//		{
-//
-//			if (resultCode == RESULT_OK)
-//			{
-//				Uri photoUri = data.getData();
-//
-//				if (photoUri != null)
-//				{
-//
-//					try {
-//						String[] filePathColumn = {MediaStore.Images.Media.DATA};
-//						Cursor cursor = getContentResolver().query(photoUri, filePathColumn, null, null, null); 
-//						cursor.moveToFirst();
-//
-//						int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-//
-//						String filePath = cursor.getString(columnIndex);
-//						cursor.close();
-//
-//						Bitmap bMap = BitmapFactory.decodeFile(filePath);
-//
-//
-//						ImageView img = new ImageView(this);
-//						img.setImageBitmap(bMap);
-//
-//
-//					}catch(Exception e)
-//					{}
-//				}
-//			}// resultCode
-//		}// case 1
-//		}// switch, request code
-	}// public void onActivityResult
+	}
 
 
 	@Override
