@@ -60,8 +60,8 @@ public class Camera extends Activity {
 
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				//cancelBogoPic();
 				takePhoto();
+				//sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
 			}
 
 		};
@@ -74,6 +74,7 @@ public class Camera extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				//cancelBogoPic();
+				sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
 				finish();
 			}
 
@@ -151,6 +152,8 @@ public class Camera extends Activity {
 			}
 			else if(result == RESULT_CANCELED){
 
+				//TODO: Delete a photo that has been taken
+				//getContentResolver().delete(imageFileUri, null, null);
 				//textview.setText("Photo Cancelled!");
 
 			}
