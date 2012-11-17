@@ -35,15 +35,6 @@
             android:name=".NotificationListView"
             android:label="@string/notifications" >
         </activity>
-        <activity
-            android:name=".TaskFulfillmentView"
-            android:label="@string/title_activity_task_fulfillment_view" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>
