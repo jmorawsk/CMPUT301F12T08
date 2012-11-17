@@ -42,6 +42,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -134,6 +135,7 @@ public class CreateTaskView extends Activity {
 				// Only add to web database if Creator has added members
 				List<String> others = task.getOtherMembers();
 				if (others != null && others.size() > 0) {
+					Log.d("DEBUG", "others.size()\t" + others.size());
 					_webManager.insertTask(task);
 				}
 
@@ -177,7 +179,7 @@ public class CreateTaskView extends Activity {
 		task.setName(_name.getText().toString());
 		task.setPhotoRequirement(_photo.isChecked());
 		task.setTextRequirement(_text.isChecked());
-		task.setOtherMembers(_otherMembers.toString());
+		task.setOtherMembers(_otherMembers.getText().toString());
 
 		return task;
 	}

@@ -183,6 +183,12 @@ public class Task implements Serializable {
 	 * @param value The string of members.
 	 */
 	public void setOtherMembers(String value) {
+		
+		if (value.matches(""))
+			return;
+		
+		Log.d("DEBUG", value);
+		
 		String[] others = value.split("(\\s+)?,(\\s+)?");
 		_otherMembersList = new ArrayList<String>();
 
