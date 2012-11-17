@@ -1,9 +1,8 @@
 package tasktracker.view;
 
 import android.content.Context;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.widget.Toast;
+import android.view.*;
+import android.widget.*;
 
 /**
 * Copyright (C) 2012 Andrea Budac, Kurtis Morin, Christian Jukna
@@ -58,14 +57,11 @@ public class ToastCreator {
 	public void toaster(String string) {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
 		
-		// TODO: Create layout
-		// View layout = (ViewGroup) inflater.inflate(R.layout.toast_layout,
-		// null);
-		//
-		// ImageView image = (ImageView) layout.findViewById(R.id.toast_image);
-		// image.setImageResource(R.drawable.info_notice);
-		// TextView text = (TextView) layout.findViewById(R.id.toast_text);
-		// text.setText(string);
+		 View layout = (ViewGroup) inflater.inflate(R.layout.toast_layout,
+		 null);
+		
+		 TextView text = (TextView) layout.findViewById(R.id.toast_text);
+		 text.setText(string);
 
 		Toast toast = new Toast(context);
 		toast.setGravity(Gravity.CENTER_VERTICAL, Gravity.CENTER_HORIZONTAL, 0);

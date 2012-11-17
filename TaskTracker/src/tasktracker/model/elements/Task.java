@@ -43,7 +43,6 @@ public class Task implements Serializable {
 	private String _creationDate;
 	private String _description;
 	private String _fulfiller;
-	private String _otherMembersString;
 	private List<String> _otherMembersList;
 	private boolean _requiresText;
 	private boolean _requiresPhoto;
@@ -162,6 +161,11 @@ public class Task implements Serializable {
 		return _text;
 	}
 
+	/**
+	 * Gets all members (including the creator) and puts them into a string using the format: <BR>
+	 * [creator], [member], ..., [member]
+	 * @return The string of all members.
+	 */
 	public String getMembers() {
 		String members = _creator;
 		for (String member : _otherMembersList) {
@@ -170,6 +174,12 @@ public class Task implements Serializable {
 		return members;
 	}
 
+	/**
+	 * Gets the string of members, separates them with comma delimiters, then
+	 * adds each member to the members list.
+	 * 
+	 * @param value The string of members.
+	 */
 	public void setOtherMembers(String value) {
 		String[] others = value.split("(\\s+)?,(\\s+)?");
 		_otherMembersList = new ArrayList<String>();
@@ -180,8 +190,8 @@ public class Task implements Serializable {
 
 		Collections.sort(_otherMembersList);
 	}
-	
-	public List<String> getOtherMembers(){
+
+	public List<String> getOtherMembers() {
 		return _otherMembersList;
 	}
 
@@ -205,7 +215,6 @@ public class Task implements Serializable {
 		}
 		_photos.add(value);
 	}
-
 
 	/**
 	 * Returns a string that represents this task. This string format will be

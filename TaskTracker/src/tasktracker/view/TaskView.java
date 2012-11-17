@@ -22,6 +22,8 @@ import android.widget.TextView;
  */
 public class TaskView extends Activity {
 
+	private Task _task;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -62,33 +64,75 @@ public class TaskView extends Activity {
 
 	protected void onStart() {
 		super.onStart();
-		Task task = (Task) getIntent().getSerializableExtra("TASK");
+		_task = (Task) getIntent().getSerializableExtra("TASK");
 
-		if (task != null) {
+		if (_task == null)
+			return;
 
 			// Assign Text fields
 			TextView name = (TextView) findViewById(R.id.taskName);
 			TextView creationInfo = (TextView) findViewById(R.id.creationInfo);
 			TextView description = (TextView) findViewById(R.id.description);
-			TextView status = (TextView) findViewById(R.id.status);
 			TextView members = (TextView) findViewById(R.id.members);
-
-			name.setText(task.getName());
-			status.setText(task.isFulfilled() ? "Fulfilled" : "Unfulfilled");
-			description.setText(task.getDescription());
-			members.setText(task.getMembers());
-			creationInfo.setText("Created on " + task.getDateCreated() + " by "
-					+ task.getCreator());
+			
+			name.setText(_task.getName());
+			description.setText(_task.getDescription());
+			members.setText(_task.getMembers());
+			creationInfo.setText("Created on " + _task.getDateCreated() + " by "
+					+ _task.getCreator());
+			
+			
+			if (_task.isFulfilled())
+				handleFulfilledTask();
+			else
+				handleUnfulfilledTask();
 
 			// Assign CheckBoxes
-			CheckBox text = (CheckBox) findViewById(R.id.checkBoxText);
-			CheckBox photo = (CheckBox) findViewById(R.id.checkBoxPhoto);
+			Button text = (Button) findViewById(R.id.button_text);
+			Button photo = (Button) findViewById(R.id.button_photo);
 
-			text.setChecked(task.requiresText());
-			photo.setChecked(task.requiresPhoto());
+			text.setEnabled(_task.requiresText());
+			photo.setEnabled(_task.requiresPhoto());
 			
 			// TODO: Handle whether the task is fulfilled.
-
-		}
+			
+		
 	}
+	
+	private void handleFulfilledTask(){
+		
+		TextView status = (TextView) findViewById(R.id.status);
+		status.setText("Fulfilled");
+		
+		Button fulfillment = (Button) findViewById(R.id.fulfillButton);
+		fulfillment.setText("View fulfillment report");
+		fulfillment.setOnClickListener(new OnClickListener(){
+
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+	}
+	
+	private void handleUnfulfilledTask(){
+		
+		TextView status = (TextView) findViewById(R.id.status);
+		status.setText("Unfulfilled");
+		
+		Button fulfillment = (Button) findViewById(R.id.fulfillButton);
+		fulfillment.setText("Mark as fulfilled");
+		fulfillment.setOnClickListener(new OnClickListener(){
+
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
+	}
+	
+	
 }
