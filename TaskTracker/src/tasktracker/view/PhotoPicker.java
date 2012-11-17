@@ -15,6 +15,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+/**
+ * A class that shows all photos currently attached to task.
+ * Allows user to choose to attach a pre existing photo or take a new photo.
+ * 
+ * @author Katherine Jasniewski
+ * 
+ */
+
 public class PhotoPicker extends Activity {
 
 	public static final int PICK_PICTURE = 1; 
@@ -23,6 +31,7 @@ public class PhotoPicker extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_photo_picker_view);
 		
+		//initializes buttons on layout
 		Button galleryPhoto = (Button) findViewById(R.id.galleryPhoto);
 		Button takePhoto = (Button) findViewById(R.id.takeAPhoto);
 		
@@ -34,8 +43,6 @@ public class PhotoPicker extends Activity {
 				selectPhoto();
 			}
 		});
-		
-		//galleryPhoto.setOnClickListener(saveListener);
 		
 		//Take a photo option
 		OnClickListener retakeListener = new OnClickListener(){
@@ -51,6 +58,7 @@ public class PhotoPicker extends Activity {
 
 	}
 	
+	//User can select a photo from the android gallery
 	public void selectPhoto(){
 	
 		Intent intent = new Intent(Intent.ACTION_PICK,
@@ -58,13 +66,9 @@ public class PhotoPicker extends Activity {
 		
 		startActivityForResult(intent, PICK_PICTURE);
 		
-		//intent.setType("image/*");
-		//intent.setAction(Intent.ACTION_GET_CONTENT);
-		
-		//startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_PICTURE);
-		
 	}
 	
+	//TODO: Should start the camera class.
 	public void takeAPhoto(){
 		
 		Intent intent = new Intent(getApplicationContext(), Camera.class);
@@ -93,7 +97,7 @@ public class PhotoPicker extends Activity {
 
                 Bitmap theSelectedImage = BitmapFactory.decodeFile(filePath);
 
-                Toast.makeText(PhotoPicker.this, "selected", 2000).show();
+                Toast.makeText(PhotoPicker.this, "photo selected", 2000).show();
             }
 		}
 

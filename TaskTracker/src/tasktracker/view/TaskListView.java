@@ -46,6 +46,7 @@ public class TaskListView extends Activity {
     private ListView taskListView;
     private List<Task> taskList;
     public List<Task> webTaskList;
+    public List<Task> oldWebTaskList;
     // private List<String> tasks;
     private String[] tasks = new String[0];
 
@@ -57,6 +58,10 @@ public class TaskListView extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         webManager = new WebDBManager();
+
+        oldWebTaskList = new ArrayList<Task>();
+
+        webTaskList = new ArrayList<Task>();
         
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_list_view);
@@ -142,6 +147,8 @@ public class TaskListView extends Activity {
     private void loadTasks() {
 
         taskList = TaskController.readFile();
+
+        taskList.addAll(oldWebTaskList);
         ArrayAdapter<Task> adapter = new ArrayAdapter<Task>(this,
                 R.layout.list_item, taskList);
         taskListView.setAdapter(adapter);
@@ -197,7 +204,10 @@ public class TaskListView extends Activity {
         ArrayAdapter<Task> adapter = new ArrayAdapter<Task>(this,
                 R.layout.list_item, taskList);
         taskListView.setAdapter(adapter);
-        
+        oldWebTaskList = new ArrayList<Task>();
+        for(Task t:webTaskList){
+            oldWebTaskList.add(t);
+        }
     }
     
     private class contactWebserver extends AsyncTask<Void, Void, Void>
@@ -227,6 +237,7 @@ public class TaskListView extends Activity {
         protected void onPostExecute(Void unused){
             //update UI with my objects
             //taskList.addAll(webTaskList);
+            
             update();
         }
 
