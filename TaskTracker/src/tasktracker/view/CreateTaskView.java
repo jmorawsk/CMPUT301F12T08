@@ -36,8 +36,10 @@ package tasktracker.view;
  * specific language governing permissions and limitations under the License.
  */
 
+import java.util.ArrayList;
 import java.util.List;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -136,7 +138,8 @@ public class CreateTaskView extends Activity {
 				List<String> others = task.getOtherMembers();
 				if (others != null && others.size() > 0) {
 					Log.d("DEBUG", "others.size()\t" + others.size());
-					_webManager.insertTask(task);
+					contactWebserver webRequest = new contactWebserver();
+					webRequest.execute(task);
 				}
 
 				finish();
@@ -190,5 +193,32 @@ public class CreateTaskView extends Activity {
 		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
 		toast.show();
 	}
+	
+	private class contactWebserver extends AsyncTask<Task, Void, Void>
+	    {
+	        @Override
+	        protected Void doInBackground(Task... tasks) {
+
+	            for (Task task:tasks){
+	                _webManager.insertTask(task);
+	            }
+	            //webTaskList = new ArrayList<Task>();
+//	            System.out.println("testing");
+//	            String[][] results = webManager.listTasksAsArrays();
+//	            String id;
+//	            Task newTask;
+//	            for(int n=0; n<results.length; n++)
+//	            {
+//	                if(results[n].length>1)
+//	                {
+//	                    System.out.println("index =" +n);
+//	                    id = results[n][1];
+//	                    newTask = webManager.getTask(id);
+//	                    webTaskList.add(newTask);
+//	                }
+//	            }
+	            return null;
+	        }
+	    }
 
 }
