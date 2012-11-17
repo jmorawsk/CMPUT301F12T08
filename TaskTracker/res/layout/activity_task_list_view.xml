@@ -11,17 +11,30 @@
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_below="@+id/buttons"
+        android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp" >
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp" >
+
+        <TextView
+            android:id="@+id/myTasks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/myTasks"
+            android:textSize="20dp"
+            android:textStyle="bold" />
 
         <ListView
             android:id="@+id/taskList"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/debugButton" >
+            android:layout_above="@+id/debugButton"
+            android:layout_below="@+id/myTasks" >
         </ListView>
 
         <!-- Only exists for debugging purposes -->
+
         <Button
             android:id="@+id/debugButton"
             android:layout_width="match_parent"

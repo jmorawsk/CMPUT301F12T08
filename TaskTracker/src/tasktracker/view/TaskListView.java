@@ -49,7 +49,7 @@ public class TaskListView extends Activity {
 
 	/** The current app user */
 	private String _user;
-	
+
 	private WebDBManager webManager;
 
 	@Override
@@ -112,6 +112,7 @@ public class TaskListView extends Activity {
 
 			public void onClick(View v) {
 				if (TaskController.deleteFile()) {
+					loadTasks();
 					showToast("Deleted file on SD");
 				} else {
 					showToast("Failed to delete file from SD");
@@ -129,30 +130,15 @@ public class TaskListView extends Activity {
 
 	protected void onStart() {
 		super.onStart();
+		loadTasks();
+	}
+
+	private void loadTasks() {
+
 		taskList = TaskController.readFile();
-		if (taskList.size() == 0)
-			taskList = createDummies();
 		ArrayAdapter<Task> adapter = new ArrayAdapter<Task>(this,
 				R.layout.list_item, taskList);
 		taskListView.setAdapter(adapter);
-
-	}
-
-	/** Creates a dummy array if SD fails */
-	List<Task> createDummies() {
-		List<Task> list = new ArrayList<Task>();
-		list.add(new Task("Me", "Not from SD", "Task Description"));
-		list.add(new Task("Me", "Still not from SD", "Task Description"));
-		list.add(new Task("Me", "Why isn't it from SD?", "Task Description"));
-		list.add(new Task("Me", "Help", "Task Description"));
-		list.add(new Task("now", "This should be working", "Task Description"));
-		list.add(new Task("You", "No", "Task Description"));
-		return list;
-	}
-
-	protected void onStop() {
-		super.onStop();
-
 	}
 
 	/**
@@ -166,13 +152,11 @@ public class TaskListView extends Activity {
 		public void onItemClick(AdapterView<?> myAdapter, View myView,
 				int myItemInt, long mylng) {
 			Task task = taskList.get(myItemInt);
-			Intent intent = new Intent(getApplicationContext(),
-					TaskView.class);
+			Intent intent = new Intent(getApplicationContext(), TaskView.class);
 			intent.putExtra("TASK", task);
 			startActivity(intent);
-			
-			
-//			showItemMenu(myView, myItemInt);
+
+			// showItemMenu(myView, myItemInt);
 		}
 
 		/**
@@ -190,13 +174,13 @@ public class TaskListView extends Activity {
 			// TODO: Create menu content, set OnMenuItemClickListener, update
 			// tasks upon deletion
 			menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-				
+
 				public boolean onMenuItemClick(MenuItem item) {
 					// TODO Auto-generated method stub
 					return false;
 				}
 			});
-			
+
 		}
 
 	}

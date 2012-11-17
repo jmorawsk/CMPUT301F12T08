@@ -11,15 +11,16 @@
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_below="@+id/buttons"
+        android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp" >
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp" >
 
         <TextView
             android:id="@+id/taskName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:layout_marginTop="16dp"
             android:text="@string/hint_taskName"
             android:textSize="20dp"
             android:textStyle="bold" />
@@ -40,7 +41,7 @@
             android:layout_marginBottom="8dp"
             android:layout_toRightOf="@+id/viewDeadline"
             android:hint="@string/dateFormat"
-            android:textSize="14dp" />
+            android:textSize="14dp" />
         -->
 
         <TextView
@@ -50,7 +51,8 @@
             android:layout_below="@+id/taskName"
             android:layout_marginBottom="8dp"
             android:layout_marginRight="12dp"
-            android:text="@string/heading_status" />
+            android:text="@string/heading_status"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/status"
@@ -67,7 +69,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/statusHeading"
-            android:text="@string/heading_taskDescription" />
+            android:text="@string/heading_taskDescription"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/description"
@@ -88,7 +91,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/description"
-            android:text="@string/heading_requirements" />
+            android:text="@string/heading_requirements"
+            android:textStyle="bold" />
 
         <CheckBox
             android:id="@+id/checkBoxText"
@@ -117,7 +121,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/checkBoxPhoto"
-            android:text="@string/heading_allMembers" />
+            android:text="@string/heading_allMembers"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/members"
@@ -144,6 +149,7 @@
             android:id="@+id/fulfillButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_below="@+id/creationInfo"
             android:text="@string/button_fulfill" />
     </RelativeLayout>

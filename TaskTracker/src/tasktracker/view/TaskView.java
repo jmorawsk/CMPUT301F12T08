@@ -22,39 +22,10 @@ import android.widget.TextView;
  */
 public class TaskView extends Activity {
 
-	private TextView _name;
-	private TextView _description;
-	private TextView _members;
-	private CheckBox _text;
-	private CheckBox _photo;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_view);
-
-		Task task = (Task) getIntent().getSerializableExtra("TASK");
-
-		if (task != null) {
-
-			// Assign EditText fields
-			_name = (TextView) findViewById(R.id.taskName);
-			_name.setText(task.getName());
-
-			_description = (TextView) findViewById(R.id.description);
-			_description.setText(task.getDescription());
-
-			_members = (TextView) findViewById(R.id.members);
-			// TODO: Get other members (from database?). Need to parse into a
-			// string.
-
-			_text = (CheckBox) findViewById(R.id.checkBoxText);
-			_text.setChecked(task.requiresText());
-
-			_photo = (CheckBox) findViewById(R.id.checkBoxPhoto);
-			_photo.setChecked(task.requiresPhoto());
-			
-		}
 
 		// Assign Buttons
 		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
@@ -87,5 +58,37 @@ public class TaskView extends Activity {
 				startActivity(intent);
 			}
 		});
+	}
+
+	protected void onStart() {
+		super.onStart();
+		Task task = (Task) getIntent().getSerializableExtra("TASK");
+
+		if (task != null) {
+
+			// Assign Text fields
+			TextView name = (TextView) findViewById(R.id.taskName);
+			TextView creationInfo = (TextView) findViewById(R.id.creationInfo);
+			TextView description = (TextView) findViewById(R.id.description);
+			TextView status = (TextView) findViewById(R.id.status);
+			TextView members = (TextView) findViewById(R.id.members);
+
+			name.setText(task.getName());
+			status.setText(task.isFulfilled() ? "Fulfilled" : "Unfulfilled");
+			description.setText(task.getDescription());
+			members.setText(task.getMembers());
+			creationInfo.setText("Created on " + task.getDateCreated() + " by "
+					+ task.getCreator());
+
+			// Assign CheckBoxes
+			CheckBox text = (CheckBox) findViewById(R.id.checkBoxText);
+			CheckBox photo = (CheckBox) findViewById(R.id.checkBoxPhoto);
+
+			text.setChecked(task.requiresText());
+			photo.setChecked(task.requiresPhoto());
+			
+			// TODO: Handle whether the task is fulfilled.
+
+		}
 	}
 }

@@ -44,6 +44,7 @@ public class Task implements Serializable {
 	private String _description;
 	private String _fulfiller;
 	private String _otherMembersString;
+	private List<String> _otherMembersList;
 	private boolean _requiresText;
 	private boolean _requiresPhoto;
 	private boolean _fulfilled;
@@ -162,11 +163,26 @@ public class Task implements Serializable {
 	}
 
 	public String getMembers() {
-		return _otherMembersString;
+		String members = _creator;
+		for (String member : _otherMembersList) {
+			members.concat(", " + member);
+		}
+		return members;
 	}
 
 	public void setOtherMembers(String value) {
-		_otherMembersString = value;
+		String[] others = value.split("(\\s+)?,(\\s+)?");
+		_otherMembersList = new ArrayList<String>();
+
+		for (String member : others) {
+			_otherMembersList.add(member);
+		}
+
+		Collections.sort(_otherMembersList);
+	}
+	
+	public List<String> getOtherMembers(){
+		return _otherMembersList;
 	}
 
 	public String getFulfiller() {
@@ -190,9 +206,6 @@ public class Task implements Serializable {
 		_photos.add(value);
 	}
 
-	public String[] getOtherMembersArray() {
-		return _otherMembersString.split("(\\s+)?,(\\s+)?");
-	}
 
 	/**
 	 * Returns a string that represents this task. This string format will be
