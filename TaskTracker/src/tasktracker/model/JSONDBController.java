@@ -158,7 +158,7 @@ public class JSONDBController extends DBManager {
     @Override
     public String[] insertTask(Task task) {
         String content = gson.toJson(task);
-        String insertCommand = "action=" + "post" + "&summary=task"
+        String insertCommand = "action=" + "post" + "&summary=" + task.getName()
                 + "&content=" + content.toString() + "&description="
                 + task.getName().replace(' ', '+');
         return parseJSONObject(executeAction(insertCommand));
