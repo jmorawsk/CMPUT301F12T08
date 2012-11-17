@@ -1,20 +1,17 @@
 package tasktracker.view;
 
 import tasktracker.model.elements.Task;
+import tasktracker.model.elements.TextRequirement;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.View;
+import android.view.*;
 import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 /**
  * And activity that displays an existing task. From here, a user may fulfill a
@@ -116,8 +113,10 @@ public class TaskView extends Activity {
 
 		_status.setText("Fulfilled");
 		_fulfillment.setText("View fulfillment report");
+		
+		
 		_fulfillment.setOnClickListener(new OnClickListener() {
-
+			
 			public void onClick(View v) {
 				// TODO Show "Ok" button on toast.
 				showToast("This task was fulfilled on [date] by "
@@ -147,6 +146,15 @@ public class TaskView extends Activity {
 
 		});
 
+		final Dialog textRequirementDialog = textRequirementDialog();
+		_textRequirement.setOnClickListener(new OnClickListener(){
+
+			public void onClick(View v) {
+				textRequirementDialog.show();
+			}
+			
+		});
+
 	}
 
 	private boolean requirementsFulfilled() {
@@ -155,7 +163,7 @@ public class TaskView extends Activity {
 
 		if (_task.requiresText()) {
 			// TODO: check if text has been input
-			if (true) {
+			if (_task.getText() == null) {
 				showToast("You must add text before marking this task as fulfilled.");
 				ready = false;
 			}
@@ -172,9 +180,36 @@ public class TaskView extends Activity {
 		return ready;
 	}
 	
-	private Dialog textRequirement(){
+	private Dialog textRequirementDialog(){
+		final EditText input = new EditText(this);
+		Builder dialog = new AlertDialog.Builder(this);
+		dialog.setView(input);
+		dialog.setTitle(_task.getName());
+		dialog.setMessage("Enter you fulfillment text.");
+		dialog.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+			
+			public void onClick(DialogInterface dialog, int which) {
+				String text = input.getText().toString();
+
+				text.replaceAll("'", "''"); // For SQL queries
+				
+				// TODO Save text
+				_task.setText(new TextRequirement(text));
+				
+				// TODO save on SD/web db
+			}
+		});
 		
-		return null;
+		dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
+
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
+		return dialog.create();
 	}
 	
 
