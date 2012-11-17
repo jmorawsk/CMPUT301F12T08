@@ -1,17 +1,21 @@
 <resources>
 
+    <!-- Activity/App Titles -->
     <string name="app_name">TaskTracker</string>
     <string name="menu_settings">Settings</string>
-    <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_create_task_view">CreateTaskView</string>
     <string name="home">Home</string>
     <string name="myTasks">My Tasks</string>
     <string name="create_a_task">Create a Task</string>
     <string name="notifications">Notifications</string>
+
+    <!-- Task Info -->
     <string name="taskName">Task Name</string>
     <string name="taskNameHint">New Task Name</string>
     <string name="dateFormat">yyyy-mm-dd</string>
     <string name="deadline">Deadline:</string>
+    <string name="heading_status">Status:</string>
+    <string name="status">[status]</string>
     <string name="taskDescription">Task Description:</string>
     <string name="taskDescriptionHint">Enter a description.</string>
     <string name="otherMembers">Other Members:</string>
@@ -19,12 +23,12 @@
     <string name="requirements">Requirements:</string>
     <string name="text">Text</string>
     <string name="photo">Photo</string>
-    <string name="createTask">Create Task</string>
-    <string name="title_activity_notification_list_view">NotificationListView</string>
-    <string name="descr_overflow_button">Temp descr overflow button</string>
     <string name="creationInfo">Created on [date] by [creator].</string>
+
+    <!-- Buttons -->
+    <string name="createTask">Create Task</string>
+    <string name="descr_overflow_button">Temp descr overflow button</string>
     <string name="fulfill">Fulfill this task</string>
-    <string name="hello_world">Hello world!</string>
     <string name="title_activity_task_view">TaskView</string>
 
 </resources>

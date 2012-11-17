@@ -26,6 +26,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
@@ -164,8 +165,14 @@ public class TaskListView extends Activity {
 
 		public void onItemClick(AdapterView<?> myAdapter, View myView,
 				int myItemInt, long mylng) {
-			// TODO Auto-generated method stub
-			showItemMenu(myView, myItemInt);
+			Task task = taskList.get(myItemInt);
+			Intent intent = new Intent(getApplicationContext(),
+					TaskView.class);
+			intent.putExtra("TASK", task);
+			startActivity(intent);
+			
+			
+//			showItemMenu(myView, myItemInt);
 		}
 
 		/**
@@ -182,6 +189,14 @@ public class TaskListView extends Activity {
 
 			// TODO: Create menu content, set OnMenuItemClickListener, update
 			// tasks upon deletion
+			menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+				
+				public boolean onMenuItemClick(MenuItem item) {
+					// TODO Auto-generated method stub
+					return false;
+				}
+			});
+			
 		}
 
 	}
