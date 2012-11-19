@@ -31,6 +31,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
+import tasktracker.controller.DatabaseAdapter;
 import tasktracker.controller.TaskController;
 import tasktracker.model.WebDBManager;
 import tasktracker.model.elements.*;
@@ -43,203 +44,214 @@ import tasktracker.model.elements.*;
  */
 public class TaskListView extends Activity {
 
-    private ListView taskListView;
-    private List<Task> taskList;
-    public List<Task> webTaskList;
-    public List<Task> oldWebTaskList;
-    // private List<String> tasks;
-    private String[] tasks = new String[0];
+	private ListView taskListView;
+	private List<Task> taskList;
+	public List<Task> webTaskList;
+	public List<Task> oldWebTaskList;
+	// private List<String> tasks;
+	private String[] tasks = new String[0];
 
-    /** The current app user */
-    private String _user;
+	/** The current app user */
+	private String _user;
 
-    private WebDBManager webManager;
+	private WebDBManager webManager;
+	private DatabaseAdapter _dbHelper;
+	private Cursor _cursor;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        webManager = new WebDBManager();
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		webManager = new WebDBManager();
 
-        oldWebTaskList = new ArrayList<Task>();
+		oldWebTaskList = new ArrayList<Task>();
 
-        webTaskList = new ArrayList<Task>();
-        
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_task_list_view);
+		webTaskList = new ArrayList<Task>();
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            _user = extras.getString("USER");
-        }
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_task_list_view);
 
-        // Assign ListView and its on item click listener.
-        taskListView = (ListView) findViewById(R.id.taskList);
-        taskListView.setOnItemClickListener(new handleList_Click());
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			_user = extras.getString("USER");
+		}
 
-        // TODO: read from database and display
-        // String[][] webTasks = webManager.listTasksAsArrays();
-        // for(int n=0;n<webTasks.length;n++){
-        // tasks.add(webTasks[n][0]);
-        // }
-        // ArrayAdapter<String> adapter = new
-        // ArrayAdapter<String>(this,R.layout.list_item, tasks);
-        // taskListView.setAdapter(adapter);
+		// Assign ListView and its on item click listener.
+		taskListView = (ListView) findViewById(R.id.taskList);
+		taskListView.setOnItemClickListener(new OnItemClickListener(){
 
-        Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
-        Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
-        Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
-        buttonMyTasks.setEnabled(false);
+			public void onItemClick(AdapterView<?> a, View v, int i,
+					long id) {
 
-        buttonCreate.setOnClickListener(new View.OnClickListener() {
+				// Task task = taskList.get(myItemInt);
+				Intent intent = new Intent(getApplicationContext(), TaskView.class);
+				intent.putExtra("TASK_ID", id);
+				startActivity(intent);
+			}
+			
+		});
 
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),
-                        CreateTaskView.class);
-                intent.putExtra("USER", _user);
-                startActivity(intent);
-            }
-        });
+		_dbHelper = new DatabaseAdapter(this);
 
-        buttonNotifications.setOnClickListener(new View.OnClickListener() {
+		// TODO: read from database and display
+		// String[][] webTasks = webManager.listTasksAsArrays();
+		// for(int n=0;n<webTasks.length;n++){
+		// tasks.add(webTasks[n][0]);
+		// }
+		// ArrayAdapter<String> adapter = new
+		// ArrayAdapter<String>(this,R.layout.list_item, tasks);
+		// taskListView.setAdapter(adapter);
 
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),
-                        NotificationListView.class);
-                intent.putExtra("USER", _user);
-                startActivity(intent);
+		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
+		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
+		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
+		buttonMyTasks.setEnabled(false);
 
-            }
-        });
+		buttonCreate.setOnClickListener(new View.OnClickListener() {
 
-        setDebugStuff();
+			public void onClick(View v) {
+				Intent intent = new Intent(getApplicationContext(),
+						CreateTaskView.class);
+				intent.putExtra("USER", _user);
+				startActivity(intent);
+			}
+		});
 
-    }
+		buttonNotifications.setOnClickListener(new View.OnClickListener() {
 
-    void setDebugStuff() {
-        Button deleteFile = (Button) findViewById(R.id.debugButton);
+			public void onClick(View v) {
+				Intent intent = new Intent(getApplicationContext(),
+						NotificationListView.class);
+				intent.putExtra("USER", _user);
+				startActivity(intent);
 
-        deleteFile.setOnClickListener(new View.OnClickListener() {
+			}
+		});
 
-            public void onClick(View v) {
-                if (TaskController.deleteFile()) {
-                    loadTasks();
-                    showToast("Deleted file on SD");
-                } else {
-                    showToast("Failed to delete file from SD");
-                }
-            }
-        });
-    }
+		setDebugStuff();
 
-    private void showToast(String message) {
-        Toast toast = Toast.makeText(getApplicationContext(), message,
-                Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-        toast.show();
-    }
+	}
 
-    protected void onStart() {
-        super.onStart();
-        loadTasks();
-        contactWebserver webRequest = new contactWebserver();
-        webRequest.execute();
-    }
+	void setDebugStuff() {
+		Button deleteFile = (Button) findViewById(R.id.debugButton);
 
-    private void loadTasks() {
+		deleteFile.setOnClickListener(new View.OnClickListener() {
 
-        taskList = TaskController.readFile();
+			public void onClick(View v) {
+				if (TaskController.deleteFile()) {
+					loadTasks();
+					showToast("Deleted file on SD");
+				} else {
+					showToast("Failed to delete file from SD");
+				}
+			}
+		});
+	}
 
-        taskList.addAll(oldWebTaskList);
-        ArrayAdapter<Task> adapter = new ArrayAdapter<Task>(this,
-                R.layout.list_item, taskList);
-        taskListView.setAdapter(adapter);
-    }
+	private void showToast(String message) {
+		Toast toast = Toast.makeText(getApplicationContext(), message,
+				Toast.LENGTH_LONG);
+		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+		toast.show();
+	}
 
-    /**
-     * A handler for clicking on a task item. Shows a menu of possible controls.
-     * 
-     * @author Jeanine Bonot
-     * 
-     */
-    class handleList_Click implements OnItemClickListener {
+	protected void onStart() {
+		super.onStart();
+		_dbHelper.open();
+		fillData();
+		// loadTasks();
+		// contactWebserver webRequest = new contactWebserver();
+		// webRequest.execute();
+	}
 
-        public void onItemClick(AdapterView<?> myAdapter, View myView,
-                int myItemInt, long mylng) {
-            Task task = taskList.get(myItemInt);
-            Intent intent = new Intent(getApplicationContext(), TaskView.class);
-            intent.putExtra("TASK", task);
-            startActivity(intent);
+	protected void onStop() {
+		super.onStop();
+		_dbHelper.close();
+		stopManagingCursor(_cursor);
+		_cursor.close();
+	}
 
-            // showItemMenu(myView, myItemInt);
-        }
+	private void fillData() {
+		_cursor = _dbHelper.fetchAllTasks();
+		startManagingCursor(_cursor);
 
-        /**
-         * Displays the menu for a given task.
-         * 
-         * @param view
-         *            The selected task element.
-         * @param index
-         *            The index of the task in the ListView.
-         */
-        private void showItemMenu(View view, final int index) {
-            PopupMenu menu = new PopupMenu(TaskListView.this, view);
-            // menu.getMenuInflater().inflate(R.menu.popup, menu.getMenu());
+		String[] from = new String[] { DatabaseAdapter.TASK,
+				DatabaseAdapter.USER };
+		int[] to = new int[] { R.id.task_name, R.id.task_creator };
 
-            // TODO: Create menu content, set OnMenuItemClickListener, update
-            // tasks upon deletion
-            menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
+				R.layout.list_item, _cursor, from, to);
 
-                public boolean onMenuItemClick(MenuItem item) {
-                    // TODO Auto-generated method stub
-                    return false;
-                }
-            });
+		taskListView.setAdapter(adapter);
+	}
 
-        }
+	private void loadTasks() {
 
-    }
+		taskList = TaskController.readFile();
 
-    private void update(){
-        loadTasks();
-        taskList.addAll(webTaskList);
-        ArrayAdapter<Task> adapter = new ArrayAdapter<Task>(this,
-                R.layout.list_item, taskList);
-        taskListView.setAdapter(adapter);
-        oldWebTaskList = new ArrayList<Task>();
-        for(Task t:webTaskList){
-            oldWebTaskList.add(t);
-        }
-    }
-    
-    private class contactWebserver extends AsyncTask<Void, Void, Void>
-    {
-        @Override
-        protected Void doInBackground(Void... temp) {
+		taskList.addAll(oldWebTaskList);
+		ArrayAdapter<Task> adapter = new ArrayAdapter<Task>(this,
+				R.layout.list_item, taskList);
+		taskListView.setAdapter(adapter);
+	}
 
-            webTaskList = new ArrayList<Task>();
-            System.out.println("testing");
-            String[][] results = webManager.listTasksAsArrays();
-            String id;
-            Task newTask;
-            for(int n=0; n<results.length; n++)
-            {
-                if(results[n].length>1)
-                {
-                    System.out.println("index =" +n);
-                    id = results[n][1];
-                    newTask = webManager.getTask(id);
-                    webTaskList.add(newTask);
-                }
-            }
-            return null;
-        }
+	/**
+	 * A handler for clicking on a task item. Shows a menu of possible controls.
+	 * 
+	 * @author Jeanine Bonot
+	 * 
+	 */
+	class handleList_Click implements OnItemClickListener {
 
-        @Override
-        protected void onPostExecute(Void unused){
-            //update UI with my objects
-            //taskList.addAll(webTaskList);
-            
-            update();
-        }
+		public void onItemClick(AdapterView<?> myAdapter, View myView,
+				int myItemInt, long id) {
 
-    }
+			// Task task = taskList.get(myItemInt);
+			Intent intent = new Intent(getApplicationContext(), TaskView.class);
+			intent.putExtra("TASK_ID", id);
+			startActivity(intent);
+
+		}
+
+	}
+
+	private void update() {
+		loadTasks();
+		taskList.addAll(webTaskList);
+		ArrayAdapter<Task> adapter = new ArrayAdapter<Task>(this,
+				R.layout.list_item, taskList);
+		taskListView.setAdapter(adapter);
+		oldWebTaskList = new ArrayList<Task>();
+		for (Task t : webTaskList) {
+			oldWebTaskList.add(t);
+		}
+	}
+
+	private class contactWebserver extends AsyncTask<Void, Void, Void> {
+		@Override
+		protected Void doInBackground(Void... temp) {
+
+			webTaskList = new ArrayList<Task>();
+			System.out.println("testing");
+			String[][] results = webManager.listTasksAsArrays();
+			String id;
+			Task newTask;
+			for (int n = 0; n < results.length; n++) {
+				if (results[n].length > 1) {
+					System.out.println("index =" + n);
+					id = results[n][1];
+					newTask = webManager.getTask(id);
+					webTaskList.add(newTask);
+				}
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void unused) {
+			// update UI with my objects
+			// taskList.addAll(webTaskList);
+
+			update();
+		}
+
+	}
 }

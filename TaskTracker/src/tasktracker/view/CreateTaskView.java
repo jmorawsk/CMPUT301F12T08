@@ -49,6 +49,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
+import tasktracker.controller.DatabaseAdapter;
 import tasktracker.controller.TaskController;
 import tasktracker.model.WebDBManager;
 import tasktracker.model.elements.*;
@@ -70,6 +71,8 @@ public class CreateTaskView extends Activity {
 
 	/** The current app user */
 	private String _user;
+	
+	private DatabaseAdapter _dbHelper;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -81,6 +84,7 @@ public class CreateTaskView extends Activity {
 
 		// Initialize our webManager
 		_webManager = new WebDBManager();
+		_dbHelper = new DatabaseAdapter(this);
 
 		// Assign EditText fields
 		_name = (EditText) findViewById(R.id.taskName);
@@ -126,6 +130,11 @@ public class CreateTaskView extends Activity {
 				}
 
 				Task task = createTask();
+				
+				// Add to SQL server
+				_dbHelper.open();
+				_dbHelper.createTask(task);
+				_dbHelper.close();
 
 				// Only add to web database if Creator has added members,
 				// otherwise save to SD
