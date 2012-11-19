@@ -7,6 +7,7 @@
     <string name="myTasks">My Tasks</string>
     <string name="create_a_task">Create a Task</string>
     <string name="notifications">Notifications</string>
+    <string name="camera">camera</string>
     
     <!-- Login -->
     <string name="tasktracker_login">TaskTracker Login</string>

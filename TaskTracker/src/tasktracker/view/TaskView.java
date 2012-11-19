@@ -27,7 +27,7 @@ public class TaskView extends Activity {
 
 	// The current user
 	private String _user;
-	
+
 	// Activity Items
 	private TextView _status;
 	private Button _textRequirement;
@@ -40,7 +40,7 @@ public class TaskView extends Activity {
 	private String _taskCreator;
 	private boolean _requiresText;
 	private boolean _requiresPhoto;
-	
+
 	// Task Fulfillment
 	private String _fulfillmentText;
 
@@ -48,23 +48,22 @@ public class TaskView extends Activity {
 	private DatabaseAdapter _dbHelper;
 	private Cursor _cursor;
 
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_view);
 
-		_user = "FulfillDebugger";
-		
+		_user = getIntent().getStringExtra("USER");
+
 		_textRequirement = (Button) findViewById(R.id.button_text);
 		_photoRequirement = (Button) findViewById(R.id.button_photo);
 		_fulfillment = (Button) findViewById(R.id.fulfillButton);
 
 		setupToolbarButtons();
-		
+
 	}
-	
-	private void setupToolbarButtons(){
+
+	private void setupToolbarButtons() {
 		// Assign Buttons
 		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
 		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
@@ -73,27 +72,21 @@ public class TaskView extends Activity {
 		buttonMyTasks.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				Intent intent = new Intent(getApplicationContext(),
-						TaskListView.class);
-				startActivity(intent);
+				startActivity(TaskListView.class);
 			}
 		});
 
 		buttonCreate.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				Intent intent = new Intent(getApplicationContext(),
-						CreateTaskView.class);
-				startActivity(intent);
+				startActivity(CreateTaskView.class);
 			}
 		});
 
 		buttonNotifications.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				Intent intent = new Intent(getApplicationContext(),
-						NotificationListView.class);
-				startActivity(intent);
+				startActivity(NotificationListView.class);
 			}
 		});
 	}
@@ -199,17 +192,26 @@ public class TaskView extends Activity {
 
 		});
 
+		_photoRequirement.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				startActivity(Camera.class);
+			}
+
+		});
+
 	}
 
 	private boolean requirementsFulfilled() {
 
 		boolean ready = true;
 
-		if (_requiresText && (_fulfillmentText == null ||_fulfillmentText.equals(""))) {
-			
-				showToast("You must add text before marking this task as fulfilled.");
-				ready = false;
-			
+		if (_requiresText
+				&& (_fulfillmentText == null || _fulfillmentText.equals(""))) {
+
+			showToast("You must add text before marking this task as fulfilled.");
+			ready = false;
+
 		}
 
 		if (_requiresPhoto) {
@@ -250,6 +252,12 @@ public class TaskView extends Activity {
 				});
 
 		return dialog.create();
+	}
+
+	private void startActivity(Class destination) {
+		Intent intent = new Intent(getApplicationContext(), destination);
+		intent.putExtra("USER", _user);
+		startActivity(intent);
 	}
 
 	private void showToast(String message) {
