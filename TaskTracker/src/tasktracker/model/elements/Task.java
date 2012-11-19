@@ -51,6 +51,9 @@ public class Task implements Serializable {
 	private boolean _fulfilled;
 	private List<PhotoRequirement> _photos;
 	private TextRequirement _text;
+	
+	// Store date as long (in hex) so can be formatted upon preference.
+	private String _dateHex;
 
 	/**
 	 * Creates a new instance of the TaskElement class.
@@ -83,8 +86,11 @@ public class Task implements Serializable {
 	public Task(String creator, String name, String description,
 			boolean requiresText, boolean requiresPhoto) {
 
-		_creationDate = new SimpleDateFormat("MMM dd, yyyy").format(Calendar
+		_creationDate = new SimpleDateFormat("MMM dd, yyyy | HH:mm").format(Calendar
 				.getInstance().getTime());
+		
+		// Store date as hex string with hex prefix.
+		_dateHex = "0x" + Long.toHexString(Calendar.getInstance().getTimeInMillis());
 
 		_creator = creator;
 		_name = name;
@@ -124,6 +130,10 @@ public class Task implements Serializable {
 
 	public String getDateCreated() {
 		return _creationDate;
+	}
+	
+	public String getDateHex(){
+		return _dateHex;
 	}
 
 	public void setDescription(String value) {

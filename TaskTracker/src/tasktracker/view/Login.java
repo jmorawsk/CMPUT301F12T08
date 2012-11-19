@@ -78,7 +78,7 @@ public class Login extends Activity {
 
 				} else {
 					// User not found in database.
-					shortToast("Invalid username and/or password.");
+					shortToast("Invalid username/password combination.");
 				}
 			}
 
