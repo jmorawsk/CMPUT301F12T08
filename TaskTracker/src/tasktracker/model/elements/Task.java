@@ -83,9 +83,8 @@ public class Task implements Serializable {
 	public Task(String creator, String name, String description,
 			boolean requiresText, boolean requiresPhoto) {
 
-		Date date = Calendar.getInstance().getTime();
-		_creationDate = new SimpleDateFormat("yyyy-MM-dd").format(date
-				.getTime());
+		_creationDate = new SimpleDateFormat("MMM dd, yyyy").format(Calendar
+				.getInstance().getTime());
 
 		_creator = creator;
 		_name = name;
@@ -164,8 +163,10 @@ public class Task implements Serializable {
 	}
 
 	/**
-	 * Gets all members (including the creator) and puts them into a string using the format: <BR>
+	 * Gets all members (including the creator) and puts them into a string
+	 * using the format: <BR>
 	 * [creator], [member], ..., [member]
+	 * 
 	 * @return The string of all members.
 	 */
 	public String getMembers() {
@@ -180,17 +181,18 @@ public class Task implements Serializable {
 	 * Gets the string of members, separates them with comma delimiters, then
 	 * adds each member to the members list.
 	 * 
-	 * @param value The string of members.
+	 * @param value
+	 *            The string of members.
 	 */
 	public void setOtherMembers(String value) {
 
 		_otherMembersList = new ArrayList<String>();
-		
+
 		if (value.matches(""))
 			return;
-		
+
 		Log.d("DEBUG", value);
-		
+
 		String[] others = value.split("(\\s+)?,(\\s+)?");
 
 		for (String member : others) {
