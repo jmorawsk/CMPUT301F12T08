@@ -152,7 +152,7 @@ public class DatabaseAdapter {
 	 * @return Cursor over all folders
 	 */
 	public Cursor fetchAllTasks() {
-		return mDb.query(TABLE_TASKS, new String[] { ID, TASK, USER }, null,
+		return mDb.query(TABLE_TASKS, new String[] { ID, TASK, USER, DATE }, null,
 				null, null, null, null);
 	}
 

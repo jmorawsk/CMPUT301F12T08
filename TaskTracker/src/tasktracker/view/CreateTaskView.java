@@ -71,7 +71,7 @@ public class CreateTaskView extends Activity {
 
 	/** The current app user */
 	private String _user;
-	
+
 	private DatabaseAdapter _dbHelper;
 
 	@Override
@@ -93,8 +93,11 @@ public class CreateTaskView extends Activity {
 		_text = (CheckBox) findViewById(R.id.checkBoxText);
 		_photo = (CheckBox) findViewById(R.id.checkBoxPhoto);
 
-		// Assign Buttons
-		Button saveButton = (Button) findViewById(R.id.saveButton);
+		setupToolbarButtons();
+		setupSaveButton();
+	}
+
+	private void setupToolbarButtons() {
 		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
 		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
 		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
@@ -119,8 +122,11 @@ public class CreateTaskView extends Activity {
 				startActivity(intent);
 			}
 		});
+	}
 
-		// Assign listener to Save button
+	private void setupSaveButton() {
+		
+		Button saveButton = (Button) findViewById(R.id.saveButton);
 		saveButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View view) {
@@ -130,11 +136,7 @@ public class CreateTaskView extends Activity {
 				}
 
 				Task task = createTask();
-				
-				// Add to SQL server
-				_dbHelper.open();
-				_dbHelper.createTask(task);
-				_dbHelper.close();
+
 
 				// Only add to web database if Creator has added members,
 				// otherwise save to SD
@@ -144,7 +146,12 @@ public class CreateTaskView extends Activity {
 					contactWebserver webRequest = new contactWebserver();
 					webRequest.execute(task);
 				} else {
-					TaskController.writeFile(task);
+					// TaskController.writeFile(task);
+					
+					// Add to SQL server
+					_dbHelper.open();
+					_dbHelper.createTask(task);
+					_dbHelper.close();
 				}
 
 				finish();

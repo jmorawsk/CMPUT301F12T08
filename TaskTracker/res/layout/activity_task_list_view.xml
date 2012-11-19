@@ -32,16 +32,27 @@
             android:layout_above="@+id/debugButton"
             android:layout_below="@+id/myTasks" >
         </ListView>
+        
+        <Button
+            android:id="@+id/button_unsubscribe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="8dp"
+            android:text="@string/button_unsubscribe"
+            android:textSize="12dp" />
 
         <!-- Only exists for debugging purposes -->
 
         <Button
             android:id="@+id/debugButton"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
             android:layout_marginTop="8dp"
-            android:text="delete file on SD" />
+            android:text="delete file on SD"
+            android:textSize="12dp" />
     </RelativeLayout>
 
 </RelativeLayout>

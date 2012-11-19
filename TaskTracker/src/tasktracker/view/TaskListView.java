@@ -29,6 +29,7 @@ import android.database.Cursor;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import tasktracker.controller.DatabaseAdapter;
@@ -61,45 +62,45 @@ public class TaskListView extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		webManager = new WebDBManager();
-
 		oldWebTaskList = new ArrayList<Task>();
-
 		webTaskList = new ArrayList<Task>();
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_list_view);
 
+		_dbHelper = new DatabaseAdapter(this);
+		
+		// Import user info from previous activity
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			_user = extras.getString("USER");
 		}
 
-		// Assign ListView and its on item click listener.
-		taskListView = (ListView) findViewById(R.id.taskList);
-		taskListView.setOnItemClickListener(new OnItemClickListener(){
+		setupToolbarButtons();
+		setupUnsubscribeButton();
+		setupTaskList();
+		setDebugStuff();
 
-			public void onItemClick(AdapterView<?> a, View v, int i,
-					long id) {
+	}
 
-				// Task task = taskList.get(myItemInt);
-				Intent intent = new Intent(getApplicationContext(), TaskView.class);
-				intent.putExtra("TASK_ID", id);
-				startActivity(intent);
-			}
-			
-		});
+	protected void onStart() {
+		super.onStart();
+		_dbHelper.open();
+		fillData();
+		// loadTasks();
+		// contactWebserver webRequest = new contactWebserver();
+		// webRequest.execute();
+	}
 
-		_dbHelper = new DatabaseAdapter(this);
+	protected void onStop() {
+		super.onStop();
+		_dbHelper.close();
+		stopManagingCursor(_cursor);
+		_cursor.close();
+	}
 
-		// TODO: read from database and display
-		// String[][] webTasks = webManager.listTasksAsArrays();
-		// for(int n=0;n<webTasks.length;n++){
-		// tasks.add(webTasks[n][0]);
-		// }
-		// ArrayAdapter<String> adapter = new
-		// ArrayAdapter<String>(this,R.layout.list_item, tasks);
-		// taskListView.setAdapter(adapter);
-
+	private void setupToolbarButtons() {
+		
 		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
 		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
 		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
@@ -125,11 +126,34 @@ public class TaskListView extends Activity {
 
 			}
 		});
-
-		setDebugStuff();
-
 	}
 
+	private void setupUnsubscribeButton(){
+		Button unsubscribe = (Button) findViewById(R.id.button_unsubscribe);
+		unsubscribe.setOnClickListener(new OnClickListener(){
+
+			public void onClick(View v) {
+				showToast("Not yet implemented");
+			}
+			
+		});
+	}
+	
+	private void setupTaskList(){
+		// Assign ListView and its on item click listener.
+		taskListView = (ListView) findViewById(R.id.taskList);
+		taskListView.setOnItemClickListener(new OnItemClickListener() {
+
+			public void onItemClick(AdapterView<?> a, View v, int i, long id) {
+				Intent intent = new Intent(getApplicationContext(),
+						TaskView.class);
+				intent.putExtra("TASK_ID", id);
+				startActivity(intent);
+			}
+
+		});
+	}
+	
 	void setDebugStuff() {
 		Button deleteFile = (Button) findViewById(R.id.debugButton);
 
@@ -137,7 +161,7 @@ public class TaskListView extends Activity {
 
 			public void onClick(View v) {
 				if (TaskController.deleteFile()) {
-					loadTasks();
+					fillData();
 					showToast("Deleted file on SD");
 				} else {
 					showToast("Failed to delete file from SD");
@@ -153,29 +177,14 @@ public class TaskListView extends Activity {
 		toast.show();
 	}
 
-	protected void onStart() {
-		super.onStart();
-		_dbHelper.open();
-		fillData();
-		// loadTasks();
-		// contactWebserver webRequest = new contactWebserver();
-		// webRequest.execute();
-	}
-
-	protected void onStop() {
-		super.onStop();
-		_dbHelper.close();
-		stopManagingCursor(_cursor);
-		_cursor.close();
-	}
-
 	private void fillData() {
 		_cursor = _dbHelper.fetchAllTasks();
 		startManagingCursor(_cursor);
 
 		String[] from = new String[] { DatabaseAdapter.TASK,
-				DatabaseAdapter.USER };
-		int[] to = new int[] { R.id.task_name, R.id.task_creator };
+				DatabaseAdapter.USER, DatabaseAdapter.DATE };
+		int[] to = new int[] { R.id.task_name, R.id.task_creator,
+				R.id.task_date };
 
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
 				R.layout.list_item, _cursor, from, to);
@@ -191,26 +200,6 @@ public class TaskListView extends Activity {
 		ArrayAdapter<Task> adapter = new ArrayAdapter<Task>(this,
 				R.layout.list_item, taskList);
 		taskListView.setAdapter(adapter);
-	}
-
-	/**
-	 * A handler for clicking on a task item. Shows a menu of possible controls.
-	 * 
-	 * @author Jeanine Bonot
-	 * 
-	 */
-	class handleList_Click implements OnItemClickListener {
-
-		public void onItemClick(AdapterView<?> myAdapter, View myView,
-				int myItemInt, long id) {
-
-			// Task task = taskList.get(myItemInt);
-			Intent intent = new Intent(getApplicationContext(), TaskView.class);
-			intent.putExtra("TASK_ID", id);
-			startActivity(intent);
-
-		}
-
 	}
 
 	private void update() {

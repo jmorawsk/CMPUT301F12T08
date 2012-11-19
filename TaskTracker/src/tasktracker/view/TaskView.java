@@ -55,18 +55,16 @@ public class TaskView extends Activity {
 		setContentView(R.layout.activity_task_view);
 
 		_user = "FulfillDebugger";
-
-		// Assign Text fields
-		// _name = (TextView) findViewById(R.id.taskName);
-		// _creationInfo = (TextView) findViewById(R.id.creationInfo);
-		// _description = (TextView) findViewById(R.id.description);
-		// _members = (TextView) findViewById(R.id.members);
-		// _status = (TextView) findViewById(R.id.status);
-		//
+		
 		_textRequirement = (Button) findViewById(R.id.button_text);
 		_photoRequirement = (Button) findViewById(R.id.button_photo);
 		_fulfillment = (Button) findViewById(R.id.fulfillButton);
 
+		setupToolbarButtons();
+		
+	}
+	
+	private void setupToolbarButtons(){
 		// Assign Buttons
 		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
 		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
