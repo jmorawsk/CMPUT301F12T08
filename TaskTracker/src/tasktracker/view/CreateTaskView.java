@@ -80,7 +80,7 @@ public class CreateTaskView extends Activity {
 		setContentView(R.layout.activity_create_task_view);
 
 		// TODO: Get creator information
-		_user = "Debugger";
+		_user = getIntent().getStringExtra("USER");
 
 		// Initialize our webManager
 		_webManager = new WebDBManager();

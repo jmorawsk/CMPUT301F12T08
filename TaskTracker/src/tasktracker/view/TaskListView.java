@@ -71,10 +71,7 @@ public class TaskListView extends Activity {
 		_dbHelper = new DatabaseAdapter(this);
 		
 		// Import user info from previous activity
-		Bundle extras = getIntent().getExtras();
-		if (extras != null) {
-			_user = extras.getString("USER");
-		}
+		_user = getIntent().getStringExtra("USER");
 
 		setupToolbarButtons();
 		setupUnsubscribeButton();
@@ -148,6 +145,7 @@ public class TaskListView extends Activity {
 				Intent intent = new Intent(getApplicationContext(),
 						TaskView.class);
 				intent.putExtra("TASK_ID", id);
+				intent.putExtra("USER", _user);
 				startActivity(intent);
 			}
 

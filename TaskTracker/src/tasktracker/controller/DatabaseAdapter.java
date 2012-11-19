@@ -22,6 +22,8 @@ public class DatabaseAdapter {
 	public static final String REQS_TEXT = "requiresText";
 	public static final String MEMBERS = "members";
 	public static final String FULFILLED = "fulfilled";
+	public static final String EMAIL = "email";
+	public static final String PASSWORD = "password";
 
 	private SQLiteDatabase mDb;
 
@@ -112,6 +114,16 @@ public class DatabaseAdapter {
 		return mDb.insert(TABLE_TASKS, null, initialValues);
 	}
 
+	public long createUser(String user, String email, String password) {
+		ContentValues initialValues = new ContentValues();
+
+		initialValues.put(USER, user);
+		initialValues.put(EMAIL, email);
+		initialValues.put(PASSWORD, password);
+
+		return mDb.insert(TABLE_USERS, null, initialValues);
+	}
+
 	/**
 	 * Delete the entry with the given rowId
 	 * 
@@ -152,8 +164,8 @@ public class DatabaseAdapter {
 	 * @return Cursor over all folders
 	 */
 	public Cursor fetchAllTasks() {
-		return mDb.query(TABLE_TASKS, new String[] { ID, TASK, USER, DATE }, null,
-				null, null, null, null);
+		return mDb.query(TABLE_TASKS, new String[] { ID, TASK, USER, DATE },
+				null, null, null, null, null);
 	}
 
 	public Cursor fetchTask(long rowId) {
@@ -163,13 +175,25 @@ public class DatabaseAdapter {
 	}
 
 	/**
-	 * Return a Cursor over the list of all users in the table
-	 * 
-	 * @return Cursor over all tags
+	 * To validate login
+	 * @param user
+	 * @param password
+	 * @return
 	 */
-	public Cursor fetchUniqueMembers() throws SQLException {
-		return mDb.query(TABLE_MEMBERS, new String[] { ID, USER }, null, null,
-				USER, null, null, null);
+	public Cursor fetchUser(String user, String password) {
+		return mDb.query(TABLE_USERS, new String[] { ID, USER, PASSWORD }, USER
+				+ "='" + user + "' AND " + PASSWORD + "='" + password + "'",
+				null, null, null, null);
+	}
+
+	/**
+	 * To check if a username is available
+	 * @param user
+	 * @return
+	 */
+	public Cursor fetchUser(String user) {
+		return mDb.query(TABLE_USERS, new String[] { ID, USER }, USER + "='"
+				+ user + "'", null, null, null, null);
 	}
 
 	/**

@@ -10,7 +10,7 @@
         android:id="@+id/login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true" >
+        android:layout_centerHorizontal="true" >
 
         <TextView
             android:id="@+id/tasktracker_login_headline"
@@ -24,7 +24,7 @@
             android:id="@+id/login_fields"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-                android:layout_below="@+id/tasktracker_login_headline"
+            android:layout_below="@+id/tasktracker_login_headline"
             android:layout_marginTop="28dp" >
 
             <RelativeLayout
@@ -34,8 +34,8 @@
                 <TextView
                     android:id="@+id/heading_username"
                     android:layout_width="wrap_content"
-                    android:layout_alignParentRight="true"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
                     android:layout_marginBottom="8dp"
                     android:layout_marginTop="12dp"
                     android:text="@string/username"
@@ -44,8 +44,8 @@
                 <TextView
                     android:id="@+id/heading_password"
                     android:layout_width="wrap_content"
-                    android:layout_alignParentRight="true"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
                     android:layout_below="@+id/heading_username"
                     android:layout_marginTop="12dp"
                     android:text="@string/password"
@@ -83,6 +83,21 @@
             android:layout_marginTop="12dp"
             android:text="@string/button_login"
             android:textSize="12dp" />
+        
+        
+        <!-- DEBUGGING BUTTON.  DELETE BEFORE RELEASE -->
+
+        <Button
+            android:id="@+id/button_debug"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_below="@+id/login_fields"
+            android:layout_marginTop="12dp"
+            android:text="Enter Debug Mode"
+            android:textSize="12dp" />
+        
+        <!-- END OF DEBUG -->
+        
     </RelativeLayout>
 
     <!-- Create an Account -->
@@ -106,8 +121,8 @@
             android:id="@+id/new_user_headings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-                android:layout_below="@+id/title_new_account" >
+            android:layout_below="@+id/title_new_account"
+            android:layout_marginTop="12dp" >
 
             <RelativeLayout
                 android:layout_width="100dp"
@@ -201,9 +216,7 @@
                     android:text="@string/button_create_account"
                     android:textSize="12dp" />
             </RelativeLayout>
-            
         </RelativeLayout>
-        
     </RelativeLayout>
 
 </RelativeLayout>
