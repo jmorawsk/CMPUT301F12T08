@@ -125,7 +125,7 @@ public class CreateTaskView extends Activity {
 	}
 
 	private void setupSaveButton() {
-		
+
 		Button saveButton = (Button) findViewById(R.id.saveButton);
 		saveButton.setOnClickListener(new OnClickListener() {
 
@@ -136,23 +136,30 @@ public class CreateTaskView extends Activity {
 				}
 
 				Task task = createTask();
+				List<String> others = task.getOtherMembers();
 
+				// Add to SQL server
+				_dbHelper.open();
+				_dbHelper.createTask(task);
+
+				_dbHelper.createMember(task.getName(), _user);
+
+				for (String member : others) {
+					_dbHelper.createMember(task.getName(), member);
+				}
+
+				_dbHelper.close();
 
 				// Only add to web database if Creator has added members,
 				// otherwise save to SD
-				List<String> others = task.getOtherMembers();
-				if (others != null && others.size() > 0) {
-					Log.d("DEBUG", "others.size()\t" + others.size());
-					contactWebserver webRequest = new contactWebserver();
-					webRequest.execute(task);
-				} else {
-					// TaskController.writeFile(task);
-					
-					// Add to SQL server
-					_dbHelper.open();
-					_dbHelper.createTask(task);
-					_dbHelper.close();
-				}
+				// if (others != null && others.size() > 0) {
+				// Log.d("DEBUG", "others.size()\t" + others.size());
+				// contactWebserver webRequest = new contactWebserver();
+				// webRequest.execute(task);
+				// } else {
+				// // TaskController.writeFile(task);
+				//
+				// }
 
 				finish();
 			}

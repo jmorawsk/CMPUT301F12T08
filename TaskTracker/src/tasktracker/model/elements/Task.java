@@ -102,6 +102,7 @@ public class Task implements Serializable {
 		_fulfilled = false;
 
 		_photos = new ArrayList<PhotoRequirement>();
+		_otherMembersList = new ArrayList<String>();
 	}
 
 	/**

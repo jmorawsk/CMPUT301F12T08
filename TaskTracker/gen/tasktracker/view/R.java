@@ -19,12 +19,12 @@ public final class R {
         public static final int RetakePhoto=0x7f070001;
         public static final int SavePhoto=0x7f070000;
         public static final int TakeAPhoto=0x7f070003;
-        public static final int buttonCreateTask=0x7f07003e;
-        public static final int buttonMyTasks=0x7f07003d;
-        public static final int buttonNotifications=0x7f07003f;
+        public static final int buttonCreateTask=0x7f07003f;
+        public static final int buttonMyTasks=0x7f07003e;
+        public static final int buttonNotifications=0x7f070040;
         public static final int button_create_account=0x7f070022;
         public static final int button_debug=0x7f070016;
-        public static final int button_done=0x7f07003a;
+        public static final int button_done=0x7f07003b;
         public static final int button_login=0x7f070015;
         public static final int button_photo=0x7f070030;
         public static final int button_text=0x7f07002f;
@@ -37,7 +37,7 @@ public final class R {
         public static final int create_account=0x7f070017;
         public static final int creationInfo=0x7f070033;
         public static final int debugButton=0x7f070029;
-        public static final int delete=0x7f070041;
+        public static final int delete=0x7f070042;
         public static final int description=0x7f07002d;
         public static final int editDescription=0x7f070007;
         public static final int fulfillButton=0x7f070034;
@@ -52,8 +52,8 @@ public final class R {
         public static final int heading_username_new=0x7f07001a;
         public static final int login=0x7f07000e;
         public static final int login_fields=0x7f070010;
-        public static final int members=0x7f070032;
-        public static final int menu_settings=0x7f070042;
+        public static final int membersList=0x7f070032;
+        public static final int menu_settings=0x7f070043;
         public static final int myTasks=0x7f070027;
         public static final int new_email=0x7f07001f;
         public static final int new_password=0x7f070020;
@@ -61,7 +61,7 @@ public final class R {
         public static final int new_user_headings=0x7f070019;
         public static final int new_username=0x7f07001e;
         public static final int notificationsList=0x7f070023;
-        public static final int open=0x7f070040;
+        public static final int open=0x7f070041;
         public static final int otherMembers=0x7f07000c;
         public static final int password=0x7f070014;
         public static final int saveButton=0x7f07000d;
@@ -74,10 +74,11 @@ public final class R {
         public static final int task_date=0x7f070038;
         public static final int task_name=0x7f070036;
         public static final int tasktracker_login_headline=0x7f07000f;
-        public static final int timestamp=0x7f070039;
+        public static final int text=0x7f070039;
+        public static final int timestamp=0x7f07003a;
         public static final int title_new_account=0x7f070018;
-        public static final int toast_layout_root=0x7f07003b;
-        public static final int toast_text=0x7f07003c;
+        public static final int toast_layout_root=0x7f07003c;
+        public static final int toast_text=0x7f07003d;
         public static final int username=0x7f070013;
         public static final int viewDescription=0x7f070006;
         public static final int viewOtherMembers=0x7f07000b;
@@ -92,15 +93,15 @@ public final class R {
         public static final int activity_task_list_view=0x7f030005;
         public static final int activity_task_view=0x7f030006;
         public static final int list_item=0x7f030007;
-        public static final int text_requirement=0x7f030008;
-        public static final int toast_layout=0x7f030009;
-        public static final int toolbar=0x7f03000a;
+        public static final int simple_list_item=0x7f030008;
+        public static final int text_requirement=0x7f030009;
+        public static final int toast_layout=0x7f03000a;
+        public static final int toolbar=0x7f03000b;
     }
     public static final class menu {
         public static final int acitivity_task_list_view=0x7f060000;
         public static final int activity_login=0x7f060001;
         public static final int activity_main=0x7f060002;
-        public static final int activity_task_fulfillment_view=0x7f060003;
     }
     public static final class string {
         /**  Activity/App Titles 

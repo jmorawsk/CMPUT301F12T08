@@ -108,7 +108,7 @@ public class TaskView extends Activity {
 
 		TextView name = (TextView) findViewById(R.id.taskName);
 		TextView description = (TextView) findViewById(R.id.description);
-		TextView members = (TextView) findViewById(R.id.members);
+		// TextView members = (TextView) findViewById(R.id.members);
 		TextView status = (TextView) findViewById(R.id.status);
 		TextView creationInfo = (TextView) findViewById(R.id.creationInfo);
 
@@ -123,18 +123,20 @@ public class TaskView extends Activity {
 				.getColumnIndex(DatabaseAdapter.REQS_PHOTO)) == 1;
 		_taskName = _cursor.getString(_cursor
 				.getColumnIndex(DatabaseAdapter.TASK));
-		
+
 		name.setText(_taskName);
 		description.setText(_cursor.getString(_cursor
 				.getColumnIndex(DatabaseAdapter.TEXT)));
-		members.setText(_cursor.getString(_cursor
-				.getColumnIndex(DatabaseAdapter.MEMBERS)));
+		// members.setText(_cursor.getString(_cursor
+		// .getColumnIndex(DatabaseAdapter.MEMBERS)));
 		creationInfo.setText("Created on " + date + " by " + creator + ".");
 
 		Button textRequirement = (Button) findViewById(R.id.button_text);
 		Button photoRequirement = (Button) findViewById(R.id.button_photo);
 		textRequirement.setEnabled(_requiresText);
 		photoRequirement.setEnabled(_requiresPhoto);
+
+		setMembersList();
 
 		_cursor = _dbHelper.fetchFulfillment(_taskName);
 		boolean fulfilled = _cursor.moveToFirst();
@@ -145,6 +147,29 @@ public class TaskView extends Activity {
 		else
 			handleUnfulfilledTask();
 
+	}
+
+	private void setMembersList() {
+		ListView members = (ListView) findViewById(R.id.membersList);
+		_cursor = _dbHelper.fetchTaskMembers(_taskName);
+
+		startManagingCursor(_cursor);
+
+		String[] from = new String[] { DatabaseAdapter.USER };
+		int[] to = new int[] { R.id.text };
+
+		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
+				R.layout.simple_list_item, _cursor, from, to);
+		int count = adapter.getCount();
+		members.setAdapter(adapter);
+		stopManagingCursor(_cursor);
+		TextView headline = (TextView) findViewById(R.id.heading_Members);
+
+		if (count == 1) {
+			headline.setText(count + " Member:");
+		} else {
+			headline.setText(count + " Members:");
+		}
 	}
 
 	protected void onStop() {
@@ -176,14 +201,16 @@ public class TaskView extends Activity {
 				// TODO Auto-generated method stub
 				if (requirementsFulfilled()) {
 					// _task.markAsFulfilled(_user);
-					String date = new SimpleDateFormat("MMM dd, yyyy | HH:mm").format(Calendar.getInstance().getTime());
-					
+					String date = new SimpleDateFormat("MMM dd, yyyy | HH:mm")
+							.format(Calendar.getInstance().getTime());
+
 					_dbHelper.open();
-					_dbHelper.createFulfillment(_taskName, date, _user, _fulfillmentText);
+					_dbHelper.createFulfillment(_taskName, date, _user,
+							_fulfillmentText);
 					_dbHelper.close();
-					
+
 					// TODO send report to creator
-					
+
 					showToast("\"" + _taskName + "\" was fulfilled!");
 
 					finish();

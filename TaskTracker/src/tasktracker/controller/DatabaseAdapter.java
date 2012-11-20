@@ -246,6 +246,12 @@ public class DatabaseAdapter {
 
 		return mCursor;
 	}
+	
+	public Cursor fetchTaskMembers(String task){
+		return mDb.query(true, TABLE_MEMBERS, new String[] { ID, TASK,
+				USER }, TASK + "='" + task + "'", null, null, null,
+				null, null);
+	}
 
 	/**
 	 * Sets the database

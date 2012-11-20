@@ -56,11 +56,14 @@
         <TextView
             android:id="@+id/description"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/viewDescription"
             android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
             android:gravity="center_vertical|top"
             android:hint="@string/default_description"
+            android:minHeight="30dp"
+            android:maxHeight="80dp"
             android:scrollbarAlwaysDrawVerticalTrack="true"
             android:scrollbarStyle="insideInset"
             android:scrollbars="vertical"
@@ -111,7 +114,8 @@
             android:text="@string/heading_allMembers"
             android:textStyle="bold" />
 
-        <TextView
+        <!--
+              <TextView
             android:id="@+id/members"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -120,13 +124,21 @@
             android:hint="@string/default_members"
             android:scrollbars="vertical"
             android:textSize="12dp" />
+        -->
+
+        <ListView
+            android:id="@+id/membersList"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_margin="12dp"
+            android:layout_above="@+id/creationInfo"
+            android:layout_below="@+id/heading_Members" />
 
         <TextView
             android:id="@+id/creationInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/members"
-            android:layout_marginTop="12dp"
+            android:layout_above="@+id/fulfillButton"
             android:gravity="center_vertical|center_horizontal"
             android:text="@string/default_creationInfo"
             android:textSize="12dp"
@@ -137,7 +149,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_below="@+id/creationInfo"
             android:text="@string/button_fulfill" />
     </RelativeLayout>
 
