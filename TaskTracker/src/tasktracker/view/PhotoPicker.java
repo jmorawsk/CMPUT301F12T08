@@ -11,7 +11,9 @@ import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -24,6 +26,10 @@ import android.widget.Toast;
  */
 
 public class PhotoPicker extends Activity {
+	
+	private String[] imageUrls;
+
+	//private DisplayImageOptions options;
 
 	public static final int PICK_PICTURE = 1; 
 
@@ -56,6 +62,16 @@ public class PhotoPicker extends Activity {
 
 		takePhoto.setOnClickListener(retakeListener);
 
+		
+		GridView gridView = (GridView) findViewById(R.id.gridView);
+		//gridView.setAdapter(new ImageAdapter(this));
+		
+		//gridView.setOnItemClickListener(new OnItemClickListener() {
+//		        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+//		            Toast.makeText(PhotoPicker.this, "" + position, Toast.LENGTH_SHORT).show();
+//		        }
+//		    });
+		
 	}
 	
 	//User can select a photo from the android gallery
