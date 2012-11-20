@@ -54,6 +54,9 @@ public class Task implements Serializable {
 	
 	// Store date as long (in hex) so can be formatted upon preference.
 	private String _dateHex;
+	
+	// SQL ids
+	private long _creatorID;
 
 	/**
 	 * Creates a new instance of the TaskElement class.
@@ -113,6 +116,10 @@ public class Task implements Serializable {
 
 	public String getCreator() {
 		return _creator;
+	}
+	
+	public long getCreatorID(){
+		return _creatorID;
 	}
 
 	/** Gets the task ID */

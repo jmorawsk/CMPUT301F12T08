@@ -21,7 +21,6 @@ public class DatabaseAdapter {
 	public static final String REQS_PHOTO = "requiresPhoto";
 	public static final String REQS_TEXT = "requiresText";
 	public static final String MEMBERS = "members";
-	public static final String FULFILLED = "fulfilled";
 	public static final String EMAIL = "email";
 	public static final String PASSWORD = "password";
 
@@ -31,6 +30,7 @@ public class DatabaseAdapter {
 	private static final String TABLE_TASKS = "tasks";
 	private static final String TABLE_MEMBERS = "members";
 	private static final String TABLE_USERS = "users";
+	private static final String TABLE_FULFILLMENTS = "fulfillments";
 
 	/**
 	 * Constructor - takes the context to allow the database to be
@@ -109,7 +109,6 @@ public class DatabaseAdapter {
 		initialValues.put(MEMBERS, task.getMembers());
 		initialValues.put(REQS_PHOTO, task.requiresPhoto() ? 1 : 0);
 		initialValues.put(REQS_TEXT, task.requiresText() ? 1 : 0);
-		initialValues.put(FULFILLED, task.isFulfilled() ? 1 : 0);
 
 		return mDb.insert(TABLE_TASKS, null, initialValues);
 	}
@@ -124,6 +123,26 @@ public class DatabaseAdapter {
 		return mDb.insert(TABLE_USERS, null, initialValues);
 	}
 
+	public long createFulfillment(String task, String date, String fulfiller, String text){
+		ContentValues initialValues = new ContentValues();
+
+		initialValues.put(TASK, task);
+		initialValues.put(TEXT, text);
+		initialValues.put(USER, fulfiller);
+		initialValues.put(DATE, date);
+
+		return mDb.insert(TABLE_FULFILLMENTS, null, initialValues);
+	}
+	
+	public long createMember(String task, String user){
+		ContentValues initialValues = new ContentValues();
+
+		initialValues.put(TASK, task);
+		initialValues.put(USER, user);
+
+		return mDb.insert(TABLE_MEMBERS, null, initialValues);
+	}
+	
 	/**
 	 * Delete the entry with the given rowId
 	 * 
@@ -167,13 +186,30 @@ public class DatabaseAdapter {
 		return mDb.query(TABLE_TASKS, new String[] { ID, TASK, USER, DATE },
 				null, null, null, null, null);
 	}
+	
+	public Cursor fetchAllFulfillments(){
+		return mDb.query(TABLE_FULFILLMENTS, new String[] { ID, TASK, USER, DATE },
+				null, null, null, null, null);
+	}
+	
+	public Cursor fetchFulfillment(String task){
+		return mDb.query(TABLE_FULFILLMENTS, new String[] { ID, TASK, DATE, USER,
+				TEXT }, TASK + "='"
+				+ task + "'", null, null, null, null, null);
+	}
 
 	public Cursor fetchTask(long rowId) {
 		return mDb.query(TABLE_TASKS, new String[] { ID, TASK, DATE, USER,
-				TEXT, REQS_PHOTO, REQS_TEXT, MEMBERS, FULFILLED }, ID + "="
+				TEXT, REQS_PHOTO, REQS_TEXT, MEMBERS }, ID + "="
 				+ rowId, null, null, null, null, null);
 	}
 
+	
+	public Cursor fetchUser(long rowId){
+		return mDb.query(TABLE_USERS, new String[] { ID, USER, EMAIL }, ID + "="
+				+ rowId, null, null, null, null, null);
+	}
+	
 	/**
 	 * To validate login
 	 * @param user

@@ -1,8 +1,9 @@
 package tasktracker.view;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import tasktracker.controller.DatabaseAdapter;
-import tasktracker.model.elements.Task;
-import tasktracker.model.elements.TextRequirement;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -11,7 +12,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.util.Log;
 import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.*;
@@ -117,27 +117,29 @@ public class TaskView extends Activity {
 		String date = _cursor.getString(_cursor
 				.getColumnIndex(DatabaseAdapter.DATE));
 
-		boolean fulfilled = _cursor.getInt(_cursor
-				.getColumnIndex(DatabaseAdapter.FULFILLED)) == 1;
 		_requiresText = _cursor.getInt(_cursor
 				.getColumnIndex(DatabaseAdapter.REQS_TEXT)) == 1;
 		_requiresPhoto = _cursor.getInt(_cursor
 				.getColumnIndex(DatabaseAdapter.REQS_PHOTO)) == 1;
-
-		name.setText(_cursor.getString(_cursor
-				.getColumnIndex(DatabaseAdapter.TASK)));
+		_taskName = _cursor.getString(_cursor
+				.getColumnIndex(DatabaseAdapter.TASK));
+		
+		name.setText(_taskName);
 		description.setText(_cursor.getString(_cursor
 				.getColumnIndex(DatabaseAdapter.TEXT)));
 		members.setText(_cursor.getString(_cursor
 				.getColumnIndex(DatabaseAdapter.MEMBERS)));
 		creationInfo.setText("Created on " + date + " by " + creator + ".");
-		status.setText(fulfilled ? "Fulfilled" : "Unfulfilled");
 
 		Button textRequirement = (Button) findViewById(R.id.button_text);
 		Button photoRequirement = (Button) findViewById(R.id.button_photo);
 		textRequirement.setEnabled(_requiresText);
 		photoRequirement.setEnabled(_requiresPhoto);
 
+		_cursor = _dbHelper.fetchFulfillment(_taskName);
+		boolean fulfilled = _cursor.moveToFirst();
+
+		status.setText(fulfilled ? "Fulfilled" : "Unfulfilled");
 		if (fulfilled)
 			handleFulfilledTask();
 		else
@@ -174,7 +176,14 @@ public class TaskView extends Activity {
 				// TODO Auto-generated method stub
 				if (requirementsFulfilled()) {
 					// _task.markAsFulfilled(_user);
-					// TODO Update SD
+					String date = new SimpleDateFormat("MMM dd, yyyy | HH:mm").format(Calendar.getInstance().getTime());
+					
+					_dbHelper.open();
+					_dbHelper.createFulfillment(_taskName, date, _user, _fulfillmentText);
+					_dbHelper.close();
+					
+					// TODO send report to creator
+					
 					showToast("\"" + _taskName + "\" was fulfilled!");
 
 					finish();
@@ -235,7 +244,6 @@ public class TaskView extends Activity {
 
 			public void onClick(DialogInterface dialog, int which) {
 				_fulfillmentText = input.getText().toString();
-				_fulfillmentText.replaceAll("'", "''"); // For SQL queries
 
 				// TODO save on SD/web db
 			}
@@ -254,7 +262,7 @@ public class TaskView extends Activity {
 		return dialog.create();
 	}
 
-	private void startActivity(Class destination) {
+	private void startActivity(Class<?> destination) {
 		Intent intent = new Intent(getApplicationContext(), destination);
 		intent.putExtra("USER", _user);
 		startActivity(intent);

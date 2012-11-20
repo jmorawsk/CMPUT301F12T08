@@ -27,7 +27,7 @@ public class DatabaseModel {
 			+ "text TEXT NOT NULL, "
 			+ "members TEXT NOT NULL, "
 			+ "requiresPhoto INTEGER, "
-			+ "requiresText INTEGER, " + "fulfilled TEXT INTEGER);";
+			+ "requiresText INTEGER);";
 
 	private static final String MEMBERS = "CREATE TABLE members(_id INTEGER primary key autoincrement,  "
 			+ "task TEXT NOT NULL, " + "user TEXT NOT NULL);";

@@ -100,6 +100,7 @@ public final class R {
         public static final int acitivity_task_list_view=0x7f060000;
         public static final int activity_login=0x7f060001;
         public static final int activity_main=0x7f060002;
+        public static final int activity_task_fulfillment_view=0x7f060003;
     }
     public static final class string {
         /**  Activity/App Titles 
