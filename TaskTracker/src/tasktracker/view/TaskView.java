@@ -29,7 +29,6 @@ public class TaskView extends Activity {
 	private String _user;
 
 	// Activity Items
-	private TextView _status;
 	private Button _textRequirement;
 	private Button _photoRequirement;
 	private Button _fulfillment;
@@ -62,7 +61,33 @@ public class TaskView extends Activity {
 		setupToolbarButtons();
 
 	}
-
+    
+	
+	public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.task, menu);
+        return true;
+        
+    }    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+ 
+        switch (item.getItemId())
+        {
+        case R.id.menu_edit:
+        	showToast("Edit");
+            return true;
+ 
+        case R.id.menu_delete:
+            showToast("Delete");
+            return true;
+ 
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }    
+    
 	private void setupToolbarButtons() {
 		// Assign Buttons
 		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
@@ -138,14 +163,16 @@ public class TaskView extends Activity {
 
 		setMembersList();
 
-		_cursor = _dbHelper.fetchFulfillment(_taskName);
-		boolean fulfilled = _cursor.moveToFirst();
+		Cursor cursor = _dbHelper.fetchFulfillment(_taskName);
+		boolean fulfilled = cursor.moveToFirst();
 
 		status.setText(fulfilled ? "Fulfilled" : "Unfulfilled");
 		if (fulfilled)
-			handleFulfilledTask();
+			handleFulfilledTask(cursor);
 		else
 			handleUnfulfilledTask();
+
+		cursor.close();
 
 	}
 
@@ -179,9 +206,21 @@ public class TaskView extends Activity {
 		_cursor.close();
 	}
 
-	private void handleFulfilledTask() {
+	private void handleFulfilledTask(Cursor cursor) {
+		final String text = cursor.getString(cursor
+				.getColumnIndex(DatabaseAdapter.TEXT));
+		final String date = cursor.getString(cursor
+				.getColumnIndex(DatabaseAdapter.DATE));
 
 		_fulfillment.setText("View fulfillment report");
+		_textRequirement.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				showToast(text + "\n\n" + date);
+			}
+
+		});
+
 		_fulfillment.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {

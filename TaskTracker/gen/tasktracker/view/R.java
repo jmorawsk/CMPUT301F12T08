@@ -53,6 +53,8 @@ public final class R {
         public static final int login=0x7f07000e;
         public static final int login_fields=0x7f070010;
         public static final int membersList=0x7f070032;
+        public static final int menu_delete=0x7f070045;
+        public static final int menu_edit=0x7f070044;
         public static final int menu_settings=0x7f070043;
         public static final int myTasks=0x7f070027;
         public static final int new_email=0x7f07001f;
@@ -102,6 +104,7 @@ public final class R {
         public static final int acitivity_task_list_view=0x7f060000;
         public static final int activity_login=0x7f060001;
         public static final int activity_main=0x7f060002;
+        public static final int task=0x7f060003;
     }
     public static final class string {
         /**  Activity/App Titles 

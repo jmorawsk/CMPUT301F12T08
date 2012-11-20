@@ -35,7 +35,7 @@ public class DatabaseModel {
 	private static final String FULFILLMENTS = "CREATE TABLE fulfillments(_id INTEGER primary key autoincrement,  "
 			+ "task TEXT NOT NULL, "
 			+ "user TEXT NOT NULL, "
-			+ "date TEXT NOT NULL, " + "text TEXT NOT NULL);";
+			+ "date TEXT NOT NULL, " + "text TEXT);";
 
 	private static final String PHOTOS = "CREATE TABLE photos(_id INTEGER primary key autoincrement,  "
 			+ "task TEXT NOT NULL, "
