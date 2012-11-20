@@ -29,7 +29,7 @@ public class DatabaseAdapter {
 	private static final String TABLE_PHOTOS = "photos";
 	private static final String TABLE_TASKS = "tasks";
 	private static final String TABLE_MEMBERS = "members";
-	private static final String TABLE_USERS = "users";
+	private static final String TABLE_USERS 	= "users";
 	private static final String TABLE_FULFILLMENTS = "fulfillments";
 
 	/**
@@ -228,7 +228,7 @@ public class DatabaseAdapter {
 	 * @return
 	 */
 	public Cursor fetchUser(String user) {
-		return mDb.query(TABLE_USERS, new String[] { ID, USER }, USER + "='"
+		return mDb.query(TABLE_USERS, new String[] { ID, USER, EMAIL }, USER + "='"
 				+ user + "'", null, null, null, null);
 	}
 

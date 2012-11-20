@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import tasktracker.controller.DatabaseAdapter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -12,6 +13,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.util.Log;
 import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.*;
@@ -61,33 +63,31 @@ public class TaskView extends Activity {
 		setupToolbarButtons();
 
 	}
-    
-	
-	public boolean onCreateOptionsMenu(Menu menu)
-    {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.task, menu);
-        return true;
-        
-    }    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
- 
-        switch (item.getItemId())
-        {
-        case R.id.menu_edit:
-        	showToast("Edit");
-            return true;
- 
-        case R.id.menu_delete:
-            showToast("Delete");
-            return true;
- 
-        default:
-            return super.onOptionsItemSelected(item);
-        }
-    }    
-    
+
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater menuInflater = getMenuInflater();
+		menuInflater.inflate(R.menu.task, menu);
+		return true;
+
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+		switch (item.getItemId()) {
+		case R.id.menu_edit:
+			showToast("Edit");
+			return true;
+
+		case R.id.menu_delete:
+			showToast("Delete");
+			return true;
+
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+
 	private void setupToolbarButtons() {
 		// Assign Buttons
 		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
@@ -137,7 +137,7 @@ public class TaskView extends Activity {
 		TextView status = (TextView) findViewById(R.id.status);
 		TextView creationInfo = (TextView) findViewById(R.id.creationInfo);
 
-		String creator = _cursor.getString(_cursor
+		_taskCreator = _cursor.getString(_cursor
 				.getColumnIndex(DatabaseAdapter.USER));
 		String date = _cursor.getString(_cursor
 				.getColumnIndex(DatabaseAdapter.DATE));
@@ -154,7 +154,8 @@ public class TaskView extends Activity {
 				.getColumnIndex(DatabaseAdapter.TEXT)));
 		// members.setText(_cursor.getString(_cursor
 		// .getColumnIndex(DatabaseAdapter.MEMBERS)));
-		creationInfo.setText("Created on " + date + " by " + creator + ".");
+		creationInfo
+				.setText("Created on " + date + " by " + _taskCreator + ".");
 
 		Button textRequirement = (Button) findViewById(R.id.button_text);
 		Button photoRequirement = (Button) findViewById(R.id.button_photo);
@@ -231,6 +232,31 @@ public class TaskView extends Activity {
 		});
 	}
 
+	
+	private void sendEmail() {
+
+		_cursor = _dbHelper.fetchUser(_taskCreator);
+		
+		if (!_cursor.moveToFirst()) {
+			showToast("Could not find creator");
+			return;
+		}
+		String email = _cursor.getString(_cursor
+				.getColumnIndexOrThrow(DatabaseAdapter.EMAIL));
+
+		Intent i = new Intent(Intent.ACTION_SEND);
+		i.setType("text/plain");
+		i.putExtra(Intent.EXTRA_EMAIL  , new String[]{email});
+		i.putExtra(Intent.EXTRA_SUBJECT, "TaskTracker : Task Fulfillment Report");
+		i.putExtra(Intent.EXTRA_TEXT   , "\"" + _taskName
+				+ "\" was fulfilled by " + _user);
+		try {
+		    startActivity(Intent.createChooser(i, "Send mail..."));
+		} catch (android.content.ActivityNotFoundException ex) {
+		    Toast.makeText(this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+		}
+	}
+
 	private void handleUnfulfilledTask() {
 
 		_fulfillment.setText("Mark as fulfilled");
@@ -240,19 +266,19 @@ public class TaskView extends Activity {
 				// TODO Auto-generated method stub
 				if (requirementsFulfilled()) {
 					// _task.markAsFulfilled(_user);
-					String date = new SimpleDateFormat("MMM dd, yyyy | HH:mm")
-							.format(Calendar.getInstance().getTime());
 
-					_dbHelper.open();
-					_dbHelper.createFulfillment(_taskName, date, _user,
-							_fulfillmentText);
-					_dbHelper.close();
+						sendEmail();
+						String date = new SimpleDateFormat(
+								"MMM dd, yyyy | HH:mm").format(Calendar
+								.getInstance().getTime());
 
-					// TODO send report to creator
+					 _dbHelper.createFulfillment(_taskName, date, _user,
+					 _fulfillmentText);
+					
+					 // TODO send report to creator
+					 showToast("\"" + _taskName + "\" was fulfilled!");
 
-					showToast("\"" + _taskName + "\" was fulfilled!");
-
-					finish();
+						finish();
 				}
 			}
 

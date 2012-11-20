@@ -42,7 +42,7 @@ public final class R {
         public static final int editDescription=0x7f070007;
         public static final int fulfillButton=0x7f070034;
         public static final int galleryPhoto=0x7f070025;
-        public static final int gridView1=0x7f070024;
+        public static final int gridView=0x7f070024;
         public static final int heading_Members=0x7f070031;
         public static final int heading_email_new=0x7f07001b;
         public static final int heading_password=0x7f070012;
