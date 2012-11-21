@@ -20,18 +20,25 @@ package tasktracker.view;
 
 import java.util.*;
 
-import android.os.AsyncTask;
+//import android.R;
 //import android.R;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.text.Editable;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import tasktracker.controller.TaskController;
+import tasktracker.model.PreferencesManager;
 import tasktracker.model.WebDBManager;
 import tasktracker.model.elements.*;
 
@@ -43,192 +50,219 @@ import tasktracker.model.elements.*;
  */
 public class TaskListView extends Activity {
 
-    private ListView taskListView;
-    private List<Task> taskList;
-    public List<Task> webTaskList;
-    // private List<String> tasks;
-    private String[] tasks = new String[0];
+	private ListView taskListView;
+	private List<Task> taskList;
+	// private List<String> tasks;
+	private String[] tasks = new String[0];
 
-    /** The current app user */
-    private String _user;
+	private PreferencesManager preferences = new PreferencesManager();
+	
+	private WebDBManager webManager;
 
-    private WebDBManager webManager;
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_task_list_view);
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        webManager = new WebDBManager();
-        
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_task_list_view);
+		//Changed to a global variable
+		/*
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			_user = extras.getString("USER");
+		}
+		*/
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            _user = extras.getString("USER");
-        }
+		// Assign ListView and its on item click listener.
+		taskListView = (ListView) findViewById(R.id.taskList);
+		taskListView.setOnItemClickListener(new handleList_Click());
 
-        // Assign ListView and its on item click listener.
-        taskListView = (ListView) findViewById(R.id.taskList);
-        taskListView.setOnItemClickListener(new handleList_Click());
+		// TODO: read from database and display
+		// String[][] webTasks = webManager.listTasksAsArrays();
+		// for(int n=0;n<webTasks.length;n++){
+		// tasks.add(webTasks[n][0]);
+		// }
+		// ArrayAdapter<String> adapter = new
+		// ArrayAdapter<String>(this,R.layout.list_item, tasks);
+		// taskListView.setAdapter(adapter);
 
-        // TODO: read from database and display
-        // String[][] webTasks = webManager.listTasksAsArrays();
-        // for(int n=0;n<webTasks.length;n++){
-        // tasks.add(webTasks[n][0]);
-        // }
-        // ArrayAdapter<String> adapter = new
-        // ArrayAdapter<String>(this,R.layout.list_item, tasks);
-        // taskListView.setAdapter(adapter);
+		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
+		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
+		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
+		buttonMyTasks.setEnabled(false);
 
-        Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
-        Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
-        Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
-        buttonMyTasks.setEnabled(false);
+		buttonCreate.setOnClickListener(new View.OnClickListener() {
 
-        buttonCreate.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				Intent intent = new Intent(getApplicationContext(),
+						CreateTaskView.class);
+				startActivity(intent);
+			}
+		});
 
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),
-                        CreateTaskView.class);
-                intent.putExtra("USER", _user);
-                startActivity(intent);
-            }
-        });
+		buttonNotifications.setOnClickListener(new View.OnClickListener() {
 
-        buttonNotifications.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				Intent intent = new Intent(getApplicationContext(),
+						NotificationListView.class);
+				startActivity(intent);
 
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),
-                        NotificationListView.class);
-                intent.putExtra("USER", _user);
-                startActivity(intent);
+			}
+		});
 
-            }
-        });
+		setDebugStuff();
 
-        setDebugStuff();
+	}
 
-    }
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.account_menu, menu);
+	    return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection
+	    switch (item.getItemId()) {
+	        case R.id.change_name:
+	            changeName();
+	            return true;
+	        case R.id.help:
+	            showHelp();
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
+	
+	private void changeName() {
+		// TODO Auto-generated method stub
+		//showToast("Change name clicked");
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-    void setDebugStuff() {
-        Button deleteFile = (Button) findViewById(R.id.debugButton);
+		alert.setTitle("Change Account Name");
+		alert.setMessage("Old Account Name was '" + preferences.getUsername(getBaseContext()) + "'.");
 
-        deleteFile.setOnClickListener(new View.OnClickListener() {
+		// Set an EditText view to get user input 
+		final EditText input = new EditText(this);
+		alert.setView(input);
 
-            public void onClick(View v) {
-                if (TaskController.deleteFile()) {
-                    loadTasks();
-                    showToast("Deleted file on SD");
-                } else {
-                    showToast("Failed to delete file from SD");
-                }
-            }
-        });
-    }
+		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int whichButton) {
+		  Editable value = input.getText();
+		  preferences.setUsername(getBaseContext(), value.toString());
+		  // Do something with value!
+		  }
+		});
 
-    private void showToast(String message) {
-        Toast toast = Toast.makeText(getApplicationContext(), message,
-                Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-        toast.show();
-    }
+		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		  public void onClick(DialogInterface dialog, int whichButton) {
+		    // Canceled.
+		  }
+		});
 
-    protected void onStart() {
-        super.onStart();
-        loadTasks();
-        contactWebserver webRequest = new contactWebserver();
-        webRequest.execute();
-    }
+		alert.show();
+	}
 
-    private void loadTasks() {
+	private void showHelp() {
+		// TODO Auto-generated method stub
+		showToast("Show help clicked");
+	}
 
-        taskList = TaskController.readFile();
-        ArrayAdapter<Task> adapter = new ArrayAdapter<Task>(this,
-                R.layout.list_item, taskList);
-        taskListView.setAdapter(adapter);
-    }
 
-    /**
-     * A handler for clicking on a task item. Shows a menu of possible controls.
-     * 
-     * @author Jeanine Bonot
-     * 
-     */
-    class handleList_Click implements OnItemClickListener {
+	void setDebugStuff() {
+		Button deleteFile = (Button) findViewById(R.id.debugButton);
 
-        public void onItemClick(AdapterView<?> myAdapter, View myView,
-                int myItemInt, long mylng) {
-            Task task = taskList.get(myItemInt);
-            Intent intent = new Intent(getApplicationContext(), TaskView.class);
-            intent.putExtra("TASK", task);
-            startActivity(intent);
+		deleteFile.setOnClickListener(new View.OnClickListener() {
 
-            // showItemMenu(myView, myItemInt);
-        }
+			public void onClick(View v) {
+				if (TaskController.deleteFile()) {
+					showToast("Deleted file on SD");
+				} else {
+					showToast("Failed to delete file from SD");
+				}
+			}
+		});
+	}
 
-        /**
-         * Displays the menu for a given task.
-         * 
-         * @param view
-         *            The selected task element.
-         * @param index
-         *            The index of the task in the ListView.
-         */
-        private void showItemMenu(View view, final int index) {
-            PopupMenu menu = new PopupMenu(TaskListView.this, view);
-            // menu.getMenuInflater().inflate(R.menu.popup, menu.getMenu());
+	private void showToast(String message) {
+		Toast toast = Toast.makeText(getApplicationContext(), message,
+				Toast.LENGTH_LONG);
+		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+		toast.show();
+	}
 
-            // TODO: Create menu content, set OnMenuItemClickListener, update
-            // tasks upon deletion
-            menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+	protected void onStart() {
+		super.onStart();
+		taskList = TaskController.readFile();
+		if (taskList.size() == 0)
+			taskList = createDummies();
+		ArrayAdapter<Task> adapter = new ArrayAdapter<Task>(this,
+				R.layout.list_item, taskList);
+		taskListView.setAdapter(adapter);
 
-                public boolean onMenuItemClick(MenuItem item) {
-                    // TODO Auto-generated method stub
-                    return false;
-                }
-            });
+	}
 
-        }
+	/** Creates a dummy array if SD fails */
+	List<Task> createDummies() {
+		List<Task> list = new ArrayList<Task>();
+		list.add(new Task("Me", "Not from SD", "Task Description"));
+		list.add(new Task("Me", "Still not from SD", "Task Description"));
+		list.add(new Task("Me", "Why isn't it from SD?", "Task Description"));
+		list.add(new Task("Me", "Help", "Task Description"));
+		list.add(new Task("now", "This should be working", "Task Description"));
+		list.add(new Task("You", "No", "Task Description"));
+		return list;
+	}
 
-    }
+	protected void onStop() {
+		super.onStop();
 
-    private void update(){
-        loadTasks();
-        taskList.addAll(webTaskList);
-        ArrayAdapter<Task> adapter = new ArrayAdapter<Task>(this,
-                R.layout.list_item, taskList);
-        taskListView.setAdapter(adapter);
-        
-    }
-    
-    private class contactWebserver extends AsyncTask<Void, Void, Void>
-    {
-        @Override
-        protected Void doInBackground(Void... temp) {
+	}
 
-            webTaskList = new ArrayList<Task>();
-            System.out.println("testing");
-            String[][] results = webManager.listTasksAsArrays();
-            String id;
-            Task newTask;
-            for(int n=0; n<results.length; n++)
-            {
-                if(results[n].length>1)
-                {
-                    System.out.println("index =" +n);
-                    id = results[n][1];
-                    newTask = webManager.getTask(id);
-                    webTaskList.add(newTask);
-                }
-            }
-            return null;
-        }
+	/**
+	 * A handler for clicking on a task item. Shows a menu of possible controls.
+	 * 
+	 * @author Jeanine Bonot
+	 * 
+	 */
+	class handleList_Click implements OnItemClickListener {
 
-        @Override
-        protected void onPostExecute(Void unused){
-            //update UI with my objects
-            //taskList.addAll(webTaskList);
-            update();
-        }
+		public void onItemClick(AdapterView<?> myAdapter, View myView,
+				int myItemInt, long mylng) {
+			Task task = taskList.get(myItemInt);
+			Intent intent = new Intent(getApplicationContext(),
+					TaskView.class);
+			intent.putExtra("TASK", task);
+			startActivity(intent);
+			
+			
+//			showItemMenu(myView, myItemInt);
+		}
 
-    }
+		/**
+		 * Displays the menu for a given task.
+		 * 
+		 * @param view
+		 *            The selected task element.
+		 * @param index
+		 *            The index of the task in the ListView.
+		 */
+		private void showItemMenu(View view, final int index) {
+			PopupMenu menu = new PopupMenu(TaskListView.this, view);
+			// menu.getMenuInflater().inflate(R.menu.popup, menu.getMenu());
+
+			// TODO: Create menu content, set OnMenuItemClickListener, update
+			// tasks upon deletion
+			menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+				
+				public boolean onMenuItemClick(MenuItem item) {
+					// TODO Auto-generated method stub
+					return false;
+				}
+			});
+			
+		}
+
+	}
 }

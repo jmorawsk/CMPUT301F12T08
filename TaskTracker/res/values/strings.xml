@@ -41,4 +41,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_task_fulfillment_view">TaskFulfillmentView</string>
 
+    <string name="help">Help</string>
+    <string name="Account">Account</string>
+    <string name="change_name">Change Name</string>
+
+
 </resources>

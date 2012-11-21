@@ -25,6 +25,8 @@ import android.content.Intent;
 import android.view.View;
 
 import java.util.*;
+
+import tasktracker.model.PreferencesManager;
 import tasktracker.model.elements.Notification;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
@@ -39,9 +41,6 @@ public class NotificationListView extends Activity {
 
 	private ListView notificationsList;
 	private List<Notification> notifications;
-	
-	/** The current app user */
-	private String _user;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -50,7 +49,7 @@ public class NotificationListView extends Activity {
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null){
-			_user = extras.getString("USER");
+			//_user = extras.getString("USER");	//Left in as code reference
 		}
 		
 		
@@ -68,7 +67,6 @@ public class NotificationListView extends Activity {
 			public void onClick(View v) {
 				Intent intent = new Intent(getApplicationContext(),
 						TaskListView.class);
-				intent.putExtra("USER", _user);
 				startActivity(intent);
 
 			}
@@ -79,7 +77,6 @@ public class NotificationListView extends Activity {
 			public void onClick(View v) {
 				Intent intent = new Intent(getApplicationContext(),
 						CreateTaskView.class);
-				intent.putExtra("USER", _user);
 				startActivity(intent);
 			}
 		});

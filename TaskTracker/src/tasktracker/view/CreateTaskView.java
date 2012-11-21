@@ -47,6 +47,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
 import tasktracker.controller.TaskController;
+import tasktracker.model.PreferencesManager;
 import tasktracker.model.WebDBManager;
 import tasktracker.model.elements.*;
 
@@ -66,18 +67,17 @@ public class CreateTaskView extends Activity {
 	private CheckBox _text;
 	private CheckBox _photo;
 	private WebDBManager _webManager;
+	private PreferencesManager _preferences;
 
-	/** The current app user */
-	private String _user;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_task_view);
 
-		// TODO: Get creator information
-		_user = "Debugger";
-
+		// Initialize our preferencesManager
+		_preferences = new PreferencesManager();
+		
 		// Initialize our webManager
 		_webManager = new WebDBManager();
 
@@ -100,7 +100,6 @@ public class CreateTaskView extends Activity {
 			public void onClick(View v) {
 				Intent intent = new Intent(getApplicationContext(),
 						TaskListView.class);
-				intent.putExtra("USER", _user);
 				startActivity(intent);
 			}
 		});
@@ -110,7 +109,6 @@ public class CreateTaskView extends Activity {
 			public void onClick(View v) {
 				Intent intent = new Intent(getApplicationContext(),
 						NotificationListView.class);
-				intent.putExtra("USER", _user);
 				startActivity(intent);
 			}
 		});
@@ -171,7 +169,7 @@ public class CreateTaskView extends Activity {
 	private Task createTask() {
 
 		// TODO: Find out how to quickly access user information
-		Task task = new Task(_user);
+		Task task = new Task(_preferences.getUsername(getBaseContext()));
 
 		task.setDescription(_description.getText().toString());
 		task.setName(_name.getText().toString());
