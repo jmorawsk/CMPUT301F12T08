@@ -86,8 +86,8 @@ public class CreateTaskView extends Activity {
 		_name = (EditText) findViewById(R.id.taskName);
 		_description = (EditText) findViewById(R.id.editDescription);
 		_otherMembers = (EditText) findViewById(R.id.otherMembers);
-		_text = (CheckBox) findViewById(R.id.checkBoxText);
-		_photo = (CheckBox) findViewById(R.id.checkBoxPhoto);
+		_text = (CheckBox) findViewById(R.id.checkbox_text);
+		_photo = (CheckBox) findViewById(R.id.checkbox_photo);
 
 		setupToolbarButtons();
 		setupSaveButton();
