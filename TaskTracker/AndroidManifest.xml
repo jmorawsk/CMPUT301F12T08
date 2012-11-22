@@ -35,6 +35,10 @@
             android:label="@string/camera" >
         </activity>
         <activity
+            android:name=".PhotoPicker"
+            android:label="@string/photo_picker" >
+        </activity>
+        <activity
             android:name=".Login"
             android:label="@string/app_name" >
             <intent-filter>

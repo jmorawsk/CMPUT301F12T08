@@ -7,149 +7,171 @@
         android:id="@+id/buttons"
         layout="@layout/toolbar" />
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_below="@+id/buttons"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp" >
-
-        <TextView
-            android:id="@+id/taskName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="@string/hint_taskName"
-            android:textSize="20dp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/statusHeading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/taskName"
-            android:layout_marginBottom="8dp"
-            android:layout_marginRight="12dp"
-            android:text="@string/heading_status"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/taskName"
-            android:layout_marginBottom="8dp"
-            android:layout_toRightOf="@+id/statusHeading"
-            android:hint="@string/default_status"
-            android:textSize="14dp" />
-
-        <TextView
-            android:id="@+id/viewDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/statusHeading"
-            android:text="@string/heading_taskDescription"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/viewDescription"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="8dp"
-            android:gravity="center_vertical|top"
-            android:hint="@string/default_description"
-            android:minHeight="30dp"
-            android:maxHeight="80dp"
-            android:scrollbarAlwaysDrawVerticalTrack="true"
-            android:scrollbarStyle="insideInset"
-            android:scrollbars="vertical"
-            android:singleLine="false"
-            android:textSize="14dp" />
-
-        <TextView
-            android:id="@+id/viewRequirements"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/description"
-            android:text="@string/heading_requirements"
-            android:textStyle="bold" />
+    <ScrollView
+        android:id="@+id/scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/buttons" >
 
         <RelativeLayout
-            android:id="@+id/buttons_requirements"
-            android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:layout_below="@+id/viewRequirements" >
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            android:scrollbarStyle="insideInset"
+            android:scrollbars="vertical" >
 
-            <Button
-                android:id="@+id/button_text"
-                android:layout_width="120dp"
-                android:layout_height="fill_parent"
-                android:layout_alignParentLeft="true"
+            <TextView
+                android:id="@+id/taskName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:text="@string/text"
-                android:textSize="12dp" />
+                android:text="@string/hint_taskName"
+                android:textSize="20dp"
+                android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/button_photo"
-                android:layout_width="120dp"
-                android:layout_height="fill_parent"
+            <TextView
+                android:id="@+id/viewDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/taskName"
+                android:text="@string/heading_taskDescription"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/viewDescription"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:gravity="center_vertical|top"
+                android:hint="@string/default_description"
+                android:maxHeight="80dp"
+                android:minHeight="30dp"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:scrollbarStyle="insideInset"
+                android:scrollbars="vertical"
+                android:singleLine="false"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/viewRequirements"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/description"
+                android:text="@string/heading_requirements"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/checkbox_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/viewRequirements"
+                android:layout_marginBottom="8dp"
+                android:enabled="false"
+                android:text="@string/text" />
+
+            <CheckBox
+                android:id="@+id/checkbox_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/viewRequirements"
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="16dp"
-                android:layout_toRightOf="@+id/button_text"
+                android:layout_toRightOf="@+id/checkbox_text"
                 android:enabled="false"
-                android:text="@string/photo"
-                android:textSize="12dp" />
+                android:text="@string/photo" />
+
+            <TextView
+                android:id="@+id/heading_Members"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/checkbox_photo"
+                android:text="@string/heading_allMembers"
+                android:textStyle="bold" />
+
+            <ListView
+                android:id="@+id/membersList"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@+id/heading_Members"
+                android:layout_margin="12dp" />
+
+            <TextView
+                android:id="@+id/creationInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/membersList"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/default_creationInfo"
+                android:textSize="12dp"
+                android:textStyle="italic" />
+
+            <Button
+                android:id="@+id/button_expand"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/creationInfo"
+                android:text="Expand" />
+
+            <Button
+                android:id="@+id/button_collapse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/creationInfo"
+                android:text="Collapse"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/button_collapse"
+                android:orientation="vertical" >
+
+                <ListView
+                    android:id="@+id/list_fulfillments"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_margin="12dp"
+                    android:visibility="gone" />
+
+                <EditText
+                    android:id="@+id/edit_textFulfillment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:gravity="center_vertical|top"
+                    android:hint="@string/default_description"
+                    android:minHeight="80dp"
+                    android:scrollbarAlwaysDrawVerticalTrack="true"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="vertical"
+                    android:singleLine="false"
+                    android:textSize="14dp"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/button_photo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Photos..."
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/fulfillButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:text="@string/button_fulfill"
+                    android:visibility="gone" />
+            </LinearLayout>
         </RelativeLayout>
-
-        <TextView
-            android:id="@+id/heading_Members"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/buttons_requirements"
-            android:text="@string/heading_allMembers"
-            android:textStyle="bold" />
-
-        <!--
-              <TextView
-            android:id="@+id/members"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_below="@+id/heading_Members"
-            android:gravity="center_vertical|top"
-            android:hint="@string/default_members"
-            android:scrollbars="vertical"
-            android:textSize="12dp" />
-        -->
-
-        <ListView
-            android:id="@+id/membersList"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_margin="12dp"
-            android:layout_above="@+id/creationInfo"
-            android:layout_below="@+id/heading_Members" />
-
-        <TextView
-            android:id="@+id/creationInfo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/fulfillButton"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="@string/default_creationInfo"
-            android:textSize="12dp"
-            android:textStyle="italic" />
-
-        <Button
-            android:id="@+id/fulfillButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:text="@string/button_fulfill" />
-    </RelativeLayout>
+    </ScrollView>
 
 </RelativeLayout>
