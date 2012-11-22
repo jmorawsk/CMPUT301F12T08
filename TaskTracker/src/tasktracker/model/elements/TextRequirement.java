@@ -30,6 +30,11 @@ public class TextRequirement extends Requirement {
 
 	private String text;
 	
+	public TextRequirement(String text){
+		this.text = text;
+	}
+	
+	
 	/** Gets the text string */
 	public String getText(){
 		return this.text;

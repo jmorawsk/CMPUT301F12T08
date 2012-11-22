@@ -15,6 +15,14 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
+/**
+ * A class that opens android camera. Takes and saves a photo.
+ * 
+ * @author Katherine Jasniewski
+ * 
+ */
 
 public class Camera extends Activity {
 
@@ -49,6 +57,7 @@ public class Camera extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				//acceptPhoto();
+				 Toast.makeText(Camera.this, "photo saved", 2000).show();
 			}
 
 		};
@@ -141,12 +150,9 @@ public class Camera extends Activity {
 
 		if(requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE){
 
-			//TextView textview = (TextView) findViewById(R.id.status);
-
 
 			if(result == RESULT_OK){
 
-				//textview.setText("Photo OK!");
 				ImageButton button = (ImageButton) findViewById(R.id.TakeAPhoto);
 				button.setImageDrawable(Drawable.createFromPath(imageFileUri.getPath()));
 
@@ -155,12 +161,10 @@ public class Camera extends Activity {
 
 				//TODO: Delete a photo that has been taken
 				//getContentResolver().delete(imageFileUri, null, null);
-				//textview.setText("Photo Cancelled!");
 
 			}
 			else{
 
-				//textview.setText("Not sure what happened!");
 			}
 		}
 

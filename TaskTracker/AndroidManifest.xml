@@ -16,12 +16,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".TaskListView"
-            android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:label="@string/myTasks" >
         </activity>
         <activity
             android:name=".CreateTaskView"
@@ -36,8 +31,12 @@
             android:label="@string/notifications" >
         </activity>
         <activity
-            android:name=".TaskFulfillmentView"
-            android:label="@string/title_activity_task_fulfillment_view" >
+            android:name=".Camera"
+            android:label="@string/camera" >
+        </activity>
+        <activity
+            android:name=".Login"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

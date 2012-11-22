@@ -42,7 +42,7 @@ public abstract class Requirement implements Serializable {
 	 * value to the time stamp.
 	 */
 	public Requirement() {
-		this.timeStamp = new Date(0);
+		this.timeStamp = Calendar.getInstance().getTime();
 	}
 
 	/**

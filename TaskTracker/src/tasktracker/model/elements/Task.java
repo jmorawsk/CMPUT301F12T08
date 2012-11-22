@@ -22,6 +22,8 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import android.util.Log;
+
 /**
  * A class that represents a task. Every task has a creator, and is to be
  * fulfilled by a task member.
@@ -49,6 +51,12 @@ public class Task implements Serializable {
 	private boolean _fulfilled;
 	private List<PhotoRequirement> _photos;
 	private TextRequirement _text;
+	
+	// Store date as long (in hex) so can be formatted upon preference.
+	private String _dateHex;
+	
+	// SQL ids
+	private long _creatorID;
 
 	/**
 	 * Creates a new instance of the TaskElement class.
@@ -81,9 +89,11 @@ public class Task implements Serializable {
 	public Task(String creator, String name, String description,
 			boolean requiresText, boolean requiresPhoto) {
 
-		Date date = Calendar.getInstance().getTime();
-		_creationDate = new SimpleDateFormat("yyyy-MM-dd").format(date
-				.getTime());
+		_creationDate = new SimpleDateFormat("MMM dd, yyyy | HH:mm").format(Calendar
+				.getInstance().getTime());
+		
+		// Store date as hex string with hex prefix.
+		_dateHex = "0x" + Long.toHexString(Calendar.getInstance().getTimeInMillis());
 
 		_creator = creator;
 		_name = name;
@@ -92,6 +102,7 @@ public class Task implements Serializable {
 		_fulfilled = false;
 
 		_photos = new ArrayList<PhotoRequirement>();
+		_otherMembersList = new ArrayList<String>();
 	}
 
 	/**
@@ -106,6 +117,10 @@ public class Task implements Serializable {
 
 	public String getCreator() {
 		return _creator;
+	}
+	
+	public long getCreatorID(){
+		return _creatorID;
 	}
 
 	/** Gets the task ID */
@@ -123,6 +138,10 @@ public class Task implements Serializable {
 
 	public String getDateCreated() {
 		return _creationDate;
+	}
+	
+	public String getDateHex(){
+		return _dateHex;
 	}
 
 	public void setDescription(String value) {
@@ -162,8 +181,10 @@ public class Task implements Serializable {
 	}
 
 	/**
-	 * Gets all members (including the creator) and puts them into a string using the format: <BR>
+	 * Gets all members (including the creator) and puts them into a string
+	 * using the format: <BR>
 	 * [creator], [member], ..., [member]
+	 * 
 	 * @return The string of all members.
 	 */
 	public String getMembers() {
@@ -178,11 +199,19 @@ public class Task implements Serializable {
 	 * Gets the string of members, separates them with comma delimiters, then
 	 * adds each member to the members list.
 	 * 
-	 * @param value The string of members.
+	 * @param value
+	 *            The string of members.
 	 */
 	public void setOtherMembers(String value) {
-		String[] others = value.split("(\\s+)?,(\\s+)?");
+
 		_otherMembersList = new ArrayList<String>();
+
+		if (value.matches(""))
+			return;
+
+		Log.d("DEBUG", value);
+
+		String[] others = value.split("(\\s+)?,(\\s+)?");
 
 		for (String member : others) {
 			_otherMembersList.add(member);

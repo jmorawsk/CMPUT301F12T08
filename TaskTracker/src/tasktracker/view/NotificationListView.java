@@ -22,11 +22,13 @@ package tasktracker.view;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.view.View;
 
 import java.util.*;
 
 import tasktracker.model.PreferencesManager;
+import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.elements.Notification;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
@@ -39,24 +41,59 @@ import android.widget.AdapterView.OnItemClickListener;
  */
 public class NotificationListView extends Activity {
 
-	private ListView notificationsList;
+	private ListView _notificationsList;
 	private List<Notification> notifications;
+
+	private DatabaseAdapter _dbHelper;
+	private Cursor _cursor;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_notification_list_view);
 
-		Bundle extras = getIntent().getExtras();
-		if (extras != null){
-			//_user = extras.getString("USER");	//Left in as code reference
-		}
-		
-		
-		// Assign ListView and its item click listener
-		this.notificationsList = (ListView) findViewById(R.id.notificationsList);
-		this.notificationsList.setOnItemClickListener(new handleList_Click());
+		_dbHelper = new DatabaseAdapter(this);
 
+		// Assign ListView and its item click listener
+		_notificationsList = (ListView) findViewById(R.id.notificationsList);
+		// this.notificationsList.setOnItemClickListener(new
+		// handleList_Click());
+
+		setupToolbarButtons();
+
+	}
+
+	protected void onStart() {
+		super.onStart();
+		_dbHelper.open();
+		fillData();
+	}
+
+	protected void onStop() {
+		super.onStop();
+		_dbHelper.close();
+		stopManagingCursor(_cursor);
+		_cursor.close();
+	}
+
+	private void fillData() {
+		_cursor = _dbHelper.fetchAllFulfillments();
+		startManagingCursor(_cursor);
+
+		String[] from = new String[] { DatabaseAdapter.TASK,
+				DatabaseAdapter.USER, DatabaseAdapter.DATE };
+		int[] to = new int[] { R.id.task_name, R.id.task_creator,
+				R.id.task_date };
+
+		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
+				R.layout.list_item, _cursor, from, to);
+		
+		_notificationsList.setAdapter(adapter);
+		
+		
+	}
+
+	private void setupToolbarButtons() {
 		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
 		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
 		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
@@ -71,7 +108,7 @@ public class NotificationListView extends Activity {
 
 			}
 		});
-		
+
 		buttonCreate.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
