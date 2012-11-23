@@ -7,6 +7,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 public class DatabaseAdapter {
@@ -29,7 +30,7 @@ public class DatabaseAdapter {
 	private static final String TABLE_PHOTOS = "photos";
 	private static final String TABLE_TASKS = "tasks";
 	private static final String TABLE_MEMBERS = "members";
-	private static final String TABLE_USERS 	= "users";
+	private static final String TABLE_USERS = "users";
 	private static final String TABLE_FULFILLMENTS = "fulfillments";
 
 	/**
@@ -123,7 +124,8 @@ public class DatabaseAdapter {
 		return mDb.insert(TABLE_USERS, null, initialValues);
 	}
 
-	public long createFulfillment(String task, String date, String fulfiller, String text){
+	public long createFulfillment(String task, String date, String fulfiller,
+			String text) {
 		ContentValues initialValues = new ContentValues();
 
 		initialValues.put(TASK, task);
@@ -133,8 +135,8 @@ public class DatabaseAdapter {
 
 		return mDb.insert(TABLE_FULFILLMENTS, null, initialValues);
 	}
-	
-	public long createMember(String task, String user){
+
+	public long createMember(String task, String user) {
 		ContentValues initialValues = new ContentValues();
 
 		initialValues.put(TASK, task);
@@ -142,7 +144,7 @@ public class DatabaseAdapter {
 
 		return mDb.insert(TABLE_MEMBERS, null, initialValues);
 	}
-	
+
 	/**
 	 * Delete the entry with the given rowId
 	 * 
@@ -161,7 +163,7 @@ public class DatabaseAdapter {
 	 *            id of entry to delete
 	 * @return true if deleted, false otherwise
 	 */
-	public boolean deleteFolder(long rowId) {
+	public boolean deleteTask(long rowId) {
 		return mDb.delete(TABLE_TASKS, ID + "=" + rowId, null) > 0;
 	}
 
@@ -173,8 +175,8 @@ public class DatabaseAdapter {
 	 *            name of folder to delete photos from
 	 * @return true if deleted, false otherwise
 	 */
-	public boolean deletePhotosInTask(String task) {
-		return mDb.delete(TABLE_PHOTOS, TASK + "='" + task + "'", null) > 0;
+	public boolean deletePhotosInTask(long taskID) {
+		return mDb.delete(TABLE_PHOTOS, TASK + "=" + taskID, null) > 0;
 	}
 
 	/**
@@ -186,50 +188,78 @@ public class DatabaseAdapter {
 		return mDb.query(TABLE_TASKS, new String[] { ID, TASK, USER, DATE },
 				null, null, null, null, null);
 	}
-	
-	public Cursor fetchAllFulfillments(){
-		return mDb.query(TABLE_FULFILLMENTS, new String[] { ID, TASK, USER, DATE },
-				null, null, null, null, null);
+
+	public Cursor fetchAllFulfillments() {
+		return mDb.query(TABLE_FULFILLMENTS, new String[] { ID, TASK, USER,
+				DATE }, null, null, null, null, null);
 	}
-	
-	public Cursor fetchFulfillment(String task){
-		return mDb.query(TABLE_FULFILLMENTS, new String[] { ID, TASK, DATE, USER,
-				TEXT }, TASK + "='"
-				+ task + "'", null, null, null, null, null);
+
+	/**
+	 * Will be deleted when task is stored by ID instead of string.
+	 * 
+	 * @param task
+	 * @return
+	 */
+	public Cursor fetchFulfillment(String task) {
+
+		return mDb.rawQuery("SELECT * FROM " + TABLE_FULFILLMENTS + " WHERE "
+				+ TASK + " = ?", new String[] { task });
+	}
+
+	public Cursor fetchFulfillment(long taskID) {
+
+		return mDb
+				.query(TABLE_FULFILLMENTS, new String[] { ID, TASK, DATE, USER,
+						TEXT }, TASK + "=" + taskID, null, null, null, null,
+						null);
 	}
 
 	public Cursor fetchTask(long rowId) {
 		return mDb.query(TABLE_TASKS, new String[] { ID, TASK, DATE, USER,
-				TEXT, REQS_PHOTO, REQS_TEXT, MEMBERS }, ID + "="
-				+ rowId, null, null, null, null, null);
+				TEXT, REQS_PHOTO, REQS_TEXT, MEMBERS }, ID + "=" + rowId, null,
+				null, null, null, null);
 	}
 
-	
-	public Cursor fetchUser(long rowId){
-		return mDb.query(TABLE_USERS, new String[] { ID, USER, EMAIL }, ID + "="
-				+ rowId, null, null, null, null, null);
+	public Cursor fetchUser(long rowId) {
+		return mDb.query(TABLE_USERS, new String[] { ID, USER, EMAIL }, ID
+				+ "=" + rowId, null, null, null, null, null);
 	}
-	
+
 	/**
 	 * To validate login
+	 * 
 	 * @param user
 	 * @param password
 	 * @return
 	 */
 	public Cursor fetchUser(String user, String password) {
-		return mDb.query(TABLE_USERS, new String[] { ID, USER, PASSWORD }, USER
-				+ "='" + user + "' AND " + PASSWORD + "='" + password + "'",
-				null, null, null, null);
+		return mDb.rawQuery("SELECT * FROM " + TABLE_USERS + " WHERE " + USER
+				+ " = ? AND " + PASSWORD + " = ?", new String[] { user,
+				password });
 	}
 
 	/**
 	 * To check if a username is available
+	 * 
 	 * @param user
 	 * @return
 	 */
 	public Cursor fetchUser(String user) {
-		return mDb.query(TABLE_USERS, new String[] { ID, USER, EMAIL }, USER + "='"
-				+ user + "'", null, null, null, null);
+		return mDb.rawQuery("SELECT * FROM " + TABLE_USERS + " WHERE " + USER
+				+ " = ?", new String[] { user });
+	}
+
+	/**
+	 * Returns a cursor that points to data with the requested tag Will be
+	 * deleted when we use task ID to find photos
+	 * 
+	 * @param task
+	 *            retrieve photos with given task
+	 * @return Cursor that traverses photos with given task
+	 */
+	public Cursor fetchPhotosUnderTask(String task) {
+		return mDb.rawQuery("SELECT * FROM " + TABLE_PHOTOS + " WHERE " + TASK
+				+ " = ?", new String[] { task });
 	}
 
 	/**
@@ -239,18 +269,28 @@ public class DatabaseAdapter {
 	 *            retrieve photos with given task
 	 * @return Cursor that traverses photos with given task
 	 */
-	public Cursor fetchPhotosUnderTask(String task) {
+	public Cursor fetchPhotosUnderTask(long taskID) {
 		Cursor mCursor = mDb.query(true, TABLE_PHOTOS, new String[] { ID, DATE,
-				TASK, PHOTO }, TASK + "='" + task + "'", null, null, null,
-				null, null);
+				TASK, PHOTO }, TASK + "=" + taskID, null, null, null, null,
+				null);
 
 		return mCursor;
 	}
-	
-	public Cursor fetchTaskMembers(String task){
-		return mDb.query(true, TABLE_MEMBERS, new String[] { ID, TASK,
-				USER }, TASK + "='" + task + "'", null, null, null,
-				null, null);
+
+	/**
+	 * Will be deleted when we use task ID to find members
+	 * 
+	 * @param task
+	 * @return
+	 */
+	public Cursor fetchTaskMembers(String task) {
+		return mDb.rawQuery("SELECT * FROM " + TABLE_MEMBERS + " WHERE " + TASK
+				+ " = ?", new String[] { task });
+	}
+
+	public Cursor fetchTaskMembers(long taskID) {
+		return mDb.query(true, TABLE_MEMBERS, new String[] { ID, TASK, USER },
+				TASK + "=" + taskID, null, null, null, null, null);
 	}
 
 	/**
