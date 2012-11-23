@@ -42,11 +42,16 @@ public class DatabaseModel {
 			+ "user TEXT NOT NULL, "
 			+ "date TEXT NOT NULL, " + "photo BLOB NOT NULL);";
 
+	private static final String NOTIFICATIONS = "CREATE TABLE notifications(_id INTEGER primary key autoincrement, "
+			+ "task_id TEXT NOT NULL,"
+			+ "user TEXT NOT NULL,"
+			+ "text TEXT NOT NULL);";
+
 	private static final String[] CREATE_TABLES = new String[] {//
-	USERS, TASKS, MEMBERS, FULFILLMENTS, PHOTOS };
+	USERS, TASKS, MEMBERS, FULFILLMENTS, PHOTOS, NOTIFICATIONS };
 
 	private static final String[] TABLE_NAMES = new String[] { //
-	"users", "tasks", "members", "fulfillments", "photos" };
+	"users", "tasks", "members", "fulfillments", "photos", "notifications" };
 
 	private static final String DATABASE_NAME = "data";
 	private static final int DATABASE_VERSION = 1;

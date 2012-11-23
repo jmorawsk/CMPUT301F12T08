@@ -16,6 +16,7 @@ public class DatabaseAdapter {
 	public static final String ID = "_id";
 	public static final String DATE = "date";
 	public static final String TASK = "task";
+	public static final String TASK_ID = "task_id";
 	public static final String PHOTO = "photo";
 	public static final String USER = "user";
 	public static final String TEXT = "text";
