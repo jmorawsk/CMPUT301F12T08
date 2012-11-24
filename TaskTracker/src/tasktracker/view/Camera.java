@@ -8,6 +8,8 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.view.Menu;
 import android.view.View;
@@ -58,6 +60,12 @@ public class Camera extends Activity {
 				// TODO Auto-generated method stub
 				//acceptPhoto();
 				 Toast.makeText(Camera.this, "photo saved", 2000).show();
+				
+				 //Bitmap newPhoto = BitmapFactory.decodeFile(imageFileUri.getPath());
+				 Intent intent = new Intent();
+				 intent.putExtra("photo", imageFileUri.getPath());
+				 //setResult();
+				 finish();
 			}
 
 		};
@@ -155,6 +163,7 @@ public class Camera extends Activity {
 
 				ImageButton button = (ImageButton) findViewById(R.id.TakeAPhoto);
 				button.setImageDrawable(Drawable.createFromPath(imageFileUri.getPath()));
+				
 
 			}
 			else if(result == RESULT_CANCELED){
