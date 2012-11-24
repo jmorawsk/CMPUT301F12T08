@@ -56,19 +56,33 @@ public class ToastCreator {
 	 * @param string
 	 *            The message string.
 	 */
-	public void toaster(String string) {
-		LayoutInflater inflater = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//	public void showToast(String string) {
+//		LayoutInflater inflater = (LayoutInflater) context
+//				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//
+//		View layout = (ViewGroup) inflater.inflate(R.layout.toast_layout, null);
+//
+//		TextView text = (TextView) layout.findViewById(R.id.toast_text);
+//		text.setText(string);
+//
+//		Toast toast = new Toast(context);
+//		toast.setGravity(Gravity.CENTER_VERTICAL, Gravity.CENTER_HORIZONTAL, 0);
+//		toast.setDuration(Toast.LENGTH_SHORT);
+//		toast.setView(layout);
+//		toast.show();
+//	}
 
-		View layout = (ViewGroup) inflater.inflate(R.layout.toast_layout, null);
-
-		TextView text = (TextView) layout.findViewById(R.id.toast_text);
-		text.setText(string);
-
-		Toast toast = new Toast(context);
-		toast.setGravity(Gravity.CENTER_VERTICAL, Gravity.CENTER_HORIZONTAL, 0);
-		toast.setDuration(Toast.LENGTH_SHORT);
-		toast.setView(layout);
+	public void showLongToast(String message) {
+		Toast toast = Toast.makeText(context, message,
+				Toast.LENGTH_LONG);
+		toast.setGravity(Gravity.CENTER, 0, 0);
+		toast.show();
+	}
+	
+	public void showShortToast(String message) {
+		Toast toast = Toast.makeText(context, message,
+				Toast.LENGTH_SHORT);
+		toast.setGravity(Gravity.CENTER, 0, 0);
 		toast.show();
 	}
 }

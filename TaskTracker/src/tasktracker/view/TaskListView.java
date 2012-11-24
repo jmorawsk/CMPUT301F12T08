@@ -1,4 +1,3 @@
-
 package tasktracker.view;
 
 /**
@@ -30,6 +29,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.text.Editable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -64,6 +64,8 @@ public class TaskListView extends Activity {
 	private DatabaseAdapter _dbHelper;
 	private Cursor _cursor;
 
+	private String _user;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		preferences = new PreferencesManager();
@@ -75,6 +77,8 @@ public class TaskListView extends Activity {
 		setContentView(R.layout.activity_task_list_view);
 
 		_dbHelper = new DatabaseAdapter(this);
+		_user = getIntent().getStringExtra("USER");
+		Log.d("TaskListView", "user = " + _user);
 
 		setupToolbarButtons();
 		setupUnsubscribeButton();
@@ -100,7 +104,7 @@ public class TaskListView extends Activity {
 	}
 
 	private void setupToolbarButtons() {
-		
+
 		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
 		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
 		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
@@ -111,7 +115,8 @@ public class TaskListView extends Activity {
 			public void onClick(View v) {
 				Intent intent = new Intent(getApplicationContext(),
 						CreateTaskView.class);
-				intent.putExtra("USER", preferences.getUsername(getBaseContext()));
+				intent.putExtra("USER",
+						preferences.getUsername(getBaseContext()));
 				startActivity(intent);
 			}
 		});
@@ -121,83 +126,86 @@ public class TaskListView extends Activity {
 			public void onClick(View v) {
 				Intent intent = new Intent(getApplicationContext(),
 						NotificationListView.class);
-				intent.putExtra("USER", preferences.getUsername(getBaseContext()));
+				intent.putExtra("USER",
+						preferences.getUsername(getBaseContext()));
 				startActivity(intent);
 
 			}
 		});
 	}
 
-	private void setupUnsubscribeButton(){
+	private void setupUnsubscribeButton() {
 		Button unsubscribe = (Button) findViewById(R.id.button_unsubscribe);
-		unsubscribe.setOnClickListener(new OnClickListener(){
+		unsubscribe.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
 				showToast("Not yet implemented");
 			}
-			
+
 		});
 	}
-	
-//}
 
-@Override
-public boolean onCreateOptionsMenu(Menu menu) {
-    MenuInflater inflater = getMenuInflater();
-    inflater.inflate(R.menu.account_menu, menu);
-    return true;
-}
+	// }
 
-@Override
-public boolean onOptionsItemSelected(MenuItem item) {
-    // Handle item selection
-    switch (item.getItemId()) {
-        case R.id.change_name:
-            changeName();
-            return true;
-        case R.id.help:
-            showHelp();
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
-    }
-}
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.account_menu, menu);
+		return true;
+	}
 
-//
-private void changeName() {
-	//showToast("Change name clicked");
-	AlertDialog.Builder alert = new AlertDialog.Builder(this);
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle item selection
+		switch (item.getItemId()) {
+		case R.id.change_name:
+			changeName();
+			return true;
+		case R.id.help:
+			showHelp();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
 
-	alert.setTitle("Change Account Name");
-	alert.setMessage("Old Account Name was '" + preferences.getUsername(getBaseContext()) + "'.");
+	//
+	private void changeName() {
+		// showToast("Change name clicked");
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-	// Set an EditText view to get user input 
-	final EditText input = new EditText(this);
-	alert.setView(input);
+		alert.setTitle("Change Account Name");
+		alert.setMessage("Old Account Name was '"
+				+ preferences.getUsername(getBaseContext()) + "'.");
 
-	alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-	public void onClick(DialogInterface dialog, int whichButton) {
-	  Editable value = input.getText();
-	  preferences.setUsername(getBaseContext(), value.toString());
-	  // Do something with value!
-	  }
-	});
+		// Set an EditText view to get user input
+		final EditText input = new EditText(this);
+		alert.setView(input);
 
-	alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-	  public void onClick(DialogInterface dialog, int whichButton) {
-	    // Canceled.
-	  }
-	});
+		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				Editable value = input.getText();
+				preferences.setUsername(getBaseContext(), value.toString());
+				// Do something with value!
+			}
+		});
 
-	alert.show();
-}
+		alert.setNegativeButton("Cancel",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						// Canceled.
+					}
+				});
 
-private void showHelp() {
-	// TODO Auto-generated method stub
-	showToast("Show help clicked");
-}
-	
-	private void setupTaskList(){
+		alert.show();
+	}
+
+	private void showHelp() {
+		// TODO Auto-generated method stub
+		showToast("Show help clicked");
+	}
+
+	private void setupTaskList() {
 		// Assign ListView and its on item click listener.
 		taskListView = (ListView) findViewById(R.id.taskList);
 		taskListView.setOnItemClickListener(new OnItemClickListener() {
@@ -206,12 +214,13 @@ private void showHelp() {
 				Intent intent = new Intent(getApplicationContext(),
 						TaskView.class);
 				intent.putExtra("TASK_ID", id);
+				intent.putExtra("USER", _user);
 				startActivity(intent);
 			}
 
 		});
 	}
-	
+
 	void setDebugStuff() {
 		Button deleteFile = (Button) findViewById(R.id.debugButton);
 
@@ -302,4 +311,3 @@ private void showHelp() {
 
 	}
 }
-

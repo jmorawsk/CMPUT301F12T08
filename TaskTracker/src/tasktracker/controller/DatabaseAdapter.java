@@ -1,6 +1,7 @@
 package tasktracker.controller;
 
 import tasktracker.model.DatabaseModel;
+import tasktracker.model.elements.Notification;
 import tasktracker.model.elements.Task;
 import android.content.ContentValues;
 import android.content.Context;
@@ -33,6 +34,7 @@ public class DatabaseAdapter {
 	private static final String TABLE_MEMBERS = "members";
 	private static final String TABLE_USERS = "users";
 	private static final String TABLE_FULFILLMENTS = "fulfillments";
+	private static final String TABLE_NOTIFICATIONS = "notifications";
 
 	/**
 	 * Constructor - takes the context to allow the database to be
@@ -114,6 +116,16 @@ public class DatabaseAdapter {
 
 		return mDb.insert(TABLE_TASKS, null, initialValues);
 	}
+	
+	public long createNotification(String task, String recipient, String message) {
+		ContentValues initialValues = new ContentValues();
+
+		initialValues.put(TASK_ID, task);
+		initialValues.put(USER, recipient);
+		initialValues.put(TEXT, message);
+
+		return mDb.insert(TABLE_NOTIFICATIONS, null, initialValues);
+	}
 
 	public long createUser(String user, String email, String password) {
 		ContentValues initialValues = new ContentValues();
@@ -193,6 +205,11 @@ public class DatabaseAdapter {
 	public Cursor fetchAllFulfillments() {
 		return mDb.query(TABLE_FULFILLMENTS, new String[] { ID, TASK, USER,
 				DATE }, null, null, null, null, null);
+	}
+	
+	public Cursor fetchUserNotifications(String recipient){
+		return mDb.rawQuery("SELECT * FROM " + TABLE_NOTIFICATIONS + " WHERE "
+				+ USER + " = ?", new String[] { recipient });
 	}
 
 	/**

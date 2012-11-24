@@ -34,7 +34,7 @@ import android.content.ContentValues;
  * @author Jeanine Bonot
  * 
  */
-public class Notification {
+public final class Notification {
 
 	/** Indicates the type of notification */
 	public enum Type {
@@ -51,46 +51,6 @@ public class Notification {
 		InformMembership
 	};
 
-	private String _date;
-	private boolean _viewed;
-	private Task _task;
-	private String _sender;
-	private Type _type;
-
-	/**
-	 * Creates a new instance of the Notification class.
-	 * 
-	 * @param sender
-	 *            The name of the user sending the notification.
-	 * @param task
-	 *            The task that the notification regards.
-	 * @param type
-	 *            The type of notification.
-	 */
-	public Notification(String sender, Task task, Type type) {
-		Date date = Calendar.getInstance().getTime();
-
-		_sender = sender;
-		_viewed = false;
-		_date = new SimpleDateFormat("yyyy-MM-dd").format(date);
-		_type = type;
-	}
-
-	/** Mark the notification as viewed by the receiver */
-	public void markAsViewed() {
-		_viewed = true;
-	}
-
-	/** Checks if the receiver viewed the notification */
-	public boolean hasBeenViewed() {
-		return _viewed;
-	}
-
-	/** Gets the task associated with the notification */
-	public Task getTaskElement() {
-		return _task;
-	}
-
 	/**
 	 * Sets the notification's message string according to the notification's
 	 * type.
@@ -98,19 +58,24 @@ public class Notification {
 	 * @param type
 	 *            The type of notification being sent
 	 */
-	public String getMessage() {
-		switch (_type) {
+	public static String getMessage(String sender, String taskName, Type type) {
+		switch (type) {
 		case FulfillmentReport:
+			String date = new SimpleDateFormat("yyyy-MM-dd | HH:mm")
+					.format(Calendar.getInstance().getTime());
 			return String.format("\"%s\" was fulfilled by %s on %s.",
-					_task.getName(), _sender, _date);
+					taskName, sender, date);
 		case InformDelete:
-			return String.format("%s deleted \"%s\".", _sender, _task.getName());
+			return String.format("%s deleted \"%s\".", sender, taskName);
 		case InformEdit:
-			return String.format("%s made changes to \"%s\".", _sender, _task.getName());
+			return String.format("%s made changes to \"%s\".", sender,
+					taskName);
 		case InformMembership:
-			return String.format("%s has made you a member of \"%s\".", _sender, _task.getName());
+			return String.format("%s has made you a member of \"%s\".",
+					sender, taskName);
 		default:
-			return String.format("Unknown notification for \"%s\".", _task.getName());
+			return String.format("Unknown notification for \"%s\".",
+					taskName);
 		}
 	}
 

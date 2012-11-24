@@ -68,10 +68,13 @@ public class CreateTaskView extends Activity {
 	private EditText _otherMembers;
 	private CheckBox _text;
 	private CheckBox _photo;
+	private CheckBox _private;
 	private WebDBManager _webManager;
 	private PreferencesManager _preferences = new PreferencesManager();
 
 	private DatabaseAdapter _dbHelper;
+	private ToastCreator _toaster;
+	private String _user;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -81,6 +84,9 @@ public class CreateTaskView extends Activity {
 		// Initialize our webManager
 		_webManager = new WebDBManager();
 		_dbHelper = new DatabaseAdapter(this);
+		_toaster = new ToastCreator(this);
+		
+		_user = getIntent().getStringExtra("USER");
 
 		// Assign EditText fields
 		_name = (EditText) findViewById(R.id.taskName);
@@ -88,6 +94,7 @@ public class CreateTaskView extends Activity {
 		_otherMembers = (EditText) findViewById(R.id.otherMembers);
 		_text = (CheckBox) findViewById(R.id.checkbox_text);
 		_photo = (CheckBox) findViewById(R.id.checkbox_photo);
+		_private = (CheckBox) findViewById(R.id.checkbox_private);
 
 		setupToolbarButtons();
 		setupSaveButton();
@@ -135,13 +142,19 @@ public class CreateTaskView extends Activity {
 				// Add to SQL server
 				_dbHelper.open();
 				_dbHelper.createTask(task);
-
-				_dbHelper.createMember(task.getName(), _preferences.getUsername(getBaseContext()));
+				
+				String taskName = task.getName();
+				String message = Notification.getMessage(_user, taskName, Notification.Type.InformMembership);
+				
+				_dbHelper.createMember(taskName,
+						_preferences.getUsername(getBaseContext()));
+				_dbHelper.createNotification(taskName, _user, message);
 
 				for (String member : others) {
-					_dbHelper.createMember(task.getName(), member);
+					_dbHelper.createMember(taskName, member);
+					_dbHelper.createNotification(taskName, member, message);
 				}
-
+				
 				_dbHelper.close();
 
 				// Only add to web database if Creator has added members,
@@ -168,12 +181,12 @@ public class CreateTaskView extends Activity {
 	 */
 	private boolean hasEmptyFields() {
 		if (_name.getText().toString().matches("")) {
-			showToast("Your task must have a name");
+			_toaster.showLongToast("Your task must have a name");
 			return true;
 		}
 
 		if (_description.getText().toString().matches("")) {
-			showToast("Your task must have a description");
+			_toaster.showLongToast("Your task must have a description");
 			return true;
 		}
 
@@ -197,13 +210,6 @@ public class CreateTaskView extends Activity {
 		task.setOtherMembers(_otherMembers.getText().toString());
 
 		return task;
-	}
-
-	private void showToast(String message) {
-		Toast toast = Toast.makeText(getApplicationContext(), message,
-				Toast.LENGTH_LONG);
-		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-		toast.show();
 	}
 
 	private class contactWebserver extends AsyncTask<Task, Void, Void> {

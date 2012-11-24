@@ -13,13 +13,12 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/buttons" >
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_margin="8dp"
+            android:orientation="vertical"
+            android:padding="8dp"
             android:scrollbarAlwaysDrawVerticalTrack="true"
             android:scrollbarStyle="insideInset"
             android:scrollbars="vertical" >
@@ -37,7 +36,6 @@
                 android:id="@+id/viewDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/taskName"
                 android:text="@string/heading_taskDescription"
                 android:textStyle="bold" />
 
@@ -45,7 +43,6 @@
                 android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/viewDescription"
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="8dp"
                 android:gravity="center_vertical|top"
@@ -62,36 +59,36 @@
                 android:id="@+id/viewRequirements"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/description"
                 android:text="@string/heading_requirements"
                 android:textStyle="bold" />
 
-            <CheckBox
-                android:id="@+id/checkbox_text"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/viewRequirements"
-                android:layout_marginBottom="8dp"
-                android:enabled="false"
-                android:text="@string/text" />
+                android:layout_marginBottom="8dp" >
 
-            <CheckBox
-                android:id="@+id/checkbox_photo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/viewRequirements"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="16dp"
-                android:layout_toRightOf="@+id/checkbox_text"
-                android:enabled="false"
-                android:text="@string/photo" />
+                <CheckBox
+                    android:id="@+id/checkbox_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:text="@string/text"
+                    android:textSize="12dp" />
+
+                <CheckBox
+                    android:id="@+id/checkbox_photo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:enabled="false"
+                    android:text="@string/photo"
+                    android:textSize="12dp" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/heading_Members"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/checkbox_photo"
                 android:text="@string/heading_allMembers"
                 android:textStyle="bold" />
 
@@ -99,14 +96,20 @@
                 android:id="@+id/membersList"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_below="@+id/heading_Members"
-                android:layout_margin="12dp" />
+                android:layout_margin="12dp"
+                android:maxHeight="200dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="@string/private_task"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/creationInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/membersList"
                 android:gravity="center_vertical|center_horizontal"
                 android:text="@string/default_creationInfo"
                 android:textSize="12dp"
@@ -116,27 +119,26 @@
                 android:id="@+id/button_expand"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/creationInfo"
-                android:text="Expand" />
+                android:text="@string/button_expand"
+                android:textSize="12dp" />
 
             <Button
                 android:id="@+id/button_collapse"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/creationInfo"
-                android:text="Collapse"
+                android:text="@string/button_collapse"
+                android:textSize="12dp"
                 android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/button_collapse"
                 android:orientation="vertical" >
 
                 <ListView
                     android:id="@+id/list_fulfillments"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="12dp"
                     android:visibility="gone" />
 
@@ -147,7 +149,7 @@
                     android:layout_marginBottom="8dp"
                     android:layout_marginLeft="8dp"
                     android:gravity="center_vertical|top"
-                    android:hint="@string/default_description"
+                    android:hint="@string/hint_textFulfillment"
                     android:minHeight="80dp"
                     android:scrollbarAlwaysDrawVerticalTrack="true"
                     android:scrollbarStyle="insideInset"
@@ -171,7 +173,7 @@
                     android:text="@string/button_fulfill"
                     android:visibility="gone" />
             </LinearLayout>
-        </RelativeLayout>
+        </LinearLayout>
     </ScrollView>
 
 </RelativeLayout>

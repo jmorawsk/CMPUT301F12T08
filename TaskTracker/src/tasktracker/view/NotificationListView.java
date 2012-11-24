@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.util.Log;
 import android.view.View;
 
 import java.util.*;
@@ -42,10 +43,11 @@ import android.widget.AdapterView.OnItemClickListener;
 public class NotificationListView extends Activity {
 
 	private ListView _notificationsList;
-	private List<Notification> notifications;
 
 	private DatabaseAdapter _dbHelper;
 	private Cursor _cursor;
+	
+	private String _user;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -53,7 +55,9 @@ public class NotificationListView extends Activity {
 		setContentView(R.layout.activity_notification_list_view);
 
 		_dbHelper = new DatabaseAdapter(this);
-
+		_user = getIntent().getStringExtra("USER");
+		Log.d("Notifications", "user = " + _user);
+		
 		// Assign ListView and its item click listener
 		_notificationsList = (ListView) findViewById(R.id.notificationsList);
 		// this.notificationsList.setOnItemClickListener(new
@@ -77,17 +81,16 @@ public class NotificationListView extends Activity {
 	}
 
 	private void fillData() {
-		_cursor = _dbHelper.fetchAllFulfillments();
+		_cursor = _dbHelper.fetchUserNotifications(_user);
 		startManagingCursor(_cursor);
 
-		String[] from = new String[] { DatabaseAdapter.TASK,
-				DatabaseAdapter.USER, DatabaseAdapter.DATE };
-		int[] to = new int[] { R.id.task_name, R.id.task_creator,
-				R.id.task_date };
+		String[] from = new String[] { DatabaseAdapter.TEXT, DatabaseAdapter.TASK_ID,
+				DatabaseAdapter.USER};
+		int[] to = new int[] { R.id.text };
 
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
-				R.layout.list_item, _cursor, from, to);
-		
+				R.layout.simple_list_item, _cursor, from, to);
+		Log.d("Notifications", "Count = " + adapter.getCount());
 		_notificationsList.setAdapter(adapter);
 		
 		

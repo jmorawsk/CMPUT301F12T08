@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import tasktracker.controller.DatabaseAdapter;
+import tasktracker.model.elements.Notification;
 import tasktracker.model.elements.Task;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.util.Log;
 import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.*;
+import android.widget.SimpleCursorAdapter.ViewBinder;
 
 /**
  * And activity that displays an existing task. From here, a user may fulfill a
@@ -54,20 +56,23 @@ public class TaskView extends Activity {
 	private Cursor _cursor;
 
 	private boolean _hasFulfillments;
-	
+
+	private ToastCreator _toaster;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_view);
 
 		_dbHelper = new DatabaseAdapter(this);
-		_user = getIntent().getStringExtra("USER");
 
+		_user = getIntent().getStringExtra("USER");
 		_taskID = getIntent().getLongExtra("TASK_ID", -1);
 
 		if (_taskID == -1)
 			return;
 
+		_toaster = new ToastCreator(this);
 		_textFulfillment = (EditText) findViewById(R.id.edit_textFulfillment);
 		_fulfillmentList = (ListView) findViewById(R.id.list_fulfillments);
 		_fulfillmentButton = (Button) findViewById(R.id.fulfillButton);
@@ -90,24 +95,31 @@ public class TaskView extends Activity {
 			}
 
 		});
-		
+
 		_fulfillmentButton.setText("Add Fulfillment");
 		_fulfillmentButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				if (requirementsFulfilled()) {
-					// _task.markAsFulfilled(_user);
 
-//					sendEmailToCreator();
+					String message = Notification.getMessage(_user, _taskName,
+							Notification.Type.FulfillmentReport);
+					// sendEmailToCreator(message);
 					String date = new SimpleDateFormat("MMM dd, yyyy | HH:mm")
 							.format(Calendar.getInstance().getTime());
 
-					_dbHelper.createFulfillment(_taskName, date, _user,
-							_textFulfillment.getText().toString());
+					long id = _dbHelper.createFulfillment(_taskName, date,
+							_user, _textFulfillment.getText().toString());
+
+					Log.d("Task Fulfillment",
+							"fulfillment id: " + Long.toString(id));
+
+					_dbHelper.createNotification(_taskName, _taskCreator,
+							message);
 
 					// TODO send report to creator
-					showToast("\"" + _taskName + "\" was fulfilled!");
+					_toaster.showLongToast("\"" + _taskName
+							+ "\" was fulfilled!");
 
 					finish();
 				}
@@ -129,12 +141,16 @@ public class TaskView extends Activity {
 
 		switch (item.getItemId()) {
 		case R.id.menu_edit:
-			showToast("Edit");
+			_toaster.showLongToast("Edit");
 			return true;
 
 		case R.id.menu_delete:
-			showToast("Delete");
+			_toaster.showLongToast("Delete");
 			return true;
+		case R.id.menu_logout:
+			_user = null;
+			_toaster.showLongToast("Logged out");
+			startActivity(Login.class);
 
 		default:
 			return super.onOptionsItemSelected(item);
@@ -157,7 +173,7 @@ public class TaskView extends Activity {
 		_dbHelper.close();
 		_cursor.close();
 	}
-	
+
 	private void setupToolbarButtons() {
 		// Assign Buttons
 		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
@@ -186,6 +202,9 @@ public class TaskView extends Activity {
 		});
 	}
 
+	/**
+	 * Fills the layout views with information on the task.
+	 */
 	private void setTaskInfo() {
 		_cursor = _dbHelper.fetchTask(_taskID);
 
@@ -219,25 +238,53 @@ public class TaskView extends Activity {
 		textRequirement.setChecked(_requiresText);
 		photoRequirement.setChecked(_requiresPhoto);
 	}
-	
+
+	/**
+	 * Sets the fulfillment list with data from the SQL database.
+	 */
 	private void setFulfillmentsList() {
 		_cursor = _dbHelper.fetchFulfillment(_taskName);
 
 		startManagingCursor(_cursor);
 
-		String[] from = new String[] { DatabaseAdapter.TEXT };
+		String[] from = new String[] { DatabaseAdapter.USER,
+				DatabaseAdapter.TEXT };
 		int[] to = new int[] { R.id.text };
 
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
 				R.layout.simple_list_item, _cursor, from, to);
 		int count = adapter.getCount();
 		_hasFulfillments = count > 0;
-		Log.d("Has fulfillments", Boolean.toString(_hasFulfillments));
+		Log.d("Task Fulfillment",
+				"number of fulfillments = " + Integer.toString(count));
+
+		adapter.setViewBinder(new ViewBinder() {
+
+			public boolean setViewValue(View view, Cursor cursor,
+					int columnIndex) {
+
+				if (true) {
+					String fulfiller = cursor.getString(cursor
+							.getColumnIndex(DatabaseAdapter.USER));
+					String date = cursor.getString(cursor
+							.getColumnIndex(DatabaseAdapter.DATE));
+					TextView textView = (TextView) view;
+					textView.setText("Fulfilled by " + fulfiller + " on "
+							+ date);
+					return true;
+				}
+
+				return false;
+			}
+		});
 		_fulfillmentList.setAdapter(adapter);
 		stopManagingCursor(_cursor);
-		
+
 	}
 
+	/**
+	 * Sets the member list with data from the SQL database.
+	 */
 	private void setMembersList() {
 		ListView members = (ListView) findViewById(R.id.membersList);
 		_cursor = _dbHelper.fetchTaskMembers(_taskName);
@@ -261,31 +308,18 @@ public class TaskView extends Activity {
 		}
 	}
 
-	private void handleFulfilledTask(Cursor cursor) {
-		final String text = cursor.getString(cursor
-				.getColumnIndex(DatabaseAdapter.TEXT));
-		final String date = cursor.getString(cursor
-				.getColumnIndex(DatabaseAdapter.DATE));
-
-		_fulfillmentButton.setText("View fulfillment report");
-		_fulfillmentButton.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View v) {
-				// TODO Show "Ok" button on toast.
-				showToast("This task was fulfilled on [date] by [list of fulfillers].");
-			}
-
-		});
-	}
-
-	private void sendEmailToCreator() {
+	/**
+	 * Send an email report of the task fulfillment to the creator;
+	 */
+	private void sendEmailToCreator(String message) {
 
 		_cursor = _dbHelper.fetchUser(_taskCreator);
 
 		if (!_cursor.moveToFirst()) {
-			showToast("Could not find creator");
+			_toaster.showLongToast("Could not find creator information");
 			return;
 		}
+
 		String email = _cursor.getString(_cursor
 				.getColumnIndexOrThrow(DatabaseAdapter.EMAIL));
 
@@ -294,8 +328,7 @@ public class TaskView extends Activity {
 		i.putExtra(Intent.EXTRA_EMAIL, new String[] { email });
 		i.putExtra(Intent.EXTRA_SUBJECT,
 				"TaskTracker : Task Fulfillment Report");
-		i.putExtra(Intent.EXTRA_TEXT, "\"" + _taskName + "\" was fulfilled by "
-				+ _user);
+		i.putExtra(Intent.EXTRA_TEXT, message);
 		try {
 			startActivity(Intent.createChooser(i, "Send mail..."));
 		} catch (android.content.ActivityNotFoundException ex) {
@@ -304,6 +337,12 @@ public class TaskView extends Activity {
 		}
 	}
 
+	/**
+	 * Soon to be deleted. Makes sure that the requirements have been completed
+	 * before fulfilling a task.
+	 * 
+	 * @return True if the requirements we fulfilled; otherwise false.
+	 */
 	private boolean requirementsFulfilled() {
 
 		boolean ready = true;
@@ -311,7 +350,7 @@ public class TaskView extends Activity {
 		if (_requiresPhoto) {
 			// TODO: check if text has been input
 			if (true) {
-				showToast("You must add a photo before marking this task as fulfilled.");
+				_toaster.showLongToast("You must add a photo before marking this task as fulfilled.");
 				ready = false;
 			}
 		}
@@ -319,17 +358,16 @@ public class TaskView extends Activity {
 		return ready;
 	}
 
-	private void startActivity(Class<?> destination) {
+	/**
+	 * Start a new activity while passing the user's information.
+	 * 
+	 * @param destination
+	 *            The activity class destination.
+	 */
+	private <T extends Activity> void startActivity(Class<T> destination) {
 		Intent intent = new Intent(getApplicationContext(), destination);
 		intent.putExtra("USER", _user);
 		startActivity(intent);
-	}
-
-	private void showToast(String message) {
-		Toast toast = Toast.makeText(getApplicationContext(), message,
-				Toast.LENGTH_LONG);
-		toast.setGravity(Gravity.CENTER, 0, 0);
-		toast.show();
 	}
 
 	class TextFulfillmentSetup implements TextWatcher {
@@ -350,14 +388,27 @@ public class TaskView extends Activity {
 		}
 	}
 
+	/**
+	 * OnClickListener for the expand button. When the user clicks the expand
+	 * button, the fields that are required for task fulfillment are displayed,
+	 * as well as the fulfillment button.
+	 */
 	class ExpandButtonSetup implements OnClickListener {
 
+		/**
+		 * Sets views a visible if they are required for fulfillment.
+		 */
 		public void onClick(View v) {
 			_collapseButton.setVisibility(View.VISIBLE);
+			_expandButton.setVisibility(View.GONE);
+
+			Log.d("Task Fulfillment",
+					"_hasFulfillments = " + Boolean.toString(_hasFulfillments));
+
 			if (_hasFulfillments) {
-				// TODO if has fulfillments
 				_fulfillmentList.setVisibility(View.VISIBLE);
 			}
+
 			if (_requiresText) {
 				_textFulfillment.setVisibility(View.VISIBLE);
 				_textFulfillment.requestFocus();
@@ -367,7 +418,9 @@ public class TaskView extends Activity {
 				_photoButton.setVisibility(View.VISIBLE);
 
 			_fulfillmentButton.setVisibility(View.VISIBLE);
-			_expandButton.setVisibility(View.INVISIBLE);
+
+			// Scroll down so the user can quickly complete the task
+			// requirements.
 			_scrollview.post(new Runnable() {
 
 				public void run() {
@@ -378,15 +431,19 @@ public class TaskView extends Activity {
 		}
 	}
 
+	/**
+	 * OnClickListener for the collapse button. Hides all views that are related
+	 * to task fulfillment.
+	 */
 	class CollapseButtonSetup implements OnClickListener {
 
 		public void onClick(View v) {
 			_expandButton.setVisibility(View.VISIBLE);
+			_collapseButton.setVisibility(View.GONE);
 			_fulfillmentList.setVisibility(View.GONE);
 			_fulfillmentButton.setVisibility(View.GONE);
 			_textFulfillment.setVisibility(View.GONE);
 			_photoButton.setVisibility(View.GONE);
-			_collapseButton.setVisibility(View.GONE);
 		}
 	}
 
