@@ -20,7 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * A class that opens android camera. Takes and saves a photo.
+ * A class that opens android camera. Takes and saves a photo
+ * in the users task photo gallery.
  * 
  * @author Katherine Jasniewski
  * 
@@ -60,11 +61,11 @@ public class Camera extends Activity {
 
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				//acceptPhoto();
-				 Toast.makeText(Camera.this, "photo saved", 2000).show();
+				 Toast.makeText(Camera.this, "Photo has been added", 2000).show();
 				
-				 //Bitmap newPhoto = BitmapFactory.decodeFile(imageFileUri.getPath());
 				 Intent intent = new Intent();
+				 setResult(RESULT_OK);
+				 //Activity.this.
 				 intent.putExtra("photo", imageFileUri.getPath());
 				 //setResult();
 				 finish();
@@ -79,16 +80,18 @@ public class Camera extends Activity {
 
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				//Checks if a photo has been taken to determine whether to delete.
 				if(check.equals("PHOTO_TAKEN")){
 				File fdelete = new File(imageFileUri.getPath());
 				fdelete.delete();
-				
+				//refresh
 				sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
 				
+				//Sets that photo has been deleted.
 				check = "PHOTO_DELETED";
 				}
+				
 				takePhoto();
-				//sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
 			}
 
 		};
@@ -100,12 +103,13 @@ public class Camera extends Activity {
 
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				//cancelBogoPic();
 				
+				if(check.equals("PHOTO_TAKEN")){
 				File fdelete = new File(imageFileUri.getPath());
 				fdelete.delete();
-				
+				//refresh
 				sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
+				}
 				
 				finish();
 			}
@@ -150,6 +154,7 @@ public class Camera extends Activity {
 		//intent has information about image
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
 		
+		//refresh
 		sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
 
 		startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
@@ -163,7 +168,7 @@ public class Camera extends Activity {
 
 
 			if(result == RESULT_OK){
-				
+				//Sets check to indicate a photo has been taken.
 				check = "PHOTO_TAKEN";
 				ImageButton button = (ImageButton) findViewById(R.id.TakeAPhoto);
 				button.setImageDrawable(Drawable.createFromPath(imageFileUri.getPath()));
@@ -173,7 +178,6 @@ public class Camera extends Activity {
 			else if(result == RESULT_CANCELED){
 
 				//TODO: Delete a photo that has been taken
-				//getContentResolver().delete(imageFileUri, null, null);
 
 			}
 			else{

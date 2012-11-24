@@ -10,7 +10,13 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
-
+/**
+ * A class that contains a list of photos and places them in
+ * the grid view of photo picker layout.
+ * 
+ * @author Katherine Jasniewski
+ * 
+ */
 
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;

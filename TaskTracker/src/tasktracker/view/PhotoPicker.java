@@ -35,7 +35,7 @@ public class PhotoPicker extends Activity {
 
 	public static final int PICK_PICTURE_FROM_GALLERY = 1; 
 	public static final int TAKE_PICTURE = 2;
-	
+
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_photo_picker_view);
@@ -43,6 +43,8 @@ public class PhotoPicker extends Activity {
 		//initializes buttons on layout
 		Button galleryPhoto = (Button) findViewById(R.id.galleryPhoto);
 		Button takePhoto = (Button) findViewById(R.id.takeAPhoto);
+
+		setupToolbarButtons();
 
 		galleryPhoto.setOnClickListener(new OnClickListener(){
 
@@ -66,10 +68,12 @@ public class PhotoPicker extends Activity {
 		takePhoto.setOnClickListener(retakeListener);
 
 
+
+
 		gridView = (GridView) findViewById(R.id.gridView);
 		gridView.setAdapter(myAdapter);
 
-//		gridView.setAdapter(new ImageAdapter(this));
+		//		gridView.setAdapter(new ImageAdapter(this));
 		gridView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 				Toast.makeText(PhotoPicker.this, "" + position, Toast.LENGTH_SHORT).show();
@@ -77,6 +81,39 @@ public class PhotoPicker extends Activity {
 			}
 		});
 
+	}
+
+	private void setupToolbarButtons() {
+		// Assign Buttons
+		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
+		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
+		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
+
+		buttonMyTasks.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				startActivity(TaskListView.class);
+			}
+		});
+
+		buttonCreate.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				startActivity(CreateTaskView.class);
+			}
+		});
+
+		buttonNotifications.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				startActivity(NotificationListView.class);
+			}
+		});
+	}
+
+	private void startActivity(Class<?> destination) {
+		Intent intent = new Intent(getApplicationContext(), destination);
+		startActivity(intent);
 	}
 
 	//User can select a photo from the android gallery
@@ -102,7 +139,7 @@ public class PhotoPicker extends Activity {
 
 
 		switch(requestCode) { 
-		case PICK_PICTURE_FROM_GALLERY:
+		case PICK_PICTURE_FROM_GALLERY:{
 			if(resultCode == RESULT_OK){  
 				Uri selectedImage = data.getData();
 				String[] filePathColumn = {MediaStore.Images.Media.DATA};
@@ -123,18 +160,22 @@ public class PhotoPicker extends Activity {
 				gridView.setAdapter(myAdapter);
 			}
 			break;
-			
-		case TAKE_PICTURE:
+		}
+		
+		case TAKE_PICTURE:{
+
+			Toast.makeText(PhotoPicker.this, "B", 2000).show();
 			if(resultCode == RESULT_OK){
-				
+
 				Toast.makeText(PhotoPicker.this, "Reached", 2000).show();
-				
+
 				String path = data.getExtras().getString("photo");
 				Bitmap newPhoto = BitmapFactory.decodeFile(path);
 				myAdapter.addPhoto(newPhoto);
 
 				gridView.setAdapter(myAdapter);
 			}
+		}
 		}
 
 	}
