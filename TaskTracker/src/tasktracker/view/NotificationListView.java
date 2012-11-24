@@ -28,7 +28,7 @@ import android.view.View;
 
 import java.util.*;
 
-import tasktracker.model.PreferencesManager;
+import tasktracker.model.Preferences;
 import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.elements.Notification;
 import android.widget.*;

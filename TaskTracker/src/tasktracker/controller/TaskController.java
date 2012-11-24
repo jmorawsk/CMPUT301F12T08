@@ -34,6 +34,8 @@ import android.os.Environment;
 import android.util.Log;
 
 /**
+ * OBSELETED: Being replaced with LocalDBManager.
+ * 
  * Manages the passing of information between the application and the database.
  * 
  * @author Jeanine Bonot

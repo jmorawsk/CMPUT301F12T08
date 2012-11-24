@@ -51,7 +51,7 @@ import android.view.View.OnClickListener;
 import android.widget.*;
 import tasktracker.controller.DatabaseAdapter;
 import tasktracker.controller.TaskController;
-import tasktracker.model.PreferencesManager;
+import tasktracker.model.Preferences;
 import tasktracker.model.WebDBManager;
 import tasktracker.model.elements.*;
 
@@ -70,7 +70,6 @@ public class CreateTaskView extends Activity {
 	private CheckBox _photo;
 	private CheckBox _private;
 	private WebDBManager _webManager;
-	private PreferencesManager _preferences = new PreferencesManager();
 
 	private DatabaseAdapter _dbHelper;
 	private ToastCreator _toaster;
@@ -147,7 +146,7 @@ public class CreateTaskView extends Activity {
 				String message = Notification.getMessage(_user, taskName, Notification.Type.InformMembership);
 				
 				_dbHelper.createMember(taskName,
-						_preferences.getUsername(getBaseContext()));
+						Preferences.getUsername(getBaseContext()));
 				_dbHelper.createNotification(taskName, _user, message);
 
 				for (String member : others) {
@@ -201,7 +200,7 @@ public class CreateTaskView extends Activity {
 	private Task createTask() {
 
 		// TODO: Find out how to quickly access user information
-		Task task = new Task(_preferences.getUsername(getBaseContext()));
+		Task task = new Task(Preferences.getUsername(getBaseContext()));
 
 		task.setDescription(_description.getText().toString());
 		task.setName(_name.getText().toString());
