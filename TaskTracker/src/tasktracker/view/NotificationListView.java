@@ -30,7 +30,6 @@ import java.util.*;
 
 import tasktracker.model.Preferences;
 import tasktracker.controller.DatabaseAdapter;
-import tasktracker.model.elements.Notification;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -46,7 +45,6 @@ public class NotificationListView extends Activity {
 
 	private DatabaseAdapter _dbHelper;
 	private Cursor _cursor;
-	
 	private String _user;
 
 	@Override
@@ -55,9 +53,9 @@ public class NotificationListView extends Activity {
 		setContentView(R.layout.activity_notification_list_view);
 
 		_dbHelper = new DatabaseAdapter(this);
-		_user = getIntent().getStringExtra("USER");
+		_user = Preferences.getUsername(this);
 		Log.d("Notifications", "user = " + _user);
-		
+
 		// Assign ListView and its item click listener
 		_notificationsList = (ListView) findViewById(R.id.notificationsList);
 		// this.notificationsList.setOnItemClickListener(new
@@ -84,16 +82,15 @@ public class NotificationListView extends Activity {
 		_cursor = _dbHelper.fetchUserNotifications(_user);
 		startManagingCursor(_cursor);
 
-		String[] from = new String[] { DatabaseAdapter.TEXT, DatabaseAdapter.TASK_ID,
-				DatabaseAdapter.USER};
+		String[] from = new String[] { DatabaseAdapter.TEXT,
+				DatabaseAdapter.TASK_ID, DatabaseAdapter.USER };
 		int[] to = new int[] { R.id.text };
 
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
 				R.layout.simple_list_item, _cursor, from, to);
 		Log.d("Notifications", "Count = " + adapter.getCount());
 		_notificationsList.setAdapter(adapter);
-		
-		
+
 	}
 
 	private void setupToolbarButtons() {

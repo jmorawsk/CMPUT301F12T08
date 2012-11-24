@@ -1,6 +1,7 @@
 package tasktracker.view;
 
 import tasktracker.controller.DatabaseAdapter;
+import tasktracker.model.Preferences;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -52,6 +53,7 @@ public class Login extends Activity {
 		debug.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
+				setPreferences("Debugger", "cmput301f12t08@gmail.com", "", true);
 				proceedToHomePage("Debugger");
 			}
 
@@ -64,17 +66,21 @@ public class Login extends Activity {
 
 			public void onClick(View v) {
 				_dbHelper.open();
+				String username = _loginUsername.getText()
+						.toString();
+				String password = _loginPassword.getText().toString();
+				
 				_cursor = _dbHelper.fetchUser(_loginUsername.getText()
 						.toString(), _loginPassword.getText().toString());
 
 				if (_cursor.moveToFirst()) {
 
-					String user = _cursor.getString(_cursor
-							.getColumnIndex(DatabaseAdapter.USER));
+					String email = _cursor.getString(_cursor
+							.getColumnIndex(DatabaseAdapter.EMAIL));
 					_cursor.close();
 					_dbHelper.close();
-
-					proceedToHomePage(user);
+					setPreferences(username, email, password, true);
+					proceedToHomePage(username);
 
 				} else {
 					// User not found in database.
@@ -119,6 +125,7 @@ public class Login extends Activity {
 				_dbHelper.close();
 
 				longToast("Creation successful!");
+				setPreferences(username, email, password, true);
 				proceedToHomePage(username);
 			}
 
@@ -147,10 +154,14 @@ public class Login extends Activity {
 		longToast("Welcome, " + user + "!");
 		
 		Intent intent = new Intent(getApplicationContext(), TaskListView.class);
-		intent.putExtra("USER", user);
 		startActivity(intent);
 	}
 
+	private void setPreferences(String user, String email, String password, boolean save){
+		Preferences.setUsername(this, user, save);
+		Preferences.setPassword(this, email, save);
+		Preferences.setEmail(this, password, save);
+	}
 	/**
 	 * from
 	 * http://stackoverflow.com/questions/1819142/how-should-i-validate-an-e

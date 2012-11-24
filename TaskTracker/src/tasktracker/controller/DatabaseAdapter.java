@@ -1,14 +1,12 @@
 package tasktracker.controller;
 
 import tasktracker.model.DatabaseModel;
-import tasktracker.model.elements.Notification;
 import tasktracker.model.elements.Task;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 public class DatabaseAdapter {

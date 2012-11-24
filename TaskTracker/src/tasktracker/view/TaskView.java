@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import tasktracker.controller.DatabaseAdapter;
+import tasktracker.model.Preferences;
 import tasktracker.model.elements.Notification;
 import tasktracker.model.elements.Task;
 import android.net.Uri;
@@ -64,15 +65,15 @@ public class TaskView extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_view);
 
-		_dbHelper = new DatabaseAdapter(this);
-
-		_user = getIntent().getStringExtra("USER");
 		_taskID = getIntent().getLongExtra("TASK_ID", -1);
 
 		if (_taskID == -1)
 			return;
 
+		_dbHelper = new DatabaseAdapter(this);
+		_user = Preferences.getUsername(this);
 		_toaster = new ToastCreator(this);
+		
 		_textFulfillment = (EditText) findViewById(R.id.edit_textFulfillment);
 		_fulfillmentList = (ListView) findViewById(R.id.list_fulfillments);
 		_fulfillmentButton = (Button) findViewById(R.id.fulfillButton);
@@ -116,8 +117,6 @@ public class TaskView extends Activity {
 
 					_dbHelper.createNotification(_taskName, _taskCreator,
 							message);
-
-					// TODO send report to creator
 					_toaster.showLongToast("\"" + _taskName
 							+ "\" was fulfilled!");
 

@@ -84,8 +84,7 @@ public class CreateTaskView extends Activity {
 		_webManager = new WebDBManager();
 		_dbHelper = new DatabaseAdapter(this);
 		_toaster = new ToastCreator(this);
-		
-		_user = getIntent().getStringExtra("USER");
+		_user = Preferences.getUsername(this);
 
 		// Assign EditText fields
 		_name = (EditText) findViewById(R.id.taskName);

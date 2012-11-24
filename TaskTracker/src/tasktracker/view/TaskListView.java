@@ -59,14 +59,13 @@ public class TaskListView extends Activity {
 	public List<Task> oldWebTaskList;
 	// private List<String> tasks;
 	private String[] tasks = new String[0];
+	private String _user;
 
 	//private PreferencesManager preferences;
 	
 	private WebDBManager webManager;
 	private DatabaseAdapter _dbHelper;
 	private Cursor _cursor;
-
-	private String _user;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -77,9 +76,8 @@ public class TaskListView extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_list_view);
 
+		_user = Preferences.getUsername(this);
 		_dbHelper = new DatabaseAdapter(this);
-		_user = getIntent().getStringExtra("USER");
-		Log.d("TaskListView", "user = " + _user);
 
 		setupToolbarButtons();
 		setupUnsubscribeButton();
@@ -321,7 +319,6 @@ public class TaskListView extends Activity {
 				Intent intent = new Intent(getApplicationContext(),
 						TaskView.class);
 				intent.putExtra("TASK_ID", id);
-				intent.putExtra("USER", _user);
 				startActivity(intent);
 			}
 
