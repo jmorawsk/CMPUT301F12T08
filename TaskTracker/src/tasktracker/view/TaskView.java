@@ -49,13 +49,12 @@ public class TaskView extends Activity {
 	private boolean _requiresText;
 	private boolean _requiresPhoto;
 
-	// Task Fulfillment
-	private String _fulfillmentText;
-
 	// DB stuff
 	private DatabaseAdapter _dbHelper;
 	private Cursor _cursor;
 
+	private boolean _hasFulfillments;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -91,66 +90,31 @@ public class TaskView extends Activity {
 			}
 
 		});
+		
+		_fulfillmentButton.setText("Add Fulfillment");
+		_fulfillmentButton.setOnClickListener(new OnClickListener() {
 
-	}
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if (requirementsFulfilled()) {
+					// _task.markAsFulfilled(_user);
 
-	class TextFulfillmentSetup implements TextWatcher {
-		public void afterTextChanged(Editable s) {
-			_fulfillmentButton.setEnabled(s.length() > 0);
-		}
+//					sendEmailToCreator();
+					String date = new SimpleDateFormat("MMM dd, yyyy | HH:mm")
+							.format(Calendar.getInstance().getTime());
 
-		public void beforeTextChanged(CharSequence s, int start, int count,
-				int after) {
-			// Do nothing.
+					_dbHelper.createFulfillment(_taskName, date, _user,
+							_textFulfillment.getText().toString());
 
-		}
+					// TODO send report to creator
+					showToast("\"" + _taskName + "\" was fulfilled!");
 
-		public void onTextChanged(CharSequence s, int start, int before,
-				int count) {
-			// Do nothing.
-
-		}
-	}
-
-	class ExpandButtonSetup implements OnClickListener {
-
-		public void onClick(View v) {
-			_collapseButton.setVisibility(View.VISIBLE);
-			boolean hasfulfillments = false;
-			if (hasfulfillments) {
-				// TODO if has fulfillments
-				_fulfillmentList.setVisibility(View.VISIBLE);
-			}
-			if (_requiresText) {
-				_textFulfillment.setVisibility(View.VISIBLE);
-				_textFulfillment.requestFocus();
-			}
-
-			if (_requiresPhoto)
-				_photoButton.setVisibility(View.VISIBLE);
-
-			_fulfillmentButton.setVisibility(View.VISIBLE);
-			_expandButton.setVisibility(View.INVISIBLE);
-			_scrollview.post(new Runnable() {
-
-				public void run() {
-					_scrollview.fullScroll(ScrollView.FOCUS_DOWN);
+					finish();
 				}
+			}
 
-			});
-		}
-	}
+		});
 
-	class CollapseButtonSetup implements OnClickListener {
-
-		public void onClick(View v) {
-			_expandButton.setVisibility(View.VISIBLE);
-			_fulfillmentList.setVisibility(View.GONE);
-			_fulfillmentButton.setVisibility(View.GONE);
-			_textFulfillment.setVisibility(View.GONE);
-			_photoButton.setVisibility(View.GONE);
-			_collapseButton.setVisibility(View.GONE);
-		}
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -177,6 +141,23 @@ public class TaskView extends Activity {
 		}
 	}
 
+	protected void onStart() {
+		super.onStart();
+
+		_dbHelper.open();
+
+		setTaskInfo();
+		setMembersList();
+		setFulfillmentsList();
+	}
+
+	protected void onStop() {
+		super.onStop();
+
+		_dbHelper.close();
+		_cursor.close();
+	}
+	
 	private void setupToolbarButtons() {
 		// Assign Buttons
 		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
@@ -238,25 +219,23 @@ public class TaskView extends Activity {
 		textRequirement.setChecked(_requiresText);
 		photoRequirement.setChecked(_requiresPhoto);
 	}
+	
+	private void setFulfillmentsList() {
+		_cursor = _dbHelper.fetchFulfillment(_taskName);
 
-	protected void onStart() {
-		super.onStart();
+		startManagingCursor(_cursor);
 
-		_dbHelper.open();
+		String[] from = new String[] { DatabaseAdapter.TEXT };
+		int[] to = new int[] { R.id.text };
 
-		setTaskInfo();
-		setMembersList();
-
-		Cursor cursor = _dbHelper.fetchFulfillment(_taskName);
-		boolean fulfilled = cursor.moveToFirst();
-
-		if (fulfilled)
-			handleFulfilledTask(cursor);
-		else
-			handleUnfulfilledTask();
-
-		cursor.close();
-
+		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
+				R.layout.simple_list_item, _cursor, from, to);
+		int count = adapter.getCount();
+		_hasFulfillments = count > 0;
+		Log.d("Has fulfillments", Boolean.toString(_hasFulfillments));
+		_fulfillmentList.setAdapter(adapter);
+		stopManagingCursor(_cursor);
+		
 	}
 
 	private void setMembersList() {
@@ -280,13 +259,6 @@ public class TaskView extends Activity {
 		} else {
 			headline.setText(count + " Members:");
 		}
-	}
-
-	protected void onStop() {
-		super.onStop();
-
-		_dbHelper.close();
-		_cursor.close();
 	}
 
 	private void handleFulfilledTask(Cursor cursor) {
@@ -332,44 +304,9 @@ public class TaskView extends Activity {
 		}
 	}
 
-	private void handleUnfulfilledTask() {
-
-		_fulfillmentButton.setText("Mark as fulfilled");
-		_fulfillmentButton.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				if (requirementsFulfilled()) {
-					// _task.markAsFulfilled(_user);
-
-					sendEmailToCreator();
-					String date = new SimpleDateFormat("MMM dd, yyyy | HH:mm")
-							.format(Calendar.getInstance().getTime());
-
-					_dbHelper.createFulfillment(_taskName, date, _user,
-							_textFulfillment.getText().toString());
-
-					// TODO send report to creator
-					showToast("\"" + _taskName + "\" was fulfilled!");
-
-					finish();
-				}
-			}
-
-		});
-	}
-
 	private boolean requirementsFulfilled() {
 
 		boolean ready = true;
-
-		// if (_requiresText
-		// && (_fulfillmentText == null || _fulfillmentText.equals(""))) {
-		//
-		// showToast("You must add text before marking this task as fulfilled.");
-		// ready = false;
-		//
-		// }
 
 		if (_requiresPhoto) {
 			// TODO: check if text has been input
@@ -393,6 +330,64 @@ public class TaskView extends Activity {
 				Toast.LENGTH_LONG);
 		toast.setGravity(Gravity.CENTER, 0, 0);
 		toast.show();
+	}
+
+	class TextFulfillmentSetup implements TextWatcher {
+		public void afterTextChanged(Editable s) {
+			_fulfillmentButton.setEnabled(s.length() > 0);
+		}
+
+		public void beforeTextChanged(CharSequence s, int start, int count,
+				int after) {
+			// Do nothing.
+
+		}
+
+		public void onTextChanged(CharSequence s, int start, int before,
+				int count) {
+			// Do nothing.
+
+		}
+	}
+
+	class ExpandButtonSetup implements OnClickListener {
+
+		public void onClick(View v) {
+			_collapseButton.setVisibility(View.VISIBLE);
+			if (_hasFulfillments) {
+				// TODO if has fulfillments
+				_fulfillmentList.setVisibility(View.VISIBLE);
+			}
+			if (_requiresText) {
+				_textFulfillment.setVisibility(View.VISIBLE);
+				_textFulfillment.requestFocus();
+			}
+
+			if (_requiresPhoto)
+				_photoButton.setVisibility(View.VISIBLE);
+
+			_fulfillmentButton.setVisibility(View.VISIBLE);
+			_expandButton.setVisibility(View.INVISIBLE);
+			_scrollview.post(new Runnable() {
+
+				public void run() {
+					_scrollview.fullScroll(ScrollView.FOCUS_DOWN);
+				}
+
+			});
+		}
+	}
+
+	class CollapseButtonSetup implements OnClickListener {
+
+		public void onClick(View v) {
+			_expandButton.setVisibility(View.VISIBLE);
+			_fulfillmentList.setVisibility(View.GONE);
+			_fulfillmentButton.setVisibility(View.GONE);
+			_textFulfillment.setVisibility(View.GONE);
+			_photoButton.setVisibility(View.GONE);
+			_collapseButton.setVisibility(View.GONE);
+		}
 	}
 
 }
