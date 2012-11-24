@@ -126,6 +126,9 @@ public class PhotoPicker extends Activity {
 			
 		case TAKE_PICTURE:
 			if(resultCode == RESULT_OK){
+				
+				Toast.makeText(PhotoPicker.this, "Reached", 2000).show();
+				
 				String path = data.getExtras().getString("photo");
 				Bitmap newPhoto = BitmapFactory.decodeFile(path);
 				myAdapter.addPhoto(newPhoto);

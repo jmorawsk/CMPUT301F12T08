@@ -32,6 +32,8 @@ public class Camera extends Activity {
 
 	//Button to take a photo initialized
 	ImageButton takeAPhotoButton;
+	
+	String check = "PHOTO";
 
 
 	@Override
@@ -77,6 +79,14 @@ public class Camera extends Activity {
 
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				if(check.equals("PHOTO_TAKEN")){
+				File fdelete = new File(imageFileUri.getPath());
+				fdelete.delete();
+				
+				sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
+				
+				check = "PHOTO_DELETED";
+				}
 				takePhoto();
 				//sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
 			}
@@ -91,8 +101,12 @@ public class Camera extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				//cancelBogoPic();
-				//Refreshes the External Storage Directory
+				
+				File fdelete = new File(imageFileUri.getPath());
+				fdelete.delete();
+				
 				sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
+				
 				finish();
 			}
 
@@ -109,26 +123,13 @@ public class Camera extends Activity {
 
 	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
 
-
-	//	public void acceptPhoto(){
-	//		
-	//		String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/pictures";
-	//		File folderF = new File(folder);
-	//
-	//		//if file doesn't exist create it
-	//		if(!folderF.exists()){
-	//
-	//			folderF.mkdir();
-	//		}
-	//		
-	//		String imageFilePath = folder + "/" + String.valueOf(System.currentTimeMillis() + ".jpg");
-	//		File imageFile = new File(imageFilePath);
-	//		imageFileUri = Uri.fromFile(imageFile);
-	//		
-	//	}
-
 	//Takes a photo and saves it in a file
 	public void takePhoto(){
+		
+		if(check.equals("PHOTO_TAKEN")){
+			File fdelete = new File(imageFileUri.getPath());
+			fdelete.delete();
+		}
 
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
@@ -148,6 +149,8 @@ public class Camera extends Activity {
 
 		//intent has information about image
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
+		
+		sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
 
 		startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
 
@@ -155,12 +158,13 @@ public class Camera extends Activity {
 
 
 	protected void onActivityResult(int requestCode, int result, Intent data){
-
+		
 		if(requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE){
 
 
 			if(result == RESULT_OK){
-
+				
+				check = "PHOTO_TAKEN";
 				ImageButton button = (ImageButton) findViewById(R.id.TakeAPhoto);
 				button.setImageDrawable(Drawable.createFromPath(imageFileUri.getPath()));
 				
