@@ -10,15 +10,16 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/buttons" >
+        android:layout_below="@id/buttons"
+            android:layout_marginBottom="8dp" >
 
         <LinearLayout
             android:id="@+id/relativelayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:padding="8dp"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:padding="8dp" >
 
             <EditText
                 android:id="@+id/taskName"
@@ -109,6 +110,7 @@
                 android:id="@+id/saveButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:enabled="false"
                 android:text="@string/createTask" />
         </LinearLayout>
     </ScrollView>

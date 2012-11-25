@@ -100,6 +100,7 @@
                 android:maxHeight="200dp" />
 
             <TextView
+                android:id="@+id/private_task"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -130,49 +131,43 @@
                 android:textSize="12dp"
                 android:visibility="gone" />
 
-            <LinearLayout
+            <ListView
+                android:id="@+id/list_fulfillments"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:layout_margin="12dp"
+                android:visibility="gone" />
 
-                <ListView
-                    android:id="@+id/list_fulfillments"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="12dp"
-                    android:visibility="gone" />
+            <EditText
+                android:id="@+id/edit_textFulfillment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:gravity="center_vertical|top"
+                android:hint="@string/hint_textFulfillment"
+                android:minHeight="80dp"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:scrollbarStyle="insideInset"
+                android:scrollbars="vertical"
+                android:singleLine="false"
+                android:textSize="14dp"
+                android:visibility="gone" />
 
-                <EditText
-                    android:id="@+id/edit_textFulfillment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:gravity="center_vertical|top"
-                    android:hint="@string/hint_textFulfillment"
-                    android:minHeight="80dp"
-                    android:scrollbarAlwaysDrawVerticalTrack="true"
-                    android:scrollbarStyle="insideInset"
-                    android:scrollbars="vertical"
-                    android:singleLine="false"
-                    android:textSize="14dp"
-                    android:visibility="gone" />
+            <Button
+                android:id="@+id/button_photo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Photos..."
+                android:visibility="gone" />
 
-                <Button
-                    android:id="@+id/button_photo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Photos..."
-                    android:visibility="gone" />
-
-                <Button
-                    android:id="@+id/fulfillButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:enabled="false"
-                    android:text="@string/button_fulfill"
-                    android:visibility="gone" />
-            </LinearLayout>
+            <Button
+                android:id="@+id/fulfillButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:text="@string/button_fulfill"
+                android:visibility="gone" />
         </LinearLayout>
     </ScrollView>
 

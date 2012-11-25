@@ -25,12 +25,12 @@
     <string name="heading_deadline">Deadline:</string>
     <string name="heading_status">Status:</string>
     <string name="heading_taskDescription">Task Description:</string>
-    <string name="heading_otherMembers">Other Members:</string>
+    <string name="heading_otherMembers">Other Members (Optional):</string>
     <string name="heading_allMembers">Members:</string>
     <string name="heading_requirements">Requirements:</string>
     <string name="text">Text</string>
     <string name="photo">Photo</string>
-    <string name="private_task">This task is private.  Only the creator and members may view and fulfill it.</string>
+    <string name="private_task">This task is private.  Only members may view and fulfill it.</string>
 
     <!-- Task Hints -->
     <string name="hint_taskName">New Task Name</string>

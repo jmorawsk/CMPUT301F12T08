@@ -36,7 +36,6 @@ package tasktracker.view;
  * specific language governing permissions and limitations under the License.
  */
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.os.AsyncTask;
@@ -44,13 +43,12 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 
-import android.util.Log;
-import android.view.Gravity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
 import tasktracker.controller.DatabaseAdapter;
-import tasktracker.controller.TaskController;
 import tasktracker.model.Preferences;
 import tasktracker.model.WebDBManager;
 import tasktracker.model.elements.*;
@@ -69,10 +67,10 @@ public class CreateTaskView extends Activity {
 	private CheckBox _text;
 	private CheckBox _photo;
 	private CheckBox _private;
+	private Button _saveButton;
 	private WebDBManager _webManager;
 
 	private DatabaseAdapter _dbHelper;
-	private ToastCreator _toaster;
 	private String _user;
 
 	@Override
@@ -83,7 +81,6 @@ public class CreateTaskView extends Activity {
 		// Initialize our webManager
 		_webManager = new WebDBManager();
 		_dbHelper = new DatabaseAdapter(this);
-		_toaster = new ToastCreator(this);
 		_user = Preferences.getUsername(this);
 
 		// Assign EditText fields
@@ -93,9 +90,13 @@ public class CreateTaskView extends Activity {
 		_text = (CheckBox) findViewById(R.id.checkbox_text);
 		_photo = (CheckBox) findViewById(R.id.checkbox_photo);
 		_private = (CheckBox) findViewById(R.id.checkbox_private);
+		_saveButton = (Button) findViewById(R.id.saveButton);
+
+		_saveButton.setOnClickListener(new SaveOnClickListener());
+		_name.addTextChangedListener(new SaveButtonEnabler());
+		_description.addTextChangedListener(new SaveButtonEnabler());
 
 		setupToolbarButtons();
-		setupSaveButton();
 	}
 
 	private void setupToolbarButtons() {
@@ -107,88 +108,16 @@ public class CreateTaskView extends Activity {
 		buttonMyTasks.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				Intent intent = new Intent(getApplicationContext(),
-						TaskListView.class);
-				startActivity(intent);
+				startActivity(TaskListView.class);
 			}
 		});
 
 		buttonNotifications.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				Intent intent = new Intent(getApplicationContext(),
-						NotificationListView.class);
-				startActivity(intent);
+				startActivity(NotificationListView.class);
 			}
 		});
-	}
-
-	private void setupSaveButton() {
-
-		Button saveButton = (Button) findViewById(R.id.saveButton);
-		saveButton.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View view) {
-
-				if (hasEmptyFields()) {
-					return;
-				}
-
-				Task task = createTask();
-				List<String> others = task.getOtherMembers();
-
-				// Add to SQL server
-				_dbHelper.open();
-				_dbHelper.createTask(task);
-				
-				String taskName = task.getName();
-				String message = Notification.getMessage(_user, taskName, Notification.Type.InformMembership);
-				
-				_dbHelper.createMember(taskName,
-						Preferences.getUsername(getBaseContext()));
-				_dbHelper.createNotification(taskName, _user, message);
-
-				for (String member : others) {
-					_dbHelper.createMember(taskName, member);
-					_dbHelper.createNotification(taskName, member, message);
-				}
-				
-				_dbHelper.close();
-
-				// Only add to web database if Creator has added members,
-				// otherwise save to SD
-				// if (others != null && others.size() > 0) {
-				// Log.d("DEBUG", "others.size()\t" + others.size());
-				// contactWebserver webRequest = new contactWebserver();
-				// webRequest.execute(task);
-				// } else {
-				// // TaskController.writeFile(task);
-				//
-				// }
-
-				finish();
-			}
-
-		});
-	}
-
-	/**
-	 * Checks if any of the required fields has been left empty.
-	 * 
-	 * @return True if a required field has been left empty, false otherwise.
-	 */
-	private boolean hasEmptyFields() {
-		if (_name.getText().toString().matches("")) {
-			_toaster.showLongToast("Your task must have a name");
-			return true;
-		}
-
-		if (_description.getText().toString().matches("")) {
-			_toaster.showLongToast("Your task must have a description");
-			return true;
-		}
-
-		return false;
 	}
 
 	/**
@@ -206,8 +135,20 @@ public class CreateTaskView extends Activity {
 		task.setPhotoRequirement(_photo.isChecked());
 		task.setTextRequirement(_text.isChecked());
 		task.setOtherMembers(_otherMembers.getText().toString());
+		task.setIsPrivate(_private.isChecked());
 
 		return task;
+	}
+
+	/**
+	 * Start a new activity while passing the user's information.
+	 * 
+	 * @param destination
+	 *            The activity class destination.
+	 */
+	private <T extends Activity> void startActivity(Class<T> destination) {
+		Intent intent = new Intent(getApplicationContext(), destination);
+		startActivity(intent);
 	}
 
 	private class contactWebserver extends AsyncTask<Task, Void, Void> {
@@ -233,6 +174,77 @@ public class CreateTaskView extends Activity {
 			// }
 			// }
 			return null;
+		}
+	}
+
+	/**
+	 * 
+	 * @author jbonot
+	 * 
+	 */
+	class SaveOnClickListener implements OnClickListener {
+
+		public void onClick(View v) {
+
+			Task task = createTask();
+			List<String> others = task.getOtherMembers();
+
+			// Add to SQL server
+			_dbHelper.open();
+			_dbHelper.createTask(task);
+
+			String taskName = task.getName();
+			String message = Notification.getMessage(_user, taskName,
+					Notification.Type.InformMembership);
+
+			_dbHelper.createNotification(taskName, _user, message);
+
+			_dbHelper.createMember(taskName,
+					Preferences.getUsername(getBaseContext()));
+
+			for (String member : others) {
+				_dbHelper.createMember(taskName, member);
+				_dbHelper.createNotification(taskName, member, message);
+			}
+			_dbHelper.close();
+
+			ToastCreator.showLongToast(CreateTaskView.this, "Task created!");
+
+			// Only add to web database if Creator has added members,
+			// otherwise save to SD
+			// if (others != null && others.size() > 0) {
+			// Log.d("DEBUG", "others.size()\t" + others.size());
+			// contactWebserver webRequest = new contactWebserver();
+			// webRequest.execute(task);
+			// } else {
+			// // TaskController.writeFile(task);
+			//
+			// }
+
+			finish();
+		}
+
+	}
+
+	/**
+	 * Enables the save button only when the task has a name and a description.
+	 */
+	class SaveButtonEnabler implements TextWatcher {
+		public void afterTextChanged(Editable s) {
+			_saveButton.setEnabled(_name.getText().length() > 0
+					&& _description.getText().length() > 0);
+		}
+
+		public void beforeTextChanged(CharSequence s, int start, int count,
+				int after) {
+			// Do nothing.
+
+		}
+
+		public void onTextChanged(CharSequence s, int start, int before,
+				int count) {
+			// Do nothing.
+
 		}
 	}
 

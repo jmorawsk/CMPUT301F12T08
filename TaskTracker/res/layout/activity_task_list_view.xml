@@ -7,12 +7,13 @@
         android:id="@+id/buttons"
         layout="@layout/toolbar" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_below="@+id/buttons"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
+        android:orientation="vertical"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp" >
 
@@ -29,30 +30,9 @@
             android:id="@+id/taskList"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/debugButton"
             android:layout_below="@+id/myTasks" >
         </ListView>
-        
-        <Button
-            android:id="@+id/button_unsubscribe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="8dp"
-            android:text="@string/button_unsubscribe"
-            android:textSize="12dp" />
 
-        <!-- Only exists for debugging purposes -->
-
-        <Button
-            android:id="@+id/debugButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="8dp"
-            android:text="delete file on SD"
-            android:textSize="12dp" />
-    </RelativeLayout>
+    </LinearLayout>
 
 </RelativeLayout>

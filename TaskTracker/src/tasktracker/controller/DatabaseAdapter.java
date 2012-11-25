@@ -24,6 +24,7 @@ public class DatabaseAdapter {
 	public static final String MEMBERS = "members";
 	public static final String EMAIL = "email";
 	public static final String PASSWORD = "password";
+	public static final String PRIVATE = "private";
 
 	private SQLiteDatabase mDb;
 
@@ -108,13 +109,15 @@ public class DatabaseAdapter {
 		initialValues.put(DATE, task.getDateCreated());
 		initialValues.put(USER, task.getCreator());
 		initialValues.put(TEXT, task.getDescription());
-		initialValues.put(MEMBERS, task.getMembers());
 		initialValues.put(REQS_PHOTO, task.requiresPhoto() ? 1 : 0);
 		initialValues.put(REQS_TEXT, task.requiresText() ? 1 : 0);
+		initialValues.put(PRIVATE, task.isPrivate() ? 1 : 0);
+		
+		Log.d("DatabaseAdapter", "PRIVATE = " + Boolean.toString(task.isPrivate()));
 
 		return mDb.insert(TABLE_TASKS, null, initialValues);
 	}
-	
+
 	public long createNotification(String task, String recipient, String message) {
 		ContentValues initialValues = new ContentValues();
 
@@ -200,14 +203,21 @@ public class DatabaseAdapter {
 				null, null, null, null, null);
 	}
 
+	public Cursor fetchTasksAvailableToUser(String user) {
+
+		return mDb.rawQuery("Select DISTINCT t._id, t.task, t.user, t.date "
+				+ "FROM tasks as t, members as m " + "WHERE t.private = 0 "
+				+ "OR (m.user = ? AND t.task = m.task)", new String[] { user });
+	}
+
 	public Cursor fetchAllFulfillments() {
 		return mDb.query(TABLE_FULFILLMENTS, new String[] { ID, TASK, USER,
 				DATE }, null, null, null, null, null);
 	}
-	
-	public Cursor fetchUserNotifications(String recipient){
+
+	public Cursor fetchUserNotifications(String recipient) {
 		return mDb.rawQuery("SELECT * FROM " + TABLE_NOTIFICATIONS + " WHERE "
-				+ USER + " = ?", new String[] { recipient });
+				+ USER + " = ? ORDER BY " + ID + " DESC", new String[] { recipient });
 	}
 
 	/**
@@ -232,7 +242,7 @@ public class DatabaseAdapter {
 
 	public Cursor fetchTask(long rowId) {
 		return mDb.query(TABLE_TASKS, new String[] { ID, TASK, DATE, USER,
-				TEXT, REQS_PHOTO, REQS_TEXT, MEMBERS }, ID + "=" + rowId, null,
+				TEXT, REQS_PHOTO, REQS_TEXT, PRIVATE }, ID + "=" + rowId, null,
 				null, null, null, null);
 	}
 
@@ -300,7 +310,7 @@ public class DatabaseAdapter {
 	 * @return
 	 */
 	public Cursor fetchTaskMembers(String task) {
-		return mDb.rawQuery("SELECT * FROM " + TABLE_MEMBERS + " WHERE " + TASK
+		return mDb.rawQuery("SELECT DISTINCT * FROM " + TABLE_MEMBERS + " WHERE " + TASK
 				+ " = ?", new String[] { task });
 	}
 

@@ -44,17 +44,11 @@ public class Task implements Serializable {
 	private String _name;
 	private String _creationDate;
 	private String _description;
-	private String _fulfiller;
 	private List<String> _otherMembersList;
 	private boolean _requiresText;
 	private boolean _requiresPhoto;
-	private boolean _fulfilled;
-	private List<PhotoRequirement> _photos;
-	private TextRequirement _text;
-	
-	// Store date as long (in hex) so can be formatted upon preference.
-	private String _dateHex;
-	
+	private boolean _private;
+
 	// SQL ids
 	private long _creatorID;
 
@@ -89,20 +83,15 @@ public class Task implements Serializable {
 	public Task(String creator, String name, String description,
 			boolean requiresText, boolean requiresPhoto) {
 
-		_creationDate = new SimpleDateFormat("MMM dd, yyyy | HH:mm").format(Calendar
-				.getInstance().getTime());
-		
-		// Store date as hex string with hex prefix.
-		_dateHex = "0x" + Long.toHexString(Calendar.getInstance().getTimeInMillis());
+		_creationDate = new SimpleDateFormat("MMM dd, yyyy | HH:mm")
+				.format(Calendar.getInstance().getTime());
 
 		_creator = creator;
 		_name = name;
 		_requiresText = requiresText;
 		_requiresPhoto = requiresPhoto;
-		_fulfilled = false;
-
-		_photos = new ArrayList<PhotoRequirement>();
 		_otherMembersList = new ArrayList<String>();
+		_private = false;
 	}
 
 	/**
@@ -118,8 +107,8 @@ public class Task implements Serializable {
 	public String getCreator() {
 		return _creator;
 	}
-	
-	public long getCreatorID(){
+
+	public long getCreatorID() {
 		return _creatorID;
 	}
 
@@ -138,10 +127,6 @@ public class Task implements Serializable {
 
 	public String getDateCreated() {
 		return _creationDate;
-	}
-	
-	public String getDateHex(){
-		return _dateHex;
 	}
 
 	public void setDescription(String value) {
@@ -167,32 +152,13 @@ public class Task implements Serializable {
 	public boolean requiresPhoto() {
 		return _requiresPhoto;
 	}
-
-	public List<PhotoRequirement> getPhotos() {
-		return _requiresPhoto ? _photos : null;
+	
+	public void setIsPrivate(boolean value){
+		_private = value;
 	}
-
-	public void setText(TextRequirement value) {
-		_text = value;
-	}
-
-	public TextRequirement getText() {
-		return _text;
-	}
-
-	/**
-	 * Gets all members (including the creator) and puts them into a string
-	 * using the format: <BR>
-	 * [creator], [member], ..., [member]
-	 * 
-	 * @return The string of all members.
-	 */
-	public String getMembers() {
-		String members = _creator;
-		for (String member : _otherMembersList) {
-			members.concat(", " + member);
-		}
-		return members;
+	
+	public boolean isPrivate(){
+		return _private;
 	}
 
 	/**
@@ -209,8 +175,6 @@ public class Task implements Serializable {
 		if (value.matches(""))
 			return;
 
-		Log.d("DEBUG", value);
-
 		String[] others = value.split("(\\s+)?,(\\s+)?");
 
 		for (String member : others) {
@@ -222,35 +186,6 @@ public class Task implements Serializable {
 
 	public List<String> getOtherMembers() {
 		return _otherMembersList;
-	}
-
-	public String getFulfiller() {
-		return _fulfiller;
-	}
-
-	public boolean isFulfilled() {
-		return _fulfilled;
-	}
-
-	public void markAsFulfilled(String fulfiller) {
-		_fulfiller = fulfiller;
-		_fulfilled = true;
-	}
-
-	public void addPhoto(PhotoRequirement value) {
-		if (_photos == null) {
-			// Cannot add photo
-			return;
-		}
-		_photos.add(value);
-	}
-
-	/**
-	 * Returns a string that represents this task. This string format will be
-	 * used in the Task List View screen.
-	 */
-	public String toString() {
-		return "\"" + _name + "\" by " + _creator;
 	}
 
 }

@@ -24,23 +24,12 @@ import android.os.AsyncTask;
 //import android.R;
 import android.os.Bundle;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.text.Editable;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
+import android.view.*;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import tasktracker.controller.DatabaseAdapter;
-import tasktracker.controller.TaskController;
 import tasktracker.model.Preferences;
 import tasktracker.model.WebDBManager;
 import tasktracker.model.elements.*;
@@ -61,8 +50,8 @@ public class TaskListView extends Activity {
 	private String[] tasks = new String[0];
 	private String _user;
 
-	//private PreferencesManager preferences;
-	
+	// private PreferencesManager preferences;
+
 	private WebDBManager webManager;
 	private DatabaseAdapter _dbHelper;
 	private Cursor _cursor;
@@ -80,10 +69,7 @@ public class TaskListView extends Activity {
 		_dbHelper = new DatabaseAdapter(this);
 
 		setupToolbarButtons();
-		setupUnsubscribeButton();
 		setupTaskList();
-		setDebugStuff();
-
 	}
 
 	protected void onStart() {
@@ -124,91 +110,9 @@ public class TaskListView extends Activity {
 				Intent intent = new Intent(getApplicationContext(),
 						NotificationListView.class);
 				startActivity(intent);
-
 			}
 		});
 	}
-
-	private void setupUnsubscribeButton() {
-		Button unsubscribe = (Button) findViewById(R.id.button_unsubscribe);
-		unsubscribe.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View v) {
-				showToast("Not yet implemented");
-			}
-			
-		});
-	}
-	
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.account_menu, menu);
-	    return true;
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle item selection
-	    switch (item.getItemId()) {
-	        case R.id.change_name:
-	            changeName();
-	            return true;
-	        case R.id.help:
-	            showHelp();
-	            return true;
-	        default:
-	            return super.onOptionsItemSelected(item);
-	    }
-	}
-	
-	
-	private void changeName(){
-		/*
-		InputPopup popup = new InputPopup();
-		String result = popup.makePopup("Test title", "Test message", getBaseContext());
-		showToast(result);
-		*/
-//		inputPopup("Test title", "Test message", this);
-//		showToast(resultValue);
-	}
-	/*
-	String resultValue;
-	public void inputPopup(String Title, String Message,  Context context) {
-		AlertDialog.Builder alert = new AlertDialog.Builder(context);
-		
-		alert.setTitle(Title);
-		alert.setMessage(Message);
-	
-		// Set an EditText view to get user input 
-		final EditText input = new EditText(context);
-		alert.setView(input);
-	
-		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-		public void onClick(DialogInterface dialog, int whichButton) {
-		  Editable value = input.getText();
-		  //preferences.setUsername(getBaseContext(), value.toString());
-		  // Do something with value!
-		  resultValue = value.toString();
-		  }
-		});
-	
-		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-		  public void onClick(DialogInterface dialog, int whichButton) {
-		    // Canceled.
-			  resultValue = "";
-		  }
-		});
-	
-		alert.show();
->>>>>>> branch 'master' of https://github.com/jmorawsk/CMPUT301F12T08.git
-
-<<<<<<< HEAD
-		});
-	}
-
-	// }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -227,41 +131,113 @@ public class TaskListView extends Activity {
 		case R.id.help:
 			showHelp();
 			return true;
+		case R.id.logout:
+			
+			Intent intent = new Intent(getApplicationContext(), Login.class);
+			startActivity(intent);
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
 
-	//
 	private void changeName() {
-		// showToast("Change name clicked");
-		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-
-		alert.setTitle("Change Account Name");
-		alert.setMessage("Old Account Name was '"
-				+ preferences.getUsername(getBaseContext()) + "'.");
-
-		// Set an EditText view to get user input
-		final EditText input = new EditText(this);
-		alert.setView(input);
-
-		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-				Editable value = input.getText();
-				preferences.setUsername(getBaseContext(), value.toString());
-				// Do something with value!
-			}
-		});
-
-		alert.setNegativeButton("Cancel",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						// Canceled.
-					}
-				});
-
-		alert.show();
+		/*
+		 * InputPopup popup = new InputPopup(); String result =
+		 * popup.makePopup("Test title", "Test message", getBaseContext());
+		 * showToast(result);
+		 */
+		// inputPopup("Test title", "Test message", this);
+		// showToast(resultValue);
 	}
+
+	/*
+	 * String resultValue; public void inputPopup(String Title, String Message,
+	 * Context context) { AlertDialog.Builder alert = new
+	 * AlertDialog.Builder(context);
+	 * 
+	 * alert.setTitle(Title); alert.setMessage(Message);
+	 * 
+	 * // Set an EditText view to get user input final EditText input = new
+	 * EditText(context); alert.setView(input);
+	 * 
+	 * alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+	 * public void onClick(DialogInterface dialog, int whichButton) { Editable
+	 * value = input.getText(); //preferences.setUsername(getBaseContext(),
+	 * value.toString()); // Do something with value! resultValue =
+	 * value.toString(); } });
+	 * 
+	 * alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+	 * public void onClick(DialogInterface dialog, int whichButton) { //
+	 * Canceled. resultValue = ""; } });
+	 * 
+	 * alert.show(); >>>>>>> branch 'master' of
+	 * https://github.com/jmorawsk/CMPUT301F12T08.git
+	 * 
+	 * <<<<<<< HEAD }); }
+	 * 
+	 * // }
+	 * 
+	 * @Override public boolean onCreateOptionsMenu(Menu menu) { MenuInflater
+	 * inflater = getMenuInflater(); inflater.inflate(R.menu.account_menu,
+	 * menu); return true; }
+	 * 
+	 * @Override public boolean onOptionsItemSelected(MenuItem item) { // Handle
+	 * item selection switch (item.getItemId()) { case R.id.change_name:
+	 * changeName(); return true; case R.id.help: showHelp(); return true;
+	 * default: return super.onOptionsItemSelected(item); } }
+	 * 
+	 * // private void changeName() { // showToast("Change name clicked");
+	 * AlertDialog.Builder alert = new AlertDialog.Builder(this);
+	 * 
+	 * alert.setTitle("Change Account Name");
+	 * alert.setMessage("Old Account Name was '" +
+	 * preferences.getUsername(getBaseContext()) + "'.");
+	 * 
+	 * // Set an EditText view to get user input final EditText input = new
+	 * EditText(this); alert.setView(input);
+	 * 
+	 * alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+	 * public void onClick(DialogInterface dialog, int whichButton) { Editable
+	 * value = input.getText(); preferences.setUsername(getBaseContext(),
+	 * value.toString()); // Do something with value! } });
+	 * 
+	 * alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+	 * public void onClick(DialogInterface dialog, int whichButton) { //
+	 * Canceled. } });
+	 * 
+	 * alert.show(); }
+	 * 
+	 * private void showHelp() { // TODO Auto-generated method stub
+	 * showToast("Show help clicked"); }
+	 * 
+	 * private void setupTaskList() { ======= }
+	 */
+
+	/*
+	 * String mystring = ""; private void changeName() {
+	 * //showToast("Change name clicked"); AlertDialog.Builder alert = new
+	 * AlertDialog.Builder(this);
+	 * 
+	 * alert.setTitle("Change Account Name");
+	 * alert.setMessage("Old Account Name was '" +
+	 * preferences.getUsername(getBaseContext()) + "'.");
+	 * 
+	 * // Set an EditText view to get user input final EditText input = new
+	 * EditText(this); alert.setView(input);
+	 * 
+	 * alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+	 * public void onClick(DialogInterface dialog, int whichButton) { Editable
+	 * value = input.getText(); //preferences.setUsername(getBaseContext(),
+	 * value.toString()); mystring = value.toString(); // Do something with
+	 * value! } });
+	 * 
+	 * alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+	 * public void onClick(DialogInterface dialog, int whichButton) { //
+	 * Canceled. } });
+	 * 
+	 * alert.show(); }
+	 */
 
 	private void showHelp() {
 		// TODO Auto-generated method stub
@@ -269,48 +245,6 @@ public class TaskListView extends Activity {
 	}
 
 	private void setupTaskList() {
-=======
-	}
-	*/
-	
-	/*
-	String mystring = "";
-	private void changeName() {
-		//showToast("Change name clicked");
-		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-	
-		alert.setTitle("Change Account Name");
-		alert.setMessage("Old Account Name was '" + preferences.getUsername(getBaseContext()) + "'.");
-	
-		// Set an EditText view to get user input 
-		final EditText input = new EditText(this);
-		alert.setView(input);
-	
-		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-		public void onClick(DialogInterface dialog, int whichButton) {
-		  Editable value = input.getText();
-		  //preferences.setUsername(getBaseContext(), value.toString());
-		  mystring = value.toString();
-		  // Do something with value!
-		  }
-		});
-	
-		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-		  public void onClick(DialogInterface dialog, int whichButton) {
-		    // Canceled.
-		  }
-		});
-	
-		alert.show();
-	}
-	*/
-	
-	private void showHelp() {
-		// TODO Auto-generated method stub
-		showToast("Show help clicked");
-	}
-	
-	private void setupTaskList(){
 		// Assign ListView and its on item click listener.
 		taskListView = (ListView) findViewById(R.id.taskList);
 		taskListView.setOnItemClickListener(new OnItemClickListener() {
@@ -325,22 +259,6 @@ public class TaskListView extends Activity {
 		});
 	}
 
-	void setDebugStuff() {
-		Button deleteFile = (Button) findViewById(R.id.debugButton);
-
-		deleteFile.setOnClickListener(new View.OnClickListener() {
-
-			public void onClick(View v) {
-				if (TaskController.deleteFile()) {
-					fillData();
-					showToast("Deleted file on SD");
-				} else {
-					showToast("Failed to delete file from SD");
-				}
-			}
-		});
-	}
-
 	private void showToast(String message) {
 		Toast toast = Toast.makeText(getApplicationContext(), message,
 				Toast.LENGTH_LONG);
@@ -349,7 +267,7 @@ public class TaskListView extends Activity {
 	}
 
 	private void fillData() {
-		_cursor = _dbHelper.fetchAllTasks();
+		_cursor = _dbHelper.fetchTasksAvailableToUser(_user);
 		startManagingCursor(_cursor);
 
 		String[] from = new String[] { DatabaseAdapter.TASK,
@@ -363,18 +281,7 @@ public class TaskListView extends Activity {
 		taskListView.setAdapter(adapter);
 	}
 
-	private void loadTasks() {
-
-		taskList = TaskController.readFile();
-
-		taskList.addAll(oldWebTaskList);
-		ArrayAdapter<Task> adapter = new ArrayAdapter<Task>(this,
-				R.layout.list_item, taskList);
-		taskListView.setAdapter(adapter);
-	}
-
 	private void update() {
-		loadTasks();
 		taskList.addAll(webTaskList);
 		ArrayAdapter<Task> adapter = new ArrayAdapter<Task>(this,
 				R.layout.list_item, taskList);

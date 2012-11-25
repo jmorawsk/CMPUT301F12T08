@@ -35,18 +35,7 @@ import android.widget.*;
  */
 // NOV2012 - Jeanine Bonot - Modified to use TaskTracker layouts. Added
 // documentation.
-public class ToastCreator {
-	private Context context;
-
-	/**
-	 * Creates a new instance of the ToastCreator class.
-	 * 
-	 * @param ctx
-	 *            The context of the toast.
-	 */
-	public ToastCreator(Context ctx) {
-		this.context = ctx;
-	}
+public final class ToastCreator {
 
 	/**
 	 * A function that takes in a string and displays this string in a toast.
@@ -72,14 +61,14 @@ public class ToastCreator {
 //		toast.show();
 //	}
 
-	public void showLongToast(String message) {
+	public static void showLongToast(Context context, String message) {
 		Toast toast = Toast.makeText(context, message,
 				Toast.LENGTH_LONG);
 		toast.setGravity(Gravity.CENTER, 0, 0);
 		toast.show();
 	}
 	
-	public void showShortToast(String message) {
+	public static void showShortToast(Context context, String message) {
 		Toast toast = Toast.makeText(context, message,
 				Toast.LENGTH_SHORT);
 		toast.setGravity(Gravity.CENTER, 0, 0);

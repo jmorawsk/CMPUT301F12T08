@@ -72,8 +72,7 @@ public class TaskView extends Activity {
 
 		_dbHelper = new DatabaseAdapter(this);
 		_user = Preferences.getUsername(this);
-		_toaster = new ToastCreator(this);
-		
+
 		_textFulfillment = (EditText) findViewById(R.id.edit_textFulfillment);
 		_fulfillmentList = (ListView) findViewById(R.id.list_fulfillments);
 		_fulfillmentButton = (Button) findViewById(R.id.fulfillButton);
@@ -117,7 +116,7 @@ public class TaskView extends Activity {
 
 					_dbHelper.createNotification(_taskName, _taskCreator,
 							message);
-					_toaster.showLongToast("\"" + _taskName
+					ToastCreator.showLongToast(TaskView.this, "\"" + _taskName
 							+ "\" was fulfilled!");
 
 					finish();
@@ -126,34 +125,6 @@ public class TaskView extends Activity {
 
 		});
 
-	}
-
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater menuInflater = getMenuInflater();
-		menuInflater.inflate(R.menu.task, menu);
-		return true;
-
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-
-		switch (item.getItemId()) {
-		case R.id.menu_edit:
-			_toaster.showLongToast("Edit");
-			return true;
-
-		case R.id.menu_delete:
-			_toaster.showLongToast("Delete");
-			return true;
-		case R.id.menu_logout:
-			_user = null;
-			_toaster.showLongToast("Logged out");
-			startActivity(Login.class);
-
-		default:
-			return super.onOptionsItemSelected(item);
-		}
 	}
 
 	protected void onStart() {
@@ -209,9 +180,14 @@ public class TaskView extends Activity {
 
 		if (!_cursor.moveToFirst())
 			return;
+
 		TextView name = (TextView) findViewById(R.id.taskName);
 		TextView description = (TextView) findViewById(R.id.description);
 		TextView creationInfo = (TextView) findViewById(R.id.creationInfo);
+		TextView privacy = (TextView) findViewById(R.id.private_task);
+
+		CheckBox textRequirement = (CheckBox) findViewById(R.id.checkbox_text);
+		CheckBox photoRequirement = (CheckBox) findViewById(R.id.checkbox_photo);
 
 		_taskCreator = _cursor.getString(_cursor
 				.getColumnIndex(DatabaseAdapter.USER));
@@ -224,6 +200,9 @@ public class TaskView extends Activity {
 				.getColumnIndex(DatabaseAdapter.REQS_PHOTO)) == 1;
 		_taskName = _cursor.getString(_cursor
 				.getColumnIndex(DatabaseAdapter.TASK));
+		
+		if (_cursor.getInt(_cursor.getColumnIndex(DatabaseAdapter.PRIVATE)) == 1)
+			privacy.setVisibility(View.VISIBLE);
 
 		name.setText(_taskName);
 		description.setText(_cursor.getString(_cursor
@@ -231,11 +210,9 @@ public class TaskView extends Activity {
 		creationInfo
 				.setText("Created on " + date + " by " + _taskCreator + ".");
 
-		CheckBox textRequirement = (CheckBox) findViewById(R.id.checkbox_text);
-		CheckBox photoRequirement = (CheckBox) findViewById(R.id.checkbox_photo);
-
 		textRequirement.setChecked(_requiresText);
 		photoRequirement.setChecked(_requiresPhoto);
+
 	}
 
 	/**
@@ -315,7 +292,8 @@ public class TaskView extends Activity {
 		_cursor = _dbHelper.fetchUser(_taskCreator);
 
 		if (!_cursor.moveToFirst()) {
-			_toaster.showLongToast("Could not find creator information");
+			ToastCreator.showLongToast(this,
+					"Could not find creator information");
 			return;
 		}
 
@@ -331,8 +309,8 @@ public class TaskView extends Activity {
 		try {
 			startActivity(Intent.createChooser(i, "Send mail..."));
 		} catch (android.content.ActivityNotFoundException ex) {
-			Toast.makeText(this, "There are no email clients installed.",
-					Toast.LENGTH_SHORT).show();
+			ToastCreator.showShortToast(this,
+					"There are no email clients installed.");
 		}
 	}
 
@@ -349,7 +327,9 @@ public class TaskView extends Activity {
 		if (_requiresPhoto) {
 			// TODO: check if text has been input
 			if (true) {
-				_toaster.showLongToast("You must add a photo before marking this task as fulfilled.");
+				ToastCreator
+						.showLongToast(this,
+								"You must add a photo before marking this task as fulfilled.");
 				ready = false;
 			}
 		}
@@ -358,14 +338,13 @@ public class TaskView extends Activity {
 	}
 
 	/**
-	 * Start a new activity while passing the user's information.
+	 * Start a new activity.
 	 * 
 	 * @param destination
 	 *            The activity class destination.
 	 */
 	private <T extends Activity> void startActivity(Class<T> destination) {
 		Intent intent = new Intent(getApplicationContext(), destination);
-		intent.putExtra("USER", _user);
 		startActivity(intent);
 	}
 

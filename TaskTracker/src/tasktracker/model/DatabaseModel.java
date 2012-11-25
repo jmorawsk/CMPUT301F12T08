@@ -25,9 +25,9 @@ public class DatabaseModel {
 			+ "task TEXT NOT NULL, "
 			+ "date TEXT NOT NULL, "
 			+ "text TEXT NOT NULL, "
-			+ "members TEXT NOT NULL, "
 			+ "requiresPhoto INTEGER, "
-			+ "requiresText INTEGER);";
+			+ "requiresText INTEGER, "
+			+ "private INTEGER);";
 
 	private static final String MEMBERS = "CREATE TABLE members(_id INTEGER primary key autoincrement,  "
 			+ "task TEXT NOT NULL, " + "user TEXT NOT NULL);";
@@ -45,7 +45,7 @@ public class DatabaseModel {
 	private static final String NOTIFICATIONS = "CREATE TABLE notifications(_id INTEGER primary key autoincrement, "
 			+ "task_id TEXT NOT NULL,"
 			+ "user TEXT NOT NULL,"
-			+ "text TEXT NOT NULL);";
+			+ "text TEXT NOT NULL" + "viewed INTEGER);";
 
 	private static final String[] CREATE_TABLES = new String[] {//
 	USERS, TASKS, MEMBERS, FULFILLMENTS, PHOTOS, NOTIFICATIONS };
