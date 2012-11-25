@@ -17,6 +17,7 @@ public class Preferences {
 	private static String username = "";
 	private static String password = "";
 	private static String email = "";
+	
 
 	/**
 	 * Returns the current name being used for the preferences file
@@ -86,9 +87,11 @@ public class Preferences {
 	 *            the Activity context (use getBaseContext())
 	 * @param value
 	 *            the new user name string
+	 * @param changePreferences
+	 * 			  whether to change the preferences file value, or leave it and use this value as a temporary session
 	 */
 	public static void setUsername(Context context, String value,
-			Boolean changePreferences) {
+			boolean changePreferences) {
 		if (changePreferences) {
 			SharedPreferences settings = context.getSharedPreferences(
 					PREF_NAME, Context.MODE_PRIVATE);
@@ -107,9 +110,11 @@ public class Preferences {
 	 *            the Activity context (use getBaseContext())
 	 * @param value
 	 *            the new user password string
+	 * @param changePreferences
+	 * 			  whether to change the preferences file value, or leave it and use this value as a temporary session
 	 */
 	public static void setPassword(Context context, String value,
-			Boolean changePreferences) {
+			boolean changePreferences) {
 		if (changePreferences) {
 			SharedPreferences settings = context.getSharedPreferences(
 					PREF_NAME, Context.MODE_PRIVATE);
@@ -128,9 +133,11 @@ public class Preferences {
 	 *            the Activity context (use getBaseContext())
 	 * @param value
 	 *            the new user email string
+	 * @param changePreferences
+	 * 			  whether to change the preferences file value, or leave it and use this value as a temporary session
 	 */
 	public static void setEmail(Context context, String value,
-			Boolean changePreferences) {
+			boolean changePreferences) {
 		if (changePreferences) {
 			SharedPreferences settings = context.getSharedPreferences(
 					PREF_NAME, Context.MODE_PRIVATE);

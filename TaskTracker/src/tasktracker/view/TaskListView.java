@@ -132,7 +132,7 @@ public class TaskListView extends Activity {
 			showHelp();
 			return true;
 		case R.id.logout:
-			
+
 			Intent intent = new Intent(getApplicationContext(), Login.class);
 			startActivity(intent);
 			return true;
