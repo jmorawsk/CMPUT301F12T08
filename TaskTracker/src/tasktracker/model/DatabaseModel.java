@@ -45,7 +45,7 @@ public class DatabaseModel {
 	private static final String NOTIFICATIONS = "CREATE TABLE notifications(_id INTEGER primary key autoincrement, "
 			+ "task_id TEXT NOT NULL,"
 			+ "user TEXT NOT NULL,"
-			+ "text TEXT NOT NULL" + "viewed INTEGER);";
+			+ "text TEXT NOT NULL, " + "viewed INTEGER);";
 
 	private static final String[] CREATE_TABLES = new String[] {//
 	USERS, TASKS, MEMBERS, FULFILLMENTS, PHOTOS, NOTIFICATIONS };
