@@ -272,8 +272,8 @@ public class TaskListView extends Activity {
 
 		String[] from = new String[] { DatabaseAdapter.TASK,
 				DatabaseAdapter.USER, DatabaseAdapter.DATE };
-		int[] to = new int[] { R.id.task_name, R.id.task_creator,
-				R.id.task_date };
+		int[] to = new int[] { R.id.item_title, R.id.item_text,
+				R.id.item_date_bottom };
 
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
 				R.layout.list_item, _cursor, from, to);

@@ -6,14 +6,9 @@ import java.util.Calendar;
 import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.Preferences;
 import tasktracker.model.elements.Notification;
-import tasktracker.model.elements.Task;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.app.Dialog;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.text.Editable;
@@ -22,7 +17,6 @@ import android.util.Log;
 import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.*;
-import android.widget.SimpleCursorAdapter.ViewBinder;
 
 /**
  * And activity that displays an existing task. From here, a user may fulfill a
@@ -42,7 +36,7 @@ public class TaskView extends Activity {
 	private Button _collapseButton;
 	private Button _photoButton;
 	private EditText _textFulfillment;
-	private ListView _fulfillmentList;
+	private LinearLayout _fulfillmentList;
 	private ScrollView _scrollview;
 
 	// Task Info
@@ -55,10 +49,6 @@ public class TaskView extends Activity {
 	// DB stuff
 	private DatabaseAdapter _dbHelper;
 	private Cursor _cursor;
-
-	private boolean _hasFulfillments;
-
-	private ToastCreator _toaster;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -73,13 +63,13 @@ public class TaskView extends Activity {
 		_dbHelper = new DatabaseAdapter(this);
 		_user = Preferences.getUsername(this);
 
-		_textFulfillment = (EditText) findViewById(R.id.edit_textFulfillment);
-		_fulfillmentList = (ListView) findViewById(R.id.list_fulfillments);
 		_fulfillmentButton = (Button) findViewById(R.id.fulfillButton);
 		_photoButton = (Button) findViewById(R.id.button_photo);
-		_scrollview = (ScrollView) findViewById(R.id.scrollview);
 		_expandButton = (Button) findViewById(R.id.button_expand);
 		_collapseButton = (Button) findViewById(R.id.button_collapse);
+		_fulfillmentList = (LinearLayout) findViewById(R.id.list_fulfillments);
+		_scrollview = (ScrollView) findViewById(R.id.scrollview);
+		_textFulfillment = (EditText) findViewById(R.id.edit_textFulfillment);
 
 		_expandButton.setOnClickListener(new ExpandButtonSetup());
 		_collapseButton.setOnClickListener(new CollapseButtonSetup());
@@ -102,20 +92,21 @@ public class TaskView extends Activity {
 			public void onClick(View v) {
 				if (requirementsFulfilled()) {
 
-					String message = Notification.getMessage(_user, _taskName,
-							Notification.Type.FulfillmentReport);
-					// sendEmailToCreator(message);
+					String textFulfillment = _textFulfillment.getText().toString();
 					String date = new SimpleDateFormat("MMM dd, yyyy | HH:mm")
 							.format(Calendar.getInstance().getTime());
-
 					long id = _dbHelper.createFulfillment(_taskName, date,
-							_user, _textFulfillment.getText().toString());
+							_user, textFulfillment);
 
 					Log.d("Task Fulfillment",
 							"fulfillment id: " + Long.toString(id));
+					if (!_user.equals(_taskCreator)) {
+						String message = Notification.getMessage(_user, _taskName,
+								Notification.Type.FulfillmentReport);
+						sendFulfillmentNotification(message);
+						sendFulfillmentEmail(message, textFulfillment);
+					}
 
-					_dbHelper.createNotification(_taskName, _taskCreator,
-							message);
 					ToastCreator.showLongToast(TaskView.this, "\"" + _taskName
 							+ "\" was fulfilled!");
 
@@ -200,7 +191,7 @@ public class TaskView extends Activity {
 				.getColumnIndex(DatabaseAdapter.REQS_PHOTO)) == 1;
 		_taskName = _cursor.getString(_cursor
 				.getColumnIndex(DatabaseAdapter.TASK));
-		
+
 		if (_cursor.getInt(_cursor.getColumnIndex(DatabaseAdapter.PRIVATE)) == 1)
 			privacy.setVisibility(View.VISIBLE);
 
@@ -221,40 +212,68 @@ public class TaskView extends Activity {
 	private void setFulfillmentsList() {
 		_cursor = _dbHelper.fetchFulfillment(_taskName);
 
-		startManagingCursor(_cursor);
+		// startManagingCursor(_cursor);
+		//
+		// String[] from = new String[] { DatabaseAdapter.USER,
+		// DatabaseAdapter.TEXT, DatabaseAdapter.DATE };
+		// int[] to = new int[] { R.id.task_name, R.id.task_creator,
+		// R.id.fulfillment_date };
+		//
+		// SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
+		// R.layout.list_item, _cursor, from, to);
+		// int count = adapter.getCount();
+		// _hasFulfillments = count > 0;
+		// Log.d("Task Fulfillment",
+		// "number of fulfillments = " + Integer.toString(count));
 
-		String[] from = new String[] { DatabaseAdapter.USER,
-				DatabaseAdapter.TEXT };
-		int[] to = new int[] { R.id.text };
+		// adapter.setViewBinder(new ViewBinder() {
+		//
+		// public boolean setViewValue(View view, Cursor cursor,
+		// int columnIndex) {
+		//
+		// if (true) {
+		// String fulfiller = cursor.getString(cursor
+		// .getColumnIndex(DatabaseAdapter.USER));
+		// String date = cursor.getString(cursor
+		// .getColumnIndex(DatabaseAdapter.DATE));
+		// TextView textView = (TextView) view;
+		// textView.setText("Fulfilled by " + fulfiller + " on "
+		// + date);
+		// return true;
+		// }
+		//
+		// return false;
+		// }
+		// });
 
-		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
-				R.layout.simple_list_item, _cursor, from, to);
-		int count = adapter.getCount();
-		_hasFulfillments = count > 0;
-		Log.d("Task Fulfillment",
-				"number of fulfillments = " + Integer.toString(count));
+		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		int fulfillerIndex = _cursor.getColumnIndex(DatabaseAdapter.USER);
+		int textIndex = _cursor.getColumnIndex(DatabaseAdapter.TEXT);
+		int dateIndex = _cursor.getColumnIndex(DatabaseAdapter.DATE);
+		while (_cursor.moveToNext()) {
+			// _hasFulfillments = true;
+			View view = inflater.inflate(R.layout.list_item, _fulfillmentList,
+					false);
 
-		adapter.setViewBinder(new ViewBinder() {
+			TextView taskDate = (TextView) view
+					.findViewById(R.id.item_date_bottom);
+			TextView fulfiller = (TextView) view.findViewById(R.id.item_title);
+			TextView text = (TextView) view.findViewById(R.id.item_text);
+			TextView date = (TextView) view.findViewById(R.id.item_date_top);
 
-			public boolean setViewValue(View view, Cursor cursor,
-					int columnIndex) {
+			taskDate.setVisibility(View.GONE);
+			date.setVisibility(View.VISIBLE);
+			fulfiller.setText("Fulfilled by "
+					+ _cursor.getString(fulfillerIndex));
+			text.setText(_cursor.getString(textIndex));
+			text.setTextSize(12);
+			date.setText(_cursor.getString(dateIndex));
 
-				if (true) {
-					String fulfiller = cursor.getString(cursor
-							.getColumnIndex(DatabaseAdapter.USER));
-					String date = cursor.getString(cursor
-							.getColumnIndex(DatabaseAdapter.DATE));
-					TextView textView = (TextView) view;
-					textView.setText("Fulfilled by " + fulfiller + " on "
-							+ date);
-					return true;
-				}
+			_fulfillmentList.addView(view);
+		}
 
-				return false;
-			}
-		});
-		_fulfillmentList.setAdapter(adapter);
-		stopManagingCursor(_cursor);
+		// _fulfillmentList.setAdapter(adapter);
+		// stopManagingCursor(_cursor);
 
 	}
 
@@ -284,10 +303,18 @@ public class TaskView extends Activity {
 		}
 	}
 
+
 	/**
-	 * Send an email report of the task fulfillment to the creator;
+	 * Send a notification report of the task fulfillment to the creator.
 	 */
-	private void sendEmailToCreator(String message) {
+	private void sendFulfillmentNotification(String message) {
+		_dbHelper.createNotification(_taskName, _taskCreator, message);
+	}
+	
+	/**
+	 * Send an email report of the task fulfillment to the creator.
+	 */
+	private void sendFulfillmentEmail(String message, String textFulfillment) {
 
 		_cursor = _dbHelper.fetchUser(_taskCreator);
 
@@ -305,7 +332,7 @@ public class TaskView extends Activity {
 		i.putExtra(Intent.EXTRA_EMAIL, new String[] { email });
 		i.putExtra(Intent.EXTRA_SUBJECT,
 				"TaskTracker : Task Fulfillment Report");
-		i.putExtra(Intent.EXTRA_TEXT, message);
+		i.putExtra(Intent.EXTRA_TEXT, message + "\n\n" + textFulfillment);
 		try {
 			startActivity(Intent.createChooser(i, "Send mail..."));
 		} catch (android.content.ActivityNotFoundException ex) {
@@ -325,7 +352,6 @@ public class TaskView extends Activity {
 		boolean ready = true;
 
 		if (_requiresPhoto) {
-			// TODO: check if text has been input
 			if (true) {
 				ToastCreator
 						.showLongToast(this,
@@ -380,12 +406,7 @@ public class TaskView extends Activity {
 			_collapseButton.setVisibility(View.VISIBLE);
 			_expandButton.setVisibility(View.GONE);
 
-			Log.d("Task Fulfillment",
-					"_hasFulfillments = " + Boolean.toString(_hasFulfillments));
-
-			if (_hasFulfillments) {
-				_fulfillmentList.setVisibility(View.VISIBLE);
-			}
+			_fulfillmentList.setVisibility(View.VISIBLE);
 
 			if (_requiresText) {
 				_textFulfillment.setVisibility(View.VISIBLE);
@@ -394,6 +415,9 @@ public class TaskView extends Activity {
 
 			if (_requiresPhoto)
 				_photoButton.setVisibility(View.VISIBLE);
+
+			if (!(_requiresText || _requiresPhoto))
+				_fulfillmentButton.setEnabled(true);
 
 			_fulfillmentButton.setVisibility(View.VISIBLE);
 

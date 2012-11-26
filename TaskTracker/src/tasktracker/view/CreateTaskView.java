@@ -197,8 +197,6 @@ public class CreateTaskView extends Activity {
 			String message = Notification.getMessage(_user, taskName,
 					Notification.Type.InformMembership);
 
-			_dbHelper.createNotification(taskName, _user, message);
-
 			_dbHelper.createMember(taskName,
 					Preferences.getUsername(getBaseContext()));
 
@@ -221,7 +219,7 @@ public class CreateTaskView extends Activity {
 			//
 			// }
 
-			finish();
+			startActivity(TaskListView.class);
 		}
 
 	}

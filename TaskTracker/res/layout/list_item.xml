@@ -13,7 +13,7 @@
         android:visibility="gone" />
 
     <TextView
-        android:id="@+id/task_name"
+        android:id="@+id/item_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/check_box"
@@ -23,23 +23,34 @@
     </TextView>
 
     <TextView
-        android:id="@+id/task_creator"
+        android:id="@+id/item_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/task_name"
+        android:layout_below="@+id/item_title"
         android:layout_toRightOf="@id/check_box"
         android:text="TaskCreator"
         android:textSize="11dp" >
     </TextView>
 
     <TextView
-        android:id="@+id/task_date"
+        android:id="@+id/item_date_bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/task_name"
+        android:layout_below="@+id/item_title"
         android:text="CreationDate"
         android:textSize="11dp" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/item_date_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@id/item_title"
+        android:text="FulfillmentDate"
+        android:textSize="11dp"
+        android:visibility="gone" >
     </TextView>
 
 </RelativeLayout>

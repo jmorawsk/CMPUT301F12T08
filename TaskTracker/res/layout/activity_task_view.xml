@@ -131,12 +131,13 @@
                 android:textSize="12dp"
                 android:visibility="gone" />
 
-            <ListView
+            <LinearLayout
                 android:id="@+id/list_fulfillments"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:visibility="gone" />
+                android:orientation="vertical"
+                android:visibility="gone" >
+            </LinearLayout>
 
             <EditText
                 android:id="@+id/edit_textFulfillment"
