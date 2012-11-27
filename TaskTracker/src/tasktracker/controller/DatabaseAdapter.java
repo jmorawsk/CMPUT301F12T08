@@ -223,13 +223,18 @@ public class DatabaseAdapter {
 	}
 
 	public Cursor fetchTasksAvailableToUser(String user) {
-		// TODO : Find out why vote count is multiplied by the number of tasks
-		return mDb.rawQuery(
-				"Select t._id, t.task, t.user, t.date, COUNT(v.user) as count "
-						+ "FROM tasks as t, members as m LEFT JOIN votes as v ON t.task = v.task "
-						+ "WHERE (t.private = 0 "
-						+ "OR (t.private = 1 AND m.user = ? AND t.task = m.task)) GROUP BY t.task",
-				new String[] { user });
+		return mDb
+				.rawQuery(
+						"SELECT DISTINCT _id, task, user, date, CASE WHEN count IS NULL THEN 0 ELSE count END as count"
+								+ " FROM (SELECT t._id, t.task, t.user, t.date"
+								+ " FROM tasks as t, members as m"
+								+ " WHERE t.private = 0 OR (t.private = 1 AND m.user = ? AND t.task = m.task)"
+								+ ") as available LEFT JOIN"
+								+ " (SELECT v.task as taskname, COUNT(v.user) as count"
+								+ " FROM tasks as t, votes as v"
+								+ " WHERE t.task = v.task GROUP BY v.task) as votecount"
+								+ " ON available.task = votecount.taskname",
+						new String[] { user });
 	}
 
 	public Cursor fetchAllFulfillments() {
