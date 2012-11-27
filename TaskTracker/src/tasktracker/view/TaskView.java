@@ -32,8 +32,8 @@ public class TaskView extends Activity {
 
 	// Activity Items
 	private Button _fulfillmentButton;
-	private Button _expandButton;
-	private Button _collapseButton;
+	private TextView _expandButton;
+	private TextView _collapseButton;
 	private Button _photoButton;
 	private TextView _voteLink;
 	private TextView _voteInfo;
@@ -69,8 +69,8 @@ public class TaskView extends Activity {
 
 		_fulfillmentButton = (Button) findViewById(R.id.fulfillButton);
 		_photoButton = (Button) findViewById(R.id.button_photo);
-		_expandButton = (Button) findViewById(R.id.button_expand);
-		_collapseButton = (Button) findViewById(R.id.button_collapse);
+		_expandButton = (TextView) findViewById(R.id.button_expand);
+		_collapseButton = (TextView) findViewById(R.id.button_collapse);
 
 		_fulfillmentList = (LinearLayout) findViewById(R.id.list_fulfillments);
 		_scrollview = (ScrollView) findViewById(R.id.scrollview);

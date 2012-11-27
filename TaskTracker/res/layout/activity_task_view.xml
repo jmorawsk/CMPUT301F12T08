@@ -28,7 +28,6 @@
                 android:id="@+id/taskName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
                 android:text="@string/hint_taskName"
                 android:textSize="20dp"
                 android:textStyle="bold" />
@@ -51,7 +50,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Like"
-                    android:textSize="12dp" />
+                    android:textColor="@color/color_link"
+                    android:textSize="12dp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <TextView
@@ -138,19 +139,25 @@
                 android:textSize="12dp"
                 android:textStyle="italic" />
 
-            <Button
+            <TextView
                 android:id="@+id/button_expand"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text="@string/button_expand"
-                android:textSize="12dp" />
+                android:textColor="@color/color_link"
+                android:textSize="12dp"
+                android:textStyle="bold" />
 
-            <Button
+            <TextView
                 android:id="@+id/button_collapse"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text="@string/button_collapse"
+                android:textColor="@color/color_link"
                 android:textSize="12dp"
+                android:textStyle="bold"
                 android:visibility="gone" />
 
             <LinearLayout
