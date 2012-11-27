@@ -57,7 +57,6 @@ public class NotificationListView extends Activity {
 		Log.d("Notifications", "user = " + _user);
 
 		// Assign ListView and its item click listener
-		_notificationsList = (ListView) findViewById(R.id.notificationsList);
 		// this.notificationsList.setOnItemClickListener(new
 		// handleList_Click());
 
@@ -68,6 +67,7 @@ public class NotificationListView extends Activity {
 	protected void onStart() {
 		super.onStart();
 		_dbHelper.open();
+		setupNotificationList();
 		fillData();
 	}
 
@@ -76,6 +76,21 @@ public class NotificationListView extends Activity {
 		_dbHelper.close();
 		stopManagingCursor(_cursor);
 		_cursor.close();
+	}
+
+	private void setupNotificationList() {
+		_notificationsList = (ListView) findViewById(R.id.notificationsList);
+		_notificationsList.setOnItemClickListener(new OnItemClickListener() {
+
+			public void onItemClick(AdapterView<?> a, View v, int i, long id) {
+				// TODO Click leads to Task
+				Intent intent = new Intent(getApplicationContext(),
+						TaskView.class);
+				intent.putExtra("TASK_ID", id);
+				startActivity(intent);
+			}
+
+		});
 	}
 
 	private void fillData() {

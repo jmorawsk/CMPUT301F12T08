@@ -60,7 +60,8 @@ public class TaskView extends Activity {
 		setContentView(R.layout.activity_task_view);
 
 		_taskID = getIntent().getLongExtra("TASK_ID", -1);
-
+		Log.d("TaskView", "TASK_ID = " + Long.toString(_taskID));
+		
 		if (_taskID == -1){
 			Log.e("TaskView", "Did not receive task id");
 			finish();}
