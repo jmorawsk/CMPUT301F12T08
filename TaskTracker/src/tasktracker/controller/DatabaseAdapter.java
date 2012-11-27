@@ -18,6 +18,7 @@ public class DatabaseAdapter {
 	public static final String TASK_ID = "task_id";
 	public static final String PHOTO = "photo";
 	public static final String USER = "user";
+	public static final String USER_ID = "user_id";
 	public static final String TEXT = "text";
 	public static final String REQS_PHOTO = "requiresPhoto";
 	public static final String REQS_TEXT = "requiresText";
@@ -85,12 +86,12 @@ public class DatabaseAdapter {
 	 *            the photo in byte array format
 	 * @return rowId or -1 if failed
 	 */
-	public long createPhotoEntry(String date, String task, byte[] photo) {
+	public long createPhoto(String date, long taskID, byte[] photo) {
 		ContentValues initialValues = new ContentValues();
 
 		initialValues.put(DATE, date);
 		initialValues.put(PHOTO, photo);
-		initialValues.put(TASK, task);
+		initialValues.put(TASK_ID, taskID);
 
 		return mDb.insert(TABLE_PHOTOS, null, initialValues);
 	}
@@ -121,10 +122,10 @@ public class DatabaseAdapter {
 		return mDb.insert(TABLE_TASKS, null, initialValues);
 	}
 
-	public long createNotification(String task, String recipient, String message) {
+	public long createNotification(long taskID, String recipient, String message) {
 		ContentValues initialValues = new ContentValues();
 
-		initialValues.put(TASK_ID, task);
+		initialValues.put(TASK_ID, taskID);
 		initialValues.put(USER, recipient);
 		initialValues.put(TEXT, message);
 
@@ -141,11 +142,11 @@ public class DatabaseAdapter {
 		return mDb.insert(TABLE_USERS, null, initialValues);
 	}
 
-	public long createFulfillment(String task, String date, String fulfiller,
+	public long createFulfillment(long taskID, String date, String fulfiller,
 			String text) {
 		ContentValues initialValues = new ContentValues();
 
-		initialValues.put(TASK, task);
+		initialValues.put(TASK_ID, taskID);
 		initialValues.put(TEXT, text);
 		initialValues.put(USER, fulfiller);
 		initialValues.put(DATE, date);
@@ -153,28 +154,28 @@ public class DatabaseAdapter {
 		return mDb.insert(TABLE_FULFILLMENTS, null, initialValues);
 	}
 
-	public long createMember(String task, String user) {
+	public long createMember(long taskID, String user) {
 		ContentValues initialValues = new ContentValues();
 
-		initialValues.put(TASK, task);
+		initialValues.put(TASK_ID, taskID);
 		initialValues.put(USER, user);
 
 		return mDb.insert(TABLE_MEMBERS, null, initialValues);
 	}
 
-	public long createVote(String task, String user) {
+	public long createVote(long taskID, String user) {
 		ContentValues initialValues = new ContentValues();
 
-		initialValues.put(TASK, task);
+		initialValues.put(TASK_ID, taskID);
 		initialValues.put(USER, user);
 
 		return mDb.insert(TABLE_VOTES, null, initialValues);
 	}
 
-	public void deleteVote(String task, String user) {
+	public void deleteVote(long taskID, String user) {
 		Cursor cursor = mDb.rawQuery("DELETE FROM " + TABLE_VOTES + " WHERE "
-				+ TASK + "= ? AND " + USER + " = ?",
-				new String[] { task, user });
+				+ TASK_ID + "= " + taskID + " AND " + USER + " = ?",
+				new String[] { user });
 		Log.d("DatabaseAdapter", "Cursor Delete Vote: " + cursor.toString());
 	}
 
@@ -209,7 +210,7 @@ public class DatabaseAdapter {
 	 * @return true if deleted, false otherwise
 	 */
 	public boolean deletePhotosInTask(long taskID) {
-		return mDb.delete(TABLE_PHOTOS, TASK + "=" + taskID, null) > 0;
+		return mDb.delete(TABLE_PHOTOS, TASK_ID + "=" + taskID, null) > 0;
 	}
 
 	/**
@@ -228,19 +229,19 @@ public class DatabaseAdapter {
 						"SELECT DISTINCT _id, task, user, date, CASE WHEN count IS NULL THEN 0 ELSE count END as count"
 								+ " FROM (SELECT t._id, t.task, t.user, t.date"
 								+ " FROM tasks as t, members as m"
-								+ " WHERE t.private = 0 OR (t.private = 1 AND m.user = ? AND t.task = m.task)"
+								+ " WHERE t.private = 0 OR (t.private = 1 AND m.user = ? AND t._id = m.task_id)"
 								+ ") as available LEFT JOIN"
-								+ " (SELECT v.task as taskname, COUNT(v.user) as count"
+								+ " (SELECT v.task_id as task_id, COUNT(v.user) as count"
 								+ " FROM tasks as t, votes as v"
-								+ " WHERE t.task = v.task GROUP BY v.task) as votecount"
-								+ " ON available.task = votecount.taskname",
+								+ " WHERE t._id = v.task_id GROUP BY v.task_id) as votecount"
+								+ " ON available._id = votecount.task_id",
 						new String[] { user });
 	}
 
-	public Cursor fetchAllFulfillments() {
-		return mDb.query(TABLE_FULFILLMENTS, new String[] { ID, TASK, USER,
-				DATE }, null, null, null, null, null);
-	}
+//	public Cursor fetchAllFulfillments() {
+//		return mDb.query(TABLE_FULFILLMENTS, new String[] { ID, TASK_ID, USER,
+//				DATE }, null, null, null, null, null);
+//	}
 
 	public Cursor fetchUserNotifications(String recipient) {
 		return mDb.rawQuery("SELECT * FROM " + TABLE_NOTIFICATIONS + " WHERE "
@@ -248,23 +249,11 @@ public class DatabaseAdapter {
 				new String[] { recipient });
 	}
 
-	/**
-	 * Will be deleted when task is stored by ID instead of string.
-	 * 
-	 * @param task
-	 * @return
-	 */
-	public Cursor fetchFulfillment(String task) {
-
-		return mDb.rawQuery("SELECT * FROM " + TABLE_FULFILLMENTS + " WHERE "
-				+ TASK + " = ?", new String[] { task });
-	}
-
 	public Cursor fetchFulfillment(long taskID) {
 
 		return mDb
-				.query(TABLE_FULFILLMENTS, new String[] { ID, TASK, DATE, USER,
-						TEXT }, TASK + "=" + taskID, null, null, null, null,
+				.query(TABLE_FULFILLMENTS, new String[] { ID, TASK_ID, DATE, USER,
+						TEXT }, TASK_ID + "=" + taskID, null, null, null, null,
 						null);
 	}
 
@@ -303,18 +292,6 @@ public class DatabaseAdapter {
 				+ " = ?", new String[] { user });
 	}
 
-	/**
-	 * Returns a cursor that points to data with the requested tag Will be
-	 * deleted when we use task ID to find photos
-	 * 
-	 * @param task
-	 *            retrieve photos with given task
-	 * @return Cursor that traverses photos with given task
-	 */
-	public Cursor fetchPhotosUnderTask(String task) {
-		return mDb.rawQuery("SELECT * FROM " + TABLE_PHOTOS + " WHERE " + TASK
-				+ " = ?", new String[] { task });
-	}
 
 	/**
 	 * Returns a cursor that points to data with the requested tag
@@ -325,36 +302,26 @@ public class DatabaseAdapter {
 	 */
 	public Cursor fetchPhotosUnderTask(long taskID) {
 		Cursor mCursor = mDb.query(true, TABLE_PHOTOS, new String[] { ID, DATE,
-				TASK, PHOTO }, TASK + "=" + taskID, null, null, null, null,
+				TASK_ID, PHOTO }, TASK_ID + "=" + taskID, null, null, null, null,
 				null);
 
 		return mCursor;
 	}
 
-	/**
-	 * Will be deleted when we use task ID to find members
-	 * 
-	 * @param task
-	 * @return
-	 */
-	public Cursor fetchTaskMembers(String task) {
-		return mDb.rawQuery("SELECT DISTINCT * FROM " + TABLE_MEMBERS
-				+ " WHERE " + TASK + " = ?", new String[] { task });
-	}
-
 	public Cursor fetchTaskMembers(long taskID) {
-		return mDb.query(true, TABLE_MEMBERS, new String[] { ID, TASK, USER },
-				TASK + "=" + taskID, null, null, null, null, null);
+		return mDb.rawQuery("SELECT DISTINCT * FROM " + TABLE_MEMBERS
+				+ " WHERE " + TASK_ID + " = " + taskID, new String[0]);
 	}
 
-	public Cursor countAllVotes(String task) {
+	public Cursor countAllVotes(long taskID) {
 		return mDb.rawQuery("SELECT COUNT(*) FROM " + TABLE_VOTES + " WHERE "
-				+ TASK + " = ?", new String[] { task });
+				+ TASK_ID + " = " + taskID, new String[0]);
 	}
 
-	public Cursor fetchVote(String task, String user) {
-		return mDb.rawQuery("SELECT * FROM " + TABLE_VOTES + " WHERE " + TASK
-				+ " = ? AND " + USER + " = ? ", new String[] { task, user });
+	public Cursor fetchVote(long taskID, String user) {
+		return mDb.rawQuery("SELECT * FROM " + TABLE_VOTES + " WHERE "
+				+ TASK_ID + " = " + taskID + " AND " + USER + " = ?",
+				new String[] { user });
 	}
 
 	/**

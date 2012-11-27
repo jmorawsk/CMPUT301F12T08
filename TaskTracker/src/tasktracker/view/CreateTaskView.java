@@ -191,18 +191,18 @@ public class CreateTaskView extends Activity {
 
 			// Add to SQL server
 			_dbHelper.open();
-			_dbHelper.createTask(task);
+			long taskID = _dbHelper.createTask(task);
 
 			String taskName = task.getName();
 			String message = Notification.getMessage(_user, taskName,
 					Notification.Type.InformMembership);
 
-			_dbHelper.createMember(taskName,
+			_dbHelper.createMember(taskID,
 					Preferences.getUsername(getBaseContext()));
 
 			for (String member : others) {
-				_dbHelper.createMember(taskName, member);
-				_dbHelper.createNotification(taskName, member, message);
+				_dbHelper.createMember(taskID, member);
+				_dbHelper.createNotification(taskID, member, message);
 			}
 			_dbHelper.close();
 

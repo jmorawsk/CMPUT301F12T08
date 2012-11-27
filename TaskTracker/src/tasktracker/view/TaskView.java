@@ -61,8 +61,9 @@ public class TaskView extends Activity {
 
 		_taskID = getIntent().getLongExtra("TASK_ID", -1);
 
-		if (_taskID == -1)
-			return;
+		if (_taskID == -1){
+			Log.e("TaskView", "Did not receive task id");
+			finish();}
 
 		_dbHelper = new DatabaseAdapter(this);
 		_user = Preferences.getUsername(this);
@@ -118,7 +119,7 @@ public class TaskView extends Activity {
 
 	private void setVoteInfo() {
 
-		_cursor = _dbHelper.countAllVotes(_taskName);
+		_cursor = _dbHelper.countAllVotes(_taskID);
 
 		if (_cursor.moveToFirst()) {
 			_voteCount = _cursor.getInt(0);
@@ -126,7 +127,7 @@ public class TaskView extends Activity {
 			Log.d("TaskView", "Vote count = " + _voteCount);
 		}
 
-		_cursor = _dbHelper.fetchVote(_taskName, _user);
+		_cursor = _dbHelper.fetchVote(_taskID, _user);
 		if (_cursor.moveToFirst()) {
 			_voted = true;
 			_voteLink.setText("Unlike");
@@ -211,7 +212,7 @@ public class TaskView extends Activity {
 	 * Sets the fulfillment list with data from the SQL database.
 	 */
 	private void setFulfillmentsList() {
-		_cursor = _dbHelper.fetchFulfillment(_taskName);
+		_cursor = _dbHelper.fetchFulfillment(_taskID);
 
 		// startManagingCursor(_cursor);
 		//
@@ -281,7 +282,7 @@ public class TaskView extends Activity {
 	 */
 	private void setMembersList() {
 		ListView members = (ListView) findViewById(R.id.membersList);
-		_cursor = _dbHelper.fetchTaskMembers(_taskName);
+		_cursor = _dbHelper.fetchTaskMembers(_taskID);
 
 		startManagingCursor(_cursor);
 
@@ -306,7 +307,7 @@ public class TaskView extends Activity {
 	 * Send a notification report of the task fulfillment to the creator.
 	 */
 	private void sendFulfillmentNotification(String message) {
-		_dbHelper.createNotification(_taskName, _taskCreator, message);
+		_dbHelper.createNotification(_taskID, _taskCreator, message);
 	}
 
 	/**
@@ -455,7 +456,7 @@ public class TaskView extends Activity {
 				String textFulfillment = _textFulfillment.getText().toString();
 				String date = new SimpleDateFormat("MMM dd, yyyy | HH:mm")
 						.format(Calendar.getInstance().getTime());
-				long id = _dbHelper.createFulfillment(_taskName, date, _user,
+				long id = _dbHelper.createFulfillment(_taskID, date, _user,
 						textFulfillment);
 
 				Log.d("Task Fulfillment",
@@ -479,11 +480,11 @@ public class TaskView extends Activity {
 
 		public void onClick(View v) {
 			if (_voted) {
-				_dbHelper.deleteVote(_taskName, _user);
+				_dbHelper.deleteVote(_taskID, _user);
 				_voteCount--;
 				_voteLink.setText("Like");
 			} else {
-				_dbHelper.createVote(_taskName, _user);
+				_dbHelper.createVote(_taskID, _user);
 				_voteCount++;
 				_voteLink.setText("Unlike");
 			}

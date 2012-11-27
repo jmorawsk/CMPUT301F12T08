@@ -21,8 +21,8 @@ public class DatabaseModel {
 			+ "password TEXT NOT NULL);";
 
 	private static final String VOTES = "CREATE TABLE votes ("
-			+ "task TEXT NOT NULL, " + "user TEXT NOT NULL, "
-			+ "PRIMARY KEY (task, user));";
+			+ "task_id INTEGER, " + "user TEXT NOT NULL, "
+			+ "PRIMARY KEY (task_id, user));";
 
 	private static final String TASKS = "CREATE TABLE tasks (_id INTEGER primary key autoincrement, "
 			+ "user TEXT NOT NULL, "
@@ -34,20 +34,20 @@ public class DatabaseModel {
 			+ "private INTEGER);";
 
 	private static final String MEMBERS = "CREATE TABLE members(_id INTEGER primary key autoincrement,  "
-			+ "task TEXT NOT NULL, " + "user TEXT NOT NULL);";
+			+ "task_id INTEGER, " + "user TEXT NOT NULL);";
 
 	private static final String FULFILLMENTS = "CREATE TABLE fulfillments(_id INTEGER primary key autoincrement,  "
-			+ "task TEXT NOT NULL, "
+			+ "task_id INTEGER, "
 			+ "user TEXT NOT NULL, "
 			+ "date TEXT NOT NULL, " + "text TEXT);";
 
 	private static final String PHOTOS = "CREATE TABLE photos(_id INTEGER primary key autoincrement,  "
-			+ "task TEXT NOT NULL, "
+			+ "task_id INTEGER, "
 			+ "user TEXT NOT NULL, "
 			+ "date TEXT NOT NULL, " + "photo BLOB NOT NULL);";
 
 	private static final String NOTIFICATIONS = "CREATE TABLE notifications(_id INTEGER primary key autoincrement, "
-			+ "task_id TEXT NOT NULL,"
+			+ "task_id INTEGER,"
 			+ "user TEXT NOT NULL,"
 			+ "text TEXT NOT NULL, " + "viewed INTEGER);";
 
