@@ -35,6 +35,8 @@ public class TaskView extends Activity {
 	private Button _expandButton;
 	private Button _collapseButton;
 	private Button _photoButton;
+	private TextView _voteLink;
+	private TextView _voteInfo;
 	private EditText _textFulfillment;
 	private LinearLayout _fulfillmentList;
 	private ScrollView _scrollview;
@@ -45,6 +47,8 @@ public class TaskView extends Activity {
 	private String _taskCreator;
 	private boolean _requiresText;
 	private boolean _requiresPhoto;
+	private boolean _voted;
+	private int _voteCount;
 
 	// DB stuff
 	private DatabaseAdapter _dbHelper;
@@ -67,12 +71,18 @@ public class TaskView extends Activity {
 		_photoButton = (Button) findViewById(R.id.button_photo);
 		_expandButton = (Button) findViewById(R.id.button_expand);
 		_collapseButton = (Button) findViewById(R.id.button_collapse);
+
 		_fulfillmentList = (LinearLayout) findViewById(R.id.list_fulfillments);
 		_scrollview = (ScrollView) findViewById(R.id.scrollview);
 		_textFulfillment = (EditText) findViewById(R.id.edit_textFulfillment);
 
+		_voteInfo = (TextView) findViewById(R.id.vote_info);
+		_voteLink = (TextView) findViewById(R.id.text_vote);
+		_voteLink.setOnClickListener(new VoteButtonSetup());
+
 		_expandButton.setOnClickListener(new ExpandButtonSetup());
 		_collapseButton.setOnClickListener(new CollapseButtonSetup());
+		_fulfillmentButton.setOnClickListener(new FulfillButtonSetup());
 
 		setupToolbarButtons();
 
@@ -82,36 +92,6 @@ public class TaskView extends Activity {
 
 			public void onClick(View v) {
 				startActivity(PhotoPicker.class);
-			}
-
-		});
-
-		_fulfillmentButton.setText("Add Fulfillment");
-		_fulfillmentButton.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View v) {
-				if (requirementsFulfilled()) {
-
-					String textFulfillment = _textFulfillment.getText().toString();
-					String date = new SimpleDateFormat("MMM dd, yyyy | HH:mm")
-							.format(Calendar.getInstance().getTime());
-					long id = _dbHelper.createFulfillment(_taskName, date,
-							_user, textFulfillment);
-
-					Log.d("Task Fulfillment",
-							"fulfillment id: " + Long.toString(id));
-					if (!_user.equals(_taskCreator)) {
-						String message = Notification.getMessage(_user, _taskName,
-								Notification.Type.FulfillmentReport);
-						sendFulfillmentNotification(message);
-						sendFulfillmentEmail(message, textFulfillment);
-					}
-
-					ToastCreator.showLongToast(TaskView.this, "\"" + _taskName
-							+ "\" was fulfilled!");
-
-					finish();
-				}
 			}
 
 		});
@@ -126,6 +106,7 @@ public class TaskView extends Activity {
 		setTaskInfo();
 		setMembersList();
 		setFulfillmentsList();
+		setVoteInfo();
 	}
 
 	protected void onStop() {
@@ -133,6 +114,26 @@ public class TaskView extends Activity {
 
 		_dbHelper.close();
 		_cursor.close();
+	}
+
+	private void setVoteInfo() {
+
+		_cursor = _dbHelper.countAllVotes(_taskName);
+
+		if (_cursor.moveToFirst()) {
+			_voteCount = _cursor.getInt(0);
+			_voteInfo.setText(_voteCount + " likes");
+			Log.d("TaskView", "Vote count = " + _voteCount);
+		}
+
+		_cursor = _dbHelper.fetchVote(_taskName, _user);
+		if (_cursor.moveToFirst()) {
+			_voted = true;
+			_voteLink.setText("Unlike");
+		} else {
+			_voted = false;
+			_voteLink.setText("Like");
+		}
 	}
 
 	private void setupToolbarButtons() {
@@ -255,14 +256,12 @@ public class TaskView extends Activity {
 			View view = inflater.inflate(R.layout.list_item, _fulfillmentList,
 					false);
 
-			TextView taskDate = (TextView) view
-					.findViewById(R.id.item_date_bottom);
+			view.findViewById(R.id.item_date_bottom).setVisibility(View.GONE);
+			view.findViewById(R.id.item_vote_count).setVisibility(View.GONE);
 			TextView fulfiller = (TextView) view.findViewById(R.id.item_title);
 			TextView text = (TextView) view.findViewById(R.id.item_text);
-			TextView date = (TextView) view.findViewById(R.id.item_date_top);
+			TextView date = (TextView) view.findViewById(R.id.item_top_right);
 
-			taskDate.setVisibility(View.GONE);
-			date.setVisibility(View.VISIBLE);
 			fulfiller.setText("Fulfilled by "
 					+ _cursor.getString(fulfillerIndex));
 			text.setText(_cursor.getString(textIndex));
@@ -303,14 +302,13 @@ public class TaskView extends Activity {
 		}
 	}
 
-
 	/**
 	 * Send a notification report of the task fulfillment to the creator.
 	 */
 	private void sendFulfillmentNotification(String message) {
 		_dbHelper.createNotification(_taskName, _taskCreator, message);
 	}
-	
+
 	/**
 	 * Send an email report of the task fulfillment to the creator.
 	 */
@@ -447,6 +445,54 @@ public class TaskView extends Activity {
 			_textFulfillment.setVisibility(View.GONE);
 			_photoButton.setVisibility(View.GONE);
 		}
+	}
+
+	class FulfillButtonSetup implements OnClickListener {
+
+		public void onClick(View v) {
+			if (requirementsFulfilled()) {
+
+				String textFulfillment = _textFulfillment.getText().toString();
+				String date = new SimpleDateFormat("MMM dd, yyyy | HH:mm")
+						.format(Calendar.getInstance().getTime());
+				long id = _dbHelper.createFulfillment(_taskName, date, _user,
+						textFulfillment);
+
+				Log.d("Task Fulfillment",
+						"fulfillment id: " + Long.toString(id));
+				if (!_user.equals(_taskCreator)) {
+					String message = Notification.getMessage(_user, _taskName,
+							Notification.Type.FulfillmentReport);
+					sendFulfillmentNotification(message);
+					sendFulfillmentEmail(message, textFulfillment);
+				}
+
+				ToastCreator.showLongToast(TaskView.this, "\"" + _taskName
+						+ "\" was fulfilled!");
+
+				finish();
+			}
+		}
+	}
+
+	class VoteButtonSetup implements OnClickListener {
+
+		public void onClick(View v) {
+			if (_voted) {
+				_dbHelper.deleteVote(_taskName, _user);
+				_voteCount--;
+				_voteLink.setText("Like");
+			} else {
+				_dbHelper.createVote(_taskName, _user);
+				_voteCount++;
+				_voteLink.setText("Unlike");
+			}
+
+			_voted = !_voted;
+
+			_voteInfo.setText(_voteCount + " likes");
+		}
+
 	}
 
 }

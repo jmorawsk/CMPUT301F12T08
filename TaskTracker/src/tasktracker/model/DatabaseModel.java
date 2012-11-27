@@ -20,6 +20,10 @@ public class DatabaseModel {
 			+ "email TEXT NOT NULL, "
 			+ "password TEXT NOT NULL);";
 
+	private static final String VOTES = "CREATE TABLE votes ("
+			+ "task TEXT NOT NULL, " + "user TEXT NOT NULL, "
+			+ "PRIMARY KEY (task, user));";
+
 	private static final String TASKS = "CREATE TABLE tasks (_id INTEGER primary key autoincrement, "
 			+ "user TEXT NOT NULL, "
 			+ "task TEXT NOT NULL, "
@@ -48,13 +52,13 @@ public class DatabaseModel {
 			+ "text TEXT NOT NULL, " + "viewed INTEGER);";
 
 	private static final String[] CREATE_TABLES = new String[] {//
-	USERS, TASKS, MEMBERS, FULFILLMENTS, PHOTOS, NOTIFICATIONS };
+	USERS, TASKS, MEMBERS, FULFILLMENTS, PHOTOS, NOTIFICATIONS, VOTES };
 
 	private static final String[] TABLE_NAMES = new String[] { //
-	"users", "tasks", "members", "fulfillments", "photos", "notifications" };
+	"users", "tasks", "members", "fulfillments", "photos", "notifications", "votes" };
 
 	private static final String DATABASE_NAME = "data";
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 
 	private static final String NAME = "dbAdapter";
 

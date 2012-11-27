@@ -25,6 +25,7 @@ public class DatabaseAdapter {
 	public static final String EMAIL = "email";
 	public static final String PASSWORD = "password";
 	public static final String PRIVATE = "private";
+	public static final String COUNT = "count";
 
 	private SQLiteDatabase mDb;
 
@@ -34,6 +35,7 @@ public class DatabaseAdapter {
 	private static final String TABLE_USERS = "users";
 	private static final String TABLE_FULFILLMENTS = "fulfillments";
 	private static final String TABLE_NOTIFICATIONS = "notifications";
+	private static final String TABLE_VOTES = "votes";
 
 	/**
 	 * Constructor - takes the context to allow the database to be
@@ -112,8 +114,9 @@ public class DatabaseAdapter {
 		initialValues.put(REQS_PHOTO, task.requiresPhoto() ? 1 : 0);
 		initialValues.put(REQS_TEXT, task.requiresText() ? 1 : 0);
 		initialValues.put(PRIVATE, task.isPrivate() ? 1 : 0);
-		
-		Log.d("DatabaseAdapter", "PRIVATE = " + Boolean.toString(task.isPrivate()));
+
+		Log.d("DatabaseAdapter",
+				"PRIVATE = " + Boolean.toString(task.isPrivate()));
 
 		return mDb.insert(TABLE_TASKS, null, initialValues);
 	}
@@ -157,6 +160,22 @@ public class DatabaseAdapter {
 		initialValues.put(USER, user);
 
 		return mDb.insert(TABLE_MEMBERS, null, initialValues);
+	}
+
+	public long createVote(String task, String user) {
+		ContentValues initialValues = new ContentValues();
+
+		initialValues.put(TASK, task);
+		initialValues.put(USER, user);
+
+		return mDb.insert(TABLE_VOTES, null, initialValues);
+	}
+
+	public void deleteVote(String task, String user) {
+		Cursor cursor = mDb.rawQuery("DELETE FROM " + TABLE_VOTES + " WHERE "
+				+ TASK + "= ? AND " + USER + " = ?",
+				new String[] { task, user });
+		Log.d("DatabaseAdapter", "Cursor Delete Vote: " + cursor.toString());
 	}
 
 	/**
@@ -204,10 +223,13 @@ public class DatabaseAdapter {
 	}
 
 	public Cursor fetchTasksAvailableToUser(String user) {
-
-		return mDb.rawQuery("Select DISTINCT t._id, t.task, t.user, t.date "
-				+ "FROM tasks as t, members as m " + "WHERE t.private = 0 "
-				+ "OR (m.user = ? AND t.task = m.task)", new String[] { user });
+		// TODO : Find out why vote count is multiplied by the number of tasks
+		return mDb.rawQuery(
+				"Select t._id, t.task, t.user, t.date, COUNT(v.user) as count "
+						+ "FROM tasks as t, members as m LEFT JOIN votes as v ON t.task = v.task "
+						+ "WHERE (t.private = 0 "
+						+ "OR (t.private = 1 AND m.user = ? AND t.task = m.task)) GROUP BY t.task",
+				new String[] { user });
 	}
 
 	public Cursor fetchAllFulfillments() {
@@ -217,7 +239,8 @@ public class DatabaseAdapter {
 
 	public Cursor fetchUserNotifications(String recipient) {
 		return mDb.rawQuery("SELECT * FROM " + TABLE_NOTIFICATIONS + " WHERE "
-				+ USER + " = ? ORDER BY " + ID + " DESC", new String[] { recipient });
+				+ USER + " = ? ORDER BY " + ID + " DESC",
+				new String[] { recipient });
 	}
 
 	/**
@@ -310,13 +333,23 @@ public class DatabaseAdapter {
 	 * @return
 	 */
 	public Cursor fetchTaskMembers(String task) {
-		return mDb.rawQuery("SELECT DISTINCT * FROM " + TABLE_MEMBERS + " WHERE " + TASK
-				+ " = ?", new String[] { task });
+		return mDb.rawQuery("SELECT DISTINCT * FROM " + TABLE_MEMBERS
+				+ " WHERE " + TASK + " = ?", new String[] { task });
 	}
 
 	public Cursor fetchTaskMembers(long taskID) {
 		return mDb.query(true, TABLE_MEMBERS, new String[] { ID, TASK, USER },
 				TASK + "=" + taskID, null, null, null, null, null);
+	}
+
+	public Cursor countAllVotes(String task) {
+		return mDb.rawQuery("SELECT COUNT(*) FROM " + TABLE_VOTES + " WHERE "
+				+ TASK + " = ?", new String[] { task });
+	}
+
+	public Cursor fetchVote(String task, String user) {
+		return mDb.rawQuery("SELECT * FROM " + TABLE_VOTES + " WHERE " + TASK
+				+ " = ? AND " + USER + " = ? ", new String[] { task, user });
 	}
 
 	/**

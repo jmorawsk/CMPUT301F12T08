@@ -14,7 +14,7 @@
 
     <TextView
         android:id="@+id/item_title"
-        android:layout_width="wrap_content"
+        android:layout_width="210dp"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/check_box"
         android:text="TaskName"
@@ -33,24 +33,31 @@
     </TextView>
 
     <TextView
+        android:id="@+id/item_top_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/item_title"
+        android:layout_alignParentRight="true"
+        android:text="Likes"
+        android:textSize="11dp" />
+    <TextView
+        android:id="@+id/item_vote_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/item_title"
+        android:layout_toLeftOf="@+id/item_top_right"
+        android:text="-1"
+        android:layout_marginRight="6dp"
+        android:textSize="11dp" />
+
+    <TextView
         android:id="@+id/item_date_bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/item_text"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/item_title"
         android:text="CreationDate"
-        android:textSize="11dp" >
-    </TextView>
-
-    <TextView
-        android:id="@+id/item_date_top"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignBottom="@id/item_title"
-        android:text="FulfillmentDate"
-        android:textSize="11dp"
-        android:visibility="gone" >
-    </TextView>
+        android:textSize="11dp" />
 
 </RelativeLayout>
