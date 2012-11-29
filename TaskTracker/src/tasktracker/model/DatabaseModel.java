@@ -39,7 +39,7 @@ public class DatabaseModel
     private static final String  MEMBERS          = "CREATE TABLE members( "
                                                           + "task_id INTEGER, "
                                                           + "user TEXT NOT NULL, "
-                                                          + "PRIMARY KEY (task_id, user);";
+                                                          + "PRIMARY KEY (task_id, user));";
 
     private static final String  FULFILLMENTS     = "CREATE TABLE fulfillments(_id INTEGER primary key autoincrement,  "
                                                           + "task_id INTEGER, "

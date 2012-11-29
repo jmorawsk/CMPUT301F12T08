@@ -24,6 +24,7 @@
             android:layout_marginBottom="8dp"
             android:hint="@string/hint_taskName"
             android:inputType="text"
+            android:maxLength="60"
             android:textSize="20dp"
             android:textStyle="bold" />
 

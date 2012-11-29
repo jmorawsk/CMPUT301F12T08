@@ -63,7 +63,7 @@ public class TaskView extends Activity
         setContentView(R.layout.activity_task_view);
 
         _taskID = getIntent().getIntExtra("TASK_ID", -1);
-        Log.d("TaskView", "TASK_ID = " + Long.toString(_taskID));
+        Log.d("TaskView", "TASK_ID = " + Integer.toString(_taskID));
 
         if (_taskID == -1)
         {
@@ -116,7 +116,7 @@ public class TaskView extends Activity
         _dbHelper.open();
 
         setTaskInfo();
-        setMembersList();
+//        setMembersList();
         setFulfillmentsList();
         setVoteInfo();
     }
@@ -131,12 +131,14 @@ public class TaskView extends Activity
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-            MenuInflater inflater = getMenuInflater();
-            inflater.inflate(R.menu.account_menu, menu);
-            return true;
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.account_menu, menu);
+        return true;
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
@@ -271,47 +273,13 @@ public class TaskView extends Activity
 
         _cursor = _dbHelper.fetchFulfillment(_taskID);
 
-        // startManagingCursor(_cursor);
-        //
-        // String[] from = new String[] { DatabaseAdapter.USER,
-        // DatabaseAdapter.TEXT, DatabaseAdapter.DATE };
-        // int[] to = new int[] { R.id.task_name, R.id.task_creator,
-        // R.id.fulfillment_date };
-        //
-        // SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
-        // R.layout.list_item, _cursor, from, to);
-        // int count = adapter.getCount();
-        // _hasFulfillments = count > 0;
-        // Log.d("Task Fulfillment",
-        // "number of fulfillments = " + Integer.toString(count));
-
-        // adapter.setViewBinder(new ViewBinder() {
-        //
-        // public boolean setViewValue(View view, Cursor cursor,
-        // int columnIndex) {
-        //
-        // if (true) {
-        // String fulfiller = cursor.getString(cursor
-        // .getColumnIndex(DatabaseAdapter.USER));
-        // String date = cursor.getString(cursor
-        // .getColumnIndex(DatabaseAdapter.DATE));
-        // TextView textView = (TextView) view;
-        // textView.setText("Fulfilled by " + fulfiller + " on "
-        // + date);
-        // return true;
-        // }
-        //
-        // return false;
-        // }
-        // });
-
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         int fulfillerIndex = _cursor.getColumnIndex(DatabaseAdapter.USER);
         int textIndex = _cursor.getColumnIndex(DatabaseAdapter.TEXT);
         int dateIndex = _cursor.getColumnIndex(DatabaseAdapter.DATE);
+
         while (_cursor.moveToNext())
         {
-            // _hasFulfillments = true;
             View view = inflater.inflate(R.layout.list_item, _fulfillmentList,
                     false);
 
@@ -330,9 +298,6 @@ public class TaskView extends Activity
             _fulfillmentList.addView(view);
         }
 
-        // _fulfillmentList.setAdapter(adapter);
-        // stopManagingCursor(_cursor);
-
     }
 
     /**
@@ -348,12 +313,13 @@ public class TaskView extends Activity
 
         String[] from = new String[] { DatabaseAdapter.USER };
         int[] to = new int[] { R.id.text };
-
+        
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
                 R.layout.simple_list_item, _cursor, from, to);
         int count = adapter.getCount();
         members.setAdapter(adapter);
         stopManagingCursor(_cursor);
+
         TextView headline = (TextView) findViewById(R.id.heading_Members);
 
         if (count == 1)
