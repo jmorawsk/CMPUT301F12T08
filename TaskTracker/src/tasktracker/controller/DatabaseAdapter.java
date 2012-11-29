@@ -333,5 +333,18 @@ public class DatabaseAdapter {
 	public void setMDb(SQLiteDatabase mDb) {
 		this.mDb = mDb;
 	}
+	
+	public void resetDatabase(){
+
+		for (String table : DatabaseModel.TABLE_NAMES) {
+			mDb.execSQL("DROP TABLE IF EXISTS " + table);
+			Log.d("RESET", table);
+		}
+
+		for (String createTable : DatabaseModel.CREATE_TABLES) {
+			mDb.execSQL(createTable);
+			Log.d("CREATE", createTable);
+		}
+	}
 
 }

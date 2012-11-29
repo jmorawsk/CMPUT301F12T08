@@ -21,7 +21,6 @@ package tasktracker.view;
 import java.util.*;
 
 import android.os.AsyncTask;
-//import android.R;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -70,6 +69,7 @@ public class TaskListView extends Activity {
 
 		setupToolbarButtons();
 		setupTaskList();
+		setupDebugFeatures();
 	}
 
 	protected void onStart() {
@@ -86,6 +86,19 @@ public class TaskListView extends Activity {
 		_dbHelper.close();
 		stopManagingCursor(_cursor);
 		_cursor.close();
+	}
+
+	private void setupDebugFeatures() {
+		Button clearSQL = (Button) findViewById(R.id.button_clearSQL);
+		clearSQL.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View v) {
+				System.out.println("Button click");
+				_dbHelper.resetDatabase();
+				onStart();
+			}
+
+		});
 	}
 
 	private void setupToolbarButtons() {
@@ -271,9 +284,10 @@ public class TaskListView extends Activity {
 		startManagingCursor(_cursor);
 
 		String[] from = new String[] { DatabaseAdapter.TASK,
-				DatabaseAdapter.USER, DatabaseAdapter.DATE, DatabaseAdapter.COUNT };
+				DatabaseAdapter.USER, DatabaseAdapter.DATE,
+				DatabaseAdapter.COUNT };
 		int[] to = new int[] { R.id.item_title, R.id.item_text,
-				R.id.item_date_bottom, R.id.item_vote_count};
+				R.id.item_date_bottom, R.id.item_vote_count };
 
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
 				R.layout.list_item, _cursor, from, to);

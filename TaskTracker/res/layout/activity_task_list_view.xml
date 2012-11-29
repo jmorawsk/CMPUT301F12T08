@@ -13,9 +13,9 @@
         android:layout_below="@+id/buttons"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
-        android:orientation="vertical"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp" >
+        android:layout_marginTop="8dp"
+        android:orientation="vertical" >
 
         <TextView
             android:id="@+id/myTasks"
@@ -29,10 +29,16 @@
         <ListView
             android:id="@+id/taskList"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/myTasks" >
+            android:layout_height="wrap_content" >
         </ListView>
-
     </LinearLayout>
+
+    <Button
+        android:id="@+id/button_clearSQL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear SQL Database"
+        android:layout_alignParentBottom="true"
+        android:visibility="visible" />
 
 </RelativeLayout>
