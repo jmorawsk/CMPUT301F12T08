@@ -98,6 +98,10 @@ public class Preferences {
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putString("username", value);
 			editor.commit();
+			
+			//TODO Change the SQL database...
+			//updateUser()
+			//TODO and change the user item in the crowdsourcer server
 		}
 		username = value; // Update the quick access variable
 	}

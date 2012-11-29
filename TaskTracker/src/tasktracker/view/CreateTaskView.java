@@ -50,6 +50,7 @@ import android.view.View.OnClickListener;
 import android.widget.*;
 import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.Preferences;
+import tasktracker.model.ReadFromURL;
 import tasktracker.model.WebDBManager;
 import tasktracker.model.elements.*;
 
@@ -205,9 +206,18 @@ public class CreateTaskView extends Activity {
 				_dbHelper.createNotification(taskID, member, message);
 			}
 			_dbHelper.close();
+			
+			//Temp commented out nov26
+			//ToastCreator.showLongToast(CreateTaskView.this, "Task created!");
 
-			ToastCreator.showLongToast(CreateTaskView.this, "Task created!");
-
+			//Mikes experiments nov26
+			String[] msg;
+			msg = _webManager.insertTask(task);
+			//ReadFromURL myReadFromURL = new ReadFromURL();
+			//myReadFromURL.execute("http://crowdsourcer.softwareprocess.es/F12/CMPUT301F12T08/?action=post&summary=%3CTask%3ETest3FromMikenov28&content={%22_creationDate%22:%22Nov%2028,%202012%20|%2022:38%22,%22_creator%22:%22mike%22,%22_otherMembersList%22:[],%22_description%22:%22test%20from%20mike%22,%22_name%22:%22nov28%22,%22_creatorID%22:0,%22_private%22:false,%22_requiresPhoto%22:false,%22_requiresText%22:true}&description=nov28");
+			//ToastCreator.showLongToast(CreateTaskView.this, "Task created! DB summary: "+msg[0]);
+			ToastCreator.showLongToast(CreateTaskView.this, "Task created! DB summary: n/a");
+			
 			// Only add to web database if Creator has added members,
 			// otherwise save to SD
 			// if (others != null && others.size() > 0) {
