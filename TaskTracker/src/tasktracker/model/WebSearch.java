@@ -8,6 +8,10 @@ import tasktracker.model.elements.Task;
 
 public class WebSearch
 {
+    //
+    private String[] cute = new String[]{"kitty","kitten","cat",
+            "baby","puppy","cute","cuddly"
+    };
     ArrayList<Task> webTaskList;
     final WebDBManager webManager;
     final String[] keywords;
