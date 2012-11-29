@@ -43,7 +43,7 @@ public class TaskView extends Activity
     private ScrollView      _scrollview;
 
     // Task Info
-    private int            _taskID;
+    private int             _taskID;
     private String          _taskName;
     private String          _taskCreator;
     private boolean         _requiresText;
@@ -128,6 +128,31 @@ public class TaskView extends Activity
 
         _dbHelper.close();
         _cursor.close();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.account_menu, menu);
+            return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+
+        // Handle item selection
+        switch (item.getItemId())
+        {
+            case R.id.logout:
+
+                Intent intent = new Intent(getApplicationContext(), Login.class);
+                startActivity(intent);
+                return true;
+            default:
+                ToastCreator.showShortToast(this, "Not Yet Implemented");
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void setVoteInfo()

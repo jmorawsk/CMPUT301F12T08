@@ -24,6 +24,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import java.util.*;
@@ -83,6 +86,31 @@ public class NotificationListView extends Activity
         _dbHelper.close();
         stopManagingCursor(_cursor);
         _cursor.close();
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.account_menu, menu);
+            return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+
+        // Handle item selection
+        switch (item.getItemId())
+        {
+            case R.id.logout:
+
+                Intent intent = new Intent(getApplicationContext(), Login.class);
+                startActivity(intent);
+                return true;
+            default:
+                ToastCreator.showShortToast(this, "Not Yet Implemented");
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void setupNotificationList()
