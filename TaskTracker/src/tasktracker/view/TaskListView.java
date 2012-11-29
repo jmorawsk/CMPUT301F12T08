@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
@@ -265,7 +266,8 @@ public class TaskListView extends Activity {
 			public void onItemClick(AdapterView<?> a, View v, int i, long id) {
 				Intent intent = new Intent(getApplicationContext(),
 						TaskView.class);
-				intent.putExtra("TASK_ID", id);
+				TextView taskID = (TextView)((RelativeLayout)v).findViewById(R.id.id);
+                                intent.putExtra("TASK_ID", Integer.parseInt(taskID.getText().toString()));
 				startActivity(intent);
 			}
 
@@ -283,10 +285,10 @@ public class TaskListView extends Activity {
 		_cursor = _dbHelper.fetchTasksAvailableToUser(_user);
 		startManagingCursor(_cursor);
 
-		String[] from = new String[] { DatabaseAdapter.TASK,
+		String[] from = new String[] { DatabaseAdapter.ID, DatabaseAdapter.TASK,
 				DatabaseAdapter.USER, DatabaseAdapter.DATE,
 				DatabaseAdapter.COUNT };
-		int[] to = new int[] { R.id.item_title, R.id.item_text,
+		int[] to = new int[] { R.id.id, R.id.item_title, R.id.item_text,
 				R.id.item_date_bottom, R.id.item_vote_count };
 
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,

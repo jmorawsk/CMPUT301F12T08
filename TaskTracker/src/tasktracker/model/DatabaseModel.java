@@ -36,9 +36,10 @@ public class DatabaseModel
                                                           + "requiresText INTEGER, "
                                                           + "private INTEGER);";
 
-    private static final String  MEMBERS          = "CREATE TABLE members(_id INTEGER primary key autoincrement,  "
+    private static final String  MEMBERS          = "CREATE TABLE members( "
                                                           + "task_id INTEGER, "
-                                                          + "user TEXT NOT NULL);";
+                                                          + "user TEXT NOT NULL, "
+                                                          + "PRIMARY KEY (task_id, user);";
 
     private static final String  FULFILLMENTS     = "CREATE TABLE fulfillments(_id INTEGER primary key autoincrement,  "
                                                           + "task_id INTEGER, "
