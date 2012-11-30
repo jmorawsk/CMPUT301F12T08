@@ -66,5 +66,6 @@
     <string name="change_password">Change Password</string>
 	<string name="change_email">Change Email</string>
     <string name="logout">Logout</string>
+    <string name="availableOffline">Available Offline:</string>
     
 </resources>

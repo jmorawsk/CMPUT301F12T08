@@ -31,6 +31,7 @@ import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.Preferences;
+import tasktracker.model.ReadFromURL;
 import tasktracker.model.WebDBManager;
 import tasktracker.model.elements.*;
 
@@ -65,6 +66,11 @@ public class TaskListView extends Activity {
 		setContentView(R.layout.activity_task_list_view);
 
 		_user = Preferences.getUsername(this);
+		if (_user == Preferences.INVALID_ACCOUNT) {
+			//User has likely never signed in, force login screen
+			Intent intent = new Intent(getApplicationContext(), Login.class);
+			startActivity(intent);
+		}
 		_dbHelper = new DatabaseAdapter(this);
 
 		Log.d("TaskListView", "On Create");
@@ -188,7 +194,6 @@ public class TaskListView extends Activity {
 						Integer.parseInt(taskID.getText().toString()));
 				startActivity(intent);
 			}
-
 		});
 	}
 
@@ -205,14 +210,21 @@ public class TaskListView extends Activity {
 
 		String[] from = new String[] { DatabaseAdapter.ID,
 				DatabaseAdapter.TASK, DatabaseAdapter.USER,
-				DatabaseAdapter.DATE, DatabaseAdapter.COUNT };
+				DatabaseAdapter.DATE, DatabaseAdapter.COUNT,
+				DatabaseAdapter.DOWNLOADED};
 		int[] to = new int[] { R.id.id, R.id.item_title, R.id.item_text,
-				R.id.item_date_bottom, R.id.item_vote_count };
+				R.id.item_date_bottom, R.id.item_vote_count, R.id.downloaded };
 
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
 				R.layout.list_item, _cursor, from, to);
 
 		taskListView.setAdapter(adapter);
+		
+		//Now call an asynchronous task to populate the Database with items from Crowdsourcer
+		ReadFromURL taskDownloader = new ReadFromURL();
+		taskDownloader.setContext(getBaseContext());
+		taskDownloader.followUpMethod = 1;
+		taskDownloader.execute("http://crowdsourcer.softwareprocess.es/F12/CMPUT301F12T08/?action=list");
 	}
 
 	private void update() {

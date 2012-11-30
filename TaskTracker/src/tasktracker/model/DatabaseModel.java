@@ -32,7 +32,9 @@ public class DatabaseModel {
 			+ "text TEXT NOT NULL, "
 			+ "requiresPhoto INTEGER, "
 			+ "requiresText INTEGER, "
-			+ "private INTEGER);";
+			+ "private INTEGER, "
+			+ "downloaded TEXT NOT NULL);";	//Added by mike Nov 29
+
 
 	private static final String MEMBERS = "CREATE TABLE members(_id INTEGER primary key autoincrement, "
 			+ "task_id INTEGER, " + "user TEXT NOT NULL);";
@@ -60,8 +62,9 @@ public class DatabaseModel {
 			"votes" };
 
 	private static final String DATABASE_NAME = "data";
-	private static final int DATABASE_VERSION = 2;
-
+	//private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 4;	//Added downloaded column to Tasks table. -Mike, nov26
+	
 	private static final String NAME = "dbAdapter";
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {

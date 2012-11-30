@@ -163,6 +163,8 @@ public class CreateTaskView extends Activity {
 		task.setTextRequirement(_text.isChecked());
 		task.setOtherMembers(_otherMembers.getText().toString());
 		task.setIsPrivate(_private.isChecked());
+		
+		task.setIsDownloaded("Yes");	//Since it was created on this phone, it's already in the SQL table
 
 		return task;
 	}
@@ -178,8 +180,8 @@ public class CreateTaskView extends Activity {
 		startActivity(intent);
 	}
 
+	//Unused. TODO: Delete? (Mike nov 29)
 	private class ContactWebServer extends AsyncTask<Task, Void, Void> {
-
 		@Override
 		protected Void doInBackground(Task... tasks) {
 			for (Task task : tasks) {

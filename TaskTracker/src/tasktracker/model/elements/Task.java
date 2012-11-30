@@ -48,6 +48,7 @@ public class Task implements Serializable {
 	private boolean _requiresText;
 	private boolean _requiresPhoto;
 	private boolean _private;
+	private String _isDownloaded;	//added nov29 by Mike
 
 	// SQL ids
 	private long _creatorID;
@@ -93,7 +94,8 @@ public class Task implements Serializable {
 		_otherMembersList = new ArrayList<String>();
 		_private = false;
 	}
-
+	
+	//Setters
 	/**
 	 * Sets the task ID if it has not yet been done so already.
 	 * 
@@ -101,9 +103,38 @@ public class Task implements Serializable {
 	 */
 	public void setID(String value) {
 		_id = value;
-
+	}
+	
+	public void setName(String value) {
+		_name = value;
+	}
+	
+	public void setDate(String value){
+		_creationDate = value;
+	}
+	
+	public void setDescription(String value) {
+		_description = value;
+	}
+	
+	public void setTextRequirement(boolean value) {
+		_requiresText = value;
 	}
 
+	public void setPhotoRequirement(boolean value) {
+		_requiresPhoto = value;
+	}
+	
+	public void setIsPrivate(boolean value){
+		_private = value;
+	}
+	
+	public void setIsDownloaded(String value){
+		_isDownloaded = value;
+	}
+	
+	
+	//Getters
 	public String getCreator() {
 		return _creator;
 	}
@@ -117,10 +148,6 @@ public class Task implements Serializable {
 		return _id;
 	}
 
-	public void setName(String value) {
-		_name = value;
-	}
-
 	public String getName() {
 		return _name;
 	}
@@ -129,37 +156,27 @@ public class Task implements Serializable {
 		return _creationDate;
 	}
 
-	public void setDescription(String value) {
-		_description = value;
-	}
-
 	public String getDescription() {
 		return _description;
 	}
-
-	public void setTextRequirement(boolean value) {
-		_requiresText = value;
+	
+	public String getDownloaded(){
+		return _isDownloaded;
 	}
-
+	
 	public boolean requiresText() {
 		return _requiresText;
 	}
-
-	public void setPhotoRequirement(boolean value) {
-		_requiresPhoto = value;
-	}
-
+	
 	public boolean requiresPhoto() {
 		return _requiresPhoto;
-	}
-	
-	public void setIsPrivate(boolean value){
-		_private = value;
 	}
 	
 	public boolean isPrivate(){
 		return _private;
 	}
+	
+
 
 	/**
 	 * Gets the string of members, separates them with comma delimiters, then

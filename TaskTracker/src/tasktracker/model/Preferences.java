@@ -12,7 +12,8 @@ import android.content.SharedPreferences;
 
 public class Preferences {
 	private static final String PREF_NAME = "Preferences";
-
+	public static final String INVALID_ACCOUNT = "<ACCOUNT_NOT_SET>";
+	
 	// Variables for quicker access, ie without accessing the Preferences file
 	private static String username = "";
 	private static String password = "";
@@ -40,7 +41,7 @@ public class Preferences {
 			// If username not loaded yet, load it
 			SharedPreferences settings = context.getSharedPreferences(
 					PREF_NAME, Context.MODE_PRIVATE);
-			username = settings.getString("username", "New Account");
+			username = settings.getString("username", INVALID_ACCOUNT);
 		}
 		return username;
 	}

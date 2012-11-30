@@ -161,9 +161,16 @@ public class JSONDBController extends DBManager {
     @Override
     public String[] insertTask(Task task) {
         String content = gson.toJson(task);
-        String insertCommand = "action=" + "post" + "&summary=" + "<Task>" + task.getName()
-                + "&content=" + content.toString() + "&description="
-                + task.getName().replace(' ', '+');
+        String insertCommand = "action=" + "post" + "&summary=" 
+        		+ "<Task>" + task.getName()
+        		+ "<CreatorID>" + task.getCreatorID()
+        		+ "<Date>" + task.getDateCreated()
+        		+ "<Likes>" + 0	//TODO this could cause trouble for tasks that weren't JUST created
+                + "<Description>" + task.getDescription()
+                + "<RequiresPhoto>" + task.requiresPhoto()
+        		+ "<RequiresText>" + task.requiresText()
+        		+ "&content=" + content.toString();
+        		//+ "&description=" + task.getName().replace(' ', '+');
         //System.out.println("*********** insertTask in JSONDBController was called!");
         return parseJSONObject(executeAction(insertCommand));
     }
