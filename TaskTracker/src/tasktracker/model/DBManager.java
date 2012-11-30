@@ -1,6 +1,8 @@
 package tasktracker.model;
 
+import android.content.Context;
 import tasktracker.model.elements.Task;
+import tasktracker.model.elements.User;
 
 /**
  * An abstract class for interacting with a database
@@ -40,6 +42,11 @@ public abstract class DBManager
      * @return  an array of task property values.
      */
     public abstract String[] insertTask(String summary, String description);
+    
+    /*
+     * TODO fill out info (Added nov29 by mike)
+     */
+    public abstract void insertUser(User user, Context context);
     
     /**
      * Adds a task to the database.

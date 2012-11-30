@@ -2,6 +2,9 @@ package tasktracker.view;
 
 import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.Preferences;
+import tasktracker.model.WebDBManager;
+import tasktracker.model.elements.RequestCreateUser;
+import tasktracker.model.elements.User;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -42,7 +45,7 @@ public class Login extends Activity {
 		// TODO Delete before release
 		_dbHelper.open();
 		_dbHelper.createUser("Debugger", "cmput301f12t08@gmail.com", "");
-		_dbHelper.createUser("jbonot", "jbonot@ualberta.ca", "");
+		_dbHelper.createUser("jbonot", "jbonot@ualberta.ca", ""); //Aw that's cheating! -Mike
 		_dbHelper.close();
 		// End to-do
 		
@@ -129,11 +132,24 @@ public class Login extends Activity {
 					return;
 				}
 
+				/*	//This is now being done in module ReadFromURL
 				_dbHelper.open();
 				_dbHelper.createUser(username, email, password);
 				_dbHelper.close();
-
-				ToastCreator.showLongToast(Login.this, "Creation successful!");
+				*/
+				
+				User user = new User();
+				user.setEmail(email);
+				user.setName(username);
+				user.setPassword(password);
+				
+				//WebDBManager _webManager = new WebDBManager();
+				//Add this user to crowdsourcer database
+				//_webManager.insertUser(user, getBaseContext());
+				
+				RequestCreateUser creater = new RequestCreateUser(getBaseContext(), user);
+				
+				//ToastCreator.showLongToast(Login.this, "Creation successful!");
 				setPreferences(username, email, password, true);
 				proceedToHomePage(username);
 			}

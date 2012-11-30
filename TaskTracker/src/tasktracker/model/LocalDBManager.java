@@ -1,7 +1,9 @@
 package tasktracker.model;
 
 
+import android.content.Context;
 import tasktracker.model.elements.Task;
+import tasktracker.model.elements.User;
 
 /**
  * A class for interacting with a local database
@@ -64,6 +66,11 @@ public class LocalDBManager extends DBManager
     @Override
     public String[] insertTask(Task task){
         return controller.insertTask(task);
+    }
+    
+    @Override
+    public void insertUser(User user, Context context){
+    	//controller.insertUser(user, context);	//TODO: Is this module even being used???
     }
 
     /**

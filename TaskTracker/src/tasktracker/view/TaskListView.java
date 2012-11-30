@@ -220,11 +220,9 @@ public class TaskListView extends Activity {
 
 		taskListView.setAdapter(adapter);
 		
-		//Now call an asynchronous task to populate the Database with items from Crowdsourcer
-		ReadFromURL taskDownloader = new ReadFromURL();
-		taskDownloader.setContext(getBaseContext());
-		taskDownloader.followUpMethod = 1;
-		taskDownloader.execute("http://crowdsourcer.softwareprocess.es/F12/CMPUT301F12T08/?action=list");
+		//Now call an asynchronous method to populate the Database with items from Crowdsourcer
+		RequestDownloadTasksSummaries downloader = new RequestDownloadTasksSummaries(getBaseContext());
+		
 	}
 
 	private void update() {

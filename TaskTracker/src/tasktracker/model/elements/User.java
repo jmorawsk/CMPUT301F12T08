@@ -30,6 +30,8 @@ public class User {
 	private static int _userCount = 0;
 
 	private String name;
+	private String email;
+	private String password;
 	private int id;
 
 	/**
@@ -37,8 +39,10 @@ public class User {
 	 * and the name is set to a default value.
 	 */
 	public User() {
-		this.id = ++_userCount;
+		this.id = ++_userCount;	//TODO: Change to crowdsourcer return value
 		this.name = "user" + this.id;
+		this.email = "";
+		this.password = "";
 	}
 
 	/**
@@ -51,9 +55,10 @@ public class User {
 		if (!this.assignName(name)) {
 			// Assignment was unsuccessful, notify app user.
 		} else {
-			this.id = ++_userCount;
+			this.id = ++_userCount;	//TODO: Change to crowdsourcer return value
 		}
-
+		this.email = "";
+		this.password = "";
 	}
 
 	/**
@@ -64,7 +69,20 @@ public class User {
 	public String getName() {
 		return this.name;
 	}
+	
+	/** Gets the ID number of the user */
+	public int getID() {
+		return this.id;
+	}
 
+	public String getEmail(){
+		return this.email;
+	}
+	
+	public String getPassword(){
+		return this.password;
+	}
+	
 	/**
 	 * Sets the user name if the new name is available.
 	 * 
@@ -79,10 +97,17 @@ public class User {
 		}
 
 	}
+	
+	/*
+	 * Sets the user email
+	 * NOTE: Does not check if email if valid!
+	 */
+	public void setEmail(String value){
+		email = value;
+	}
 
-	/** Gets the ID number of the user */
-	public int getID() {
-		return this.id;
+	public void setPassword(String value){
+		password = value;
 	}
 
 //	/**

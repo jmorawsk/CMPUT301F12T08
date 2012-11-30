@@ -13,9 +13,13 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import android.content.Context;
+import android.widget.Toast;
+
 import com.google.gson.Gson;
 
 import tasktracker.model.elements.Task;
+import tasktracker.model.elements.User;
 import tasktracker.view.CreateTaskView;
 import tasktracker.view.ToastCreator;
 
@@ -149,13 +153,14 @@ public class JSONDBController extends DBManager {
         return parseJSONObject(executeAction(insertCommand));
     }
 
+    //TODO replaced this with CreateTaskRequest Nov30, delete?
     /**
      * A method for adding a task to the JSON db
      * Nov 28: Changing this to add tags to the summary of each task entry
      * 
      * @param task
      *            the task to be added
-     * @return a string array of what was added to the db 0-summary 1-content 2-id
+     * @return CHANGE: return should be void!  a string array of what was added to the db 0-summary 1-content 2-id
      *         3-description
      */
     @Override
@@ -173,6 +178,33 @@ public class JSONDBController extends DBManager {
         		//+ "&description=" + task.getName().replace(' ', '+');
         //System.out.println("*********** insertTask in JSONDBController was called!");
         return parseJSONObject(executeAction(insertCommand));
+    }
+    
+    public void insertUser(User user, Context context){
+    	String content = gson.toJson(user);
+    	String insertCommand = "action=" + "post" + "&summary=" 
+    			+ "<User>" + user.getName()
+    			+ "&content=" + content.toString();
+    			//+ "<Email>" + user.getEmail();
+
+		ReadFromURL taskDownloader = new ReadFromURL();
+		taskDownloader.setContext(context);
+		taskDownloader.followUpMethod = 2;
+		
+        URI uri = null;
+        // construct our uri
+        try {
+            uri = new URI("http", "crowdsourcer.softwareprocess.es",
+                    "/F12/CMPUT301F12T08/", insertCommand, null);
+        } catch (URISyntaxException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+		//Toast toast = Toast.makeText(context, "Added user: " + uri.toASCIIString(), Toast.LENGTH_SHORT);
+		//toast.show();
+		System.out.println(uri.toASCIIString());
+		taskDownloader.execute(uri.toASCIIString());
     }
 
     /**

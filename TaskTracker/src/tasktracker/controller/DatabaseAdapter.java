@@ -135,6 +135,21 @@ public class DatabaseAdapter {
 		return mDb.insert(TABLE_NOTIFICATIONS, null, initialValues);
 	}
 
+	/*
+	 * For creating a new user entry in the local SQL DB at the given ID
+	 */
+	public long createUser(String user, String email, String password, String ID) {
+		ContentValues initialValues = new ContentValues();
+
+		initialValues.put(USER, user);
+		initialValues.put(EMAIL, email);
+		initialValues.put(PASSWORD, password);
+		//TODO enter this user under the given ID
+
+		return mDb.insert(TABLE_USERS, null, initialValues);
+	}
+	
+	//TODO: Remove all references to this and delete it
 	public long createUser(String user, String email, String password) {
 		ContentValues initialValues = new ContentValues();
 

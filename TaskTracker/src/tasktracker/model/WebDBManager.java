@@ -1,7 +1,9 @@
 package tasktracker.model;
 
 
+import android.content.Context;
 import tasktracker.model.elements.Task;
+import tasktracker.model.elements.User;
 
 /**
  * A class for interacting with a web database (webserver)
@@ -49,6 +51,12 @@ public class WebDBManager extends DBManager
     @Override
     public String[] insertTask(String summary, String description){
         return controller.insertTask(summary,description);
+    }
+    
+    //TODO: info TODO: Why is there info at EVERY step of inherritance? Sooo much redundancy!!
+    @Override
+    public void insertUser(User user, Context context){
+    	controller.insertUser(user, context);
     }
     
     /**

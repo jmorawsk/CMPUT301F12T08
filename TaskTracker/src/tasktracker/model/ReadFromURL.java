@@ -9,6 +9,7 @@ import java.util.List;
 import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.elements.Notification;
 import tasktracker.model.elements.Task;
+import tasktracker.model.elements.User;
 import tasktracker.view.CreateTaskView;
 import tasktracker.view.ToastCreator;
 
@@ -16,6 +17,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+//TODO: Depricated, replaced with a polymorphic AccessURL
 /*
  * @author Mostly Jason, modified by Mike
  * 
@@ -33,6 +35,17 @@ public class ReadFromURL extends AsyncTask<String,Void,String>
 	public int followUpMethod = 0;
 	private Context context;
 	private boolean contextSet = false;
+	
+	private User user;
+	private boolean userSet = false;
+	
+	/*
+	 * To run followUpMethod 2, a user object is required
+	 */
+	public void setUser(User use){
+		user = use;
+		userSet = true;
+	}
 	
 	/*
 	 * Context is required to display result toasts and for many followUpMethods
@@ -73,13 +86,20 @@ public class ReadFromURL extends AsyncTask<String,Void,String>
     	//ToastCreator.showLongToast(getBaseContext(), "Task created! DB summary: n/a");
     		//TODO: Find some way to show a popup without requiring passing a Context through 15 methods
     	switch (followUpMethod){
-    	case 0:
-        	if (contextSet){
-	    		Toast toast = Toast.makeText(context, "URL accessed", Toast.LENGTH_SHORT);
-	            toast.show();
-        	}
-    	case 1:
-    		if (contextSet) addDownloadedTaskSummariesToDatabase(line);
+	    	case 0:
+	        	if (contextSet){
+		    		Toast toast = Toast.makeText(context, "URL accessed", Toast.LENGTH_SHORT);
+		            toast.show();
+	        	}
+	    	case 1:
+	    		if (contextSet) addDownloadedTaskSummariesToDatabase(line);
+	    	case 2:
+	    		if (contextSet) addUserToSQL(line);
+	    	default:
+	        	if (contextSet){
+		    		Toast toast = Toast.makeText(context, "Bad followUpMethod number chosen (ReadFromURL): " + followUpMethod, Toast.LENGTH_SHORT);
+		            toast.show();
+	        	}
     	}
     }
     
@@ -159,7 +179,7 @@ public class ReadFromURL extends AsyncTask<String,Void,String>
 					task.setPhotoRequirement(requiresPhoto);
 					task.setTextRequirement(requiresText);
 					//TODO set likes
-					//TODO set other members?
+					//TODO set other members? Is this relevent for a downloaded task?
 					task.setOtherMembers("");
 					task.setIsPrivate(false);
 					//Add to local SQL database
@@ -170,19 +190,6 @@ public class ReadFromURL extends AsyncTask<String,Void,String>
 		}
 		Toast toast = Toast.makeText(context, "First item found at " + pos + ", it starts with " + task.getID(), Toast.LENGTH_SHORT);
 		toast.show();
-		
-		/*
-		Task task = new Task(Preferences.getUsername(getBaseContext()));
-
-		task.setDescription(_description.getText().toString());
-		task.setName(_name.getText().toString());
-		task.setPhotoRequirement(_photo.isChecked());
-		task.setTextRequirement(_text.isChecked());
-		task.setOtherMembers(_otherMembers.getText().toString());
-		task.setIsPrivate(_private.isChecked());
-		
-		task.setIsDownloaded("Yes");	//Since it was created on this phone, it's already in the SQL table
-		*/
 		
 		_dbHelper.close();
     }
@@ -206,5 +213,26 @@ public class ReadFromURL extends AsyncTask<String,Void,String>
 			_dbHelper.createNotification(taskID, member, message);
 		}
 	}
+    
+    /*
+     * Puts the new user into the SQL table with the crowdsourcer ID as the user ID
+     */
+    private void addUserToSQL(String line){
+    	if (!userSet){
+    		return;
+    	} else {
+	    	DatabaseAdapter _dbHelper = new DatabaseAdapter(context);
+			// Add to SQL server
+			_dbHelper.open();
+			
+			//TODO: Put the user object in the database with the ID from crowdsourcer
+	
+			//_dbHelper.createUser(username, email, password);
+			Toast toast = Toast.makeText(context, "Added user: " + user.getName(), Toast.LENGTH_SHORT);
+			toast.show();
+			
+			_dbHelper.close();
+    	}
+    }
     
 }
