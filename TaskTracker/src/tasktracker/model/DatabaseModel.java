@@ -17,7 +17,8 @@ public class DatabaseModel {
 	 * Database creation SQL statement.
 	 */
 
-	private static final String USERS = "CREATE TABLE users (_id INTEGER primary key autoincrement, "
+	//private static final String USERS = "CREATE TABLE users (_id INTEGER primary key autoincrement, "
+	private static final String USERS = "CREATE TABLE users (_id TEXT NOT NULL primary key, "
 			+ "user TEXT NOT NULL, "
 			+ "email TEXT NOT NULL, "
 			+ "password TEXT NOT NULL);";
@@ -63,8 +64,9 @@ public class DatabaseModel {
 
 	private static final String DATABASE_NAME = "data";
 	//private static final int DATABASE_VERSION = 2;
-	private static final int DATABASE_VERSION = 4;	//Added downloaded column to Tasks table. -Mike, nov26
-	
+	//private static final int DATABASE_VERSION = 4;	//Added downloaded column to Tasks table. -Mike, nov26
+	private static final int DATABASE_VERSION = 5;	//Changed USER table primary key ID to string. -Mike nov30
+
 	private static final String NAME = "dbAdapter";
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {

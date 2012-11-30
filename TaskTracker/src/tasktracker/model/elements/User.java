@@ -32,14 +32,15 @@ public class User {
 	private String name;
 	private String email;
 	private String password;
-	private int id;
+	private String id;
 
 	/**
 	 * Creates a new instance of the User class. A unique ID number is assigned
 	 * and the name is set to a default value.
 	 */
 	public User() {
-		this.id = ++_userCount;	//TODO: Change to crowdsourcer return value
+		//this.id = ++_userCount;	//TODO: Change to crowdsourcer return value
+		this.id = "ID NOT SET YET";
 		this.name = "user" + this.id;
 		this.email = "";
 		this.password = "";
@@ -55,7 +56,8 @@ public class User {
 		if (!this.assignName(name)) {
 			// Assignment was unsuccessful, notify app user.
 		} else {
-			this.id = ++_userCount;	//TODO: Change to crowdsourcer return value
+			//this.id = ++_userCount;	//TODO: Change to crowdsourcer return value
+			this.id = "ID NOT SET YET";
 		}
 		this.email = "";
 		this.password = "";
@@ -71,7 +73,7 @@ public class User {
 	}
 	
 	/** Gets the ID number of the user */
-	public int getID() {
+	public String getID() {
 		return this.id;
 	}
 
@@ -110,6 +112,10 @@ public class User {
 		password = value;
 	}
 
+	public void setID(String value){
+		id = value;
+	}
+	
 //	/**
 //	 * Fulfill a task. Checks that the user is a member of the task, then goes
 //	 * through each of the task's requirements and fulfills them.

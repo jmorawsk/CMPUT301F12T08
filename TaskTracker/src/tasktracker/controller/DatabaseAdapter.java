@@ -88,7 +88,7 @@ public class DatabaseAdapter {
 	 *            the photo in byte array format
 	 * @return rowId or -1 if failed
 	 */
-	public long createPhoto(String date, long taskID, byte[] photo) {
+	public long createPhoto(String date, String taskID, byte[] photo) {
 		ContentValues initialValues = new ContentValues();
 
 		initialValues.put(DATE, date);
@@ -125,7 +125,7 @@ public class DatabaseAdapter {
 		return mDb.insert(TABLE_TASKS, null, initialValues);
 	}
 
-	public long createNotification(long taskID, String recipient, String message) {
+	public long createNotification(String taskID, String recipient, String message) {
 		ContentValues initialValues = new ContentValues();
 
 		initialValues.put(TASK_ID, taskID);
@@ -138,9 +138,10 @@ public class DatabaseAdapter {
 	/*
 	 * For creating a new user entry in the local SQL DB at the given ID
 	 */
-	public long createUser(String user, String email, String password, String ID) {
+	public long createUser(String user, String email, String password, String id) {
 		ContentValues initialValues = new ContentValues();
 
+		initialValues.put(ID, id);
 		initialValues.put(USER, user);
 		initialValues.put(EMAIL, email);
 		initialValues.put(PASSWORD, password);
@@ -175,7 +176,7 @@ public class DatabaseAdapter {
 		return mDb.update(TABLE_USERS, newValues, USER+"='"+user+"'", null);
 	}
 
-	public long createFulfillment(long taskID, String date, String fulfiller,
+	public long createFulfillment(String taskID, String date, String fulfiller,
 			String text) {
 		ContentValues initialValues = new ContentValues();
 
@@ -187,7 +188,7 @@ public class DatabaseAdapter {
 		return mDb.insert(TABLE_FULFILLMENTS, null, initialValues);
 	}
 
-	public long createMember(long taskID, String user) {
+	public long createMember(String taskID, String user) {
 		ContentValues initialValues = new ContentValues();
 
 		initialValues.put(TASK_ID, taskID);
@@ -196,7 +197,7 @@ public class DatabaseAdapter {
 		return mDb.insert(TABLE_MEMBERS, null, initialValues);
 	}
 
-	public long createVote(long taskID, String user) {
+	public long createVote(String taskID, String user) {
 		ContentValues initialValues = new ContentValues();
 
 		initialValues.put(TASK_ID, taskID);
@@ -205,7 +206,7 @@ public class DatabaseAdapter {
 		return mDb.insert(TABLE_VOTES, null, initialValues);
 	}
 
-	public void deleteVote(long taskID, String user) {
+	public void deleteVote(String taskID, String user) {
 		Cursor cursor = mDb.rawQuery("DELETE FROM " + TABLE_VOTES + " WHERE "
 				+ TASK_ID + "= " + taskID + " AND " + USER + " = ?",
 				new String[] { user });
@@ -241,7 +242,7 @@ public class DatabaseAdapter {
 	 *            name of folder to delete photos from
 	 * @return true if deleted, false otherwise
 	 */
-	public boolean deletePhotosInTask(long taskID) {
+	public boolean deletePhotosInTask(String taskID) {
 		return mDb.delete(TABLE_PHOTOS, TASK_ID + "=" + taskID, null) > 0;
 	}
 
@@ -281,7 +282,7 @@ public class DatabaseAdapter {
 				new String[] { recipient });
 	}
 
-	public Cursor fetchFulfillment(long taskID) {
+	public Cursor fetchFulfillment(String taskID) {
 
 		return mDb
 				.query(TABLE_FULFILLMENTS, new String[] { ID, TASK_ID, DATE, USER,
@@ -289,13 +290,13 @@ public class DatabaseAdapter {
 						null);
 	}
 
-	public Cursor fetchTask(long rowId) {
+	public Cursor fetchTask(String rowId) {
 		return mDb.query(TABLE_TASKS, new String[] { ID, TASK, DATE, USER,
 				TEXT, REQS_PHOTO, REQS_TEXT, PRIVATE }, ID + "=" + rowId, null,
 				null, null, null, null);
 	}
 
-	public Cursor fetchUser(long rowId) {
+	public Cursor fetchUserViaID(String rowId) {
 		return mDb.query(TABLE_USERS, new String[] { ID, USER, EMAIL }, ID
 				+ "=" + rowId, null, null, null, null, null);
 	}
@@ -319,7 +320,7 @@ public class DatabaseAdapter {
 	 * @param user
 	 * @return
 	 */
-	public Cursor fetchUser(String user) {
+	public Cursor fetchUserViaName(String user) {
 		return mDb.rawQuery("SELECT * FROM " + TABLE_USERS + " WHERE " + USER
 				+ " = ?", new String[] { user });
 	}
@@ -332,7 +333,7 @@ public class DatabaseAdapter {
 	 *            retrieve photos with given task
 	 * @return Cursor that traverses photos with given task
 	 */
-	public Cursor fetchPhotosUnderTask(long taskID) {
+	public Cursor fetchPhotosUnderTask(String taskID) {
 		Cursor mCursor = mDb.query(true, TABLE_PHOTOS, new String[] { ID, DATE,
 				TASK_ID, PHOTO }, TASK_ID + "=" + taskID, null, null, null, null,
 				null);
@@ -340,17 +341,17 @@ public class DatabaseAdapter {
 		return mCursor;
 	}
 
-	public Cursor fetchTaskMembers(long taskID) {
+	public Cursor fetchTaskMembers(String taskID) {
 		return mDb.rawQuery("SELECT DISTINCT * FROM " + TABLE_MEMBERS
 				+ " WHERE " + TASK_ID + " = " + taskID, new String[0]);
 	}
 
-	public Cursor countAllVotes(long taskID) {
+	public Cursor countAllVotes(String taskID) {
 		return mDb.rawQuery("SELECT COUNT(*) FROM " + TABLE_VOTES + " WHERE "
 				+ TASK_ID + " = " + taskID, new String[0]);
 	}
 
-	public Cursor fetchVote(long taskID, String user) {
+	public Cursor fetchVote(String taskID, String user) {
 		return mDb.rawQuery("SELECT * FROM " + TABLE_VOTES + " WHERE "
 				+ TASK_ID + " = " + taskID + " AND " + USER + " = ?",
 				new String[] { user });

@@ -42,7 +42,7 @@ public class TaskView extends Activity {
 	private ScrollView _scrollview;
 
 	// Task Info
-	private int _taskID;
+	private String _taskID;
 	private String _taskName;
 	private String _taskCreator;
 	private boolean _requiresText;
@@ -60,13 +60,16 @@ public class TaskView extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_view);
 
-		_taskID = getIntent().getIntExtra("TASK_ID", -1);
-		Log.d("TaskView", "TASK_ID = " + Integer.toString(_taskID));
+		_taskID = getIntent().getStringExtra("TASK_ID");	//TODO change sent intent to String ID
+		//Log.d("TaskView", "TASK_ID = " + Integer.toString(_taskID));
+		Log.d("TaskView", "TASK_ID = " + _taskID);
 
+		/*
 		if (_taskID == -1) {
 			Log.e("TaskView", "Did not receive task id");
 			finish();
 		}
+		*/
 
 		_dbHelper = new DatabaseAdapter(this);
 		_user = Preferences.getUsername(this);
@@ -208,7 +211,7 @@ public class TaskView extends Activity {
 	 */
 	private void setTaskInfo() {
 
-		_cursor = _dbHelper.fetchTask(_taskID);
+		_cursor = _dbHelper.fetchUserViaID(_taskID);
 
 		if (!_cursor.moveToFirst())
 			return;
@@ -321,7 +324,7 @@ public class TaskView extends Activity {
 	 */
 	private void sendFulfillmentEmail(String message, String textFulfillment) {
 
-		_cursor = _dbHelper.fetchUser(_taskCreator);
+		_cursor = _dbHelper.fetchUserViaName(_taskCreator);
 
 		if (!_cursor.moveToFirst()) {
 			ToastCreator.showLongToast(this,

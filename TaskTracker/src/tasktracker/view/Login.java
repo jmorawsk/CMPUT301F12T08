@@ -147,6 +147,7 @@ public class Login extends Activity {
 				//Add this user to crowdsourcer database
 				//_webManager.insertUser(user, getBaseContext());
 				
+				//Add user to crowdsourcer, and then local SQL db using crowdsourcer's returned ID
 				RequestCreateUser creater = new RequestCreateUser(getBaseContext(), user);
 				
 				//ToastCreator.showLongToast(Login.this, "Creation successful!");
@@ -166,7 +167,7 @@ public class Login extends Activity {
 	private boolean usernameTaken(String username) {
 
 		_dbHelper.open();
-		_cursor = _dbHelper.fetchUser(username);
+		_cursor = _dbHelper.fetchUserViaName(username);
 		boolean nameTaken = _cursor.moveToFirst();
 		_cursor.close();
 		_dbHelper.close();

@@ -163,8 +163,10 @@ public class JSONDBController extends DBManager {
      * @return CHANGE: return should be void!  a string array of what was added to the db 0-summary 1-content 2-id
      *         3-description
      */
+    
     @Override
     public String[] insertTask(Task task) {
+    	/*
         String content = gson.toJson(task);
         String insertCommand = "action=" + "post" + "&summary=" 
         		+ "<Task>" + task.getName()
@@ -178,9 +180,14 @@ public class JSONDBController extends DBManager {
         		//+ "&description=" + task.getName().replace(' ', '+');
         //System.out.println("*********** insertTask in JSONDBController was called!");
         return parseJSONObject(executeAction(insertCommand));
+         */
+        return parseJSONObject(executeAction("bogus"));
     }
     
+    
+    //TODO: Depreciated. Remove? -Mike
     public void insertUser(User user, Context context){
+    /*
     	String content = gson.toJson(user);
     	String insertCommand = "action=" + "post" + "&summary=" 
     			+ "<User>" + user.getName()
@@ -205,7 +212,9 @@ public class JSONDBController extends DBManager {
 		//toast.show();
 		System.out.println(uri.toASCIIString());
 		taskDownloader.execute(uri.toASCIIString());
+		*/
     }
+
 
     /**
      * Updates a task on the webserver. Returns a string array. The array
