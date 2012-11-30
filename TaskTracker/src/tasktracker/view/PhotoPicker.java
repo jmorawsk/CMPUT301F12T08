@@ -135,47 +135,54 @@ public class PhotoPicker extends Activity {
 
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
+		//Toast.makeText(PhotoPicker.this, "Res: "+resultCode + " Req: "+requestCode + "Data: " +data, 2000).show();
+		if (data!=null){
+
+			//Toast.makeText(PhotoPicker.this, "B", 2000).show();
+			//super.onActivityResult(requestCode, resultCode, data);
 
 
-		switch(requestCode) { 
-		case PICK_PICTURE_FROM_GALLERY:{
-			if(resultCode == RESULT_OK){  
-				Uri selectedImage = data.getData();
-				String[] filePathColumn = {MediaStore.Images.Media.DATA};
+			switch(requestCode) { 
+			case PICK_PICTURE_FROM_GALLERY:{
+				if(resultCode == RESULT_OK){  
+					Uri selectedImage = data.getData();
+					String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
-				Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-				cursor.moveToFirst();
+					Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+					cursor.moveToFirst();
 
-				int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-				String filePath = cursor.getString(columnIndex);
-				cursor.close();
+					int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+					String filePath = cursor.getString(columnIndex);
+					cursor.close();
 
 
-				Bitmap theSelectedImage = BitmapFactory.decodeFile(filePath);
+					Bitmap theSelectedImage = BitmapFactory.decodeFile(filePath);
 
-				Toast.makeText(PhotoPicker.this, "photo selected", 2000).show();
-				myAdapter.addPhoto(theSelectedImage);
+					Toast.makeText(PhotoPicker.this, "photo selected", 2000).show();
+					myAdapter.addPhoto(theSelectedImage);
 
-				gridView.setAdapter(myAdapter);
+					gridView.setAdapter(myAdapter);
+				}
+				break;
+
 			}
-			break;
-		}
-		
-		case TAKE_PICTURE:{
 
-			Toast.makeText(PhotoPicker.this, "B", 2000).show();
-			if(resultCode == RESULT_OK){
+			case TAKE_PICTURE:{
 
-				Toast.makeText(PhotoPicker.this, "Reached", 2000).show();
+				Toast.makeText(PhotoPicker.this, "B", 2000).show();
+				Toast.makeText(PhotoPicker.this, resultCode, 2000).show();
+				if(resultCode == RESULT_OK){
 
-				String path = data.getExtras().getString("photo");
-				Bitmap newPhoto = BitmapFactory.decodeFile(path);
-				myAdapter.addPhoto(newPhoto);
+					Toast.makeText(PhotoPicker.this, "Reached", 2000).show();
 
-				gridView.setAdapter(myAdapter);
+					String path = data.getExtras().getString("photo");
+					Bitmap newPhoto = BitmapFactory.decodeFile(path);
+					myAdapter.addPhoto(newPhoto);
+
+					gridView.setAdapter(myAdapter);
+				}
 			}
-		}
+			}
 		}
 
 	}

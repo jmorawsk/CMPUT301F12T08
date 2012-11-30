@@ -11,7 +11,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 
 /**
- * A class that contains a list of photos and places them in
+ * A class that contains an array list of photos and places them in
  * the grid view of photo picker layout.
  * 
  * @author Katherine Jasniewski

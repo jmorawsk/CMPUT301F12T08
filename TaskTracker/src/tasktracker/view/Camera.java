@@ -20,8 +20,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * A class that opens android camera. Takes and saves a photo
- * in the users task photo gallery.
+ * A class that opens android camera. Takes and returns a photo
+ * in the users task photo gallery. Refreshes the gallery to update
+ * the photos available for attachment.
  * 
  * @author Katherine Jasniewski
  * 
@@ -62,12 +63,11 @@ public class Camera extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				 Toast.makeText(Camera.this, "Photo has been added", 2000).show();
-				
-				 Intent intent = new Intent();
-				 setResult(RESULT_OK);
+				 Toast.makeText(Camera.this, imageFileUri.toString() , 2000).show();
+				 //Intent intent = new Intent();
 				 //Activity.this.
-				 intent.putExtra("photo", imageFileUri.getPath());
-				 //setResult();
+				 //intent.putExtra("photo", imageFileUri);
+				 //setResult(RESULT_OK,intent);
 				 finish();
 			}
 
@@ -105,10 +105,10 @@ public class Camera extends Activity {
 				// TODO Auto-generated method stub
 				
 				if(check.equals("PHOTO_TAKEN")){
-				File fdelete = new File(imageFileUri.getPath());
-				fdelete.delete();
-				//refresh
-				sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
+					File fdelete = new File(imageFileUri.getPath());
+					fdelete.delete();
+					//refresh
+					sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
 				}
 				
 				finish();
@@ -130,6 +130,7 @@ public class Camera extends Activity {
 	//Takes a photo and saves it in a file
 	public void takePhoto(){
 		
+		//delete the last photo taken
 		if(check.equals("PHOTO_TAKEN")){
 			File fdelete = new File(imageFileUri.getPath());
 			fdelete.delete();
