@@ -28,6 +28,7 @@ public class DatabaseAdapter {
 	public static final String PRIVATE = "private";
 	public static final String COUNT = "count";
 	public static final String DOWNLOADED = "downloaded";
+	//public static final String DESCRIPTION = "description";
 
 	private SQLiteDatabase mDb;
 
@@ -242,8 +243,8 @@ public class DatabaseAdapter {
 	public Cursor fetchTasksAvailableToUser(String user) {
 		return mDb
 				.rawQuery(
-						"SELECT DISTINCT _id, task, user, date, downloaded, CASE WHEN count IS NULL THEN 0 ELSE count END as count"
-								+ " FROM (SELECT t._id, t.task, t.user, t.date, t.downloaded"
+						"SELECT DISTINCT _id, task, user, date, downloaded, text, CASE WHEN count IS NULL THEN 0 ELSE count END as count"
+								+ " FROM (SELECT t._id, t.task, t.user, t.date, t.downloaded, t.text"
 								+ " FROM tasks as t, members as m"
 								+ " WHERE t.private = 0 OR (t.private = 1 AND m.user = ? AND t._id = m.task_id)"
 								+ ") as available LEFT JOIN"
