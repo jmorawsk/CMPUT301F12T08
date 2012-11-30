@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 
+import tasktracker.view.CreateTaskView;
+import tasktracker.view.ToastCreator;
+
 import android.os.AsyncTask;
 
 
@@ -39,6 +42,9 @@ public class ReadFromURL extends AsyncTask<String,Void,String>
     protected void onPostExecute(String line) {
         // TODO: check this.exception 
         // TODO: do something with the feed
+    	//ToastCreator.showLongToast(getBaseContext(), "Task created! DB summary: n/a");
+    		//TODO: Find some way to show a popup without requiring passing a Context through 15 methods
     }
+    
     
 }

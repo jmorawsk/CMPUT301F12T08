@@ -137,7 +137,8 @@ public class TaskListView extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle item selection
+		//An Action Menu or Help menu item was selected
+		//By Mike
 		switch (item.getItemId()) {
 		case R.id.change_name:
 			changeName();
@@ -146,7 +147,6 @@ public class TaskListView extends Activity {
 			showHelp();
 			return true;
 		case R.id.logout:
-
 			Intent intent = new Intent(getApplicationContext(), Login.class);
 			startActivity(intent);
 			return true;
@@ -154,107 +154,12 @@ public class TaskListView extends Activity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-
 	private void changeName() {
-		/*
-		 * InputPopup popup = new InputPopup(); String result =
-		 * popup.makePopup("Test title", "Test message", getBaseContext());
-		 * showToast(result);
-		 */
-		// inputPopup("Test title", "Test message", this);
-		// showToast(resultValue);
+		//InputPopup popup = new InputPopup();
+		InputPopup.make("Change Username", "Old username was " + Preferences.getUsername(getBaseContext()) + ". Please, keep it clean.", this, InputPopup.Type.username);
 	}
-
-	/*
-	 * String resultValue; public void inputPopup(String Title, String Message,
-	 * Context context) { AlertDialog.Builder alert = new
-	 * AlertDialog.Builder(context);
-	 * 
-	 * alert.setTitle(Title); alert.setMessage(Message);
-	 * 
-	 * // Set an EditText view to get user input final EditText input = new
-	 * EditText(context); alert.setView(input);
-	 * 
-	 * alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-	 * public void onClick(DialogInterface dialog, int whichButton) { Editable
-	 * value = input.getText(); //preferences.setUsername(getBaseContext(),
-	 * value.toString()); // Do something with value! resultValue =
-	 * value.toString(); } });
-	 * 
-	 * alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-	 * public void onClick(DialogInterface dialog, int whichButton) { //
-	 * Canceled. resultValue = ""; } });
-	 * 
-	 * alert.show(); >>>>>>> branch 'master' of
-	 * https://github.com/jmorawsk/CMPUT301F12T08.git
-	 * 
-	 * <<<<<<< HEAD }); }
-	 * 
-	 * // }
-	 * 
-	 * @Override public boolean onCreateOptionsMenu(Menu menu) { MenuInflater
-	 * inflater = getMenuInflater(); inflater.inflate(R.menu.account_menu,
-	 * menu); return true; }
-	 * 
-	 * @Override public boolean onOptionsItemSelected(MenuItem item) { // Handle
-	 * item selection switch (item.getItemId()) { case R.id.change_name:
-	 * changeName(); return true; case R.id.help: showHelp(); return true;
-	 * default: return super.onOptionsItemSelected(item); } }
-	 * 
-	 * // private void changeName() { // showToast("Change name clicked");
-	 * AlertDialog.Builder alert = new AlertDialog.Builder(this);
-	 * 
-	 * alert.setTitle("Change Account Name");
-	 * alert.setMessage("Old Account Name was '" +
-	 * preferences.getUsername(getBaseContext()) + "'.");
-	 * 
-	 * // Set an EditText view to get user input final EditText input = new
-	 * EditText(this); alert.setView(input);
-	 * 
-	 * alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-	 * public void onClick(DialogInterface dialog, int whichButton) { Editable
-	 * value = input.getText(); preferences.setUsername(getBaseContext(),
-	 * value.toString()); // Do something with value! } });
-	 * 
-	 * alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-	 * public void onClick(DialogInterface dialog, int whichButton) { //
-	 * Canceled. } });
-	 * 
-	 * alert.show(); }
-	 * 
-	 * private void showHelp() { // TODO Auto-generated method stub
-	 * showToast("Show help clicked"); }
-	 * 
-	 * private void setupTaskList() { ======= }
-	 */
-
-	/*
-	 * String mystring = ""; private void changeName() {
-	 * //showToast("Change name clicked"); AlertDialog.Builder alert = new
-	 * AlertDialog.Builder(this);
-	 * 
-	 * alert.setTitle("Change Account Name");
-	 * alert.setMessage("Old Account Name was '" +
-	 * preferences.getUsername(getBaseContext()) + "'.");
-	 * 
-	 * // Set an EditText view to get user input final EditText input = new
-	 * EditText(this); alert.setView(input);
-	 * 
-	 * alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-	 * public void onClick(DialogInterface dialog, int whichButton) { Editable
-	 * value = input.getText(); //preferences.setUsername(getBaseContext(),
-	 * value.toString()); mystring = value.toString(); // Do something with
-	 * value! } });
-	 * 
-	 * alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-	 * public void onClick(DialogInterface dialog, int whichButton) { //
-	 * Canceled. } });
-	 * 
-	 * alert.show(); }
-	 */
-
 	private void showHelp() {
-		// TODO Auto-generated method stub
+		// TODO Create a help menu
 		showToast("Show help clicked");
 	}
 

@@ -16,6 +16,8 @@ import org.json.simple.parser.ParseException;
 import com.google.gson.Gson;
 
 import tasktracker.model.elements.Task;
+import tasktracker.view.CreateTaskView;
+import tasktracker.view.ToastCreator;
 
 /**
  * A class for interacting with a JSON web database (webserver)
@@ -149,18 +151,20 @@ public class JSONDBController extends DBManager {
 
     /**
      * A method for adding a task to the JSON db
+     * Nov 28: Changing this to add tags to the summary of each task entry
      * 
      * @param task
      *            the task to be added
-     * @return a string array of what was added to the db 0 summary 1 content 2
-     *         id 3 description
+     * @return a string array of what was added to the db 0-summary 1-content 2-id
+     *         3-description
      */
     @Override
     public String[] insertTask(Task task) {
         String content = gson.toJson(task);
-        String insertCommand = "action=" + "post" + "&summary=" + task.getName()
+        String insertCommand = "action=" + "post" + "&summary=" + "<Task>" + task.getName()
                 + "&content=" + content.toString() + "&description="
                 + task.getName().replace(' ', '+');
+        //System.out.println("*********** insertTask in JSONDBController was called!");
         return parseJSONObject(executeAction(insertCommand));
     }
 
@@ -289,8 +293,12 @@ public class JSONDBController extends DBManager {
         }
         // actually make web request
         System.out.println(uri);
-        return readFromURL(uri.toASCIIString());
-
+        	//Jasons original
+        //return readFromURL(uri.toASCIIString());
+        	//Mikes new (nov 28)
+			ReadFromURL myReadFromURL = new ReadFromURL();
+			myReadFromURL.execute(uri.toASCIIString());
+			return "";
     }
 
     protected String oldExecuteAction(String action) {

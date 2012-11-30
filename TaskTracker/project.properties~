@@ -11,9 +11,11 @@
 #proguard.config=${sdk.dir}/tools/proguard/proguard-android.txt:proguard-project.txt
 
 # Project target.
+
 <<<<<<< HEAD
-target=android-17
+target=android-15
 =======
-target=android-14
+target=Google Inc.:Google APIs:17
+>>>>>>> I think the last commit failed; recommitting my fix for submitting Tasks to the crowdsourcer database.
 android.library=false
->>>>>>> f6589b4e033e04330801a025f9f96b1cd72b43bd
+

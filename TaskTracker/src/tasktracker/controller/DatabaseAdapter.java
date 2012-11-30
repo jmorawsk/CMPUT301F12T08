@@ -141,6 +141,21 @@ public class DatabaseAdapter {
 
 		return mDb.insert(TABLE_USERS, null, initialValues);
 	}
+	
+	//TODO Method should be moved out of the create__() section of this module
+	public long updateUser(String user, String username, String email, String password){
+		//Untested!
+		//TODO Not used; Need to rearrange user system so that each user has a key corresponding to
+		//  the Crowdsourcer ID key given to that user item; currently, it just uses an incrementing
+		//  integer
+		ContentValues newValues = new ContentValues();
+		
+		newValues.put(USER, user);
+		newValues.put(EMAIL, email);
+		newValues.put(PASSWORD, password);
+		
+		return mDb.update(TABLE_USERS, newValues, USER+"='"+user+"'", null);
+	}
 
 	public long createFulfillment(long taskID, String date, String fulfiller,
 			String text) {
@@ -178,7 +193,6 @@ public class DatabaseAdapter {
 				new String[] { user });
 		Log.d("DatabaseAdapter", "Cursor Delete Vote: " + cursor.toString());
 	}
-
 	/**
 	 * Delete the entry with the given rowId
 	 * 

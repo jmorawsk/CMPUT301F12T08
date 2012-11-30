@@ -53,6 +53,7 @@ import android.view.View.OnClickListener;
 import android.widget.*;
 import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.Preferences;
+import tasktracker.model.ReadFromURL;
 import tasktracker.model.WebDBManager;
 import tasktracker.model.elements.*;
 
@@ -140,25 +141,8 @@ public class CreateTaskView extends Activity
         Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
         buttonCreate.setEnabled(false);
 
-        buttonMyTasks.setOnClickListener(new OnClickListener()
-        {
-
-            public void onClick(View v)
-            {
-
-                startActivity(TaskListView.class);
-            }
-        });
-
-        buttonNotifications.setOnClickListener(new OnClickListener()
-        {
-
-            public void onClick(View v)
-            {
-
-                startActivity(NotificationListView.class);
-            }
-        });
+        buttonMyTasks.setOnClickListener(new StartActivityHandler<TaskListView>(TaskListView.class));
+        buttonNotifications.setOnClickListener(new StartActivityHandler<NotificationListView>(NotificationListView.class));
     }
 
     /**
@@ -190,37 +174,19 @@ public class CreateTaskView extends Activity
      */
     private <T extends Activity> void startActivity(Class<T> destination)
     {
-
         Intent intent = new Intent(getApplicationContext(), destination);
         startActivity(intent);
     }
 
-    private class contactWebserver extends AsyncTask<Task, Void, Void>
-    {
+    private class ContactWebServer extends AsyncTask<Task, Void, Void>  {
 
         @Override
         protected Void doInBackground(Task... tasks)
         {
-
             for (Task task : tasks)
             {
                 _webManager.insertTask(task);
             }
-            // webTaskList = new ArrayList<Task>();
-            // System.out.println("testing");
-            // String[][] results = webManager.listTasksAsArrays();
-            // String id;
-            // Task newTask;
-            // for(int n=0; n<results.length; n++)
-            // {
-            // if(results[n].length>1)
-            // {
-            // System.out.println("index =" +n);
-            // id = results[n][1];
-            // newTask = webManager.getTask(id);
-            // webTaskList.add(newTask);
-            // }
-            // }
             return null;
         }
     }
@@ -258,19 +224,16 @@ public class CreateTaskView extends Activity
             _dbHelper.close();
 
             ToastCreator.showLongToast(CreateTaskView.this, "Task created!");
-
-            // Only add to web database if Creator has added members,
-            // otherwise save to SD
-            // if (others != null && others.size() > 0) {
-            // Log.d("DEBUG", "others.size()\t" + others.size());
-            // contactWebserver webRequest = new contactWebserver();
-            // webRequest.execute(task);
-            // } else {
-            // // TaskController.writeFile(task);
-            //
-            // }
-
             startActivity(TaskListView.class);
+            
+            //Mikes experiments nov26
+			String[] msg;
+			msg = _webManager.insertTask(task);
+			//ReadFromURL myReadFromURL = new ReadFromURL();
+			//myReadFromURL.execute("http://crowdsourcer.softwareprocess.es/F12/CMPUT301F12T08/?action=post&summary=%3CTask%3ETest3FromMikenov28&content={%22_creationDate%22:%22Nov%2028,%202012%20|%2022:38%22,%22_creator%22:%22mike%22,%22_otherMembersList%22:[],%22_description%22:%22test%20from%20mike%22,%22_name%22:%22nov28%22,%22_creatorID%22:0,%22_private%22:false,%22_requiresPhoto%22:false,%22_requiresText%22:true}&description=nov28");
+			//ToastCreator.showLongToast(CreateTaskView.this, "Task created! DB summary: "+msg[0]);
+			ToastCreator.showLongToast(CreateTaskView.this, "Task created! DB summary: n/a");
+	
         }
 
     }
@@ -303,6 +266,20 @@ public class CreateTaskView extends Activity
             // Do nothing.
 
         }
+    }
+	
+    class StartActivityHandler<T extends Activity> implements OnClickListener{
+    	
+    	Class<T> destination;
+    	
+    	StartActivityHandler(Class<T> theClass){
+    		this.destination = theClass;
+    	}
+    	
+		public void onClick(View v) {
+	        startActivity(this.destination);		
+		}
+    	
     }
 
 }

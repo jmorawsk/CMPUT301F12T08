@@ -32,13 +32,21 @@ public class TrivialTests {
 			assertEquals(expected[i], actual[i]);
 		}
 	}
+	
 
 	@Test
 	public void test_replaceAll() {
 		String string = "That's a wrap!";
-		System.out.println(string.replaceAll("'", "''"));
-	}
+		assertEquals("That''s a wrap!", string.replaceAll("'", "''"));
+		
+		string = "\n\tyay".replace("\\", "\\\\");
+		System.out.println(string);
+		System.out.println(string.replace("\\", "\\\\"));
+		System.out.println(string.replaceAll("\\\\", "\\\\\\\\"));
+		
 
+	}
+	
 	@Test
 	public void test_timeInMillis() {
 		long time = Calendar.getInstance().getTimeInMillis();
