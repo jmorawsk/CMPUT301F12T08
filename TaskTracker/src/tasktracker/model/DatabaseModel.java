@@ -22,9 +22,8 @@ public class DatabaseModel {
 			+ "email TEXT NOT NULL, "
 			+ "password TEXT NOT NULL);";
 
-	private static final String VOTES = "CREATE TABLE votes ("
-			+ "task_id INTEGER, " + "user TEXT NOT NULL, "
-			+ "PRIMARY KEY (task_id, user));";
+	private static final String VOTES = "CREATE TABLE votes (_id INTEGER primary key autoincrement, "
+			+ "task_id INTEGER, " + "user TEXT NOT NULL);";
 
 	private static final String TASKS = "CREATE TABLE tasks (_id INTEGER primary key autoincrement, "
 			+ "user TEXT NOT NULL, "
@@ -35,9 +34,8 @@ public class DatabaseModel {
 			+ "requiresText INTEGER, "
 			+ "private INTEGER);";
 
-	private static final String MEMBERS = "CREATE TABLE members( "
-			+ "task_id INTEGER, " + "user TEXT NOT NULL, "
-			+ "PRIMARY KEY (task_id, user));";
+	private static final String MEMBERS = "CREATE TABLE members(_id INTEGER primary key autoincrement, "
+			+ "task_id INTEGER, " + "user TEXT NOT NULL);";
 
 	private static final String FULFILLMENTS = "CREATE TABLE fulfillments(_id INTEGER primary key autoincrement,  "
 			+ "task_id INTEGER, "

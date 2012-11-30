@@ -110,7 +110,7 @@ public class TaskView extends Activity {
 		_dbHelper.open();
 
 		setTaskInfo();
-//		setMembersList();
+		setMembersList();
 		setFulfillmentsList();
 		setVoteInfo();
 	}
