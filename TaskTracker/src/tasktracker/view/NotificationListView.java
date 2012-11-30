@@ -42,182 +42,169 @@ import android.widget.AdapterView.OnItemClickListener;
  * @author Jeanine
  * 
  */
-public class NotificationListView extends Activity
-{
+public class NotificationListView extends Activity {
 
-    private ListView        _notificationsList;
+	private ListView _notificationsList;
 
-    private DatabaseAdapter _dbHelper;
-    private Cursor          _cursor;
-    private String          _user;
+	private DatabaseAdapter _dbHelper;
+	private Cursor _cursor;
+	private String _user;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_notification_list_view);
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_notification_list_view);
 
-        _dbHelper = new DatabaseAdapter(this);
-        _user = Preferences.getUsername(this);
-        Log.d("Notifications", "user = " + _user);
+		_dbHelper = new DatabaseAdapter(this);
+		_user = Preferences.getUsername(this);
+		Log.d("Notifications", "user = " + _user);
 
-        // Assign ListView and its item click listener
-        // this.notificationsList.setOnItemClickListener(new
-        // handleList_Click());
+		// Assign ListView and its item click listener
+		// this.notificationsList.setOnItemClickListener(new
+		// handleList_Click());
 
-        setupToolbarButtons();
+		setupToolbarButtons();
 
-    }
+	}
 
-    protected void onStart()
-    {
+	protected void onStart() {
 
-        super.onStart();
-        _dbHelper.open();
-        setupNotificationList();
-        fillData();
-    }
+		super.onStart();
+		_dbHelper.open();
+		setupNotificationList();
+		fillData();
+	}
 
-    protected void onStop()
-    {
+	protected void onStop() {
 
-        super.onStop();
-        _dbHelper.close();
-        stopManagingCursor(_cursor);
-        _cursor.close();
-    }
-    
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-            MenuInflater inflater = getMenuInflater();
-            inflater.inflate(R.menu.account_menu, menu);
-            return true;
-    }
+		super.onStop();
+		_dbHelper.close();
+		stopManagingCursor(_cursor);
+		_cursor.close();
+	}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.account_menu, menu);
 
-        // Handle item selection
-        switch (item.getItemId())
-        {
-            case R.id.logout:
+		MenuItem account = menu.findItem(R.id.Account_menu);
+		account.setTitle(_user);
 
-                Intent intent = new Intent(getApplicationContext(), Login.class);
-                startActivity(intent);
-                return true;
-            default:
-                ToastCreator.showShortToast(this, "Not Yet Implemented");
-                return super.onOptionsItemSelected(item);
-        }
-    }
+		return true;
+	}
 
-    private void setupNotificationList()
-    {
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
 
-        _notificationsList = (ListView) findViewById(R.id.notificationsList);
-        _notificationsList.setOnItemClickListener(new OnItemClickListener()
-        {
+		// Handle item selection
+		switch (item.getItemId()) {
+		case R.id.logout:
 
-            public void onItemClick(AdapterView<?> a, View v, int i, long id)
-            {
+			Intent intent = new Intent(getApplicationContext(), Login.class);
+			startActivity(intent);
+			return true;
+		default:
+			ToastCreator.showShortToast(this, "Not Yet Implemented");
+			return super.onOptionsItemSelected(item);
+		}
+	}
 
-                // TODO Click leads to Task
-                Intent intent = new Intent(getApplicationContext(),
-                        TaskView.class);
-                TextView taskID = (TextView) ((RelativeLayout) v)
-                        .findViewById(R.id.id);
-                intent.putExtra("TASK_ID",
-                        Integer.parseInt(taskID.getText().toString()));
-                startActivity(intent);
-            }
+	private void setupNotificationList() {
 
-        });
-    }
+		_notificationsList = (ListView) findViewById(R.id.notificationsList);
+		_notificationsList.setOnItemClickListener(new OnItemClickListener() {
 
-    private void fillData()
-    {
+			public void onItemClick(AdapterView<?> a, View v, int i, long id) {
 
-        _cursor = _dbHelper.fetchUserNotifications(_user);
-        startManagingCursor(_cursor);
+				// TODO Click leads to Task
+				Intent intent = new Intent(getApplicationContext(),
+						TaskView.class);
+				TextView taskID = (TextView) ((RelativeLayout) v)
+						.findViewById(R.id.id);
+				intent.putExtra("TASK_ID",
+						Integer.parseInt(taskID.getText().toString()));
+				startActivity(intent);
+			}
 
-        String[] from = new String[] { DatabaseAdapter.TEXT,
-                DatabaseAdapter.TASK_ID, DatabaseAdapter.USER };
-        int[] to = new int[] { R.id.text, R.id.id };
+		});
+	}
 
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
-                R.layout.simple_list_item, _cursor, from, to);
-        Log.d("Notifications", "Count = " + adapter.getCount());
-        _notificationsList.setAdapter(adapter);
+	private void fillData() {
 
-    }
+		_cursor = _dbHelper.fetchUserNotifications(_user);
+		startManagingCursor(_cursor);
 
-    private void setupToolbarButtons()
-    {
+		String[] from = new String[] { DatabaseAdapter.TEXT,
+				DatabaseAdapter.TASK_ID, DatabaseAdapter.USER };
+		int[] to = new int[] { R.id.text, R.id.id };
 
-        Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
-        Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
-        Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
-        buttonNotifications.setEnabled(false);
+		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
+				R.layout.simple_list_item, _cursor, from, to);
+		Log.d("Notifications", "Count = " + adapter.getCount());
+		_notificationsList.setAdapter(adapter);
 
-        buttonMyTasks.setOnClickListener(new View.OnClickListener()
-        {
+	}
 
-            public void onClick(View v)
-            {
+	private void setupToolbarButtons() {
 
-                Intent intent = new Intent(getApplicationContext(),
-                        TaskListView.class);
-                startActivity(intent);
+		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
+		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
+		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
+		buttonNotifications.setEnabled(false);
 
-            }
-        });
+		buttonMyTasks.setOnClickListener(new View.OnClickListener() {
 
-        buttonCreate.setOnClickListener(new View.OnClickListener()
-        {
+			public void onClick(View v) {
 
-            public void onClick(View v)
-            {
+				Intent intent = new Intent(getApplicationContext(),
+						TaskListView.class);
+				startActivity(intent);
 
-                Intent intent = new Intent(getApplicationContext(),
-                        CreateTaskView.class);
-                startActivity(intent);
-            }
-        });
-    }
+			}
+		});
 
-    /**
-     * A handler for the ListView. Shows a popup menu for a given notification.
-     */
-    class handleList_Click implements OnItemClickListener
-    {
+		buttonCreate.setOnClickListener(new View.OnClickListener() {
 
-        public void onItemClick(AdapterView<?> myAdapter, View myView,
-                int myItemInt, long mylng)
-        {
+			public void onClick(View v) {
 
-            // TODO Auto-generated method stub
-            showItemMenu(myView, myItemInt);
-        }
+				Intent intent = new Intent(getApplicationContext(),
+						CreateTaskView.class);
+				startActivity(intent);
+			}
+		});
+	}
 
-        /**
-         * Displays the menu for a notification.
-         * 
-         * @param view
-         *            The selected notification item.
-         * @param index
-         *            The index of the notification in the ListView.
-         */
-        private void showItemMenu(View view, final int index)
-        {
+	/**
+	 * A handler for the ListView. Shows a popup menu for a given notification.
+	 */
+	class handleList_Click implements OnItemClickListener {
 
-            PopupMenu menu = new PopupMenu(NotificationListView.this, view);
-            // menu.getMenuInflater().inflate(R.menu.popup, menu.getMenu());
+		public void onItemClick(AdapterView<?> myAdapter, View myView,
+				int myItemInt, long mylng) {
 
-            // TODO: Create menu content, set OnMenuItemClickListener, update
-            // notifications upon deletion
-        }
+			// TODO Auto-generated method stub
+			showItemMenu(myView, myItemInt);
+		}
 
-    }
+		/**
+		 * Displays the menu for a notification.
+		 * 
+		 * @param view
+		 *            The selected notification item.
+		 * @param index
+		 *            The index of the notification in the ListView.
+		 */
+		private void showItemMenu(View view, final int index) {
+
+			PopupMenu menu = new PopupMenu(NotificationListView.this, view);
+			// menu.getMenuInflater().inflate(R.menu.popup, menu.getMenu());
+
+			// TODO: Create menu content, set OnMenuItemClickListener, update
+			// notifications upon deletion
+		}
+
+	}
 }

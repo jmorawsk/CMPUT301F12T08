@@ -63,223 +63,216 @@ import tasktracker.model.elements.*;
  * @author Jeanine Bonot
  * 
  */
-public class CreateTaskView extends Activity
-{
+public class CreateTaskView extends Activity {
 
-    private EditText        _name;
-    private EditText        _description;
-    private EditText        _otherMembers;
-    private CheckBox        _text;
-    private CheckBox        _photo;
-    private CheckBox        _private;
-    private Button          _saveButton;
-    private WebDBManager    _webManager;
+	private EditText _name;
+	private EditText _description;
+	private EditText _otherMembers;
+	private CheckBox _text;
+	private CheckBox _photo;
+	private CheckBox _private;
+	private Button _saveButton;
+	private WebDBManager _webManager;
 
-    private DatabaseAdapter _dbHelper;
-    private String          _user;
+	private DatabaseAdapter _dbHelper;
+	private String _user;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_task_view);
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_create_task_view);
 
-        // Initialize our webManager
-        _webManager = new WebDBManager();
-        _dbHelper = new DatabaseAdapter(this);
-        _user = Preferences.getUsername(this);
+		// Initialize our webManager
+		_webManager = new WebDBManager();
+		_dbHelper = new DatabaseAdapter(this);
+		_user = Preferences.getUsername(this);
 
-        // Assign EditText fields
-        _name = (EditText) findViewById(R.id.taskName);
-        _description = (EditText) findViewById(R.id.editDescription);
-        _otherMembers = (EditText) findViewById(R.id.otherMembers);
-        _text = (CheckBox) findViewById(R.id.checkbox_text);
-        _photo = (CheckBox) findViewById(R.id.checkbox_photo);
-        _private = (CheckBox) findViewById(R.id.checkbox_private);
-        _saveButton = (Button) findViewById(R.id.saveButton);
+		// Assign EditText fields
+		_name = (EditText) findViewById(R.id.taskName);
+		_description = (EditText) findViewById(R.id.editDescription);
+		_otherMembers = (EditText) findViewById(R.id.otherMembers);
+		_text = (CheckBox) findViewById(R.id.checkbox_text);
+		_photo = (CheckBox) findViewById(R.id.checkbox_photo);
+		_private = (CheckBox) findViewById(R.id.checkbox_private);
+		_saveButton = (Button) findViewById(R.id.saveButton);
 
-        _saveButton.setOnClickListener(new SaveOnClickListener());
-        _name.addTextChangedListener(new SaveButtonEnabler());
-        _description.addTextChangedListener(new SaveButtonEnabler());
+		_saveButton.setOnClickListener(new SaveOnClickListener());
+		_name.addTextChangedListener(new SaveButtonEnabler());
+		_description.addTextChangedListener(new SaveButtonEnabler());
 
-        setupToolbarButtons();
-    }
+		setupToolbarButtons();
+	}
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.account_menu, menu);
 
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.account_menu, menu);
-        return true;
-    }
+		MenuItem account = menu.findItem(R.id.Account_menu);
+		account.setTitle(_user);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+		return true;
+	}
 
-        // Handle item selection
-        switch (item.getItemId())
-        {
-            case R.id.logout:
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
 
-                Intent intent = new Intent(getApplicationContext(), Login.class);
-                startActivity(intent);
-                return true;
-            default:
-                ToastCreator.showShortToast(this, "Not Yet Implemented");
-                return super.onOptionsItemSelected(item);
-        }
-    }
+		// Handle item selection
+		switch (item.getItemId()) {
+		case R.id.logout:
 
-    private void setupToolbarButtons()
-    {
+			Intent intent = new Intent(getApplicationContext(), Login.class);
+			startActivity(intent);
+			return true;
+		default:
+			ToastCreator.showShortToast(this, "Not Yet Implemented");
+			return super.onOptionsItemSelected(item);
+		}
+	}
 
-        Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
-        Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
-        Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
-        buttonCreate.setEnabled(false);
+	private void setupToolbarButtons() {
 
-        buttonMyTasks.setOnClickListener(new StartActivityHandler<TaskListView>(TaskListView.class));
-        buttonNotifications.setOnClickListener(new StartActivityHandler<NotificationListView>(NotificationListView.class));
-    }
+		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
+		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
+		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
+		buttonCreate.setEnabled(false);
 
-    /**
-     * Create a task based on the creator's input.
-     * 
-     * @return The task created with the creator's input.
-     */
-    private Task createTask()
-    {
+		buttonMyTasks
+				.setOnClickListener(new StartActivityHandler<TaskListView>(
+						TaskListView.class));
+		buttonNotifications
+				.setOnClickListener(new StartActivityHandler<NotificationListView>(
+						NotificationListView.class));
+	}
 
-        // TODO: Find out how to quickly access user information
-        Task task = new Task(Preferences.getUsername(getBaseContext()));
+	/**
+	 * Create a task based on the creator's input.
+	 * 
+	 * @return The task created with the creator's input.
+	 */
+	private Task createTask() {
 
-        task.setDescription(_description.getText().toString());
-        task.setName(_name.getText().toString());
-        task.setPhotoRequirement(_photo.isChecked());
-        task.setTextRequirement(_text.isChecked());
-        task.setOtherMembers(_otherMembers.getText().toString());
-        task.setIsPrivate(_private.isChecked());
+		// TODO: Find out how to quickly access user information
+		Task task = new Task(Preferences.getUsername(getBaseContext()));
 
-        return task;
-    }
+		task.setDescription(_description.getText().toString());
+		task.setName(_name.getText().toString());
+		task.setPhotoRequirement(_photo.isChecked());
+		task.setTextRequirement(_text.isChecked());
+		task.setOtherMembers(_otherMembers.getText().toString());
+		task.setIsPrivate(_private.isChecked());
 
-    /**
-     * Start a new activity while passing the user's information.
-     * 
-     * @param destination
-     *            The activity class destination.
-     */
-    private <T extends Activity> void startActivity(Class<T> destination)
-    {
-        Intent intent = new Intent(getApplicationContext(), destination);
-        startActivity(intent);
-    }
+		return task;
+	}
 
-    private class ContactWebServer extends AsyncTask<Task, Void, Void>  {
+	/**
+	 * Start a new activity while passing the user's information.
+	 * 
+	 * @param destination
+	 *            The activity class destination.
+	 */
+	private <T extends Activity> void startActivity(Class<T> destination) {
+		Intent intent = new Intent(getApplicationContext(), destination);
+		startActivity(intent);
+	}
 
-        @Override
-        protected Void doInBackground(Task... tasks)
-        {
-            for (Task task : tasks)
-            {
-                _webManager.insertTask(task);
-            }
-            return null;
-        }
-    }
+	private class ContactWebServer extends AsyncTask<Task, Void, Void> {
 
-    /**
-     * 
-     * @author jbonot
-     * 
-     */
-    class SaveOnClickListener implements OnClickListener
-    {
+		@Override
+		protected Void doInBackground(Task... tasks) {
+			for (Task task : tasks) {
+				_webManager.insertTask(task);
+			}
+			return null;
+		}
+	}
 
-        public void onClick(View v)
-        {
+	/**
+	 * 
+	 * @author jbonot
+	 * 
+	 */
+	class SaveOnClickListener implements OnClickListener {
 
-            Task task = createTask();
-            List<String> others = task.getOtherMembers();
+		public void onClick(View v) {
 
-            // Add to SQL server
-            _dbHelper.open();
-            long taskID = _dbHelper.createTask(task);
+			Task task = createTask();
+			List<String> others = task.getOtherMembers();
 
-            String taskName = task.getName();
-            String message = Notification.getMessage(_user, taskName,
-                    Notification.Type.InformMembership);
+			// Add to SQL server
+			_dbHelper.open();
+			long taskID = _dbHelper.createTask(task);
 
-            _dbHelper.createMember(taskID,
-                    Preferences.getUsername(getBaseContext()));
+			String taskName = task.getName();
+			String message = Notification.getMessage(_user, taskName,
+					Notification.Type.InformMembership);
 
-            for (String member : others)
-            {
-                _dbHelper.createMember(taskID, member);
-                _dbHelper.createNotification(taskID, member, message);
-            }
-            _dbHelper.close();
+			_dbHelper.createMember(taskID,
+					Preferences.getUsername(getBaseContext()));
 
-            ToastCreator.showLongToast(CreateTaskView.this, "Task created!");
-            startActivity(TaskListView.class);
-            
-            //Mikes experiments nov26
+			for (String member : others) {
+				_dbHelper.createMember(taskID, member);
+				_dbHelper.createNotification(taskID, member, message);
+			}
+			_dbHelper.close();
+
+			ToastCreator.showLongToast(CreateTaskView.this, "Task created!");
+			startActivity(TaskListView.class);
+
+			// Mikes experiments nov26
 			String[] msg;
 			msg = _webManager.insertTask(task);
-			//ReadFromURL myReadFromURL = new ReadFromURL();
-			//myReadFromURL.execute("http://crowdsourcer.softwareprocess.es/F12/CMPUT301F12T08/?action=post&summary=%3CTask%3ETest3FromMikenov28&content={%22_creationDate%22:%22Nov%2028,%202012%20|%2022:38%22,%22_creator%22:%22mike%22,%22_otherMembersList%22:[],%22_description%22:%22test%20from%20mike%22,%22_name%22:%22nov28%22,%22_creatorID%22:0,%22_private%22:false,%22_requiresPhoto%22:false,%22_requiresText%22:true}&description=nov28");
-			//ToastCreator.showLongToast(CreateTaskView.this, "Task created! DB summary: "+msg[0]);
-			ToastCreator.showLongToast(CreateTaskView.this, "Task created! DB summary: n/a");
-	
-        }
+			// ReadFromURL myReadFromURL = new ReadFromURL();
+			// myReadFromURL.execute("http://crowdsourcer.softwareprocess.es/F12/CMPUT301F12T08/?action=post&summary=%3CTask%3ETest3FromMikenov28&content={%22_creationDate%22:%22Nov%2028,%202012%20|%2022:38%22,%22_creator%22:%22mike%22,%22_otherMembersList%22:[],%22_description%22:%22test%20from%20mike%22,%22_name%22:%22nov28%22,%22_creatorID%22:0,%22_private%22:false,%22_requiresPhoto%22:false,%22_requiresText%22:true}&description=nov28");
+			// ToastCreator.showLongToast(CreateTaskView.this,
+			// "Task created! DB summary: "+msg[0]);
+			ToastCreator.showLongToast(CreateTaskView.this,
+					"Task created! DB summary: n/a");
 
-    }
-
-    /**
-     * Enables the save button only when the task has a name and a description.
-     */
-    class SaveButtonEnabler implements TextWatcher
-    {
-
-        public void afterTextChanged(Editable s)
-        {
-
-            _saveButton.setEnabled(_name.getText().length() > 0
-                    && _description.getText().length() > 0);
-        }
-
-        public void beforeTextChanged(CharSequence s, int start, int count,
-                int after)
-        {
-
-            // Do nothing.
-
-        }
-
-        public void onTextChanged(CharSequence s, int start, int before,
-                int count)
-        {
-
-            // Do nothing.
-
-        }
-    }
-	
-    class StartActivityHandler<T extends Activity> implements OnClickListener{
-    	
-    	Class<T> destination;
-    	
-    	StartActivityHandler(Class<T> theClass){
-    		this.destination = theClass;
-    	}
-    	
-		public void onClick(View v) {
-	        startActivity(this.destination);		
 		}
-    	
-    }
+
+	}
+
+	/**
+	 * Enables the save button only when the task has a name and a description.
+	 */
+	class SaveButtonEnabler implements TextWatcher {
+
+		public void afterTextChanged(Editable s) {
+
+			_saveButton.setEnabled(_name.getText().length() > 0
+					&& _description.getText().length() > 0);
+		}
+
+		public void beforeTextChanged(CharSequence s, int start, int count,
+				int after) {
+
+			// Do nothing.
+
+		}
+
+		public void onTextChanged(CharSequence s, int start, int before,
+				int count) {
+
+			// Do nothing.
+
+		}
+	}
+
+	class StartActivityHandler<T extends Activity> implements OnClickListener {
+
+		Class<T> destination;
+
+		StartActivityHandler(Class<T> theClass) {
+			this.destination = theClass;
+		}
+
+		public void onClick(View v) {
+			startActivity(this.destination);
+		}
+
+	}
 
 }

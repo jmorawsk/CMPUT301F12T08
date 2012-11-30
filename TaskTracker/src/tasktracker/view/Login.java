@@ -6,12 +6,10 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
-import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.Button;
-import android.widget.Toast;
 
 public class Login extends Activity {
 
@@ -40,6 +38,14 @@ public class Login extends Activity {
 		_newPasswordConfirm = (EditText) findViewById(R.id.new_password_confirm);
 
 		_dbHelper = new DatabaseAdapter(this);
+		
+		// TODO Delete before release
+		_dbHelper.open();
+		_dbHelper.createUser("Debugger", "cmput301f12t08@gmail.com", "");
+		_dbHelper.createUser("jbonot", "jbonot@ualberta.ca", "");
+		_dbHelper.close();
+		// End to-do
+		
 		setupLogin();
 		setupCreateAccount();
 		setupDebugStuff();
@@ -66,10 +72,9 @@ public class Login extends Activity {
 
 			public void onClick(View v) {
 				_dbHelper.open();
-				String username = _loginUsername.getText()
-						.toString();
+				String username = _loginUsername.getText().toString();
 				String password = _loginPassword.getText().toString();
-				
+
 				_cursor = _dbHelper.fetchUser(_loginUsername.getText()
 						.toString(), _loginPassword.getText().toString());
 
@@ -84,7 +89,8 @@ public class Login extends Activity {
 
 				} else {
 					// User not found in database.
-					shortToast("Invalid username/password combination.");
+					ToastCreator.showShortToast(Login.this,
+							"Invalid username/password combination.");
 				}
 			}
 
@@ -106,17 +112,20 @@ public class Login extends Activity {
 						.toString();
 
 				if (usernameTaken(username)) {
-					shortToast("This username is unavailable.");
+					ToastCreator.showShortToast(Login.this,
+							"This username is unavailable.");
 					return;
 				}
 
 				if (!isValidEmail(email)) {
-					shortToast("Please supply a valid email address.");
+					ToastCreator.showShortToast(Login.this,
+							"Please supply a valid email address.");
 					return;
 				}
 
 				if (!password.equals(passwordConfirm)) {
-					shortToast("Your passwords do not match.");
+					ToastCreator.showShortToast(Login.this,
+							"Your passwords do not match.");
 					return;
 				}
 
@@ -124,7 +133,7 @@ public class Login extends Activity {
 				_dbHelper.createUser(username, email, password);
 				_dbHelper.close();
 
-				longToast("Creation successful!");
+				ToastCreator.showLongToast(Login.this, "Creation successful!");
 				setPreferences(username, email, password, true);
 				proceedToHomePage(username);
 			}
@@ -151,17 +160,19 @@ public class Login extends Activity {
 	}
 
 	private void proceedToHomePage(String user) {
-		longToast("Welcome, " + user + "!");
-		
+		ToastCreator.showLongToast(this, "Welcome, " + user + "!");
+
 		Intent intent = new Intent(getApplicationContext(), TaskListView.class);
 		startActivity(intent);
 	}
 
-	private void setPreferences(String user, String email, String password, boolean save){
+	private void setPreferences(String user, String email, String password,
+			boolean save) {
 		Preferences.setUsername(this, user, save);
 		Preferences.setPassword(this, email, save);
 		Preferences.setEmail(this, password, save);
 	}
+
 	/**
 	 * from
 	 * http://stackoverflow.com/questions/1819142/how-should-i-validate-an-e
@@ -174,19 +185,5 @@ public class Login extends Activity {
 			return android.util.Patterns.EMAIL_ADDRESS.matcher(target)
 					.matches();
 		}
-	}
-
-	private void shortToast(String message) {
-		Toast toast = Toast.makeText(getApplicationContext(), message,
-				Toast.LENGTH_SHORT);
-		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-		toast.show();
-	}
-	
-	private void longToast(String message){
-		Toast toast = Toast.makeText(getApplicationContext(), message,
-				Toast.LENGTH_LONG);
-		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-		toast.show();
 	}
 }

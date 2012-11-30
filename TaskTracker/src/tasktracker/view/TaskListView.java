@@ -49,7 +49,6 @@ public class TaskListView extends Activity {
 	// private List<String> tasks;
 	private String[] tasks = new String[0];
 	private String _user;
-
 	// private PreferencesManager preferences;
 
 	private WebDBManager webManager;
@@ -67,6 +66,8 @@ public class TaskListView extends Activity {
 
 		_user = Preferences.getUsername(this);
 		_dbHelper = new DatabaseAdapter(this);
+
+		Log.d("TaskListView", "On Create");
 
 		setupToolbarButtons();
 		setupTaskList();
@@ -130,15 +131,20 @@ public class TaskListView extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.account_menu, menu);
+		
+		MenuItem account = menu.findItem(R.id.Account_menu);
+		account.setTitle(_user);
+		
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		//An Action Menu or Help menu item was selected
-		//By Mike
+		// An Action Menu or Help menu item was selected
+		// By Mike
 		switch (item.getItemId()) {
 		case R.id.change_name:
 			changeName();
@@ -154,10 +160,15 @@ public class TaskListView extends Activity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
+
 	private void changeName() {
-		//InputPopup popup = new InputPopup();
-		InputPopup.make("Change Username", "Old username was " + Preferences.getUsername(getBaseContext()) + ". Please, keep it clean.", this, InputPopup.Type.username);
+		// InputPopup popup = new InputPopup();
+		InputPopup.make("Change Username",
+				"Old username was " + Preferences.getUsername(getBaseContext())
+						+ ". Please, keep it clean.", this,
+				InputPopup.Type.username);
 	}
+
 	private void showHelp() {
 		// TODO Create a help menu
 		showToast("Show help clicked");
@@ -171,8 +182,10 @@ public class TaskListView extends Activity {
 			public void onItemClick(AdapterView<?> a, View v, int i, long id) {
 				Intent intent = new Intent(getApplicationContext(),
 						TaskView.class);
-				TextView taskID = (TextView)((RelativeLayout)v).findViewById(R.id.id);
-                                intent.putExtra("TASK_ID", Integer.parseInt(taskID.getText().toString()));
+				TextView taskID = (TextView) ((RelativeLayout) v)
+						.findViewById(R.id.id);
+				intent.putExtra("TASK_ID",
+						Integer.parseInt(taskID.getText().toString()));
 				startActivity(intent);
 			}
 
@@ -190,9 +203,9 @@ public class TaskListView extends Activity {
 		_cursor = _dbHelper.fetchTasksAvailableToUser(_user);
 		startManagingCursor(_cursor);
 
-		String[] from = new String[] { DatabaseAdapter.ID, DatabaseAdapter.TASK,
-				DatabaseAdapter.USER, DatabaseAdapter.DATE,
-				DatabaseAdapter.COUNT };
+		String[] from = new String[] { DatabaseAdapter.ID,
+				DatabaseAdapter.TASK, DatabaseAdapter.USER,
+				DatabaseAdapter.DATE, DatabaseAdapter.COUNT };
 		int[] to = new int[] { R.id.id, R.id.item_title, R.id.item_text,
 				R.id.item_date_bottom, R.id.item_vote_count };
 
