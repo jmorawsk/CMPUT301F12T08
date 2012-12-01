@@ -86,6 +86,39 @@ public class TaskListView extends Activity {
 		setupTaskList();
 		setupDebugFeatures();
 	}
+	
+	void createDemoTasks(){
+
+		RequestCreateTask request;
+		Task task;
+
+		task = new Task("pennycandy", "Aww! I found a tiny shoe!", "Is it yours? Let me know!");
+		request = new RequestCreateTask(getBaseContext(), task);
+		
+		task = new Task("bobby7", "Lost: cuddly teddy bear", "He protects me from the scary monsters!");
+		request = new RequestCreateTask(getBaseContext(), task);
+
+		task = new Task("go4brny", "Wait for dairy", "What is uuuupppp!");
+		request = new RequestCreateTask(getBaseContext(), task);
+
+		task = new Task("felinehothothot", "Google \'Cats\'", "Just do it.");
+		request = new RequestCreateTask(getBaseContext(), task);
+		
+		task = new Task("hun-grie", "Find a kitty cat-themed lunchbox", "Meeow!");
+		request = new RequestCreateTask(getBaseContext(), task);
+
+		task = new Task("2H1P", "Photograph Your Lunches", "I want to know what you guys eat.");
+		request = new RequestCreateTask(getBaseContext(), task);
+		
+		task = new Task("lay-z", "Someone do my homework plz.", "99 problems and I won't do one.");
+		request = new RequestCreateTask(getBaseContext(), task);
+		
+		task = new Task("litricher", "Need book suggestions", "Send me some suggestions of books to read.");
+		request = new RequestCreateTask(getBaseContext(), task);
+		
+		task = new Task("qwerty", "Buy groceries", "Broke my leg and I can't walk to the market.  Take pictures of food you're going to buy me.  Thanks");
+		request = new RequestCreateTask(getBaseContext(), task);
+	}
 
 	protected void onStart() {
 		super.onStart();
@@ -93,7 +126,8 @@ public class TaskListView extends Activity {
 		// from Crowdsourcer
 		RequestDownloadTasksSummaries downloader = new RequestDownloadTasksSummaries(
 				getBaseContext());
-		
+
+//		createDemoTasks();
 		_dbHelper.open();
 		fillData(new String[0]);
 	}

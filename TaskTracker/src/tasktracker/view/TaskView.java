@@ -648,7 +648,7 @@ public class TaskView extends Activity {
 	private Task createTask() {
 
 		// TODO: Find out how to quickly access user information
-		task.setCreatorID(_taskCreator);
+		task = new Task(_taskCreator);
 		task.setID(_taskID);
 		task.setDescription(_description.getText().toString());
 		task.setName(_taskName);

@@ -81,7 +81,7 @@ public class CreateTaskView extends Activity {
 		_saveButton = (Button) findViewById(R.id.saveButton);
 
 		setupTextFilters();
-		
+
 		_saveButton.setOnClickListener(new SaveOnClickListener());
 		_name.addTextChangedListener(new SaveButtonEnabler());
 		_description.addTextChangedListener(new SaveButtonEnabler());
@@ -150,7 +150,7 @@ public class CreateTaskView extends Activity {
 		task.setIsPrivate(_private.isChecked());
 		task.setIsDownloaded("Yes"); // Since it was created on this phone, it's
 										// already in the SQL table
-		task.setCreatorID(Preferences.getUserID(getBaseContext()));
+//		task.setCreatorID(Preferences.getUserID(getBaseContext()));
 
 		return task;
 	}
@@ -180,8 +180,7 @@ public class CreateTaskView extends Activity {
 			// Mikes new system nov30
 			RequestCreateTask createTask = new RequestCreateTask(
 					getBaseContext(), task);
-
-			ToastCreator.showLongToast(CreateTaskView.this, "Task created!");
+			// ToastCreator.showLongToast(CreateTaskView.this, "Task created!");
 			finish();
 			startActivity(TaskListView.class);
 
@@ -239,12 +238,11 @@ public class CreateTaskView extends Activity {
 		}
 	}
 
-	public void setupTextFilters(){
-		_name.setFilters(new InputFilter[]{
-				Filters.specialCharFilter()});
-		_description.setFilters(new InputFilter[]{
-				Filters.specialCharFilter()});
-		_otherMembers.setFilters(new InputFilter[]{
-				Filters.specialCharFilter()});
+	public void setupTextFilters() {
+		_name.setFilters(new InputFilter[] { Filters.specialCharFilter() });
+		_description
+				.setFilters(new InputFilter[] { Filters.specialCharFilter() });
+		_otherMembers.setFilters(new InputFilter[] { Filters
+				.specialCharFilter() });
 	}
 }

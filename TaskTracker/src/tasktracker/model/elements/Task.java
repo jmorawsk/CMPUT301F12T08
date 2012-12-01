@@ -98,6 +98,7 @@ public class Task implements Serializable {
 		_likes = 0;
 		_photos = new ArrayList<byte[]>();
 		_texts = new ArrayList<String[]>();
+		_description = description;
 	}
 
 	// Setters
@@ -210,7 +211,7 @@ public class Task implements Serializable {
 
 	/** Gets the string summary for CrowdSourcer */
 	public String getSummary() {
-		return "<Task>" + _name + "<CreatorID>" + _creatorID + "<Date>"
+		return "<Task>" + _name + "<Creator>" + _creator + "<Date>"
 				+ _creationDate + "<Likes>" + _likes + "<Description>"
 				+ _description + "<RequiresPhoto>" + _requiresPhoto
 				+ "<RequiresText>" + _requiresText;

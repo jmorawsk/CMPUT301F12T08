@@ -10,6 +10,7 @@ import java.util.zip.GZIPOutputStream;
 import com.google.gson.Gson;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.AccessURL;
@@ -69,7 +70,8 @@ public class RequestCreateTask implements NetworkRequestModel {
 
 		// Add to SQL server
 		_dbHelper.open();
-		_dbHelper.createTask(task);
+		long value = _dbHelper.createTask(task);
+		Log.d("RequestCreateTask", "create: " + value);
 		_dbHelper.close();
 
 		// Toast toast = Toast.makeText(context,

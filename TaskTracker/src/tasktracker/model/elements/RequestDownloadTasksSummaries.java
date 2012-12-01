@@ -56,7 +56,7 @@ public class RequestDownloadTasksSummaries implements NetworkRequestModel {
 		_dbHelper.open();
 
 		Task task = new Task("null");
-		String taskName, description, date, creatorID, likes, content, id = "";
+		String taskName, description, date, creator, likes, content, id = "";
 		boolean requiresPhoto, requiresText;
 		int pos = 0;
 
@@ -73,7 +73,7 @@ public class RequestDownloadTasksSummaries implements NetworkRequestModel {
 
 			if (taskName != null) {
 				// Task found, parse for its summary...
-				creatorID = AccessURL.getTag("<CreatorID>", line, pos);
+				creator = AccessURL.getTag("<Creator>", line, pos);
 				description = AccessURL.getTag("<Description>", line, pos);
 				date = AccessURL.getTag("<Date>", line, pos);
 				likes = AccessURL.getTag("<Likes>", line, pos);
@@ -86,11 +86,11 @@ public class RequestDownloadTasksSummaries implements NetworkRequestModel {
 						.equals(AccessURL.getTag("<RequiresText>", line, pos)))
 					requiresText = true;
 				// Create object...
-				if (creatorID != null && description != null && date != null
+				if (creator != null && description != null && date != null
 						&& likes != null) {
 					// TODO retrieve the user's name via their user ID from the
 					// Crowdsourcer users list
-					task = new Task(creatorID);
+					task = new Task(creator);
 					task.setName(taskName);
 					task.setDescription(description);
 					task.setID(id);

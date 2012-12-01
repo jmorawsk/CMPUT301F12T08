@@ -68,7 +68,7 @@ public class RequestDownloadTaskContent implements NetworkRequestModel {
 
         if (taskName != null){
             //Task found, parse for its summary...
-            creatorID = AccessURL.getTag("<CreatorID>", line, pos);
+            creatorID = AccessURL.getTag("<Creator>", line, pos);
             description = AccessURL.getTag("<Description>", line, pos);
             date = AccessURL.getTag("<Date>", line, pos);
             likes = AccessURL.getTag("<Likes>", line, pos);

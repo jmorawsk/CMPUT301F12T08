@@ -50,11 +50,11 @@ public class RequestGetAllUsers implements NetworkRequestModel {
 				break;
 			pos += "{\"summary\":\"".length();
 			String username = AccessURL.getTag("<User>", line, pos);
-			Log.d("RequestGetAllUsers", "username: " + username);
 			
 			if (username == null)
 				continue;
 
+			Log.d("RequestGetAllUsers", "username: " + username);
 			String id = AccessURL.getTag(",\"id\":\"", line, pos);
 			Log.d("RequestGetAllUsers", "id: " + id);
 

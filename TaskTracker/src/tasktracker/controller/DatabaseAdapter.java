@@ -346,18 +346,18 @@ public class DatabaseAdapter {
 	}
 
 	private static String[] cuteWords = new String[] { "kitty", "kitten",
-			"cat", "baby", "puppy", "cute", "cuddly", "aww" };
+			"cat", "baby", "puppy", "teddy", "cuddly", "aww" };
 
 	private int getSimilarWords(String[] keywords, List<String[]> wordGroups) {
 		int count = 0;
 
 		for (int i = 0; i < keywords.length; i++) {
-			for (int j = 0; j < cuteWords.length; j++) {
-				if (keywords[i].equalsIgnoreCase(cuteWords[j])) {
-					wordGroups.add(cuteWords);
-					count += cuteWords.length;
-				}
+			if (keywords[i].equalsIgnoreCase("cute")){
+				wordGroups.add(cuteWords);
+				count += cuteWords.length;
 			}
+				
+			
 		}
 
 		return count;
