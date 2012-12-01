@@ -209,8 +209,8 @@ public class DatabaseAdapter {
 
 	public void deleteVote(String taskID, String user) {
 		Cursor cursor = mDb.rawQuery("DELETE FROM " + TABLE_VOTES + " WHERE "
-				+ TASK_ID + "= " + taskID + " AND " + USER + " = ?",
-				new String[] { user });
+				+ TASK_ID + "= ?" + " AND " + USER + " = ?",
+				new String[] { taskID, user });
 		Log.d("DatabaseAdapter", "Cursor Delete Vote: " + cursor.toString());
 	}
 	/**
@@ -287,7 +287,7 @@ public class DatabaseAdapter {
 
 		return mDb
 				.query(TABLE_FULFILLMENTS, new String[] { ID, TASK_ID, DATE, USER,
-						TEXT }, TASK_ID + "=" + taskID, null, null, null, null,
+						TEXT }, TASK_ID + "='" + taskID+"'", null, null, null, null,
 						null);
 	}
 
@@ -299,7 +299,7 @@ public class DatabaseAdapter {
 
 	public Cursor fetchUserViaID(String rowId) {
 		return mDb.query(TABLE_USERS, new String[] { ID, USER, EMAIL }, ID
-				+ "=" + rowId, null, null, null, null, null);
+				+ "='" + rowId+"'", null, null, null, null, null);
 	}
 
 	/**
@@ -344,18 +344,18 @@ public class DatabaseAdapter {
 
 	public Cursor fetchTaskMembers(String taskID) {
 		return mDb.rawQuery("SELECT DISTINCT * FROM " + TABLE_MEMBERS
-				+ " WHERE " + TASK_ID + " = " + taskID, new String[0]);
+				+ " WHERE " + TASK_ID + " = ?", new String[] { taskID });
 	}
 
 	public Cursor countAllVotes(String taskID) {
 		return mDb.rawQuery("SELECT COUNT(*) FROM " + TABLE_VOTES + " WHERE "
-				+ TASK_ID + " = " + taskID, new String[0]);
+				+ TASK_ID + " = ?", new String[] { taskID });
 	}
 
 	public Cursor fetchVote(String taskID, String user) {
 		return mDb.rawQuery("SELECT * FROM " + TABLE_VOTES + " WHERE "
-				+ TASK_ID + " = " + taskID + " AND " + USER + " = ?",
-				new String[] { user });
+				+ TASK_ID + " = ?" + " AND " + USER + " = ?",
+				new String[] { taskID, user });
 	}
 
 	/**
