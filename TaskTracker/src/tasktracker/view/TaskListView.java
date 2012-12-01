@@ -243,44 +243,44 @@ public class TaskListView extends Activity {
 		
 	}
 
-	private void update() {
-		taskList.addAll(webTaskList);
-		ArrayAdapter<Task> adapter = new ArrayAdapter<Task>(this,
-				R.layout.list_item, taskList);
-		taskListView.setAdapter(adapter);
-		oldWebTaskList = new ArrayList<Task>();
-		for (Task t : webTaskList) {
-			oldWebTaskList.add(t);
-		}
-	}
+//	private void update() {
+//		taskList.addAll(webTaskList);
+//		ArrayAdapter<Task> adapter = new ArrayAdapter<Task>(this,
+//				R.layout.list_item, taskList);
+//		taskListView.setAdapter(adapter);
+//		oldWebTaskList = new ArrayList<Task>();
+//		for (Task t : webTaskList) {
+//			oldWebTaskList.add(t);
+//		}
+//	}
 
-	private class contactWebserver extends AsyncTask<Void, Void, Void> {
-		@Override
-		protected Void doInBackground(Void... temp) {
-
-			webTaskList = new ArrayList<Task>();
-			System.out.println("testing");
-			String[][] results = webManager.listTasksAsArrays();
-			String id;
-			Task newTask;
-			for (int n = 0; n < results.length; n++) {
-				if (results[n].length > 1) {
-					System.out.println("index =" + n);
-					id = results[n][1];
-					newTask = webManager.getTask(id);
-					webTaskList.add(newTask);
-				}
-			}
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Void unused) {
-			// update UI with my objects
-			// taskList.addAll(webTaskList);
-
-			update();
-		}
-
-	}
+//	private class contactWebserver extends AsyncTask<Void, Void, Void> {
+//		@Override
+//		protected Void doInBackground(Void... temp) {
+//
+//			webTaskList = new ArrayList<Task>();
+//			System.out.println("testing");
+//			String[][] results = webManager.listTasksAsArrays();
+//			String id;
+//			Task newTask;
+//			for (int n = 0; n < results.length; n++) {
+//				if (results[n].length > 1) {
+//					System.out.println("index =" + n);
+//					id = results[n][1];
+//					newTask = webManager.getTask(id);
+//					webTaskList.add(newTask);
+//				}
+//			}
+//			return null;
+//		}
+//
+//		@Override
+//		protected void onPostExecute(Void unused) {
+//			// update UI with my objects
+//			// taskList.addAll(webTaskList);
+//
+//			update();
+//		}
+//
+//	}
 }
