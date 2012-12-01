@@ -141,20 +141,24 @@ public class DatabaseAdapter {
 
 		return mDb.insert(TABLE_USERS, null, initialValues);
 	}
-	
-	//TODO Method should be moved out of the create__() section of this module
-	public long updateUser(String user, String username, String email, String password){
-		//Untested!
-		//TODO Not used; Need to rearrange user system so that each user has a key corresponding to
-		//  the Crowdsourcer ID key given to that user item; currently, it just uses an incrementing
-		//  integer
+
+	// TODO Method should be moved out of the create__() section of this module
+	public long updateUser(String user, String username, String email,
+			String password) {
+		// Untested!
+		// TODO Not used; Need to rearrange user system so that each user has a
+		// key corresponding to
+		// the Crowdsourcer ID key given to that user item; currently, it just
+		// uses an incrementing
+		// integer
 		ContentValues newValues = new ContentValues();
-		
+
 		newValues.put(USER, user);
 		newValues.put(EMAIL, email);
 		newValues.put(PASSWORD, password);
-		
-		return mDb.update(TABLE_USERS, newValues, USER+"='"+user+"'", null);
+
+		return mDb.update(TABLE_USERS, newValues, USER + "='" + user + "'",
+				null);
 	}
 
 	public long createFulfillment(long taskID, String date, String fulfiller,
@@ -193,6 +197,7 @@ public class DatabaseAdapter {
 				new String[] { user });
 		Log.d("DatabaseAdapter", "Cursor Delete Vote: " + cursor.toString());
 	}
+
 	/**
 	 * Delete the entry with the given rowId
 	 * 
@@ -237,25 +242,55 @@ public class DatabaseAdapter {
 				null, null, null, null, null);
 	}
 
-	public Cursor fetchTasksAvailableToUser(String user) {
+	public Cursor fetchTasksAvailableToUser(String user, String[] keywords) {
+		String[] selectionArgs;
+		String likeComparison = TASK + " LIKE %?% OR " + TEXT + " LIKE %?%";
+		String keywordFilter = "";
+		if (keywords.length > 0) {
+			
+			// args has two iterations of keyword (like comparison) and the user
+			// info
+			selectionArgs = new String[keywords.length * 2 + 1];
+			int argsIndex = 0;
+			selectionArgs[argsIndex++] = keywords[0];
+			selectionArgs[argsIndex++] = keywords[0];
+			
+			keywordFilter = "WHERE " + likeComparison;
+			
+			for (int i = 1; i < keywords.length; i++) {
+				keywordFilter.concat(" OR " + likeComparison);
+				selectionArgs[argsIndex++] = keywords[i];
+				selectionArgs[argsIndex++] = keywords[i];
+			}
+
+		} else {
+			selectionArgs = new String[] { user };
+		}
+
+		String availableToUser = "(SELECT t._id, t.task, t.user, t.date"
+				+ " FROM tasks as t, members as m"
+				+ " WHERE t.private = 0 OR (t.private = 1 AND m.user = ? AND t._id = m.task_id)"
+				+ ") as available";
+
+		String taskVoteCount = "(SELECT v.task_id as task_id, COUNT(v.user) as count"
+				+ " FROM tasks as t, votes as v"
+				+ " WHERE t._id = v.task_id GROUP BY v.task_id) as votecount";
+
 		return mDb
 				.rawQuery(
 						"SELECT DISTINCT _id, task, user, date, CASE WHEN count IS NULL THEN 0 ELSE count END as count"
-								+ " FROM (SELECT t._id, t.task, t.user, t.date"
-								+ " FROM tasks as t, members as m"
-								+ " WHERE t.private = 0 OR (t.private = 1 AND m.user = ? AND t._id = m.task_id)"
-								+ ") as available LEFT JOIN"
-								+ " (SELECT v.task_id as task_id, COUNT(v.user) as count"
-								+ " FROM tasks as t, votes as v"
-								+ " WHERE t._id = v.task_id GROUP BY v.task_id) as votecount"
+								+ " FROM "
+								+ availableToUser
+								+ " LEFT JOIN "
+								+ taskVoteCount
 								+ " ON available._id = votecount.task_id",
 						new String[] { user });
 	}
 
-//	public Cursor fetchAllFulfillments() {
-//		return mDb.query(TABLE_FULFILLMENTS, new String[] { ID, TASK_ID, USER,
-//				DATE }, null, null, null, null, null);
-//	}
+	// public Cursor fetchAllFulfillments() {
+	// return mDb.query(TABLE_FULFILLMENTS, new String[] { ID, TASK_ID, USER,
+	// DATE }, null, null, null, null, null);
+	// }
 
 	public Cursor fetchUserNotifications(String recipient) {
 		return mDb.rawQuery("SELECT * FROM " + TABLE_NOTIFICATIONS + " WHERE "
@@ -265,10 +300,9 @@ public class DatabaseAdapter {
 
 	public Cursor fetchFulfillment(long taskID) {
 
-		return mDb
-				.query(TABLE_FULFILLMENTS, new String[] { ID, TASK_ID, DATE, USER,
-						TEXT }, TASK_ID + "=" + taskID, null, null, null, null,
-						null);
+		return mDb.query(TABLE_FULFILLMENTS, new String[] { ID, TASK_ID, DATE,
+				USER, TEXT }, TASK_ID + "=" + taskID, null, null, null, null,
+				null);
 	}
 
 	public Cursor fetchTask(long rowId) {
@@ -306,7 +340,6 @@ public class DatabaseAdapter {
 				+ " = ?", new String[] { user });
 	}
 
-
 	/**
 	 * Returns a cursor that points to data with the requested tag
 	 * 
@@ -316,8 +349,8 @@ public class DatabaseAdapter {
 	 */
 	public Cursor fetchPhotosUnderTask(long taskID) {
 		Cursor mCursor = mDb.query(true, TABLE_PHOTOS, new String[] { ID, DATE,
-				TASK_ID, PHOTO }, TASK_ID + "=" + taskID, null, null, null, null,
-				null);
+				TASK_ID, PHOTO }, TASK_ID + "=" + taskID, null, null, null,
+				null, null);
 
 		return mCursor;
 	}
@@ -347,8 +380,8 @@ public class DatabaseAdapter {
 	public void setMDb(SQLiteDatabase mDb) {
 		this.mDb = mDb;
 	}
-	
-	public void resetDatabase(){
+
+	public void resetDatabase() {
 
 		for (String table : DatabaseModel.TABLE_NAMES) {
 			mDb.execSQL("DROP TABLE IF EXISTS " + table);

@@ -51,6 +51,7 @@ public class TaskListView extends Activity {
 	private String _user;
 	// private PreferencesManager preferences;
 
+	private EditText filterText;
 	private WebDBManager webManager;
 	private DatabaseAdapter _dbHelper;
 	private Cursor _cursor;
@@ -134,10 +135,10 @@ public class TaskListView extends Activity {
 
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.account_menu, menu);
-		
+
 		MenuItem account = menu.findItem(R.id.Account_menu);
 		account.setTitle(_user);
-		
+
 		return true;
 	}
 
@@ -200,7 +201,7 @@ public class TaskListView extends Activity {
 	}
 
 	private void fillData() {
-		_cursor = _dbHelper.fetchTasksAvailableToUser(_user);
+		_cursor = _dbHelper.fetchTasksAvailableToUser(_user, new String[0]);
 		startManagingCursor(_cursor);
 
 		String[] from = new String[] { DatabaseAdapter.ID,
