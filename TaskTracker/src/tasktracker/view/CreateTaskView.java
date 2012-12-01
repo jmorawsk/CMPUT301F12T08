@@ -54,7 +54,7 @@ public class CreateTaskView extends Activity {
 	private CheckBox _photo;
 	private CheckBox _private;
 	private Button _saveButton;
-	private WebDBManager _webManager;
+	//private WebDBManager _webManager;
 
 	private String _user;
 
@@ -65,7 +65,7 @@ public class CreateTaskView extends Activity {
 		setContentView(R.layout.activity_create_task_view);
 
 		// Initialize our webManager
-		_webManager = new WebDBManager();
+		//_webManager = new WebDBManager();
 		_user = Preferences.getUsername(this);
 
 		// Assign EditText fields
@@ -213,7 +213,7 @@ public class CreateTaskView extends Activity {
 
 			// Mikes experiments nov26
 			String[] msg;
-			msg = _webManager.insertTask(task);
+			//msg = _webManager.insertTask(task);
 			// ReadFromURL myReadFromURL = new ReadFromURL();
 			// myReadFromURL.execute("http://crowdsourcer.softwareprocess.es/F12/CMPUT301F12T08/?action=post&summary=%3CTask%3ETest3FromMikenov28&content={%22_creationDate%22:%22Nov%2028,%202012%20|%2022:38%22,%22_creator%22:%22mike%22,%22_otherMembersList%22:[],%22_description%22:%22test%20from%20mike%22,%22_name%22:%22nov28%22,%22_creatorID%22:0,%22_private%22:false,%22_requiresPhoto%22:false,%22_requiresText%22:true}&description=nov28");
 			// ToastCreator.showLongToast(CreateTaskView.this,
