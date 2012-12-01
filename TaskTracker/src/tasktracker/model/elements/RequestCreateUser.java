@@ -74,7 +74,7 @@ public class RequestCreateUser implements NetworkRequestModel {
 		}
 		_dbHelper.close();
 		
-		Toast toast = Toast.makeText(context, "Win! User added to crowdSourcer: " + user.getID(), Toast.LENGTH_SHORT);
+		Toast toast = Toast.makeText(context, "User added to crowdSourcer: " + user.getName(), Toast.LENGTH_SHORT);
 		toast.show();
 		
 	}

@@ -82,7 +82,7 @@ public class RequestDownloadTasksSummaries implements NetworkRequestModel {
 					&& description != null
 					&& date != null
 					&& likes != null){
-					//TODO retrieve the user's name via their ID from the users list
+					//TODO retrieve the user's name via their user ID from the Crowdsourcer users list
 					task = new Task(creatorID);
 					task.setName(taskName);
 					task.setDescription(description);
@@ -105,6 +105,8 @@ public class RequestDownloadTasksSummaries implements NetworkRequestModel {
 		//toast.show();
 		Toast toast = Toast.makeText(context, "Downloaded tasks from online", Toast.LENGTH_SHORT);
 		toast.show();
+		
+		//TODO refresh current page (TaskListView?)
 		
 		_dbHelper.close();
 	}

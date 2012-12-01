@@ -86,7 +86,7 @@ public class RequestGetAUser implements NetworkRequestModel {
 		
 		if (userName != ""){
 			boolean foundUser = false;
-			String id, aFoundName;
+			String id = "", aFoundName;
 			int pos = 0;
 			int i = 0;
 			//Search based on userName for userID
@@ -94,37 +94,32 @@ public class RequestGetAUser implements NetworkRequestModel {
 				i++;
 				pos = line.indexOf("{\"summary\":\"", pos);
 				//pos = line.indexOf("s", pos);
-				if (pos == -1) {
-					//Toast toast = Toast.makeText(context, "FOUND ENTRY AT " + i, Toast.LENGTH_SHORT);
-					//Toast toast = Toast.makeText(context, "FOUND ENTRY AT " + line, Toast.LENGTH_SHORT);
-					
-					//toast.show();
-					//System.out.println("Bug = " + line);
-					break;
-				}
+				if (pos == -1)	break;
 					
 				pos = pos + "{\"summary\":\"".length();
 				
-				//Toast toast = Toast.makeText(context, "FOUND ENTRY AT " + pos, Toast.LENGTH_SHORT);
-				//toast.show();
-				
 				aFoundName = AccessURL.getTag("<User>", line, pos);
 				if (aFoundName != null){
-					//Toast toast = Toast.makeText(context, "SEARCH FOUND USER '" + aFoundName + "' at " + pos, Toast.LENGTH_SHORT);
-					//toast.show();
 					if (aFoundName.equals(userName)){
 						foundUser = true;
-	
+						
+						System.out.println("Buggy Name=" + aFoundName + " pos=" + pos);
+						
+						//Run new search to get details for this userID and add to local DB etc
+						//id = AccessURL.getTag(",\"id\":\"", line, line.indexOf('}', pos) + 1);
+						id = AccessURL.getTag(",\"id\":\"", line, pos);
+						
 						break;
 					} //end of if statement
 				}
 			}	//end of while statement
 			if (foundUser){
-				//Run new search to get details for this userID and add to local DB etc
-				id = AccessURL.getTag(",\"id\":\"", line, line.indexOf('}', 0) + 1);
-				//Toast toast = Toast.makeText(context, "User " + userName + "found, ID = " + id, Toast.LENGTH_SHORT);
+
+				//(Debug toasts)
+				//Toast toast = Toast.makeText(context, "User " + userName + "found, ID = " + id + ", passing it to ID search for user info.", Toast.LENGTH_SHORT);
 				//toast.show();
 				
+				System.out.println("Buggy ID=" + id);
 				RequestGetAUser getDetails = new RequestGetAUser(context, id, setToCurrentUser);
 				
 				
@@ -134,7 +129,7 @@ public class RequestGetAUser implements NetworkRequestModel {
 				
 				Intent intent = new Intent(context, Login.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				context.startActivity(intent);
+				//context.startActivity(intent);
 				//TODO user not found! Create?
 			}
 		} else {
@@ -154,7 +149,7 @@ public class RequestGetAUser implements NetworkRequestModel {
 			password = AccessURL.getTag("\"password\":", line, 0);
 			
 			
-			if (name != "" && email != "" && password != ""){
+			if (name != null && email != null && password != null){
 				//Valid user info
 				user.setName(name);
 				user.setEmail(email);
@@ -168,12 +163,16 @@ public class RequestGetAUser implements NetworkRequestModel {
 				//Set as current user?
 				if (setToCurrentUser) Preferences.setPreferences(context, user.getName(), user.getEmail(), user.getPassword(), userID, true);
 				
+				//TODO Refresh the current page, probably TaskListView, as the username has changed
+				
 				Toast toast = Toast.makeText(context, "Downloaded user info: " + user.getName() + ". Added to login list.", Toast.LENGTH_SHORT);
 				toast.show();
 			} else {
 				//User gotten but not enough info
 				//TODO error?
-				Toast toast = Toast.makeText(context, "ERROR: User found in crowdsourcer, but lacking required info.", Toast.LENGTH_SHORT);
+				System.out.println("Buggy ID Gotten Line=" + line);
+				Toast toast = Toast.makeText(context, "ERROR: User found in crowdsourcer, but lacking required info: " + line, Toast.LENGTH_SHORT);
+				//Toast toast = Toast.makeText(context, "ERROR: User entry with inadequate info: name=" + name + " email=" + email + " password=" + password, Toast.LENGTH_SHORT);
 				toast.show();
 			}
 		}
