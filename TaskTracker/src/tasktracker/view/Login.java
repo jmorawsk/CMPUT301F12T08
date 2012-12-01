@@ -2,7 +2,7 @@ package tasktracker.view;
 
 import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.Preferences;
-import tasktracker.model.WebDBManager;
+//import tasktracker.model.WebDBManager;
 import tasktracker.model.elements.RequestCreateUser;
 import tasktracker.model.elements.RequestGetAUser;
 import tasktracker.model.elements.User;

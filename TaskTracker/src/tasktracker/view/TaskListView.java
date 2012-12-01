@@ -33,8 +33,8 @@ import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.Preferences;
-import tasktracker.model.ReadFromURL;
-import tasktracker.model.WebDBManager;
+//import tasktracker.model.ReadFromURL;
+//import tasktracker.model.WebDBManager;
 import tasktracker.model.elements.*;
 
 /**
@@ -113,8 +113,8 @@ public class TaskListView extends Activity {
 		nukeCrowdSourcer.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				WebDBManager db = new WebDBManager();
-				db.nukeAll();
+				//WebDBManager db = new WebDBManager();
+				//db.nukeAll();
 				
 			}
 		});
