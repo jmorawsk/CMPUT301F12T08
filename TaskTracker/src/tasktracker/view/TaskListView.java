@@ -25,6 +25,8 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
@@ -52,10 +54,12 @@ public class TaskListView extends Activity {
 	private String _user;
 	// private PreferencesManager preferences;
 
+	private EditText filterText = null;
 	private WebDBManager webManager;
 	private DatabaseAdapter _dbHelper;
 	private Cursor _cursor;
-
+	private SimpleCursorAdapter adapter;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		webManager = new WebDBManager();
@@ -84,9 +88,6 @@ public class TaskListView extends Activity {
 		super.onStart();
 		_dbHelper.open();
 		fillData();
-		// loadTasks();
-		// contactWebserver webRequest = new contactWebserver();
-		// webRequest.execute();
 	}
 
 	protected void onStop() {
@@ -120,7 +121,8 @@ public class TaskListView extends Activity {
 	}
 
 	private void setupToolbarButtons() {
-
+	        filterText = (EditText) findViewById(R.id.search_box);
+	        filterText.addTextChangedListener(filterTextWatcher);
 		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
 		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
 		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
@@ -218,24 +220,30 @@ public class TaskListView extends Activity {
 	private void fillData() {
 		_cursor = _dbHelper.fetchTasksAvailableToUser(_user);
 		startManagingCursor(_cursor);
-/*
+
 		String[] from = new String[] { DatabaseAdapter.ID,
 				DatabaseAdapter.TASK, DatabaseAdapter.USER,
 				DatabaseAdapter.DATE, DatabaseAdapter.COUNT,
 				DatabaseAdapter.DOWNLOADED, DatabaseAdapter.TEXT};
-		*/
-		String[] from = new String[] { DatabaseAdapter.ID,
-				DatabaseAdapter.TASK, DatabaseAdapter.USER,
-				DatabaseAdapter.DATE, DatabaseAdapter.COUNT,
-				DatabaseAdapter.DOWNLOADED, DatabaseAdapter.TEXT};
-		//int[] to = new int[] { R.id.id, R.id.item_title, R.id.item_text,
-		//		R.id.item_date_bottom, R.id.item_vote_count, R.id.downloaded, R.id.description };
 		int[] to = new int[] { R.id.id, R.id.item_title, R.id.item_text,
 				R.id.item_date_bottom, R.id.item_vote_count, R.id.downloaded, R.id.description };
 
-		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
+		adapter = new SimpleCursorAdapter(this,
 				R.layout.list_item, _cursor, from, to);
-
+		//adapter.getFilter().filter('p');
+//		adapter.setStringConversionColumn(_cursor.getColumnIndex(DatabaseAdapter.TASK));
+//		adapter.setFilterQueryProvider(new FilterQueryProvider() {
+//
+//		        public Cursor runQuery(CharSequence constraint) {
+//		            String partialItemName = null;
+//		            if (constraint != null) {
+//		                partialItemName = constraint.toString();
+//		            }
+//		            _dbHelper.
+//		            return groceryDb.suggestItemCompletions(partialItemName);
+//		        }
+//		    });
+		
 		taskListView.setAdapter(adapter);
 		
 		//Now call an asynchronous method to populate the Database with items from Crowdsourcer
@@ -243,44 +251,23 @@ public class TaskListView extends Activity {
 		
 	}
 
-//	private void update() {
-//		taskList.addAll(webTaskList);
-//		ArrayAdapter<Task> adapter = new ArrayAdapter<Task>(this,
-//				R.layout.list_item, taskList);
-//		taskListView.setAdapter(adapter);
-//		oldWebTaskList = new ArrayList<Task>();
-//		for (Task t : webTaskList) {
-//			oldWebTaskList.add(t);
-//		}
+//	private void filterTasks(String filterText){
+//	    taskListView.setFilterText("photo");
 //	}
+	
+	private TextWatcher filterTextWatcher = new TextWatcher() {
 
-//	private class contactWebserver extends AsyncTask<Void, Void, Void> {
-//		@Override
-//		protected Void doInBackground(Void... temp) {
-//
-//			webTaskList = new ArrayList<Task>();
-//			System.out.println("testing");
-//			String[][] results = webManager.listTasksAsArrays();
-//			String id;
-//			Task newTask;
-//			for (int n = 0; n < results.length; n++) {
-//				if (results[n].length > 1) {
-//					System.out.println("index =" + n);
-//					id = results[n][1];
-//					newTask = webManager.getTask(id);
-//					webTaskList.add(newTask);
-//				}
-//			}
-//			return null;
-//		}
-//
-//		@Override
-//		protected void onPostExecute(Void unused) {
-//			// update UI with my objects
-//			// taskList.addAll(webTaskList);
-//
-//			update();
-//		}
-//
-//	}
+	    public void afterTextChanged(Editable s) {
+	    }
+
+	    public void beforeTextChanged(CharSequence s, int start, int count,
+	            int after) {
+	    }
+
+	    public void onTextChanged(CharSequence s, int start, int before,
+	            int count) {
+	        adapter.getFilter().filter(s);
+	    }
+
+	};
 }
