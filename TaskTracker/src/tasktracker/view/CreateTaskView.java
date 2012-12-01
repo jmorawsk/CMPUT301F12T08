@@ -106,7 +106,7 @@ public class CreateTaskView extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		
+
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.account_menu, menu);
 
@@ -124,6 +124,7 @@ public class CreateTaskView extends Activity {
 		case R.id.logout:
 
 			Intent intent = new Intent(getApplicationContext(), Login.class);
+			finish();
 			startActivity(intent);
 			return true;
 		default:
@@ -163,8 +164,9 @@ public class CreateTaskView extends Activity {
 		task.setTextRequirement(_text.isChecked());
 		task.setOtherMembers(_otherMembers.getText().toString());
 		task.setIsPrivate(_private.isChecked());
-		
-		task.setIsDownloaded("Yes");	//Since it was created on this phone, it's already in the SQL table
+
+		task.setIsDownloaded("Yes"); // Since it was created on this phone, it's
+										// already in the SQL table
 
 		return task;
 	}
@@ -180,7 +182,7 @@ public class CreateTaskView extends Activity {
 		startActivity(intent);
 	}
 
-	//Unused. TODO: Delete? (Mike nov 29)
+	// Unused. TODO: Delete? (Mike nov 29)
 	private class ContactWebServer extends AsyncTask<Task, Void, Void> {
 		@Override
 		protected Void doInBackground(Task... tasks) {
@@ -201,39 +203,55 @@ public class CreateTaskView extends Activity {
 		public void onClick(View v) {
 
 			Task task = createTask();
-			
-			if (task.isPrivate()){
+
+			if (task.isPrivate()) {
 				/*
-				List<String> others = task.getOtherMembers();
-	
-				// Add to SQL server
-				_dbHelper.open();
-				//long taskID = _dbHelper.createTask(task);
-				_dbHelper.createTask(task);
-	
-				String taskName = task.getName();
-				String message = Notification.getMessage(_user, taskName,
-						Notification.Type.InformMembership);
-	
-				_dbHelper.createMember(task.getID(),
-						Preferences.getUsername(getBaseContext()));
-	
-				for (String member : others) {
-					_dbHelper.createMember(task.getID(), member);
-					_dbHelper.createNotification(task.getID(), member, message);
-				}
-				_dbHelper.close();
-				*/
-				//TODO: How can we store to the local SQL without a Crowdsourcer ID?
-				Toast toast = Toast.makeText(getBaseContext(), "Failed: Cannot currently create local-only users", Toast.LENGTH_SHORT);
+				 * List<String> others = task.getOtherMembers();
+				 * 
+				 * // Add to SQL server _dbHelper.open(); //long taskID =
+				 * _dbHelper.createTask(task); _dbHelper.createTask(task);
+				 * 
+				 * String taskName = task.getName(); String message =
+				 * Notification.getMessage(_user, taskName,
+				 * Notification.Type.InformMembership);
+				 * 
+				 * _dbHelper.createMember(task.getID(),
+				 * Preferences.getUsername(getBaseContext()));
+				 * 
+				 * for (String member : others) {
+				 * _dbHelper.createMember(task.getID(), member);
+				 * _dbHelper.createNotification(task.getID(), member, message);
+				 * } _dbHelper.close();
+				 */
+				// TODO: How can we store to the local SQL without a
+				// Crowdsourcer ID?
+				Toast toast = Toast.makeText(getBaseContext(),
+						"Failed: Cannot currently create local-only users",
+						Toast.LENGTH_SHORT);
 				toast.show();
 			} else {
 
-				//Mikes new system nov30
-				RequestCreateTask createTask = new RequestCreateTask(getBaseContext(), task);
-				
+				// Mikes new system nov30
+				RequestCreateTask createTask = new RequestCreateTask(
+						getBaseContext(), task);
+
 				startActivity(TaskListView.class);
 			}
+			_dbHelper.close();
+
+			ToastCreator.showLongToast(CreateTaskView.this, "Task created!");
+			finish();
+			startActivity(TaskListView.class);
+
+			// Mikes experiments nov26
+			String[] msg;
+			msg = _webManager.insertTask(task);
+			// ReadFromURL myReadFromURL = new ReadFromURL();
+			// myReadFromURL.execute("http://crowdsourcer.softwareprocess.es/F12/CMPUT301F12T08/?action=post&summary=%3CTask%3ETest3FromMikenov28&content={%22_creationDate%22:%22Nov%2028,%202012%20|%2022:38%22,%22_creator%22:%22mike%22,%22_otherMembersList%22:[],%22_description%22:%22test%20from%20mike%22,%22_name%22:%22nov28%22,%22_creatorID%22:0,%22_private%22:false,%22_requiresPhoto%22:false,%22_requiresText%22:true}&description=nov28");
+			// ToastCreator.showLongToast(CreateTaskView.this,
+			// "Task created! DB summary: "+msg[0]);
+			// ToastCreator.showLongToast(CreateTaskView.this,
+			// "Task created! DB summary: n/a");
 
 		}
 
