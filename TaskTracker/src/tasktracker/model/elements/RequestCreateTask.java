@@ -62,30 +62,32 @@ public class RequestCreateTask implements NetworkRequestModel {
 
 		// Add to SQL server
 		_dbHelper.open();
-
-		task.setDescription(taskID);
-
-		// taskID = _dbHelper.createTask(task);dfd
+		
+		task.setID(taskID);
+		
+		//taskID = _dbHelper.createTask(task);
 		_dbHelper.createTask(task);
-
+		
 		String taskName = task.getName();
 		String message = Notification.getMessage(
 				Preferences.getUsername(context), taskName,
 				Notification.Type.InformMembership);
-
-		// TODO: Waiting on refactor, taskID needs to be type String not long
-
-		_dbHelper.createMember(taskID, Preferences.getUsername(context));
+		
+		//TODO: Waiting on refactor, taskID needs to be type String not long
+		
+		_dbHelper.createMember(taskID,
+				Preferences.getUsername(context));
 
 		for (String member : others) {
 			_dbHelper.createMember(taskID, member);
 			_dbHelper.createNotification(taskID, member, message);
 		}
-
+		
 		_dbHelper.close();
-
+		
+		
 		Toast toast = Toast.makeText(context,
-				"Win! Task added to crowdSourcer: " + taskID,
+				"Win! Task added to crowdSourcer: " + task.getName(),
 				Toast.LENGTH_SHORT);
 		toast.show();
 	}

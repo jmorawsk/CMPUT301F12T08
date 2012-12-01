@@ -83,7 +83,7 @@ public class RequestDownloadTasksSummaries implements NetworkRequestModel {
 					&& date != null
 					&& likes != null){
 					//TODO retrieve the user's name via their ID from the users list
-					task = new Task("the internet");
+					task = new Task(creatorID);
 					task.setName(taskName);
 					task.setDescription(description);
 					task.setID(id);
@@ -101,7 +101,9 @@ public class RequestDownloadTasksSummaries implements NetworkRequestModel {
 				//break;
 			}
 		}
-		Toast toast = Toast.makeText(context, "First item found at " + pos + ", it starts with " + task.getID(), Toast.LENGTH_SHORT);
+		//Toast toast = Toast.makeText(context, "Last item found at " + pos + ", it starts with " + task.getDescription(), Toast.LENGTH_SHORT);
+		//toast.show();
+		Toast toast = Toast.makeText(context, "Downloaded tasks from online", Toast.LENGTH_SHORT);
 		toast.show();
 		
 		_dbHelper.close();
@@ -109,7 +111,6 @@ public class RequestDownloadTasksSummaries implements NetworkRequestModel {
 	
     private void addNewTask(Task task, String _user, DatabaseAdapter _dbHelper){
 		List<String> others = task.getOtherMembers();
-	
 		// Add to SQL server
 		_dbHelper.open();
 		//long taskID = _dbHelper.createTask(task);

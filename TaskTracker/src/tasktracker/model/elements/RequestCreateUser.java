@@ -17,17 +17,25 @@ import tasktracker.model.Preferences;
  * Creates an object to add a Task to Crowdsourcer when passed to ReadFromURL, THEN adds
  * the given task to the local SQL database with Crowdsourcer's returned ID.
  * 
+<<<<<<< HEAD
+=======
+ * @param changeCurrentUser 	Whether to change the current user settigns/Preferences to this
+ * newly created user
+ * 
+>>>>>>> Recommitting previous commit with ignored files (in elements folder) added.
  * Run by creating an instance.
  */
 public class RequestCreateUser implements NetworkRequestModel {
 	private Context context;
 	private User user;
 	private String requestString;
+	private boolean changeCurrentUser;
 
     static final Gson gson = new Gson();
     /** index of 'content' for objects in database */
     
-	public RequestCreateUser(Context contex, User use){
+	public RequestCreateUser(Context contex, User use, boolean changeCurrentUse){
+		changeCurrentUser = changeCurrentUse;
 		context = contex;
 		user = use;
     	String content = gson.toJson(user);
@@ -61,6 +69,9 @@ public class RequestCreateUser implements NetworkRequestModel {
 		
 		_dbHelper.createUser(user.getName(), user.getEmail(), user.getPassword(), taskIDString);
 
+		if (changeCurrentUser){
+			Preferences.setPreferences(context, user.getName(), user.getEmail(), user.getPassword(), taskIDString, true);
+		}
 		_dbHelper.close();
 		
 		Toast toast = Toast.makeText(context, "Win! User added to crowdSourcer: " + user.getID(), Toast.LENGTH_SHORT);
