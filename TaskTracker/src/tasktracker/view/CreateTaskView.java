@@ -27,6 +27,7 @@ import android.content.Intent;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -226,13 +227,15 @@ public class CreateTaskView extends Activity {
 
 	/**
 	 * Enables the save button only when the task has a name and a description.
+	 * Task name cannot contain only whitespace characters.
 	 */
 	class SaveButtonEnabler implements TextWatcher {
 
 		public void afterTextChanged(Editable s) {
 
 			_saveButton.setEnabled(_name.getText().length() > 0
-					&& _description.getText().length() > 0);
+					&& _description.getText().length() > 0
+					&& !(_name.getText().toString().matches("\\s+")));
 		}
 
 		public void beforeTextChanged(CharSequence s, int start, int count,

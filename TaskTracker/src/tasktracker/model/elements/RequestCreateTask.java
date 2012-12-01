@@ -32,14 +32,7 @@ public class RequestCreateTask implements NetworkRequestModel {
 		context = contex;
 		task = theTask;
 		String content = gson.toJson(task);
-		String command = "action=" + "post" + "&summary=" + "<Task>"
-				+ task.getName() + "<CreatorID>" + task.getCreatorID()
-				+ "<Date>" + task.getDateCreated()
-				+ "<Likes>"
-				+ 0 // TODO this could cause trouble for tasks that weren't JUST
-					// created
-				+ "<Description>" + task.getDescription() + "<RequiresPhoto>"
-				+ task.requiresPhoto() + "<RequiresText>" + task.requiresText()
+		String command = "action=" + "post" + "&summary=" + task.getSummary()
 				+ "&content=" + content.toString();
 
 		requestString = AccessURL.turnCommandIntoURL(command);
