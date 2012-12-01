@@ -173,39 +173,39 @@ public class CreateTaskView extends Activity {
 
 			Task task = createTask();
 
-			if (task.isPrivate()) {
-				/*
-				 * List<String> others = task.getOtherMembers();
-				 * 
-				 * // Add to SQL server _dbHelper.open(); //long taskID =
-				 * _dbHelper.createTask(task); _dbHelper.createTask(task);
-				 * 
-				 * String taskName = task.getName(); String message =
-				 * Notification.getMessage(_user, taskName,
-				 * Notification.Type.InformMembership);
-				 * 
-				 * _dbHelper.createMember(task.getID(),
-				 * Preferences.getUsername(getBaseContext()));
-				 * 
-				 * for (String member : others) {
-				 * _dbHelper.createMember(task.getID(), member);
-				 * _dbHelper.createNotification(task.getID(), member, message);
-				 * } _dbHelper.close();
-				 */
-				// TODO: How can we store to the local SQL without a
-				// Crowdsourcer ID?
-				Toast toast = Toast.makeText(getBaseContext(),
-						"Failed: Cannot currently create local-only users",
-						Toast.LENGTH_SHORT);
-				toast.show();
-			} else {
+//			if (task.isPrivate()) {
+//				/*
+//				 * List<String> others = task.getOtherMembers();
+//				 * 
+//				 * // Add to SQL server _dbHelper.open(); //long taskID =
+//				 * _dbHelper.createTask(task); _dbHelper.createTask(task);
+//				 * 
+//				 * String taskName = task.getName(); String message =
+//				 * Notification.getMessage(_user, taskName,
+//				 * Notification.Type.InformMembership);
+//				 * 
+//				 * _dbHelper.createMember(task.getID(),
+//				 * Preferences.getUsername(getBaseContext()));
+//				 * 
+//				 * for (String member : others) {
+//				 * _dbHelper.createMember(task.getID(), member);
+//				 * _dbHelper.createNotification(task.getID(), member, message);
+//				 * } _dbHelper.close();
+//				 */
+//				// TODO: How can we store to the local SQL without a
+//				// Crowdsourcer ID?
+//				Toast toast = Toast.makeText(getBaseContext(),
+//						"Failed: Cannot currently create local-only users",
+//						Toast.LENGTH_SHORT);
+//				toast.show();
+//			} //else {
 
 				// Mikes new system nov30
 				RequestCreateTask createTask = new RequestCreateTask(
 						getBaseContext(), task);
 
 				startActivity(TaskListView.class);
-			}
+			//}
 
 			ToastCreator.showLongToast(CreateTaskView.this, "Task created!");
 			finish();
