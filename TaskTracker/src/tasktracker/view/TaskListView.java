@@ -245,7 +245,7 @@ public class TaskListView extends Activity {
 			public void onItemClick(AdapterView<?> a, View v, int i, long id) {
 				Intent intent = new Intent(getApplicationContext(),
 						TaskView.class);
-				TextView taskID = (TextView) ((RelativeLayout) v)
+				TextView taskID = (TextView) ((LinearLayout) v)
 						.findViewById(R.id.id);
 				System.out.println("Bug (Task ID passed)= "
 						+ taskID.getText().toString());
