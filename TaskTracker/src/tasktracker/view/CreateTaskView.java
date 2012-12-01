@@ -18,24 +18,6 @@ package tasktracker.view;
  * specific language governing permissions and limitations under the License.
  */
 
-/**
- * TaskTracker
- * 
- * Copyright 2012 Jeanine Bonot, Michael Dardis, Katherine Jasniewski,
- * Jason Morawski
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may 
- * not use this file except in compliance with the License. You may obtain
- * a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software distributed
- * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
- * CONDITIONS OF ANY KIND, either express or implied. See the License for the 
- * specific language governing permissions and limitations under the License.
- */
-
 import java.util.List;
 
 import android.os.AsyncTask;
@@ -52,10 +34,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
 import tasktracker.controller.DatabaseAdapter;
-import tasktracker.model.Preferences;
-import tasktracker.model.ReadFromURL;
-import tasktracker.model.WebDBManager;
-import tasktracker.model.elements.*;
+import tasktracker.model.*;
+import tasktracker.model.elements.RequestCreateTask;
+import tasktracker.model.elements.Task;
 
 /**
  * An activity that allows a user to create a task.
@@ -182,17 +163,6 @@ public class CreateTaskView extends Activity {
 		startActivity(intent);
 	}
 
-	// Unused. TODO: Delete? (Mike nov 29)
-	private class ContactWebServer extends AsyncTask<Task, Void, Void> {
-		@Override
-		protected Void doInBackground(Task... tasks) {
-			for (Task task : tasks) {
-				_webManager.insertTask(task);
-			}
-			return null;
-		}
-	}
-
 	/**
 	 * 
 	 * @author jbonot
@@ -237,7 +207,6 @@ public class CreateTaskView extends Activity {
 
 				startActivity(TaskListView.class);
 			}
-			_dbHelper.close();
 
 			ToastCreator.showLongToast(CreateTaskView.this, "Task created!");
 			finish();
