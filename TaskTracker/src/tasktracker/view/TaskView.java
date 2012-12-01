@@ -8,6 +8,7 @@ import java.util.HashMap;
 import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.Preferences;
 import tasktracker.model.elements.Notification;
+import tasktracker.model.elements.RequestCreateTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
@@ -508,7 +509,9 @@ public class TaskView extends Activity {
 
 				ToastCreator.showLongToast(TaskView.this, "\"" + _taskName
 						+ "\" was fulfilled!");
-
+				//TODO: Does task need to be updated on web?
+//				RequestModifyTask createTask = new RequestModifyTask(
+//                                        getBaseContext(), task);
 				finish();
 			}
 		}
