@@ -55,7 +55,6 @@ public class CreateTaskView extends Activity {
 	private Button _saveButton;
 	private WebDBManager _webManager;
 
-	private DatabaseAdapter _dbHelper;
 	private String _user;
 
 	@Override
@@ -66,7 +65,6 @@ public class CreateTaskView extends Activity {
 
 		// Initialize our webManager
 		_webManager = new WebDBManager();
-		_dbHelper = new DatabaseAdapter(this);
 		_user = Preferences.getUsername(this);
 
 		// Assign EditText fields
