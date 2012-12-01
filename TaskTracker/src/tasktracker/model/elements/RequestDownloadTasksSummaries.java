@@ -7,6 +7,7 @@ import java.util.List;
 import com.google.gson.Gson;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.AccessURL;
@@ -108,7 +109,8 @@ public class RequestDownloadTasksSummaries implements NetworkRequestModel {
 
 					_dbHelper.open();
 					// long taskID = _dbHelper.createTask(task);
-					_dbHelper.createTask(task);
+					long rowId = _dbHelper.createTask(task);
+					Log.d("RequestDownloadTaskSummaries", "Create: " + rowId);
 					_dbHelper.close();
 				}
 				// break;

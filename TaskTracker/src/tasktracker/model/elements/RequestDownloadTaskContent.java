@@ -7,6 +7,7 @@ import java.util.List;
 import com.google.gson.Gson;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.AccessURL;
@@ -52,7 +53,7 @@ public class RequestDownloadTaskContent implements NetworkRequestModel {
         _dbHelper.open();
 
         Task task = new Task("null");
-        String taskName, description, date, creatorID, likes, content, id = "";
+        String taskName, description, date, creator, likes, content, id = "";
         boolean requiresPhoto, requiresText;
         int pos = 0;
 
@@ -68,7 +69,7 @@ public class RequestDownloadTaskContent implements NetworkRequestModel {
 
         if (taskName != null){
             //Task found, parse for its summary...
-            creatorID = AccessURL.getTag("<Creator>", line, pos);
+            creator = AccessURL.getTag("<Creator>", line, pos);
             description = AccessURL.getTag("<Description>", line, pos);
             date = AccessURL.getTag("<Date>", line, pos);
             likes = AccessURL.getTag("<Likes>", line, pos);
@@ -79,12 +80,12 @@ public class RequestDownloadTaskContent implements NetworkRequestModel {
             if ("true".equals(AccessURL.getTag("<RequiresText>", line, pos))) 
                 requiresText = true;
             //Create object...
-            if (creatorID != null
+            if (creator != null
                     && description != null
                     && date != null
                     && likes != null){
                 //TODO retrieve the user's name via their user ID from the Crowdsourcer users list
-                task = new Task(creatorID);
+                task = new Task(creator);
                 task.setName(taskName);
                 task.setDescription(description);
                 task.setID(id);
@@ -123,14 +124,14 @@ public class RequestDownloadTaskContent implements NetworkRequestModel {
         // Add to SQL server
         _dbHelper.open();
         //long taskID = _dbHelper.createTask(task);
-        _dbHelper.createTask(task);
-
+        long rowId = _dbHelper.createTask(task);
+        Log.d("RequestDownloadTaskContent", "Create: " + rowId);
         String taskName = task.getName();
-        String message = Notification.getMessage(_user, taskName,
-                Notification.Type.InformMembership);
-
-        _dbHelper.createMember(task.getID(),
-                Preferences.getUsername(context));
+//        String message = Notification.getMessage(_user, taskName,
+//                Notification.Type.InformMembership);
+//
+//        _dbHelper.createMember(task.getID(),
+//                Preferences.getUsername(context));
 
     }
 

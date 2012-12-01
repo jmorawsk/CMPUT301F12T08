@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:padding="4dp" >
 
     <TextView
         android:id="@+id/id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/description"
         android:text="Task ID tag (debug)"
         android:visibility="gone" />
     <!-- Comment out the layout_below line above to remove whitespace -->
@@ -21,60 +21,71 @@
         android:padding="8dp"
         android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/item_title"
-        android:layout_width="210dp"
-        android:textColor="@color/dark_navy"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/check_box"
-        android:maxLines="2"
-        android:text="TaskName"
-        android:textSize="14dp"
-        android:textStyle="bold" >
-    </TextView>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
-    <TextView
-        android:id="@+id/item_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/item_title"
-        android:layout_toRightOf="@id/check_box"
-        android:text="TaskCreator" >
-    </TextView>
+        <TextView
+            android:id="@+id/item_title"
+            android:layout_width="210dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/check_box"
+            android:maxLines="2"
+            android:text="TaskName"
+            android:textColor="@color/dark_navy"
+            android:textSize="14dp"
+            android:textStyle="bold" >
+        </TextView>
 
-    <TextView
-        android:id="@+id/item_top_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/item_title"
-        android:layout_alignParentRight="true"
-        android:text="Likes" />
+        <TextView
+            android:id="@+id/item_top_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/item_title"
+            android:layout_alignParentRight="true"
+            android:text="Likes" />
 
-    <TextView
-        android:id="@+id/item_vote_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/item_title"
-        android:layout_marginRight="6dp"
-        android:layout_toLeftOf="@+id/item_top_right"
-        android:text="-1" />
+        <TextView
+            android:id="@+id/item_vote_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/item_title"
+            android:layout_marginRight="6dp"
+            android:layout_toLeftOf="@+id/item_top_right"
+            android:text="-1" />
+    </RelativeLayout>
 
-    <TextView
-        android:id="@+id/item_date_bottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/item_text"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/item_title"
-        android:text="CreationDate" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/item_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/item_title"
+            android:layout_alignParentRight="true"
+            android:text="TaskCreator"
+            android:textSize="12dp" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/item_date_bottom"
+            android:layout_width="wrap_content"
+            android:textColor="@color/gray"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/item_text"
+            android:layout_below="@+id/item_title"
+            android:layout_toRightOf="@id/check_box"
+            android:text="CreationDate"
+            android:textSize="12dp" />
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/availableOffline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/downloaded"
-        android:layout_alignBottom="@+id/downloaded"
-        android:layout_toLeftOf="@+id/item_top_right"
         android:text="@string/availableOffline"
         android:visibility="gone" />
 
@@ -82,17 +93,13 @@
         android:id="@+id/downloaded"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/item_date_bottom"
-        android:layout_toRightOf="@+id/availableOffline"
-        android:text="Yes?"
         android:visibility="gone" />
 
     <TextView
         android:id="@+id/description"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/item_text"
         android:maxLines="2"
         android:text="Description of task" />
 
-</RelativeLayout>
+</LinearLayout>

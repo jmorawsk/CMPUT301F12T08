@@ -177,14 +177,14 @@ public class TaskListView extends Activity {
 			}
 		});
 
-		buttonNotifications.setOnClickListener(new View.OnClickListener() {
-
-			public void onClick(View v) {
-				Intent intent = new Intent(getApplicationContext(),
-						NotificationListView.class);
-				startActivity(intent);
-			}
-		});
+//		buttonNotifications.setOnClickListener(new View.OnClickListener() {
+//
+//			public void onClick(View v) {
+//				Intent intent = new Intent(getApplicationContext(),
+//						NotificationListView.class);
+//				startActivity(intent);
+//			}
+//		});
 		
 		Button buttonSearch = (Button) findViewById(R.id.search_tasks);
 		

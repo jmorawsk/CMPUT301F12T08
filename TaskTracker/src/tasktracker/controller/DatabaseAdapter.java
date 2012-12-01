@@ -113,6 +113,11 @@ public class DatabaseAdapter {
 	public long createTask(Task task) {
 		ContentValues initialValues = new ContentValues();
 
+		Log.d("DatabaseAdapater", "taskID: " + task.getID());
+		Log.d("DatabaseAdapater", "taskName: " + task.getName());
+		Log.d("DatabaseAdapater", "taskCreator: " + task.getCreator());
+		Log.d("DatabaseAdapater", "getDateCreated: " + task.getDateCreated());
+		Log.d("DatabaseAdapater", "getDownloaded: " + task.getDownloaded());
 		initialValues.put(ID, task.getID());
 		initialValues.put(TASK, task.getName());
 		initialValues.put(DATE, task.getDateCreated());
@@ -122,9 +127,9 @@ public class DatabaseAdapter {
 		initialValues.put(REQS_TEXT, task.requiresText() ? 1 : 0);
 		initialValues.put(PRIVATE, task.isPrivate() ? 1 : 0);
 		initialValues.put(DOWNLOADED, task.getDownloaded()); // Added nov29
-		
-		for (int n=0;n<task.getLikes();n++)
-		    createVote(task.getID(),""+n);
+
+		for (int n = 0; n < task.getLikes(); n++)
+			createVote(task.getID(), "" + n);
 		// -mike
 		// Log.d("DatabaseAdapter",
 		// "PRIVATE = " + Boolean.toString(task.isPrivate()));
@@ -158,8 +163,8 @@ public class DatabaseAdapter {
 
 		return mDb.insert(TABLE_USERS, null, initialValues);
 	}
-	
-	public long createUser(String userID, String username){
+
+	public long createUser(String userID, String username) {
 		ContentValues initialValues = new ContentValues();
 
 		initialValues.put(ID, userID);
@@ -324,8 +329,8 @@ public class DatabaseAdapter {
 		// Log.d("DatabaseAdapter", "KeywordFilter = " + keywordFilter);
 
 		String availableToUser = "(SELECT t._id, t.task, t.user, t.date, t.downloaded, t.text"
-				+ " FROM tasks as t, members as m"
-				+ " WHERE t.private = 0 OR (t.private = 1 AND m.user = ? AND t._id = m.task_id)"
+				+ " FROM tasks as t"
+				+ " WHERE t.private = 0 OR (t.private = 1 AND t.user = ?)"
 				+ ") as available";
 
 		String taskVoteCount = "(SELECT v.task_id as task_id, COUNT(v.user) as count"
@@ -352,12 +357,11 @@ public class DatabaseAdapter {
 		int count = 0;
 
 		for (int i = 0; i < keywords.length; i++) {
-			if (keywords[i].equalsIgnoreCase("cute")){
+			if (keywords[i].equalsIgnoreCase("cute")) {
 				wordGroups.add(cuteWords);
 				count += cuteWords.length;
 			}
-				
-			
+
 		}
 
 		return count;
