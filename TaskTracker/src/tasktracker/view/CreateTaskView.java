@@ -144,9 +144,9 @@ public class CreateTaskView extends Activity {
 		task.setTextRequirement(_text.isChecked());
 		task.setOtherMembers(_otherMembers.getText().toString());
 		task.setIsPrivate(_private.isChecked());
-
 		task.setIsDownloaded("Yes"); // Since it was created on this phone, it's
 										// already in the SQL table
+		task.setCreatorID(Preferences.getUserID(getBaseContext()));
 
 		return task;
 	}

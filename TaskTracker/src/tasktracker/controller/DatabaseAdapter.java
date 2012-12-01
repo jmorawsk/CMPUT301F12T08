@@ -109,7 +109,8 @@ public class DatabaseAdapter {
 	 */
 	public long createTask(Task task) {
 		ContentValues initialValues = new ContentValues();
-
+		
+		initialValues.put(ID, task.getID());
 		initialValues.put(TASK, task.getName());
 		initialValues.put(DATE, task.getDateCreated());
 		initialValues.put(USER, task.getCreator());

@@ -15,6 +15,7 @@ public class Preferences {
 	public static final String INVALID_ACCOUNT = "<ACCOUNT_NOT_SET>";
 	
 	// Variables for quicker access, ie without accessing the Preferences file
+	private static String userID = "";
 	private static String username = "";
 	private static String password = "";
 	private static String email = "";
@@ -29,6 +30,23 @@ public class Preferences {
 		return PREF_NAME;
 	}
 
+	/**
+	 * Gets the user ID setting
+	 * 
+	 * @param context
+	 *            the Activity context (use getBaseContext())
+	 * @return the user ID
+	 */
+	public static String getUserID(Context context){
+		if (userID == "") {
+			// If username not loaded yet, load it
+			SharedPreferences settings = context.getSharedPreferences(
+					PREF_NAME, Context.MODE_PRIVATE);
+			userID = settings.getString("userID", INVALID_ACCOUNT);
+		}
+		return username;
+	}
+	
 	/**
 	 * Gets the user name setting
 	 * 
@@ -80,6 +98,36 @@ public class Preferences {
 		return email;
 	}
 
+	
+	//Setters
+	/**
+	 * Changes the user ID setting in the preferences file and the cached
+	 * variable
+	 * 
+	 * @param context
+	 *            the Activity context (use getBaseContext())
+	 * @param value
+	 *            the new user ID string
+	 * @param changePreferences
+	 * 			  whether to change the preferences file value, or leave it and use this value as a temporary session
+	 */
+	public static void setUserID(Context context, String value,
+			boolean changePreferences) {
+		if (changePreferences) {
+			SharedPreferences settings = context.getSharedPreferences(
+					PREF_NAME, Context.MODE_PRIVATE);
+			SharedPreferences.Editor editor = settings.edit();
+			editor.putString("userID", value);
+			editor.commit();
+			
+			//TODO Change the SQL database...
+			//updateUser()
+			//TODO and change the user item in the crowdsourcer server
+		}
+		userID = value; // Update the quick access variable
+	}
+
+	
 	/**
 	 * Changes the user name setting in the preferences file and the cached
 	 * variable
@@ -151,6 +199,17 @@ public class Preferences {
 			editor.commit();
 		}
 		email = value; // Update the quick access variable
+	}
+	
+	/*
+	 * Set multiple preferences at once.
+	 */
+	public static void setPreferences(Context context, String user, String email, String password, String id,
+			boolean save) {
+		setUsername(context, user, save);
+		setPassword(context, email, save);
+		setEmail(context, password, save);
+		setUserID(context, id, save);
 	}
 
 }

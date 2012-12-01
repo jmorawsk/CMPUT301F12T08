@@ -52,7 +52,7 @@ public class Task implements Serializable {
 	private int _likes;
 
 	// SQL ids
-	private long _creatorID;
+	private String _creatorID;
 
 	/**
 	 * Creates a new instance of the TaskElement class.
@@ -110,8 +110,12 @@ public class Task implements Serializable {
 	public void setName(String value) {
 		_name = value;
 	}
-
-	public void setDate(String value) {
+	
+	public void setCreatorID(String value){
+		_creatorID = value;
+	}
+	
+	public void setDate(String value){
 		_creationDate = value;
 	}
 
@@ -144,7 +148,7 @@ public class Task implements Serializable {
 		return _creator;
 	}
 
-	public long getCreatorID() {
+	public String getCreatorID() {
 		return _creatorID;
 	}
 

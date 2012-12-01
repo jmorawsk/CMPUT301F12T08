@@ -200,8 +200,9 @@ public class TaskListView extends Activity {
 						TaskView.class);
 				TextView taskID = (TextView) ((RelativeLayout) v)
 						.findViewById(R.id.id);
+				System.out.println("Bug = "+taskID.getText().toString());
 				intent.putExtra("TASK_ID",
-						Integer.parseInt(taskID.getText().toString()));
+						taskID.getText().toString());
 				startActivity(intent);
 			}
 		});
@@ -217,11 +218,18 @@ public class TaskListView extends Activity {
 	private void fillData() {
 		_cursor = _dbHelper.fetchTasksAvailableToUser(_user);
 		startManagingCursor(_cursor);
-
+/*
 		String[] from = new String[] { DatabaseAdapter.ID,
 				DatabaseAdapter.TASK, DatabaseAdapter.USER,
 				DatabaseAdapter.DATE, DatabaseAdapter.COUNT,
 				DatabaseAdapter.DOWNLOADED, DatabaseAdapter.TEXT};
+		*/
+		String[] from = new String[] { DatabaseAdapter.ID,
+				DatabaseAdapter.TASK, DatabaseAdapter.USER,
+				DatabaseAdapter.DATE, DatabaseAdapter.COUNT,
+				DatabaseAdapter.DOWNLOADED, DatabaseAdapter.TEXT};
+		//int[] to = new int[] { R.id.id, R.id.item_title, R.id.item_text,
+		//		R.id.item_date_bottom, R.id.item_vote_count, R.id.downloaded, R.id.description };
 		int[] to = new int[] { R.id.id, R.id.item_title, R.id.item_text,
 				R.id.item_date_bottom, R.id.item_vote_count, R.id.downloaded, R.id.description };
 

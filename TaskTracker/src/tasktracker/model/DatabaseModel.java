@@ -26,7 +26,7 @@ public class DatabaseModel {
 	private static final String VOTES = "CREATE TABLE votes (_id INTEGER primary key autoincrement, "
 			+ "task_id INTEGER, " + "user TEXT NOT NULL);";
 
-	private static final String TASKS = "CREATE TABLE tasks (_id INTEGER primary key autoincrement, "
+	private static final String TASKS = "CREATE TABLE tasks (_id TEXT NOT NULL primary key, "
 			+ "user TEXT NOT NULL, "
 			+ "task TEXT NOT NULL, "
 			+ "date TEXT NOT NULL, "

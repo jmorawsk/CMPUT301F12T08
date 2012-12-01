@@ -4,6 +4,7 @@ import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.Preferences;
 import tasktracker.model.WebDBManager;
 import tasktracker.model.elements.RequestCreateUser;
+import tasktracker.model.elements.RequestGetAUser;
 import tasktracker.model.elements.User;
 import android.os.Bundle;
 import android.app.Activity;
@@ -62,7 +63,7 @@ public class Login extends Activity {
 		debug.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				setPreferences("Debugger", "cmput301f12t08@gmail.com", "", true);
+				Preferences.setPreferences(getBaseContext(), "Debugger", "cmput301f12t08@gmail.com", "", "DEBUGGER ID", true);
 				proceedToHomePage("Debugger");
 			}
 
@@ -74,10 +75,14 @@ public class Login extends Activity {
 		login.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				_dbHelper.open();
+				//_dbHelper.open();
 				String username = _loginUsername.getText().toString();
 				String password = _loginPassword.getText().toString();
 
+				//TODO Compare against password when signing in
+				RequestGetAUser downloadUserAndSignIn = new RequestGetAUser(getBaseContext(), true, username);
+				
+				/*	//Old code to validate password against SQL table
 				_cursor = _dbHelper.fetchUser(_loginUsername.getText()
 						.toString(), _loginPassword.getText().toString());
 
@@ -87,7 +92,7 @@ public class Login extends Activity {
 							.getColumnIndex(DatabaseAdapter.EMAIL));
 					_cursor.close();
 					_dbHelper.close();
-					setPreferences(username, email, password, true);
+					setPreferences(username, email, password, id, true);
 					proceedToHomePage(username);
 
 				} else {
@@ -95,6 +100,8 @@ public class Login extends Activity {
 					ToastCreator.showShortToast(Login.this,
 							"Invalid username/password combination.");
 				}
+				*/
+				proceedToHomePage(username);
 			}
 
 		});
@@ -148,10 +155,10 @@ public class Login extends Activity {
 				//_webManager.insertUser(user, getBaseContext());
 				
 				//Add user to crowdsourcer, and then local SQL db using crowdsourcer's returned ID
-				RequestCreateUser creater = new RequestCreateUser(getBaseContext(), user);
+				RequestCreateUser creater = new RequestCreateUser(getBaseContext(), user, true);
 				
 				//ToastCreator.showLongToast(Login.this, "Creation successful!");
-				setPreferences(username, email, password, true);
+				//setPreferences(username, email, password, true);
 				proceedToHomePage(username);
 			}
 
@@ -177,17 +184,10 @@ public class Login extends Activity {
 	}
 
 	private void proceedToHomePage(String user) {
-		ToastCreator.showLongToast(this, "Welcome, " + user + "!");
+		ToastCreator.showLongToast(this, "Signing in , " + user + "...");
 
 		Intent intent = new Intent(getApplicationContext(), TaskListView.class);
 		startActivity(intent);
-	}
-
-	private void setPreferences(String user, String email, String password,
-			boolean save) {
-		Preferences.setUsername(this, user, save);
-		Preferences.setPassword(this, email, save);
-		Preferences.setEmail(this, password, save);
 	}
 
 	/**
