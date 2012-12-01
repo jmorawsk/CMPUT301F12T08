@@ -211,7 +211,8 @@ public class TaskView extends Activity {
 	 */
 	private void setTaskInfo() {
 
-		_cursor = _dbHelper.fetchUserViaID(_taskID);
+		//_cursor = _dbHelper.fetchUserViaID(_taskID);
+		_cursor = _dbHelper.fetchTask(_taskID);
 
 		if (!_cursor.moveToFirst())
 			return;

@@ -200,7 +200,7 @@ public class TaskListView extends Activity {
 						TaskView.class);
 				TextView taskID = (TextView) ((RelativeLayout) v)
 						.findViewById(R.id.id);
-				System.out.println("Bug = "+taskID.getText().toString());
+				System.out.println("Bug (Task ID passed)= "+taskID.getText().toString());
 				intent.putExtra("TASK_ID",
 						taskID.getText().toString());
 				startActivity(intent);

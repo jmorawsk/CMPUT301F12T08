@@ -293,7 +293,7 @@ public class DatabaseAdapter {
 
 	public Cursor fetchTask(String rowId) {
 		return mDb.query(TABLE_TASKS, new String[] { ID, TASK, DATE, USER,
-				TEXT, REQS_PHOTO, REQS_TEXT, PRIVATE }, ID + "=" + rowId, null,
+				TEXT, REQS_PHOTO, REQS_TEXT, PRIVATE }, ID + "=" + rowId, null,	//TODO think error lies here -Mike
 				null, null, null, null);
 	}
 

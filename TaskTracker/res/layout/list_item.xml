@@ -3,13 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="4dp" >
-    
-    <TextView 
+
+        <TextView
         android:id="@+id/id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="invisible"/>
-
+        android:layout_below="@+id/description"
+        android:visibility="visible" 
+        android:text="Task ID tag (debug)" />
+        <!-- Comment out the layout_below line above to remove whitespace -->
+        
     <CheckBox
         android:id="@+id/check_box"
         android:layout_width="wrap_content"
@@ -93,5 +96,6 @@
         android:layout_below="@+id/item_text"
         android:layout_toLeftOf="@+id/availableOffline"
         android:text="Description of task" />
+
 
 </RelativeLayout>
