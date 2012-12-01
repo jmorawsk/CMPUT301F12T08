@@ -75,8 +75,10 @@ public class RequestDownloadTasksSummaries implements NetworkRequestModel {
 				likes = AccessURL.getTag("<Likes>", line, pos);
 				//content = AccessURL.getTag("<Content>", line, pos);
 				id = AccessURL.getTag(",\"id\":\"", line, pos);
-				if (AccessURL.getTag("<requiresPhoto>", line, pos) == "true") requiresPhoto = true;
-				if (AccessURL.getTag("<requiresText>", line, pos) == "true") requiresText = true;
+				if ("true".equalsIgnoreCase(AccessURL.getTag("<RequiresPhoto>", line, pos)))
+				    requiresPhoto = true;
+				if ("true".equals(AccessURL.getTag("<RequiresText>", line, pos))) 
+				    requiresText = true;
 				//Create object...
 				if (creatorID != null
 					&& description != null
