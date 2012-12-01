@@ -17,14 +17,16 @@ public class DatabaseModel {
 	 * Database creation SQL statement.
 	 */
 
-	//private static final String USERS = "CREATE TABLE users (_id INTEGER primary key autoincrement, "
+	// private static final String USERS =
+	// "CREATE TABLE users (_id INTEGER primary key autoincrement, "
 	private static final String USERS = "CREATE TABLE users (_id TEXT NOT NULL primary key, "
 			+ "user TEXT NOT NULL, "
 			+ "email TEXT NOT NULL, "
 			+ "password TEXT NOT NULL);";
 
-	private static final String VOTES = "CREATE TABLE votes (_id INTEGER primary key autoincrement, "
-			+ "task_id INTEGER, " + "user TEXT NOT NULL);";
+	private static final String VOTES = "CREATE TABLE votes (_id INTEGER, "
+			+ "task_id INTEGER, "
+			+ "user TEXT NOT NULL, PRIMARY KEY(task_id, user));";
 
 	private static final String TASKS = "CREATE TABLE tasks (_id TEXT NOT NULL primary key, "
 			+ "user TEXT NOT NULL, "
@@ -33,12 +35,13 @@ public class DatabaseModel {
 			+ "text TEXT NOT NULL, "
 			+ "requiresPhoto INTEGER, "
 			+ "requiresText INTEGER, "
-			+ "private INTEGER, "
-			+ "downloaded TEXT NOT NULL);";	//Added by mike Nov 29
+			+ "private INTEGER, " + "downloaded TEXT NOT NULL);"; // Added by
+																	// mike Nov
+																	// 29
 
-
-	private static final String MEMBERS = "CREATE TABLE members(_id INTEGER primary key autoincrement, "
-			+ "task_id INTEGER, " + "user TEXT NOT NULL);";
+	private static final String MEMBERS = "CREATE TABLE members(_id INTEGER, "
+			+ "task_id INTEGER, " + "user TEXT NOT NULL,"
+			+ " PRIMARY KEY(task_id, user));";
 
 	private static final String FULFILLMENTS = "CREATE TABLE fulfillments(_id INTEGER primary key autoincrement,  "
 			+ "task_id INTEGER, "
@@ -63,9 +66,12 @@ public class DatabaseModel {
 			"votes" };
 
 	private static final String DATABASE_NAME = "data";
-	//private static final int DATABASE_VERSION = 2;
-	//private static final int DATABASE_VERSION = 4;	//Added downloaded column to Tasks table. -Mike, nov26
-	private static final int DATABASE_VERSION = 5;	//Changed USER table primary key ID to string. -Mike nov30
+	// private static final int DATABASE_VERSION = 2;
+	// private static final int DATABASE_VERSION = 4; //Added downloaded column
+	// to Tasks table. -Mike, nov26
+	private static final int DATABASE_VERSION = 5; // Changed USER table primary
+													// key ID to string. -Mike
+													// nov30
 
 	private static final String NAME = "dbAdapter";
 
