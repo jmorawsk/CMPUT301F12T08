@@ -11,27 +11,37 @@
         android:id="@+id/gridView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/galleryPhoto"
+        android:layout_above="@+id/cameraButtons"
         android:layout_below="@+id/buttons"
         android:layout_centerHorizontal="true"
         android:numColumns="3" >
 
     </GridView>
 
+    <LinearLayout
+        android:id = "@+id/cameraButtons"
+        android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:layout_alignParentBottom="true" >
     <Button
         android:id="@+id/takeAPhoto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
+        android:layout_width="100dp"
+        android:layout_height="75dp"
         android:text="New Photo" />
 
     <Button
         android:id="@+id/galleryPhoto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
+        android:layout_width="110dp"
+        android:layout_height="90dp"
         android:text="Select from Gallery" />
 
+   
+    <Button
+        android:id="@+id/saveChanges"
+        android:layout_width="100dp"
+        android:layout_height="75dp"
+        android:layout_below="@+id/buttons"
+        android:text="Save Changes" />
+
+    </LinearLayout>
 </RelativeLayout>

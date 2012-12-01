@@ -1,7 +1,9 @@
 package tasktracker.view;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.Preferences;
@@ -49,6 +51,7 @@ public class TaskView extends Activity {
 	private boolean _requiresPhoto;
 	private boolean _voted;
 	private int _voteCount;
+	private int _photolist;
 
 	// DB stuff
 	private DatabaseAdapter _dbHelper;
@@ -99,7 +102,7 @@ public class TaskView extends Activity {
 
 			public void onClick(View v) {
 
-				startActivity(PhotoPicker.class);
+				getImages();
 			}
 
 		});
@@ -154,6 +157,22 @@ public class TaskView extends Activity {
 		}
 	}
 
+	//Receives the images from photo picker
+	public void getImages(){
+		
+		Intent intent = new Intent(this, PhotoPicker.class);
+//		HashMap<String, String> hm = new HashMap<String, String>();
+//		hm.put("sunil", "sahoo");
+//		ArrayList<HashMap<String, String>> arl = new ArrayList<HashMap<String, String>>();
+//		arl.add(hm);
+//		intent.putExtra("arraylist", arl);
+		Toast.makeText(TaskView.this, "Get the number of Photos!", 2000).show();
+		startActivityForResult(intent, 500);
+		Toast.makeText(TaskView.this, 500, 2000).show();
+		//startActivity(PhotoPicker.class);
+		
+	}
+	
 	private void setVoteInfo() {
 
 		_cursor = _dbHelper.countAllVotes(_taskID);
@@ -514,6 +533,23 @@ public class TaskView extends Activity {
 			_voteInfo.setText(_voteCount + " likes");
 		}
 
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	    // Check which request we're responding to
+	    if (requestCode == 500) {
+	        // Make sure the request was successful
+	    	
+	    	Toast.makeText(TaskView.this, 500, 2000).show();
+	    	
+	        if (resultCode == RESULT_OK) {
+	            // The user picked a contact.
+	            // The Intent's data Uri identifies which contact was selected.
+
+	            // Do something with the contact here (bigger example below)
+	        }
+	    }
 	}
 
 }

@@ -47,6 +47,7 @@ public class PhotoPicker extends Activity {
 		//initializes buttons on layout
 		Button galleryPhoto = (Button) findViewById(R.id.galleryPhoto);
 		Button takePhoto = (Button) findViewById(R.id.takeAPhoto);
+		Button saveChanges = (Button) findViewById(R.id.saveChanges);
 
 		setupToolbarButtons();
 
@@ -60,7 +61,7 @@ public class PhotoPicker extends Activity {
 		});
 
 		//Take a photo option
-		OnClickListener retakeListener = new OnClickListener(){
+		OnClickListener takephotoListener = new OnClickListener(){
 
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -69,15 +70,28 @@ public class PhotoPicker extends Activity {
 
 		};
 
-		takePhoto.setOnClickListener(retakeListener);
+		takePhoto.setOnClickListener(takephotoListener);
 
+		//Save photos option
+		OnClickListener savephotoListener = new OnClickListener(){
 
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+			
+				setResult(myAdapter.count());
+				
+				Toast.makeText(PhotoPicker.this, "Photos Saved", 2000).show();
+				finish();
+			}
+
+		};
+
+		saveChanges.setOnClickListener(savephotoListener);
 
 
 		gridView = (GridView) findViewById(R.id.gridView);
 		gridView.setAdapter(myAdapter);
 
-		//		gridView.setAdapter(new ImageAdapter(this));
 		gridView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 				Toast.makeText(PhotoPicker.this, "" + position, Toast.LENGTH_SHORT).show();
@@ -201,8 +215,6 @@ public class PhotoPicker extends Activity {
 			case TAKE_PICTURE:{
 				
 				if(resultCode == RESULT_OK){
-
-					Toast.makeText(PhotoPicker.this, "Reached", 2000).show();
 
 					String path = imageFileUri.toString();
 					path = path.replace("file://", "");
