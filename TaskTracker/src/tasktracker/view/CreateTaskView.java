@@ -124,6 +124,7 @@ public class CreateTaskView extends Activity {
 		case R.id.logout:
 
 			Intent intent = new Intent(getApplicationContext(), Login.class);
+			finish();
 			startActivity(intent);
 			return true;
 		default:
@@ -219,6 +220,7 @@ public class CreateTaskView extends Activity {
 			_dbHelper.close();
 
 			ToastCreator.showLongToast(CreateTaskView.this, "Task created!");
+			finish();
 			startActivity(TaskListView.class);
 
 			// Mikes experiments nov26
@@ -228,8 +230,8 @@ public class CreateTaskView extends Activity {
 			// myReadFromURL.execute("http://crowdsourcer.softwareprocess.es/F12/CMPUT301F12T08/?action=post&summary=%3CTask%3ETest3FromMikenov28&content={%22_creationDate%22:%22Nov%2028,%202012%20|%2022:38%22,%22_creator%22:%22mike%22,%22_otherMembersList%22:[],%22_description%22:%22test%20from%20mike%22,%22_name%22:%22nov28%22,%22_creatorID%22:0,%22_private%22:false,%22_requiresPhoto%22:false,%22_requiresText%22:true}&description=nov28");
 			// ToastCreator.showLongToast(CreateTaskView.this,
 			// "Task created! DB summary: "+msg[0]);
-			ToastCreator.showLongToast(CreateTaskView.this,
-					"Task created! DB summary: n/a");
+//			ToastCreator.showLongToast(CreateTaskView.this,
+//					"Task created! DB summary: n/a");
 
 		}
 
