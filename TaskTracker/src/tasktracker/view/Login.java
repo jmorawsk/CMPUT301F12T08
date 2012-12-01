@@ -47,7 +47,8 @@ public class Login extends Activity {
 		// TODO Delete before release
 		_dbHelper.open();
 		_dbHelper.createUser("Debugger", "cmput301f12t08@gmail.com", "");
-		_dbHelper.createUser("jbonot", "jbonot@ualberta.ca", ""); //Aw that's cheating! -Mike
+		_dbHelper.createUser("jbonot", "cmput301.tasktracker@gmail.com", "secretpassword"); //Aw that's cheating! -Mike
+		_dbHelper.createUser("tacker", "cmput301.tasktracke@gmail.com", "tasktracker");
 		_dbHelper.close();
 		// End to-do
 		

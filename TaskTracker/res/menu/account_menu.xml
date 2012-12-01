@@ -8,15 +8,15 @@
 
         <!-- "file" submenu -->
         <menu>
-
-            <!--
-            <item android:id="@+id/change_name"
-                  android:title="@string/change_name" />
-            <item android:id="@+id/change_password"
-                  android:title="@string/change_password" />
-            <item android:id="@+id/change_email"
-                  android:title="@string/change_email" />
-            -->
+            <item
+                android:id="@+id/change_name"
+                android:title="@string/change_name"/>
+            <item
+                android:id="@+id/change_password"
+                android:title="@string/change_password"/>
+            <item
+                android:id="@+id/change_email"
+                android:title="@string/change_email"/>
             <item
                 android:id="@+id/logout"
                 android:title="@string/logout"/>
