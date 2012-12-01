@@ -47,24 +47,24 @@ public class TaskListView extends Activity {
 
 	private ListView taskListView;
 	private List<Task> taskList;
-	public List<Task> webTaskList;
-	public List<Task> oldWebTaskList;
+	//public List<Task> webTaskList;
+	//public List<Task> oldWebTaskList;
 	// private List<String> tasks;
 	private String[] tasks = new String[0];
 	private String _user;
 	// private PreferencesManager preferences;
 
 	private EditText filterText = null;
-	private WebDBManager webManager;
+	//private WebDBManager webManager;
 	private DatabaseAdapter _dbHelper;
 	private Cursor _cursor;
 	private SimpleCursorAdapter adapter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		webManager = new WebDBManager();
-		oldWebTaskList = new ArrayList<Task>();
-		webTaskList = new ArrayList<Task>();
+		//webManager = new WebDBManager();
+		//oldWebTaskList = new ArrayList<Task>();
+		//webTaskList = new ArrayList<Task>();
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_list_view);
