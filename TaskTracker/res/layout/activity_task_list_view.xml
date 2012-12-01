@@ -37,8 +37,19 @@
         android:id="@+id/button_clearSQL"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Clear SQL Database"
         android:layout_alignParentBottom="true"
+        android:text="Clear SQL Database"
+        android:textSize="12dp"
+        android:visibility="visible" />
+
+    <Button
+        android:id="@+id/button_nukeCrowdSourcer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="Nuke CrowdSourcer"
+        android:textSize="12dp"
         android:visibility="visible" />
 
 </RelativeLayout>

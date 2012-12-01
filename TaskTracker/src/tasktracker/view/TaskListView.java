@@ -107,6 +107,16 @@ public class TaskListView extends Activity {
 			}
 
 		});
+		
+		Button nukeCrowdSourcer = (Button) findViewById(R.id.button_nukeCrowdSourcer);
+		nukeCrowdSourcer.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+				WebDBManager db = new WebDBManager();
+				db.nukeAll();
+				
+			}
+		});
 	}
 
 	private void setupToolbarButtons() {
