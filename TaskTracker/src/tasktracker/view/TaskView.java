@@ -167,10 +167,10 @@ public class TaskView extends Activity {
 //		ArrayList<HashMap<String, String>> arl = new ArrayList<HashMap<String, String>>();
 //		arl.add(hm);
 //		intent.putExtra("arraylist", arl);
-		Toast.makeText(TaskView.this, "Get the number of Photos!", 2000).show();
-		startActivityForResult(intent, 500);
-		Toast.makeText(TaskView.this, 500, 2000).show();
-		//startActivity(PhotoPicker.class);
+//		Toast.makeText(TaskView.this, "Get the number of Photos!", 2000).show();
+//		startActivityForResult(intent, 500);
+//		Toast.makeText(TaskView.this, 500, 2000).show();
+		startActivity(PhotoPicker.class);
 		
 	}
 	
