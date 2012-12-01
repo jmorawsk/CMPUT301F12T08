@@ -1,5 +1,7 @@
 package tasktracker.view;
 
+import java.io.File;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -7,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.View;
@@ -28,6 +31,7 @@ import android.widget.Toast;
 
 public class PhotoPicker extends Activity {
 
+	Uri imageFileUri;
 	private String[] imageUrls;
 	private ImageAdapter myAdapter = new ImageAdapter(this);
 	private GridView gridView;
@@ -129,17 +133,44 @@ public class PhotoPicker extends Activity {
 	//TODO: Should start the camera class.
 	public void takeAPhoto(){
 
-		Intent intent = new Intent(getApplicationContext(), Camera.class);
-		startActivityForResult(intent,TAKE_PICTURE);
+
+//		//delete the last photo taken
+//		//if(check.equals("PHOTO_TAKEN")){
+//			File fdelete = new File(imageFileUri.getPath());
+//			fdelete.delete();
+		//}
+		
+		
+
+		String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp";
+		File folderF = new File(folder);
+
+		//if file doesn't exist create it
+		if(!folderF.exists()){
+
+			folderF.mkdir();
+		}
+
+		//save file with the current time
+		String imageFilePath = folder + "/" + String.valueOf(System.currentTimeMillis() + ".jpg");
+		File imageFile = new File(imageFilePath);
+		imageFileUri = Uri.fromFile(imageFile);
+		
+		//refresh
+		sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
+
+		//intent has information about image
+		Intent intentC = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		intentC.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
+
+		startActivityForResult(intentC, TAKE_PICTURE);
+	
 	}
 
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		//Toast.makeText(PhotoPicker.this, "Res: "+resultCode + " Req: "+requestCode + "Data: " +data, 2000).show();
-		if (data!=null){
-
-			//Toast.makeText(PhotoPicker.this, "B", 2000).show();
-			//super.onActivityResult(requestCode, resultCode, data);
+		
+			super.onActivityResult(requestCode, resultCode, data);
 
 
 			switch(requestCode) { 
@@ -168,14 +199,13 @@ public class PhotoPicker extends Activity {
 			}
 
 			case TAKE_PICTURE:{
-
-				Toast.makeText(PhotoPicker.this, "B", 2000).show();
-				Toast.makeText(PhotoPicker.this, resultCode, 2000).show();
+				
 				if(resultCode == RESULT_OK){
 
 					Toast.makeText(PhotoPicker.this, "Reached", 2000).show();
 
-					String path = data.getExtras().getString("photo");
+					String path = imageFileUri.toString();
+					path = path.replace("file://", "");
 					Bitmap newPhoto = BitmapFactory.decodeFile(path);
 					myAdapter.addPhoto(newPhoto);
 
@@ -184,8 +214,6 @@ public class PhotoPicker extends Activity {
 			}
 			}
 		}
-
-	}
 
 
 	@Override

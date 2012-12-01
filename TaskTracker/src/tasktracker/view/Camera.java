@@ -64,9 +64,8 @@ public class Camera extends Activity {
 				// TODO Auto-generated method stub
 				 Toast.makeText(Camera.this, "Photo has been added", 2000).show();
 				 Toast.makeText(Camera.this, imageFileUri.toString() , 2000).show();
-				 //Intent intent = new Intent();
-				 //Activity.this.
-				 //intent.putExtra("photo", imageFileUri);
+				 Intent myIntent = new Intent();
+				 myIntent.putExtra("photo", imageFileUri.toString());
 				 //setResult(RESULT_OK,intent);
 				 finish();
 			}
