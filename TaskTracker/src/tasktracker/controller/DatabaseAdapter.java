@@ -331,7 +331,7 @@ public class DatabaseAdapter {
 								+ " LEFT JOIN "
 								+ taskVoteCount
 								+ " ON available._id = votecount.task_id "
-								+ keywordFilter + secondaryConditions,
+								+ keywordFilter + secondaryConditions + " ORDER BY date DESC",
 						selectionArgs);
 	}
 
