@@ -46,15 +46,15 @@ public class TaskView extends Activity {
 	private EditText _textFulfillment;
 	private LinearLayout _fulfillmentList;
 	private ScrollView _scrollview;
-	
-	    private TextView _name;
-	    private TextView _description;
-	    private TextView _creationInfo;
-	    private TextView _privacy;
-	    
-	    private TextView _text;
-	    private TextView _date;
-	    
+
+	private TextView _name;
+	private TextView _description;
+	private TextView _creationInfo;
+	private TextView _privacy;
+
+	private TextView _text;
+	private TextView _date;
+
 	// Task Info
 	private String _taskID;
 	private String _taskName;
@@ -64,7 +64,7 @@ public class TaskView extends Activity {
 	private boolean _voted;
 	private int _voteCount;
 	private int _photolist;
-	private String[] photoFilePaths;
+	private String[] _photoFilePaths;
 
 	private Task task;
 	// DB stuff
@@ -77,16 +77,16 @@ public class TaskView extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_view);
 
-		_taskID = getIntent().getStringExtra("TASK_ID");	//TODO change sent intent to String ID
-		//Log.d("TaskView", "TASK_ID = " + Integer.toString(_taskID));
+		_taskID = getIntent().getStringExtra("TASK_ID"); // TODO change sent
+															// intent to String
+															// ID
+		// Log.d("TaskView", "TASK_ID = " + Integer.toString(_taskID));
 		Log.d("TaskView", "TASK_ID = " + _taskID);
 
 		/*
-		if (_taskID == -1) {
-			Log.e("TaskView", "Did not receive task id");
-			finish();
-		}
-		*/
+		 * if (_taskID == -1) { Log.e("TaskView", "Did not receive task id");
+		 * finish(); }
+		 */
 
 		_dbHelper = new DatabaseAdapter(this);
 		_user = Preferences.getUsername(this);
@@ -151,7 +151,7 @@ public class TaskView extends Activity {
 
 		MenuItem account = menu.findItem(R.id.Account_menu);
 		account.setTitle(_user);
-		
+
 		return true;
 	}
 
@@ -171,15 +171,15 @@ public class TaskView extends Activity {
 		}
 	}
 
-	//Receives the images from photo picker
-	public void getImages(){
-		
+	// Receives the images from photo picker
+	public void getImages() {
+
 		Intent intent = new Intent(this, PhotoPicker.class);
 		intent.putExtra("sampleData", 0);
 		startActivityForResult(intent, 500);
-		
+
 	}
-	
+
 	private void setVoteInfo() {
 
 		_cursor = _dbHelper.countAllVotes(_taskID);
@@ -237,7 +237,7 @@ public class TaskView extends Activity {
 	 */
 	private void setTaskInfo() {
 
-		//_cursor = _dbHelper.fetchUserViaID(_taskID);
+		// _cursor = _dbHelper.fetchUserViaID(_taskID);
 		_cursor = _dbHelper.fetchTask(_taskID);
 
 		if (!_cursor.moveToFirst())
@@ -269,12 +269,12 @@ public class TaskView extends Activity {
 		_name.setText(_taskName);
 		_description.setText(_cursor.getString(_cursor
 				.getColumnIndex(DatabaseAdapter.TEXT)));
-		_creationInfo
-				.setText("Created on " + date + " by " + _taskCreator + ".");
+		_creationInfo.setText("Created on " + date + " by " + _taskCreator
+				+ ".");
 
 		textRequirement.setChecked(_requiresText);
 		photoRequirement.setChecked(_requiresPhoto);
-		
+
 		task = new Task(_taskCreator);
 		createTask();
 
@@ -355,31 +355,34 @@ public class TaskView extends Activity {
 	 */
 	private void sendFulfillmentEmail(String message, String textFulfillment) {
 
-		_cursor = _dbHelper.fetchUserViaName(_taskCreator);
+		// TODO uncomment when email has been put into database
+		// _cursor = _dbHelper.fetchUserViaName(_taskCreator);
+		//
+		// if (!_cursor.moveToFirst()) {
+		// ToastCreator.showLongToast(this,
+		// "Could not find creator information");
+		// return;
+		// }
 
-		if (!_cursor.moveToFirst()) {
-			ToastCreator.showLongToast(this,
-					"Could not find creator information");
-			return;
-		}
+		// String email = _cursor.getString(_cursor
+		// .getColumnIndexOrThrow(DatabaseAdapter.EMAIL));
 
-		String email = _cursor.getString(_cursor
-				.getColumnIndexOrThrow(DatabaseAdapter.EMAIL));
+		String email = "cmput301f12t08@gmail.com"; // TODO remove hardcode
 
-		Intent i = new Intent(Intent.ACTION_SEND);
+		Intent i = new Intent(Intent.ACTION_SEND_MULTIPLE);
 		i.setType("text/plain");
 		i.putExtra(Intent.EXTRA_EMAIL, new String[] { email });
 		i.putExtra(Intent.EXTRA_SUBJECT,
 				"TaskTracker : Task Fulfillment Report");
 		i.putExtra(Intent.EXTRA_TEXT, message + "\n\n" + textFulfillment);
-		
+
 		ArrayList<Uri> uris = new ArrayList<Uri>();
-		for (String file : photoFilePaths){
-			uris.add(Uri.fromFile(new File(file)));
+		for (String file : _photoFilePaths) {
+			uris.add(Uri.parse("file://" + file));
 		}
-		
+
 		i.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
-		
+
 		try {
 			startActivity(Intent.createChooser(i, "Send mail..."));
 		} catch (android.content.ActivityNotFoundException ex) {
@@ -395,11 +398,10 @@ public class TaskView extends Activity {
 	 * @return True if the requirements we fulfilled; otherwise false.
 	 */
 	private boolean requirementsFulfilled() {
-
 		boolean ready = true;
 
 		if (_requiresPhoto) {
-			if (photoFilePaths == null || photoFilePaths.length == 0) {
+			if (_photoFilePaths == null || _photoFilePaths.length == 0) {
 				ToastCreator
 						.showLongToast(this,
 								"You must add a photo before marking this task as fulfilled.");
@@ -518,18 +520,18 @@ public class TaskView extends Activity {
 
 				Log.d("Task Fulfillment",
 						"fulfillment id: " + Long.toString(id));
-				if (!_user.equals(_taskCreator)) {
-					String message = Notification.getMessage(_user, _taskName,
-							Notification.Type.FulfillmentReport);
-					sendFulfillmentNotification(message);
-					sendFulfillmentEmail(message, textFulfillment);
-				}
+				// if (!_user.equals(_taskCreator)) {
+				String message = Notification.getMessage(_user, _taskName,
+						Notification.Type.FulfillmentReport);
+				sendFulfillmentNotification(message);
+				sendFulfillmentEmail(message, textFulfillment);
+				// }
 
 				ToastCreator.showLongToast(TaskView.this, "\"" + _taskName
 						+ "\" was fulfilled!");
-				//TODO: Does task need to be updated on web?
-//				RequestModifyTask createTask = new RequestModifyTask(
-//                                        getBaseContext(), task);
+				// TODO: Does task need to be updated on web?
+				// RequestModifyTask createTask = new RequestModifyTask(
+				// getBaseContext(), task);
 				finish();
 			}
 		}
@@ -555,46 +557,58 @@ public class TaskView extends Activity {
 		}
 
 	}
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-	    // Check which request we're responding to
-	    if (requestCode == 500) {
-	        // Make sure the request was successful
-	    	
-	    	//Toast.makeText(TaskView.this, data.getIntExtra("sampleData", -1), 2000).show();
+		// Check which request we're responding to
+		if (requestCode == 500) {
+			// Make sure the request was successful
 
-	    	//Toast.makeText(TaskView.this, data.getStringExtra("returnedData"), 2000).show();
-	        if (resultCode == RESULT_OK) {
-	        	String[] photoPaths = data.getStringArrayExtra("PhotoPaths");
-	        	
-	        	//Toast.makeText(TaskView.this, data.getStringArrayExtra("PhotoPaths")[0], 2000).show();
-	        }
-	    }
+			// Toast.makeText(TaskView.this, data.getIntExtra("sampleData", -1),
+			// 2000).show();
+
+			// Toast.makeText(TaskView.this,
+			// data.getStringExtra("returnedData"), 2000).show();
+			if (resultCode == RESULT_OK) {
+				_photoFilePaths = data.getStringArrayExtra("PhotoPaths");
+				_fulfillmentButton.setEnabled(_photoFilePaths.length > 0);
+				// Toast.makeText(TaskView.this,
+				// data.getStringArrayExtra("PhotoPaths")[0], 2000).show();
+				_scrollview.post(new Runnable() {
+
+					public void run() {
+
+						_scrollview.fullScroll(ScrollView.FOCUS_DOWN);
+					}
+
+				});
+			}
+		}
 	}
 
 	private Task createTask() {
 
-	        // TODO: Find out how to quickly access user information
-	        task.setCreatorID(_taskCreator);
-	        task.setID(_taskID);
-	        task.setDescription(_description.getText().toString());
-	        task.setName(_taskName);
-	        task.setPhotoRequirement(_requiresPhoto);
-	        task.setTextRequirement(_requiresText);
-	        //task.setDate(_date.getText().toString());
-	        //task.setOtherMembers(_otherMembers.getText().toString());
-	        
-	        boolean privacyBoolean = (_privacy.getVisibility()==1) ? true : false;
-	        task.setIsPrivate(privacyBoolean);
-	        //task.setIsDownloaded("Yes"); // Since it was created on this phone, it's
-	        // already in the SQL table
-	        task.setLikes(_voteCount);
-	        //private int _voteCount;
-	        //private int _photolist;
-	        //task.setCreatorID(Preferences.getUserID(getBaseContext()));
+		// TODO: Find out how to quickly access user information
+		task.setCreatorID(_taskCreator);
+		task.setID(_taskID);
+		task.setDescription(_description.getText().toString());
+		task.setName(_taskName);
+		task.setPhotoRequirement(_requiresPhoto);
+		task.setTextRequirement(_requiresText);
+		// task.setDate(_date.getText().toString());
+		// task.setOtherMembers(_otherMembers.getText().toString());
 
-	        return task;
+		boolean privacyBoolean = (_privacy.getVisibility() == 1) ? true : false;
+		task.setIsPrivate(privacyBoolean);
+		// task.setIsDownloaded("Yes"); // Since it was created on this phone,
+		// it's
+		// already in the SQL table
+		task.setLikes(_voteCount);
+		// private int _voteCount;
+		// private int _photolist;
+		// task.setCreatorID(Preferences.getUserID(getBaseContext()));
+
+		return task;
 	}
-	
+
 }
