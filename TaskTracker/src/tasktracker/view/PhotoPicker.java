@@ -1,6 +1,7 @@
 package tasktracker.view;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -85,11 +86,16 @@ public class PhotoPicker extends Activity {
 				//callImageAdapter();
 				//setResult(myAdapter.count());
 				intent= getIntent();
-				String msg = intent.getStringExtra("sampleData");
+				//String msg = intent.getStringExtra("sampleData");
 				
-				msg += ", Added something";
+				//Integer num = myAdapter.getNumber();
+				Bundle photoBundle = new Bundle();
+				//Bitmap[] photos = myAdapter.getPhotos();
+				ArrayList<Bitmap> photos = myAdapter.getPhotoList();
+				intent.putParcelableArrayListExtra("Photos", photos);
+				//msg += ", "+num;
 				//callImageAdapter();
-				intent.putExtra("returnedData", msg);
+				//intent.putExtra("returnedData", "Number"+ num);
 				setResult(RESULT_OK, intent);
 				
 				Toast.makeText(PhotoPicker.this, "Photos Saved", 2000).show();

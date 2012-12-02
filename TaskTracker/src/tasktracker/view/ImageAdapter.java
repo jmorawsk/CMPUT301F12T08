@@ -11,7 +11,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 
 /**
- * A class that contains an array list of photos and places them in
+ * A class that contains an array list of photos and returns them to
  * the grid view of photo picker layout.
  * 
  * @author Katherine Jasniewski
@@ -21,6 +21,7 @@ import android.widget.ImageView;
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
     private ArrayList<Bitmap> photos;
+    int count = 0;
 
     public ImageAdapter(Context c) {
         mContext = c;
@@ -28,7 +29,10 @@ public class ImageAdapter extends BaseAdapter {
     }
     
     public void addPhoto(Bitmap photo){
+    	
+    	//photo.compress(format, quality, stream);
     	photos.add(photo);
+    	count++;
     }
 
     public int getCount() {
@@ -41,6 +45,11 @@ public class ImageAdapter extends BaseAdapter {
 
     public long getItemId(int position) {
         return 0;
+    }
+    
+    public int getNumber(){
+    	
+    	return count;
     }
 
     // create a new ImageView for each item referenced by the Adapter
@@ -59,7 +68,9 @@ public class ImageAdapter extends BaseAdapter {
         return imageView;
     }
 
-    private void get_images(){
+    private void getImages(){
+    	
+    	
 //        File directory = new File(Variables.PATH_FOTOS);   
 //
 //        File[] archivos =directory.listFiles();
@@ -71,20 +82,11 @@ public class ImageAdapter extends BaseAdapter {
 //            mis_fotos[cont] = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 //        }   
     }
-
-    // references to our images
-//    private Integer[] mThumbIds = {
-//            R.drawable.sample_2, R.drawable.sample_3,
-//            R.drawable.sample_4, R.drawable.sample_5,
-//            R.drawable.sample_6, R.drawable.sample_7,
-//            R.drawable.sample_0, R.drawable.sample_1,
-//            R.drawable.sample_2, R.drawable.sample_3,
-//            R.drawable.sample_4, R.drawable.sample_5,
-//            R.drawable.sample_6, R.drawable.sample_7,
-//            R.drawable.sample_0, R.drawable.sample_1,
-//            R.drawable.sample_2, R.drawable.sample_3,
-//            R.drawable.sample_4, R.drawable.sample_5,
-//            R.drawable.sample_6, R.drawable.sample_7
-//    };
-
+    
+    public Bitmap[] getPhotos(){
+    	return photos.toArray(new Bitmap[photos.size()]);
+    }
+    public ArrayList<Bitmap> getPhotoList(){
+    	return photos;
+    }
 }
