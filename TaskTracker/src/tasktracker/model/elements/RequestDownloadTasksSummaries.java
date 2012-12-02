@@ -56,11 +56,13 @@ public class RequestDownloadTasksSummaries implements NetworkRequestModel {
 		
 		Task task = new Task("null");
 		String taskName, description, date, creatorID, likes, content, id = "";
-		boolean requiresPhoto = false, requiresText = false;
+		boolean requiresPhoto, requiresText;
 		int pos = 0;
 		
 		//Get all of the Tasks from the downloaded string
 		while(pos < line.length()){
+		    requiresPhoto = false;
+		    requiresText = false;
 			pos = line.indexOf("{\"summary\":\"", pos);
 			if (pos == -1) break;
 			pos = pos + "{\"summary\":\"".length();
@@ -94,6 +96,7 @@ public class RequestDownloadTasksSummaries implements NetworkRequestModel {
 					task.setPhotoRequirement(requiresPhoto);
 					task.setTextRequirement(requiresText);
 					//TODO set likes
+					task.setLikes(Integer.parseInt(likes));
 					//TODO set other members? Is this relevent for a downloaded task?
 					task.setOtherMembers("");
 					task.setIsPrivate(false);
