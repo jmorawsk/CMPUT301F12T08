@@ -25,6 +25,8 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
@@ -71,14 +73,15 @@ public class TaskListView extends Activity {
 		Log.d("TaskListView", "On Create");
 
 		setupToolbarButtons();
-		setupTaskList();
+		setupPageContent();
 		setupDebugFeatures();
 	}
 
 	protected void onStart() {
+		Log.d("TaskListView", "On Create");
 		super.onStart();
 		_dbHelper.open();
-		fillData();
+		fillData(new String[0]);
 		// loadTasks();
 		// contactWebserver webRequest = new contactWebserver();
 		// webRequest.execute();
@@ -175,7 +178,7 @@ public class TaskListView extends Activity {
 		showToast("Show help clicked");
 	}
 
-	private void setupTaskList() {
+	private void setupPageContent() {
 		// Assign ListView and its on item click listener.
 		taskListView = (ListView) findViewById(R.id.taskList);
 		taskListView.setOnItemClickListener(new OnItemClickListener() {
@@ -191,6 +194,37 @@ public class TaskListView extends Activity {
 			}
 
 		});
+
+		filterText = (EditText) findViewById(R.id.search_box);
+		Log.d("TaskListView",
+				"null filtertext = " + Boolean.toString(filterText == null));
+
+		filterText.addTextChangedListener(new TextWatcher() {
+
+			public void afterTextChanged(Editable s) {
+
+				String[] keywords = filterText.getText().toString()
+						.split("(\\s+)?,(\\s+)?");
+				if (keywords[0].matches("")) {
+					keywords = new String[0];
+				}
+				Log.d("TaskListView", filterText.getText().toString());
+
+				fillData(keywords);
+
+			}
+
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// Do nothing.
+			}
+
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// Do nothing.
+			}
+
+		});
 	}
 
 	private void showToast(String message) {
@@ -200,8 +234,9 @@ public class TaskListView extends Activity {
 		toast.show();
 	}
 
-	private void fillData() {
-		_cursor = _dbHelper.fetchTasksAvailableToUser(_user, new String[0]);
+	private void fillData(String[] keywords) {
+		Log.d("TaskListView", "On Create");
+		_cursor = _dbHelper.fetchTasksAvailableToUser(_user, keywords);
 		startManagingCursor(_cursor);
 
 		String[] from = new String[] { DatabaseAdapter.ID,
