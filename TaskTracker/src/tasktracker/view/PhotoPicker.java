@@ -1,6 +1,7 @@
 package tasktracker.view;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -22,8 +23,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 /**
- * A class that shows all photos currently attached to task. Allows user to
- * choose to attach a pre existing photo or take a new photo.
+ * A class that shows all photos currently attached to task.
+ * Allows user to choose to attach a pre existing photo or take a new photo.
  * 
  * @author Katherine Jasniewski
  * 
@@ -31,35 +32,41 @@ import android.widget.Toast;
 
 public class PhotoPicker extends Activity {
 
+	Intent intent;
+
+
 	Uri imageFileUri;
-	private String[] imageUrls;
+	private ArrayList<String> imageUrls = new ArrayList<String>();
 	private ImageAdapter myAdapter = new ImageAdapter(this);
 	private GridView gridView;
-	// private DisplayImageOptions options;
+	//private DisplayImageOptions options;
 
-	public static final int PICK_PICTURE_FROM_GALLERY = 1;
+	public static final int PICK_PICTURE_FROM_GALLERY = 1; 
 	public static final int TAKE_PICTURE = 2;
+	public static final int RETURN_PICTURES = 3;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_photo_picker_view);
 
-		// initializes buttons on layout
+		//initializes buttons on layout
 		Button galleryPhoto = (Button) findViewById(R.id.galleryPhoto);
 		Button takePhoto = (Button) findViewById(R.id.takeAPhoto);
+		Button saveChanges = (Button) findViewById(R.id.saveChanges);
 
 		setupToolbarButtons();
 
-		galleryPhoto.setOnClickListener(new OnClickListener() {
+		galleryPhoto.setOnClickListener(new OnClickListener(){
 
-			public void onClick(View v) {
+
+			public void onClick(View v){
 
 				selectPhoto();
 			}
 		});
 
-		// Take a photo option
-		OnClickListener retakeListener = new OnClickListener() {
+		//Take a photo option
+		OnClickListener takephotoListener = new OnClickListener(){
 
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -68,17 +75,40 @@ public class PhotoPicker extends Activity {
 
 		};
 
-		takePhoto.setOnClickListener(retakeListener);
+		takePhoto.setOnClickListener(takephotoListener);
+
+		//Save photos option
+		OnClickListener savephotoListener = new OnClickListener(){
+
+			public void onClick(View v) {
+				intent= getIntent();
+				Bundle photoBundle = new Bundle();
+				//Bitmap[] photos = myAdapter.getPhotos();
+				//ArrayList<Bitmap> photos = myAdapter.getPhotoList();
+
+				//TODO for web
+				//ArrayList<byte[]> compressed = myAdapter.getCompressedPhotos();
+				String[] pathArray = new String[imageUrls.size()];
+				imageUrls.toArray(pathArray);
+				intent.putExtra("PhotoPaths", pathArray);
+				//intent.putParcelableArrayListExtra("Photos", compressed);
+				setResult(RESULT_OK, intent);
+
+				Toast.makeText(PhotoPicker.this, "Photos Saved", 2000).show();
+				finish();
+			}
+
+		};
+
+		saveChanges.setOnClickListener(savephotoListener);
+
 
 		gridView = (GridView) findViewById(R.id.gridView);
 		gridView.setAdapter(myAdapter);
 
-		// gridView.setAdapter(new ImageAdapter(this));
 		gridView.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View v,
-					int position, long id) {
-				Toast.makeText(PhotoPicker.this, "" + position,
-						Toast.LENGTH_SHORT).show();
+			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+				Toast.makeText(PhotoPicker.this, "" + position, Toast.LENGTH_SHORT).show();
 
 			}
 		});
@@ -118,8 +148,8 @@ public class PhotoPicker extends Activity {
 		startActivity(intent);
 	}
 
-	// User can select a photo from the android gallery
-	public void selectPhoto() {
+	//User can select a photo from the android gallery
+	public void selectPhoto(){
 
 		Intent intent = new Intent(Intent.ACTION_PICK,
 				android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -128,37 +158,27 @@ public class PhotoPicker extends Activity {
 
 	}
 
-	// TODO: Should start the camera class.
-	public void takeAPhoto() {
+	//TODO: Should start the camera class.
+	public void takeAPhoto(){
 
-		// //delete the last photo taken
-		// //if(check.equals("PHOTO_TAKEN")){
-		// File fdelete = new File(imageFileUri.getPath());
-		// fdelete.delete();
-		// }
-
-		String folder = Environment.getExternalStorageDirectory()
-				.getAbsolutePath() + "/tmp";
+		String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp";
 		File folderF = new File(folder);
 
-		// if file doesn't exist create it
-		if (!folderF.exists()) {
+		//if file doesn't exist create it
+		if(!folderF.exists()){
 
 			folderF.mkdir();
 		}
 
-		// save file with the current time
-		String imageFilePath = folder + "/"
-				+ String.valueOf(System.currentTimeMillis() + ".jpg");
+		//save file with the current time
+		String imageFilePath = folder + "/" + String.valueOf(System.currentTimeMillis() + ".jpg");
 		File imageFile = new File(imageFilePath);
 		imageFileUri = Uri.fromFile(imageFile);
 
-		// refresh
-		sendBroadcast(new Intent(
-				Intent.ACTION_MEDIA_MOUNTED,
-				Uri.parse("file://" + Environment.getExternalStorageDirectory())));
+		//refresh
+		sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
 
-		// intent has information about image
+		//intent has information about image
 		Intent intentC = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		intentC.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
 
@@ -168,49 +188,51 @@ public class PhotoPicker extends Activity {
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-		super.onActivityResult(requestCode, resultCode, data);
+			super.onActivityResult(requestCode, resultCode, data);
 
-		switch (requestCode) {
-		case PICK_PICTURE_FROM_GALLERY: {
-			if (resultCode == RESULT_OK) {
-				Uri selectedImage = data.getData();
-				String[] filePathColumn = { MediaStore.Images.Media.DATA };
 
-				Cursor cursor = getContentResolver().query(selectedImage,
-						filePathColumn, null, null, null);
-				cursor.moveToFirst();
+			switch(requestCode) { 
+			case PICK_PICTURE_FROM_GALLERY:{
+				if(resultCode == RESULT_OK){  
+					Uri selectedImage = data.getData();
+					String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
-				int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-				String filePath = cursor.getString(columnIndex);
-				cursor.close();
+					Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+					cursor.moveToFirst();
 
-				Bitmap theSelectedImage = BitmapFactory.decodeFile(filePath);
+					int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+					String filePath = cursor.getString(columnIndex);
+					cursor.close();
 
-				Toast.makeText(PhotoPicker.this, "photo selected", 2000).show();
-				myAdapter.addPhoto(theSelectedImage);
 
-				gridView.setAdapter(myAdapter);
+					Bitmap theSelectedImage = BitmapFactory.decodeFile(filePath);
+
+					Toast.makeText(PhotoPicker.this, "photo selected", 2000).show();
+					myAdapter.addPhoto(theSelectedImage);
+
+					imageUrls.add(filePath);
+					gridView.setAdapter(myAdapter);
+				}
+				break;
+
+			}
+
+			case TAKE_PICTURE:{
+
+				if(resultCode == RESULT_OK){
+
+					String path = imageFileUri.toString();
+					path = path.replace("file://", "");
+					Bitmap newPhoto = BitmapFactory.decodeFile(path);
+					myAdapter.addPhoto(newPhoto);
+					imageUrls.add(path);
+					gridView.setAdapter(myAdapter);
+				}
 			}
 			break;
-
-		}
-
-		case TAKE_PICTURE: {
-
-			if (resultCode == RESULT_OK) {
-
-				Toast.makeText(PhotoPicker.this, "Reached", 2000).show();
-
-				String path = imageFileUri.toString();
-				path = path.replace("file://", "");
-				Bitmap newPhoto = BitmapFactory.decodeFile(path);
-				myAdapter.addPhoto(newPhoto);
-
-				gridView.setAdapter(myAdapter);
 			}
 		}
-		}
-	}
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

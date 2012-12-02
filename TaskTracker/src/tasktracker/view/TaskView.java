@@ -1,11 +1,13 @@
 package tasktracker.view;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.Preferences;
 import tasktracker.model.elements.Notification;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
@@ -29,6 +31,8 @@ public class TaskView extends Activity {
 
 	// The current user
 	private String _user;
+
+	private String[] _photoFilePaths;
 
 	// Activity Items
 	private Button _fulfillmentButton;
@@ -96,7 +100,7 @@ public class TaskView extends Activity {
 
 			public void onClick(View v) {
 
-				startActivity(PhotoPicker.class);
+				getImages();
 			}
 
 		});
@@ -131,7 +135,7 @@ public class TaskView extends Activity {
 
 		MenuItem account = menu.findItem(R.id.Account_menu);
 		account.setTitle(_user);
-		
+
 		return true;
 	}
 
@@ -149,6 +153,15 @@ public class TaskView extends Activity {
 			ToastCreator.showShortToast(this, "Not Yet Implemented");
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	// Receives the images from photo picker
+	public void getImages() {
+
+		Intent intent = new Intent(this, PhotoPicker.class);
+		intent.putExtra("sampleData", 0);
+		startActivityForResult(intent, 500);
+
 	}
 
 	private void setVoteInfo() {
@@ -332,12 +345,20 @@ public class TaskView extends Activity {
 		String email = _cursor.getString(_cursor
 				.getColumnIndexOrThrow(DatabaseAdapter.EMAIL));
 
-		Intent i = new Intent(Intent.ACTION_SEND);
+		Intent i = new Intent(Intent.ACTION_SEND_MULTIPLE);
 		i.setType("text/plain");
 		i.putExtra(Intent.EXTRA_EMAIL, new String[] { email });
 		i.putExtra(Intent.EXTRA_SUBJECT,
 				"TaskTracker : Task Fulfillment Report");
 		i.putExtra(Intent.EXTRA_TEXT, message + "\n\n" + textFulfillment);
+
+		ArrayList<Uri> uris = new ArrayList<Uri>();
+		for (String file : _photoFilePaths) {
+			uris.add(Uri.parse("file://" + file));
+		}
+
+		i.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
+
 		try {
 			startActivity(Intent.createChooser(i, "Send mail..."));
 		} catch (android.content.ActivityNotFoundException ex) {
@@ -353,11 +374,10 @@ public class TaskView extends Activity {
 	 * @return True if the requirements we fulfilled; otherwise false.
 	 */
 	private boolean requirementsFulfilled() {
-
 		boolean ready = true;
 
 		if (_requiresPhoto) {
-			if (true) {
+			if (_photoFilePaths == null || _photoFilePaths.length == 0) {
 				ToastCreator
 						.showLongToast(this,
 								"You must add a photo before marking this task as fulfilled.");
@@ -366,6 +386,34 @@ public class TaskView extends Activity {
 		}
 
 		return ready;
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// Check which request we're responding to
+		if (requestCode == 500) {
+			// Make sure the request was successful
+
+			// Toast.makeText(TaskView.this, data.getIntExtra("sampleData", -1),
+			// 2000).show();
+
+			// Toast.makeText(TaskView.this,
+			// data.getStringExtra("returnedData"), 2000).show();
+			if (resultCode == RESULT_OK) {
+				_photoFilePaths = data.getStringArrayExtra("PhotoPaths");
+				_fulfillmentButton.setEnabled(_photoFilePaths.length > 0);
+				// Toast.makeText(TaskView.this,
+				// data.getStringArrayExtra("PhotoPaths")[0], 2000).show();
+				_scrollview.post(new Runnable() {
+
+					public void run() {
+
+						_scrollview.fullScroll(ScrollView.FOCUS_DOWN);
+					}
+
+				});
+			}
+		}
 	}
 
 	/**
