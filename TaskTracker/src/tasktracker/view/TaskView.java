@@ -172,15 +172,9 @@ public class TaskView extends Activity {
 	public void getImages(){
 		
 		Intent intent = new Intent(this, PhotoPicker.class);
-//		HashMap<String, String> hm = new HashMap<String, String>();
-//		hm.put("sunil", "sahoo");
-//		ArrayList<HashMap<String, String>> arl = new ArrayList<HashMap<String, String>>();
-//		arl.add(hm);
-//		intent.putExtra("arraylist", arl);
-//		Toast.makeText(TaskView.this, "Get the number of Photos!", 2000).show();
-//		startActivityForResult(intent, 500);
-//		Toast.makeText(TaskView.this, 500, 2000).show();
-		intent.putExtra("sampleData", "This is sample data");
+		//Bundle 
+		//intent.p
+		intent.putExtra("sampleData", 0);
 		startActivityForResult(intent, 500);
 		
 	}
@@ -558,13 +552,16 @@ public class TaskView extends Activity {
 	    if (requestCode == 500) {
 	        // Make sure the request was successful
 	    	
-	    	Toast.makeText(TaskView.this, 500, 2000).show();
-	    	
+	    	//Toast.makeText(TaskView.this, data.getIntExtra("sampleData", -1), 2000).show();
+
+	    	//Toast.makeText(TaskView.this, data.getStringExtra("returnedData"), 2000).show();
 	        if (resultCode == RESULT_OK) {
 	            // The user picked a contact.
 	            // The Intent's data Uri identifies which contact was selected.
 
 	            // Do something with the contact here (bigger example below)
+	        	//data.getParcelableArrayListExtra("Photos");
+	        	//TODO
 	        }
 	    }
 	}
