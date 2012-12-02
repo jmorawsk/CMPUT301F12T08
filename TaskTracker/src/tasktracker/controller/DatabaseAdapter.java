@@ -244,28 +244,30 @@ public class DatabaseAdapter {
 
 	public Cursor fetchTasksAvailableToUser(String user, String[] keywords) {
 		String[] selectionArgs;
-		String likeComparison = TASK + " LIKE %?% OR " + TEXT + " LIKE %?%";
+		String likeComparison = TASK + " LIKE '%'|| ? || '%'";
 		String keywordFilter = "";
 		if (keywords.length > 0) {
+
+			keywordFilter = "WHERE " + likeComparison;
 			
 			// args has two iterations of keyword (like comparison) and the user
 			// info
-			selectionArgs = new String[keywords.length * 2 + 1];
-			int argsIndex = 0;
-			selectionArgs[argsIndex++] = keywords[0];
-			selectionArgs[argsIndex++] = keywords[0];
+			selectionArgs = new String[keywords.length + 1];
 			
-			keywordFilter = "WHERE " + likeComparison;
+			int argsIndex = 0;
+			selectionArgs[argsIndex++] = user;
+			selectionArgs[argsIndex++] = keywords[0];
 			
 			for (int i = 1; i < keywords.length; i++) {
-				keywordFilter.concat(" OR " + likeComparison);
-				selectionArgs[argsIndex++] = keywords[i];
+				keywordFilter += " OR " + likeComparison;
 				selectionArgs[argsIndex++] = keywords[i];
 			}
 
 		} else {
 			selectionArgs = new String[] { user };
 		}
+
+		Log.d("DatabaseAdapter", "KeywordFilter = " + keywordFilter);
 
 		String availableToUser = "(SELECT t._id, t.task, t.user, t.date"
 				+ " FROM tasks as t, members as m"
@@ -283,14 +285,9 @@ public class DatabaseAdapter {
 								+ availableToUser
 								+ " LEFT JOIN "
 								+ taskVoteCount
-								+ " ON available._id = votecount.task_id",
-						new String[] { user });
+								+ " ON available._id = votecount.task_id "
+								+ keywordFilter, selectionArgs);
 	}
-
-	// public Cursor fetchAllFulfillments() {
-	// return mDb.query(TABLE_FULFILLMENTS, new String[] { ID, TASK_ID, USER,
-	// DATE }, null, null, null, null, null);
-	// }
 
 	public Cursor fetchUserNotifications(String recipient) {
 		return mDb.rawQuery("SELECT * FROM " + TABLE_NOTIFICATIONS + " WHERE "
