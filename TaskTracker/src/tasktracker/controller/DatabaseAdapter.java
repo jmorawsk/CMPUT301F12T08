@@ -1,5 +1,8 @@
 package tasktracker.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import tasktracker.model.DatabaseModel;
 import tasktracker.model.elements.Task;
 import android.content.ContentValues;
@@ -121,8 +124,8 @@ public class DatabaseAdapter {
 		initialValues.put(DOWNLOADED, task.getDownloaded()); // Added nov29
 																// -mike
 
-		Log.d("DatabaseAdapter",
-				"PRIVATE = " + Boolean.toString(task.isPrivate()));
+		// Log.d("DatabaseAdapter",
+		// "PRIVATE = " + Boolean.toString(task.isPrivate()));
 
 		return mDb.insert(TABLE_TASKS, null, initialValues);
 	}
@@ -267,15 +270,20 @@ public class DatabaseAdapter {
 	public Cursor fetchTasksAvailableToUser(String user, String[] filterWords) {
 		String[] selectionArgs;
 		String keywordFilter = "";
+		String secondaryConditions = "";
 		if (filterWords.length > 0) {
 
 			String likeComparison = TASK + " LIKE '%'|| ? || '%' OR " + TEXT
 					+ " LIKE '%'|| ? || '%'";
+
 			keywordFilter = "WHERE " + likeComparison;
+
+			List<String[]> wordGroups = new ArrayList<String[]>();
+			int groupWordsCount = getSimilarWords(filterWords, wordGroups);
 
 			// args has two iterations of keyword (like comparison) and the user
 			// info
-			selectionArgs = new String[filterWords.length * 2 + 1];
+			selectionArgs = new String[(filterWords.length + groupWordsCount) * 2 + 1];
 
 			int argsIndex = 0;
 			selectionArgs[argsIndex++] = user;
@@ -288,11 +296,23 @@ public class DatabaseAdapter {
 				selectionArgs[argsIndex++] = filterWords[i];
 			}
 
+			for (String[] group : wordGroups) {
+				for (String word : group) {
+					secondaryConditions += " OR " + likeComparison;
+					selectionArgs[argsIndex++] = word;
+					selectionArgs[argsIndex++] = word;
+				}
+			}
+
 		} else {
 			selectionArgs = new String[] { user };
 		}
 
-		Log.d("DatabaseAdapter", "KeywordFilter = " + keywordFilter);
+		for (String word : filterWords) {
+			Log.d("DatabaseAdapter", "word: " + word);
+		}
+
+		// Log.d("DatabaseAdapter", "KeywordFilter = " + keywordFilter);
 
 		String availableToUser = "(SELECT t._id, t.task, t.user, t.date, t.downloaded, t.text"
 				+ " FROM tasks as t, members as m"
@@ -311,13 +331,28 @@ public class DatabaseAdapter {
 								+ " LEFT JOIN "
 								+ taskVoteCount
 								+ " ON available._id = votecount.task_id "
-								+ keywordFilter, selectionArgs);
+								+ keywordFilter + secondaryConditions,
+						selectionArgs);
 	}
 
-	// public Cursor fetchAllFulfillments() {
-	// return mDb.query(TABLE_FULFILLMENTS, new String[] { ID, TASK_ID, USER,
-	// DATE }, null, null, null, null, null);
-	// }
+	private static String[] cuteWords = new String[] { "kitty", "kitten",
+			"cat", "baby", "puppy", "cute", "cuddly", "aww" };
+
+	private int getSimilarWords(String[] keywords, List<String[]> wordGroups) {
+		int count = 0;
+
+		for (int i = 0; i < keywords.length; i++) {
+			for (int j = 0; j < cuteWords.length; j++) {
+				if (keywords[i].equalsIgnoreCase(cuteWords[j])) {
+					wordGroups.add(cuteWords);
+					count += cuteWords.length;
+				}
+			}
+		}
+
+		return count;
+
+	}
 
 	public Cursor fetchUserNotifications(String recipient) {
 		return mDb.rawQuery("SELECT * FROM " + TABLE_NOTIFICATIONS + " WHERE "
@@ -335,9 +370,7 @@ public class DatabaseAdapter {
 	public Cursor fetchTask(String rowId) {
 		return mDb.query(TABLE_TASKS, new String[] { ID, TASK, DATE, USER,
 				TEXT, REQS_PHOTO, REQS_TEXT, PRIVATE },
-				ID + "='" + rowId + "'", null, // TODO think error lies here
-												// -Mike
-				null, null, null, null);
+				ID + "='" + rowId + "'", null, null, null, null, null);
 	}
 
 	public Cursor fetchUserViaID(String rowId) {
