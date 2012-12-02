@@ -1,5 +1,6 @@
 package tasktracker.view;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -10,6 +11,7 @@ import tasktracker.model.Preferences;
 import tasktracker.model.elements.Notification;
 import tasktracker.model.elements.RequestCreateTask;
 import tasktracker.model.elements.Task;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
@@ -62,6 +64,7 @@ public class TaskView extends Activity {
 	private boolean _voted;
 	private int _voteCount;
 	private int _photolist;
+	private String[] photoFilePaths;
 
 	private Task task;
 	// DB stuff
@@ -315,6 +318,7 @@ public class TaskView extends Activity {
 	/**
 	 * Sets the member list with data from the SQL database.
 	 */
+	@SuppressWarnings("deprecation")
 	private void setMembersList() {
 
 		ListView members = (ListView) findViewById(R.id.membersList);
@@ -370,6 +374,14 @@ public class TaskView extends Activity {
 		i.putExtra(Intent.EXTRA_SUBJECT,
 				"TaskTracker : Task Fulfillment Report");
 		i.putExtra(Intent.EXTRA_TEXT, message + "\n\n" + textFulfillment);
+		
+		ArrayList<Uri> uris = new ArrayList<Uri>();
+		for (String file : photoFilePaths){
+			uris.add(Uri.fromFile(new File(file)));
+		}
+		
+		i.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
+		
 		try {
 			startActivity(Intent.createChooser(i, "Send mail..."));
 		} catch (android.content.ActivityNotFoundException ex) {
@@ -389,7 +401,7 @@ public class TaskView extends Activity {
 		boolean ready = true;
 
 		if (_requiresPhoto) {
-			if (true) {
+			if (photoFilePaths == null || photoFilePaths.length == 0) {
 				ToastCreator
 						.showLongToast(this,
 								"You must add a photo before marking this task as fulfilled.");
