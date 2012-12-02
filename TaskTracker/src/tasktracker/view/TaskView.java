@@ -172,8 +172,6 @@ public class TaskView extends Activity {
 	public void getImages(){
 		
 		Intent intent = new Intent(this, PhotoPicker.class);
-		//Bundle 
-		//intent.p
 		intent.putExtra("sampleData", 0);
 		startActivityForResult(intent, 500);
 		
@@ -556,12 +554,9 @@ public class TaskView extends Activity {
 
 	    	//Toast.makeText(TaskView.this, data.getStringExtra("returnedData"), 2000).show();
 	        if (resultCode == RESULT_OK) {
-	            // The user picked a contact.
-	            // The Intent's data Uri identifies which contact was selected.
-
-	            // Do something with the contact here (bigger example below)
-	        	//data.getParcelableArrayListExtra("Photos");
-	        	//TODO
+	        	String[] photoPaths = data.getStringArrayExtra("PhotoPaths");
+	        	
+	        	//Toast.makeText(TaskView.this, data.getStringArrayExtra("PhotoPaths")[0], 2000).show();
 	        }
 	    }
 	}

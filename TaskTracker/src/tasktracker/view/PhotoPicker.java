@@ -36,7 +36,7 @@ public class PhotoPicker extends Activity {
 	
 	
 	Uri imageFileUri;
-	private String[] imageUrls;
+	private ArrayList<String> imageUrls = new ArrayList<String>();
 	private ImageAdapter myAdapter = new ImageAdapter(this);
 	private GridView gridView;
 	//private DisplayImageOptions options;
@@ -81,21 +81,17 @@ public class PhotoPicker extends Activity {
 		OnClickListener savephotoListener = new OnClickListener(){
 
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-			
-				//callImageAdapter();
-				//setResult(myAdapter.count());
 				intent= getIntent();
-				//String msg = intent.getStringExtra("sampleData");
-				
-				//Integer num = myAdapter.getNumber();
 				Bundle photoBundle = new Bundle();
 				//Bitmap[] photos = myAdapter.getPhotos();
-				ArrayList<Bitmap> photos = myAdapter.getPhotoList();
-				intent.putParcelableArrayListExtra("Photos", photos);
-				//msg += ", "+num;
-				//callImageAdapter();
-				//intent.putExtra("returnedData", "Number"+ num);
+				//ArrayList<Bitmap> photos = myAdapter.getPhotoList();
+				
+				//TODO for web
+				//ArrayList<byte[]> compressed = myAdapter.getCompressedPhotos();
+				String[] pathArray = new String[imageUrls.size()];
+				imageUrls.toArray(pathArray);
+				intent.putExtra("PhotoPaths", pathArray);
+				//intent.putParcelableArrayListExtra("Photos", compressed);
 				setResult(RESULT_OK, intent);
 				
 				Toast.makeText(PhotoPicker.this, "Photos Saved", 2000).show();
@@ -189,14 +185,6 @@ public class PhotoPicker extends Activity {
 		startActivityForResult(intentC, TAKE_PICTURE);
 	
 	}
-	
-	public void callImageAdapter(){
-		
-//		 Intent intent2 = new Intent(this, ImageAdapter.class);
-//		 intent2 .putExtra("sampleData", msg);
-//		 startActivityForResult(intent2, RETURN_PICTURES);
-	}
-
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		
@@ -222,6 +210,7 @@ public class PhotoPicker extends Activity {
 					Toast.makeText(PhotoPicker.this, "photo selected", 2000).show();
 					myAdapter.addPhoto(theSelectedImage);
 
+					imageUrls.add(filePath);
 					gridView.setAdapter(myAdapter);
 				}
 				break;
@@ -236,23 +225,11 @@ public class PhotoPicker extends Activity {
 					path = path.replace("file://", "");
 					Bitmap newPhoto = BitmapFactory.decodeFile(path);
 					myAdapter.addPhoto(newPhoto);
-
+					imageUrls.add(path);
 					gridView.setAdapter(myAdapter);
 				}
 			}
 			break;
-			
-//			case RETURN_PICTURES:{
-//				
-//				 if(resultCode == RESULT_OK){
-//					   String msg = data.getStringExtra("returnedData");
-//					   intent.putExtra("returnedData", msg);
-//					   setResult(RESULT_OK, intent);
-//					   finish();
-//					  }
-//				
-//				
-//			}
 			}
 		}
 
