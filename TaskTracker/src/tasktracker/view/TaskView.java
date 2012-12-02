@@ -9,6 +9,7 @@ import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.Preferences;
 import tasktracker.model.elements.Notification;
 import tasktracker.model.elements.RequestCreateTask;
+import tasktracker.model.elements.Task;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
@@ -43,7 +44,15 @@ public class TaskView extends Activity {
 	private EditText _textFulfillment;
 	private LinearLayout _fulfillmentList;
 	private ScrollView _scrollview;
-
+	
+	    private TextView _name;
+	    private TextView _description;
+	    private TextView _creationInfo;
+	    private TextView _privacy;
+	    
+	    private TextView _text;
+	    private TextView _date;
+	    
 	// Task Info
 	private String _taskID;
 	private String _taskName;
@@ -54,6 +63,7 @@ public class TaskView extends Activity {
 	private int _voteCount;
 	private int _photolist;
 
+	private Task task;
 	// DB stuff
 	private DatabaseAdapter _dbHelper;
 	private Cursor _cursor;
@@ -170,7 +180,8 @@ public class TaskView extends Activity {
 //		Toast.makeText(TaskView.this, "Get the number of Photos!", 2000).show();
 //		startActivityForResult(intent, 500);
 //		Toast.makeText(TaskView.this, 500, 2000).show();
-		startActivity(PhotoPicker.class);
+		intent.putExtra("sampleData", "This is sample data");
+		startActivityForResult(intent, 500);
 		
 	}
 	
@@ -237,10 +248,10 @@ public class TaskView extends Activity {
 		if (!_cursor.moveToFirst())
 			return;
 
-		TextView name = (TextView) findViewById(R.id.taskName);
-		TextView description = (TextView) findViewById(R.id.description);
-		TextView creationInfo = (TextView) findViewById(R.id.creationInfo);
-		TextView privacy = (TextView) findViewById(R.id.private_task);
+		_name = (TextView) findViewById(R.id.taskName);
+		_description = (TextView) findViewById(R.id.description);
+		_creationInfo = (TextView) findViewById(R.id.creationInfo);
+		_privacy = (TextView) findViewById(R.id.private_task);
 
 		CheckBox textRequirement = (CheckBox) findViewById(R.id.checkbox_text);
 		CheckBox photoRequirement = (CheckBox) findViewById(R.id.checkbox_photo);
@@ -258,16 +269,19 @@ public class TaskView extends Activity {
 				.getColumnIndex(DatabaseAdapter.TASK));
 
 		if (_cursor.getInt(_cursor.getColumnIndex(DatabaseAdapter.PRIVATE)) == 1)
-			privacy.setVisibility(View.VISIBLE);
+			_privacy.setVisibility(View.VISIBLE);
 
-		name.setText(_taskName);
-		description.setText(_cursor.getString(_cursor
+		_name.setText(_taskName);
+		_description.setText(_cursor.getString(_cursor
 				.getColumnIndex(DatabaseAdapter.TEXT)));
-		creationInfo
+		_creationInfo
 				.setText("Created on " + date + " by " + _taskCreator + ".");
 
 		textRequirement.setChecked(_requiresText);
 		photoRequirement.setChecked(_requiresPhoto);
+		
+		task = new Task(_taskCreator);
+		createTask();
 
 	}
 
@@ -555,4 +569,28 @@ public class TaskView extends Activity {
 	    }
 	}
 
+	private Task createTask() {
+
+	        // TODO: Find out how to quickly access user information
+	        task.setCreatorID(_taskCreator);
+	        task.setID(_taskID);
+	        task.setDescription(_description.getText().toString());
+	        task.setName(_taskName);
+	        task.setPhotoRequirement(_requiresPhoto);
+	        task.setTextRequirement(_requiresText);
+	        //task.setDate(_date.getText().toString());
+	        //task.setOtherMembers(_otherMembers.getText().toString());
+	        
+	        boolean privacyBoolean = (_privacy.getVisibility()==1) ? true : false;
+	        task.setIsPrivate(privacyBoolean);
+	        //task.setIsDownloaded("Yes"); // Since it was created on this phone, it's
+	        // already in the SQL table
+	        task.setLikes(_voteCount);
+	        //private int _voteCount;
+	        //private int _photolist;
+	        //task.setCreatorID(Preferences.getUserID(getBaseContext()));
+
+	        return task;
+	}
+	
 }

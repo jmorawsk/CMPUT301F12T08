@@ -31,6 +31,9 @@ import android.widget.Toast;
 
 public class PhotoPicker extends Activity {
 
+	Intent intent;
+	
+	
 	Uri imageFileUri;
 	private String[] imageUrls;
 	private ImageAdapter myAdapter = new ImageAdapter(this);
@@ -39,6 +42,7 @@ public class PhotoPicker extends Activity {
 
 	public static final int PICK_PICTURE_FROM_GALLERY = 1; 
 	public static final int TAKE_PICTURE = 2;
+	public static final int RETURN_PICTURES = 3;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -78,7 +82,15 @@ public class PhotoPicker extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 			
-				setResult(myAdapter.count());
+				//callImageAdapter();
+				//setResult(myAdapter.count());
+				intent= getIntent();
+				String msg = intent.getStringExtra("sampleData");
+				
+				msg += ", Added something";
+				//callImageAdapter();
+				intent.putExtra("returnedData", msg);
+				setResult(RESULT_OK, intent);
 				
 				Toast.makeText(PhotoPicker.this, "Photos Saved", 2000).show();
 				finish();
@@ -147,15 +159,6 @@ public class PhotoPicker extends Activity {
 	//TODO: Should start the camera class.
 	public void takeAPhoto(){
 
-
-//		//delete the last photo taken
-//		//if(check.equals("PHOTO_TAKEN")){
-//			File fdelete = new File(imageFileUri.getPath());
-//			fdelete.delete();
-		//}
-		
-		
-
 		String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp";
 		File folderF = new File(folder);
 
@@ -179,6 +182,13 @@ public class PhotoPicker extends Activity {
 
 		startActivityForResult(intentC, TAKE_PICTURE);
 	
+	}
+	
+	public void callImageAdapter(){
+		
+//		 Intent intent2 = new Intent(this, ImageAdapter.class);
+//		 intent2 .putExtra("sampleData", msg);
+//		 startActivityForResult(intent2, RETURN_PICTURES);
 	}
 
 
@@ -224,6 +234,19 @@ public class PhotoPicker extends Activity {
 					gridView.setAdapter(myAdapter);
 				}
 			}
+			break;
+			
+//			case RETURN_PICTURES:{
+//				
+//				 if(resultCode == RESULT_OK){
+//					   String msg = data.getStringExtra("returnedData");
+//					   intent.putExtra("returnedData", msg);
+//					   setResult(RESULT_OK, intent);
+//					   finish();
+//					  }
+//				
+//				
+//			}
 			}
 		}
 
