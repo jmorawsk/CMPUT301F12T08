@@ -180,7 +180,8 @@ public class TaskView extends Activity {
 //		Toast.makeText(TaskView.this, "Get the number of Photos!", 2000).show();
 //		startActivityForResult(intent, 500);
 //		Toast.makeText(TaskView.this, 500, 2000).show();
-		startActivity(PhotoPicker.class);
+		intent.putExtra("sampleData", "This is sample data");
+		startActivityForResult(intent, 500);
 		
 	}
 	
@@ -280,6 +281,7 @@ public class TaskView extends Activity {
 		photoRequirement.setChecked(_requiresPhoto);
 		
 		task = new Task(_taskCreator);
+		createTask();
 
 	}
 
@@ -590,4 +592,5 @@ public class TaskView extends Activity {
 
 	        return task;
 	}
+	
 }
