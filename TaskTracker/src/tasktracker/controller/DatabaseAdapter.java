@@ -264,11 +264,41 @@ public class DatabaseAdapter {
 				null, null, null, null, null);
 	}
 
-	public Cursor fetchTasksAvailableToUser(String user) {
+	public Cursor fetchTasksAvailableToUser(String user, String[] filterWords) {
+		String[] selectionArgs;
+		String keywordFilter = "";
+		if (filterWords.length > 0) {
+
+			String likeComparison = TASK + " LIKE '%'|| ? || '%' OR " + TEXT
+					+ " LIKE '%'|| ? || '%'";
+			keywordFilter = "WHERE " + likeComparison;
+
+			// args has two iterations of keyword (like comparison) and the user
+			// info
+			selectionArgs = new String[filterWords.length * 2 + 1];
+
+			int argsIndex = 0;
+			selectionArgs[argsIndex++] = user;
+			selectionArgs[argsIndex++] = filterWords[0];
+			selectionArgs[argsIndex++] = filterWords[0];
+
+			for (int i = 1; i < filterWords.length; i++) {
+				keywordFilter += " AND " + likeComparison;
+				selectionArgs[argsIndex++] = filterWords[i];
+				selectionArgs[argsIndex++] = filterWords[i];
+			}
+
+		} else {
+			selectionArgs = new String[] { user };
+		}
+
+		Log.d("DatabaseAdapter", "KeywordFilter = " + keywordFilter);
+
 		String availableToUser = "(SELECT t._id, t.task, t.user, t.date, t.downloaded, t.text"
 				+ " FROM tasks as t, members as m"
 				+ " WHERE t.private = 0 OR (t.private = 1 AND m.user = ? AND t._id = m.task_id)"
 				+ ") as available";
+
 		String taskVoteCount = "(SELECT v.task_id as task_id, COUNT(v.user) as count"
 				+ " FROM tasks as t, votes as v"
 				+ " WHERE t._id = v.task_id GROUP BY v.task_id) as votecount";
@@ -278,10 +308,10 @@ public class DatabaseAdapter {
 						"SELECT DISTINCT _id, task, user, date, downloaded, text, CASE WHEN count IS NULL THEN 0 ELSE count END as count"
 								+ " FROM "
 								+ availableToUser
-								+ " LEFT JOIN"
+								+ " LEFT JOIN "
 								+ taskVoteCount
-								+ " ON available._id = votecount.task_id",
-						new String[] { user });
+								+ " ON available._id = votecount.task_id "
+								+ keywordFilter, selectionArgs);
 	}
 
 	// public Cursor fetchAllFulfillments() {

@@ -47,31 +47,31 @@ public class TaskListView extends Activity {
 
 	private ListView taskListView;
 	private List<Task> taskList;
-	//public List<Task> webTaskList;
-	//public List<Task> oldWebTaskList;
+	// public List<Task> webTaskList;
+	// public List<Task> oldWebTaskList;
 	// private List<String> tasks;
 	private String[] tasks = new String[0];
 	private String _user;
 	// private PreferencesManager preferences;
 
-	private EditText filterText = null;
-	//private WebDBManager webManager;
+	private EditText filterText;
+	// private WebDBManager webManager;
 	private DatabaseAdapter _dbHelper;
 	private Cursor _cursor;
 	private SimpleCursorAdapter adapter;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		//webManager = new WebDBManager();
-		//oldWebTaskList = new ArrayList<Task>();
-		//webTaskList = new ArrayList<Task>();
+		// webManager = new WebDBManager();
+		// oldWebTaskList = new ArrayList<Task>();
+		// webTaskList = new ArrayList<Task>();
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_list_view);
 
 		_user = Preferences.getUsername(this);
 		if (_user == Preferences.INVALID_ACCOUNT) {
-			//User has likely never signed in, force login screen
+			// User has likely never signed in, force login screen
 			Intent intent = new Intent(getApplicationContext(), Login.class);
 			startActivity(intent);
 		}
@@ -87,13 +87,12 @@ public class TaskListView extends Activity {
 	protected void onStart() {
 		super.onStart();
 		_dbHelper.open();
-		fillData();
+		fillData(new String[0]);
 	}
 
 	protected void onStop() {
 		super.onStop();
 		_dbHelper.close();
-		stopManagingCursor(_cursor);
 		_cursor.close();
 	}
 
@@ -108,21 +107,21 @@ public class TaskListView extends Activity {
 			}
 
 		});
-		
+
 		Button nukeCrowdSourcer = (Button) findViewById(R.id.button_nukeCrowdSourcer);
 		nukeCrowdSourcer.setOnClickListener(new View.OnClickListener() {
-			
+
 			public void onClick(View v) {
-				//WebDBManager db = new WebDBManager();
-				//db.nukeAll();
-				
+				// WebDBManager db = new WebDBManager();
+				// db.nukeAll();
+
 			}
 		});
 	}
 
 	private void setupToolbarButtons() {
-	        filterText = (EditText) findViewById(R.id.search_box);
-	        filterText.addTextChangedListener(filterTextWatcher);
+		filterText = (EditText) findViewById(R.id.search_box);
+		filterText.addTextChangedListener(filterTextWatcher);
 		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
 		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
 		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
@@ -152,10 +151,10 @@ public class TaskListView extends Activity {
 
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.account_menu, menu);
-		
+
 		MenuItem account = menu.findItem(R.id.Account_menu);
 		account.setTitle(_user);
-		
+
 		return true;
 	}
 
@@ -202,11 +201,42 @@ public class TaskListView extends Activity {
 						TaskView.class);
 				TextView taskID = (TextView) ((RelativeLayout) v)
 						.findViewById(R.id.id);
-				System.out.println("Bug (Task ID passed)= "+taskID.getText().toString());
-				intent.putExtra("TASK_ID",
-						taskID.getText().toString());
+				System.out.println("Bug (Task ID passed)= "
+						+ taskID.getText().toString());
+				intent.putExtra("TASK_ID", taskID.getText().toString());
 				startActivity(intent);
 			}
+		});
+
+		filterText = (EditText) findViewById(R.id.search_box);
+		Log.d("TaskListView",
+				"null filtertext = " + Boolean.toString(filterText == null));
+
+		filterText.addTextChangedListener(new TextWatcher() {
+
+			public void afterTextChanged(Editable s) {
+
+				String[] keywords = filterText.getText().toString()
+						.split("(\\s+)?,(\\s+)?");
+				if (keywords[0].matches("")) {
+					keywords = new String[0];
+				}
+				Log.d("TaskListView", filterText.getText().toString());
+
+				fillData(keywords);
+
+			}
+
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// Do nothing.
+			}
+
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// Do nothing.
+			}
+
 		});
 	}
 
@@ -217,57 +247,61 @@ public class TaskListView extends Activity {
 		toast.show();
 	}
 
-	private void fillData() {
-		_cursor = _dbHelper.fetchTasksAvailableToUser(_user);
+	private void fillData(String[] filterWords) {
+		_cursor = _dbHelper.fetchTasksAvailableToUser(_user, filterWords);
 		startManagingCursor(_cursor);
 
 		String[] from = new String[] { DatabaseAdapter.ID,
 				DatabaseAdapter.TASK, DatabaseAdapter.USER,
 				DatabaseAdapter.DATE, DatabaseAdapter.COUNT,
-				DatabaseAdapter.DOWNLOADED, DatabaseAdapter.TEXT};
+				DatabaseAdapter.DOWNLOADED, DatabaseAdapter.TEXT };
 		int[] to = new int[] { R.id.id, R.id.item_title, R.id.item_text,
-				R.id.item_date_bottom, R.id.item_vote_count, R.id.downloaded, R.id.description };
+				R.id.item_date_bottom, R.id.item_vote_count, R.id.downloaded,
+				R.id.description };
 
-		adapter = new SimpleCursorAdapter(this,
-				R.layout.list_item, _cursor, from, to);
-		//adapter.getFilter().filter('p');
-//		adapter.setStringConversionColumn(_cursor.getColumnIndex(DatabaseAdapter.TASK));
-//		adapter.setFilterQueryProvider(new FilterQueryProvider() {
-//
-//		        public Cursor runQuery(CharSequence constraint) {
-//		            String partialItemName = null;
-//		            if (constraint != null) {
-//		                partialItemName = constraint.toString();
-//		            }
-//		            _dbHelper.
-//		            return groceryDb.suggestItemCompletions(partialItemName);
-//		        }
-//		    });
-		
+		adapter = new SimpleCursorAdapter(this, R.layout.list_item, _cursor,
+				from, to);
+		// adapter.getFilter().filter('p');
+		// adapter.setStringConversionColumn(_cursor.getColumnIndex(DatabaseAdapter.TASK));
+		// adapter.setFilterQueryProvider(new FilterQueryProvider() {
+		//
+		// public Cursor runQuery(CharSequence constraint) {
+		// String partialItemName = null;
+		// if (constraint != null) {
+		// partialItemName = constraint.toString();
+		// }
+		// _dbHelper.
+		// return groceryDb.suggestItemCompletions(partialItemName);
+		// }
+		// });
+
 		taskListView.setAdapter(adapter);
-		
-		//Now call an asynchronous method to populate the Database with items from Crowdsourcer
-		RequestDownloadTasksSummaries downloader = new RequestDownloadTasksSummaries(getBaseContext());
-		
+
+		stopManagingCursor(_cursor);
+		// Now call an asynchronous method to populate the Database with items
+		// from Crowdsourcer
+		RequestDownloadTasksSummaries downloader = new RequestDownloadTasksSummaries(
+				getBaseContext());
+
 	}
 
-//	private void filterTasks(String filterText){
-//	    taskListView.setFilterText("photo");
-//	}
-	
+	// private void filterTasks(String filterText){
+	// taskListView.setFilterText("photo");
+	// }
+
 	private TextWatcher filterTextWatcher = new TextWatcher() {
 
-	    public void afterTextChanged(Editable s) {
-	    }
+		public void afterTextChanged(Editable s) {
+		}
 
-	    public void beforeTextChanged(CharSequence s, int start, int count,
-	            int after) {
-	    }
+		public void beforeTextChanged(CharSequence s, int start, int count,
+				int after) {
+		}
 
-	    public void onTextChanged(CharSequence s, int start, int before,
-	            int count) {
-	        adapter.getFilter().filter(s);
-	    }
+		public void onTextChanged(CharSequence s, int start, int before,
+				int count) {
+			adapter.getFilter().filter(s);
+		}
 
 	};
 }
