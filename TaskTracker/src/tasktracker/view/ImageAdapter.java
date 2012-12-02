@@ -21,7 +21,6 @@ import android.widget.ImageView;
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
     private ArrayList<Bitmap> photos;
-    int count = 0;
 
     public ImageAdapter(Context c) {
         mContext = c;
@@ -30,16 +29,10 @@ public class ImageAdapter extends BaseAdapter {
     
     public void addPhoto(Bitmap photo){
     	photos.add(photo);
-    	count += count;
     }
 
     public int getCount() {
         return photos.size();
-    }
-    
-    public int count(){
-    	
-    	return count;
     }
 
     public Object getItem(int position) {
