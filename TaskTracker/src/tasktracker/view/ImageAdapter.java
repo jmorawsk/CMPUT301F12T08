@@ -100,7 +100,6 @@ public class ImageAdapter extends BaseAdapter {
 	}
 	
 	public void decompressPhotos(ArrayList<byte[]> compressed){
-		 //ArrayList<Bitmap> 
 		photos = new ArrayList<Bitmap>();
 		for(byte[] photo:compressed){
 			photos.add(BitmapFactory.decodeByteArray(photo, 0, photo.length));

@@ -87,7 +87,9 @@ public class PhotoPicker extends Activity {
 				//ArrayList<Bitmap> photos = myAdapter.getPhotoList();
 				
 				//TODO for web
-				//ArrayList<byte[]> compressed = myAdapter.getCompressedPhotos();
+				ArrayList<byte[]> compressed = myAdapter.getCompressedPhotos();
+				//photoBundle.
+				//photoBundle.putByteArray("compressed", compressed);
 				String[] pathArray = new String[imageUrls.size()];
 				imageUrls.toArray(pathArray);
 				intent.putExtra("PhotoPaths", pathArray);
