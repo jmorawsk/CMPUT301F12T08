@@ -26,6 +26,7 @@ import android.app.Activity;
 import android.content.Intent;
 
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
@@ -79,6 +80,8 @@ public class CreateTaskView extends Activity {
 		_private = (CheckBox) findViewById(R.id.checkbox_private);
 		_saveButton = (Button) findViewById(R.id.saveButton);
 
+		setupTextFilters();
+		
 		_saveButton.setOnClickListener(new SaveOnClickListener());
 		_name.addTextChangedListener(new SaveButtonEnabler());
 		_description.addTextChangedListener(new SaveButtonEnabler());
@@ -235,7 +238,14 @@ public class CreateTaskView extends Activity {
 		public void onClick(View v) {
 			startActivity(this.destination);
 		}
-
 	}
 
+	public void setupTextFilters(){
+		_name.setFilters(new InputFilter[]{
+				Filters.specialCharFilter()});
+		_description.setFilters(new InputFilter[]{
+				Filters.specialCharFilter()});
+		_otherMembers.setFilters(new InputFilter[]{
+				Filters.specialCharFilter()});
+	}
 }
