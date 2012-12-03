@@ -12,6 +12,7 @@ import tasktracker.model.Preferences;
 import tasktracker.model.elements.Notification;
 import tasktracker.model.elements.RequestCreateNotification;
 import tasktracker.model.elements.RequestCreateTask;
+import tasktracker.model.elements.RequestModifyTask;
 import tasktracker.model.elements.Task;
 import android.net.Uri;
 import android.os.Bundle;
@@ -549,8 +550,8 @@ public class TaskView extends Activity {
 				ToastCreator.showLongToast(TaskView.this, "\"" + _taskName
 						+ "\" was fulfilled!");
 				// TODO: Does task need to be updated on web?
-				// RequestModifyTask createTask = new RequestModifyTask(
-				// getBaseContext(), task);
+				 RequestModifyTask updateTask = new RequestModifyTask(
+				 getBaseContext(), task);
 				finish();
 			}
 		}

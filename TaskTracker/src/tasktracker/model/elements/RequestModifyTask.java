@@ -24,10 +24,11 @@ public class RequestModifyTask implements NetworkRequestModel {
         context = contex;
         task = theTask;
         String content = gson.toJson(task);
+        //String content = gson.toJson(task.getPhotos());
         String command = "action=" + "update" + "&summary=" + task.getSummary()
                 + "&content=" + content.toString()
                 + "&id=" + task.getID();
-
+        System.out.println(command);
         requestString = AccessURL.turnCommandIntoURL(command);
 
         AccessURL access = new AccessURL(this);
