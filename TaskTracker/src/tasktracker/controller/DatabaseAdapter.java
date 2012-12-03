@@ -155,6 +155,14 @@ public class DatabaseAdapter {
 
 		return mDb.insert(TABLE_USERS, null, initialValues);
 	}
+	
+	public long createUser(String userID, String username){
+		ContentValues initialValues = new ContentValues();
+
+		initialValues.put(ID, userID);
+		initialValues.put(USER, username);
+		return mDb.insert(TABLE_USERS, null, initialValues);
+	}
 
 	// TODO: Remove all references to this and delete it
 	public long createUser(String user, String email, String password) {
