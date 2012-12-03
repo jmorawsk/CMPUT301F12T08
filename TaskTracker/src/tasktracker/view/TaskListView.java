@@ -248,6 +248,11 @@ public class TaskListView extends Activity {
 	}
 
 	private void fillData(String[] filterWords) {
+		// Now call an asynchronous method to populate the Database with items
+		// from Crowdsourcer
+		RequestDownloadTasksSummaries downloader = new RequestDownloadTasksSummaries(
+				getBaseContext());
+		
 		_cursor = _dbHelper.fetchTasksAvailableToUser(_user, filterWords);
 		startManagingCursor(_cursor);
 
@@ -278,10 +283,7 @@ public class TaskListView extends Activity {
 		taskListView.setAdapter(adapter);
 
 		stopManagingCursor(_cursor);
-		// Now call an asynchronous method to populate the Database with items
-		// from Crowdsourcer
-		RequestDownloadTasksSummaries downloader = new RequestDownloadTasksSummaries(
-				getBaseContext());
+
 
 	}
 
