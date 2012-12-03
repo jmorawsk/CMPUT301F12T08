@@ -21,8 +21,8 @@ public class DatabaseModel {
 	// "CREATE TABLE users (_id INTEGER primary key autoincrement, "
 	private static final String USERS = "CREATE TABLE users (_id TEXT NOT NULL PRIMARY KEY, "
 			+ "user TEXT NOT NULL, "
-			+ "email TEXT NOT NULL, "
-			+ "password TEXT NOT NULL);";
+			+ "email TEXT, "
+			+ "password TEXT);";
 
 	private static final String VOTES = "CREATE TABLE votes (_id INTEGER, "
 			+ "task_id INTEGER, "

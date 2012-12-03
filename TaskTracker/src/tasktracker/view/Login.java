@@ -5,6 +5,7 @@ import tasktracker.model.Preferences;
 //import tasktracker.model.WebDBManager;
 import tasktracker.model.elements.RequestCreateUser;
 import tasktracker.model.elements.RequestGetAUser;
+import tasktracker.model.elements.RequestGetAllUsers;
 import tasktracker.model.elements.User;
 import android.os.Bundle;
 import android.app.Activity;
@@ -49,6 +50,8 @@ public class Login extends Activity {
 		_dbHelper.createUser("jbonot", "jbonot@ualberta.ca", ""); //Aw that's cheating! -Mike
 		_dbHelper.close();
 		// End to-do
+		
+		RequestGetAllUsers request = new RequestGetAllUsers(getBaseContext());
 		
 		setupLogin();
 		setupCreateAccount();
