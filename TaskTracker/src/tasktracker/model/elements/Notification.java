@@ -50,7 +50,59 @@ public final class Notification {
 		// User has become a member of a task.
 		InformMembership
 	};
-
+	
+	private String taskID;
+	private String[] recipients;
+	private String message;
+	private long date;
+	
+	public Notification(String message){
+		this.date = System.currentTimeMillis() / 1000;
+		this.message = message;
+	}
+	
+	public long getDate(){
+		return this.date;
+	}
+	
+	public String getMessage(){
+		return this.message;
+	}
+	
+	public String getRecipientsString(){
+		String value = recipients[0];
+		
+		for (int i = 1; i < recipients.length; i++){
+			value += "," + recipients[i];
+		}
+		
+		return value;
+	}
+	
+	public String[] getRecipientsArray(){
+		return this.recipients;
+	}
+	
+	public String getTaskId(){
+		return this.taskID;
+	}
+	
+	public void setDate(long value){
+		this.date = value;
+	}
+	
+	public void setRecipients(String[] values){
+		this.recipients = values;
+	}
+	
+	public void setRecipients(String values){
+		this.recipients = values.split(",");
+	}
+	
+	public void setTaskId(String value){
+		this.taskID = value;
+	}
+	
 	/**
 	 * Sets the notification's message string according to the notification's
 	 * type.
