@@ -50,6 +50,7 @@ public class Task implements Serializable {
 	private boolean _private;
 	private String _isDownloaded; // added nov29 by Mike
 	private int _likes;
+	private ArrayList<byte[]> _photos; 
 
 	// SQL ids
 	private String _creatorID;
@@ -95,6 +96,7 @@ public class Task implements Serializable {
 		_otherMembersList = new ArrayList<String>();
 		_private = false;
 		_likes = 0;
+		_photos = new ArrayList<byte[]>();
 	}
 
 	// Setters
@@ -142,6 +144,13 @@ public class Task implements Serializable {
 	public void setLikes(int value) {
 		_likes = value;
 	}
+	
+	public void setPhotos(ArrayList<byte[]> photos){
+		_photos.addAll(photos);
+//		for(int i = 0; photos.size()>i; i++){
+//			_photos.add(photos.get(i));
+//		}
+	}
 
 	// Getters
 	public String getCreator() {
@@ -187,6 +196,10 @@ public class Task implements Serializable {
 
 	public int getLikes() {
 		return _likes;
+	}
+	
+	public ArrayList<byte[]> getPhotos(){
+		return _photos;
 	}
 
 	/** Gets the string summary for CrowdSourcer */

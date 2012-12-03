@@ -588,9 +588,9 @@ public class TaskView extends Activity {
 				_fulfillmentButton.setEnabled(requirementsFulfilled());
 				
 				ArrayList<byte[]> byteArrays  = new ArrayList<byte[]>();
-				int frogs = data.getIntExtra("numPhotos", 0);
+				int numPhotos = data.getIntExtra("numPhotos", 0);
 				
-				for(int i = 0; frogs>i; i++){
+				for(int i = 0; numPhotos>i; i++){
 					byte[] compressedPhoto = data.getByteArrayExtra("photo"+i);	
 					//bytes[i] = photoCompression;
 					byteArrays.add(compressedPhoto);
