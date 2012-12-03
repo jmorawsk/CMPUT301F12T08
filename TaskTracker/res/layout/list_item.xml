@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/description"
-        android:visibility="visible" 
+        android:visibility="gone" 
         android:text="Task ID tag (debug)" />
         <!-- Comment out the layout_below line above to remove whitespace -->
         

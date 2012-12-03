@@ -29,6 +29,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.*;
+import android.view.View.OnClickListener;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import tasktracker.controller.DatabaseAdapter;
@@ -107,16 +108,6 @@ public class TaskListView extends Activity {
 			}
 
 		});
-
-		Button nukeCrowdSourcer = (Button) findViewById(R.id.button_nukeCrowdSourcer);
-		nukeCrowdSourcer.setOnClickListener(new View.OnClickListener() {
-
-			public void onClick(View v) {
-				// WebDBManager db = new WebDBManager();
-				// db.nukeAll();
-
-			}
-		});
 	}
 
 	private void setupToolbarButtons() {
@@ -125,7 +116,15 @@ public class TaskListView extends Activity {
 		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
 		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
 		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
-		buttonMyTasks.setEnabled(false);
+//		buttonMyTasks.setEnabled(false);
+		
+		buttonMyTasks.setOnClickListener(new OnClickListener(){
+
+			public void onClick(View v) {
+				onStart();
+			}
+			
+		});
 
 		buttonCreate.setOnClickListener(new View.OnClickListener() {
 
