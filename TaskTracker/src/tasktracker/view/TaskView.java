@@ -65,7 +65,9 @@ public class TaskView extends Activity {
 	private boolean _voted;
 	private int _voteCount;
 	private int _photolist;
+
 	private String[] _photoFilePaths;
+	private boolean _validTextFulfillment;
 
 	private Task task;
 	// DB stuff
@@ -399,18 +401,22 @@ public class TaskView extends Activity {
 	 * @return True if the requirements we fulfilled; otherwise false.
 	 */
 	private boolean requirementsFulfilled() {
-		boolean ready = true;
 
-		if (_requiresPhoto) {
-			if (_photoFilePaths == null || _photoFilePaths.length == 0) {
-				ToastCreator
-						.showLongToast(this,
-								"You must add a photo before marking this task as fulfilled.");
-				ready = false;
-			}
+		if (_requiresPhoto
+				&& (_photoFilePaths == null || _photoFilePaths.length == 0)) {
+//			ToastCreator
+//					.showLongToast(this,
+//							"You must add a photo before marking this task as fulfilled.");
+			return false;
+
 		}
 
-		return ready;
+		if (_requiresText && !_validTextFulfillment) {
+//			ToastCreator.showLongToast(this, "You must supply some text before marking this task as fulfilled");
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -429,7 +435,8 @@ public class TaskView extends Activity {
 
 		public void afterTextChanged(Editable s) {
 
-			_fulfillmentButton.setEnabled(s.length() > 0);
+			_validTextFulfillment = (s.length() > 0) && !s.toString().matches("\\s+");
+			_fulfillmentButton.setEnabled(requirementsFulfilled());
 		}
 
 		public void beforeTextChanged(CharSequence s, int start, int count,
@@ -510,7 +517,7 @@ public class TaskView extends Activity {
 	class FulfillButtonSetup implements OnClickListener {
 
 		public void onClick(View v) {
-
+			Log.d("TaskView", "Fulfillbutton Clicked");
 			if (requirementsFulfilled()) {
 
 				String textFulfillment = _textFulfillment.getText().toString();
@@ -575,7 +582,7 @@ public class TaskView extends Activity {
 			// data.getStringExtra("returnedData"), 2000).show();
 			if (resultCode == RESULT_OK) {
 				_photoFilePaths = data.getStringArrayExtra("PhotoPaths");
-				_fulfillmentButton.setEnabled(_photoFilePaths.length > 0);
+				_fulfillmentButton.setEnabled(requirementsFulfilled());
 				// Toast.makeText(TaskView.this,
 				// data.getStringArrayExtra("PhotoPaths")[0], 2000).show();
 				_scrollview.post(new Runnable() {
