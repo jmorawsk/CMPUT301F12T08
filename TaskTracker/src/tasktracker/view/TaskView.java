@@ -180,6 +180,16 @@ public class TaskView extends Activity {
 
 		Intent intent = new Intent(this, PhotoPicker.class);
 		intent.putExtra("sampleData", 0);
+		ArrayList<byte[]> byteArrays  = new ArrayList<byte[]>();
+		byteArrays.addAll(task.getPhotos());
+		int numPhotos = byteArrays.size();
+		System.out.println("TVsend"+numPhotos);
+		intent.putExtra("numPhotos", numPhotos);
+		
+		for(int i = 0; numPhotos>i; i++){
+			intent.putExtra("photo"+i,byteArrays.get(i));	
+			//bytes[i] = photoCompression;
+		}
 		startActivityForResult(intent, 500);
 
 	}
@@ -278,17 +288,16 @@ public class TaskView extends Activity {
 
 		textRequirement.setChecked(_requiresText);
 		photoRequirement.setChecked(_requiresPhoto);
-
-		task = new Task(_taskCreator);
+		if (task==null)
+			task = new Task(_taskCreator);
 		createTask();
-
 	}
 
 	/**
 	 * Sets the fulfillment list with data from the SQL database.
 	 */
 	private void setFulfillmentsList() {
-
+		_fulfillmentList.removeAllViews();
 		_cursor = _dbHelper.fetchFulfillment(_taskID);
 
 		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -311,7 +320,6 @@ public class TaskView extends Activity {
 			text.setText(_cursor.getString(textIndex));
 			text.setTextSize(12);
 			date.setText(_cursor.getString(dateIndex));
-
 			_fulfillmentList.addView(view);
 		}
 
@@ -589,14 +597,15 @@ public class TaskView extends Activity {
 				
 				ArrayList<byte[]> byteArrays  = new ArrayList<byte[]>();
 				int numPhotos = data.getIntExtra("numPhotos", 0);
-				
+
+				System.out.println("TVrec"+numPhotos);
 				for(int i = 0; numPhotos>i; i++){
 					byte[] compressedPhoto = data.getByteArrayExtra("photo"+i);	
 					//bytes[i] = photoCompression;
 					byteArrays.add(compressedPhoto);
 				}
 				
-				
+				task.setPhotos(byteArrays);
 				
 				// Toast.makeText(TaskView.this,
 				// data.getStringArrayExtra("PhotoPaths")[0], 2000).show();

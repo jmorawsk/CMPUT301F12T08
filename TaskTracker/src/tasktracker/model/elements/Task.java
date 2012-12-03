@@ -146,6 +146,7 @@ public class Task implements Serializable {
 	}
 	
 	public void setPhotos(ArrayList<byte[]> photos){
+		_photos = new ArrayList<byte[]>();
 		_photos.addAll(photos);
 //		for(int i = 0; photos.size()>i; i++){
 //			_photos.add(photos.get(i));

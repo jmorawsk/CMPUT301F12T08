@@ -91,9 +91,11 @@ public class PhotoPicker extends Activity {
 				ArrayList<byte[]> compressed = myAdapter.getCompressedPhotos();
 				Array[] bytes = new Array[compressed.size()];
 				//photoBundle.
+				int numPhotos = compressed.size();
+				intent.putExtra("numPhotos", numPhotos);
 
-				intent.putExtra("numPhotos", compressed.size());
-				for(int i = 0; compressed.size()>i; i++){
+				System.out.println("PPsend"+numPhotos);
+				for(int i = 0; numPhotos>i; i++){
 					byte[] photoCompression = compressed.get(i);	
 					//bytes[i] = photoCompression;
 
@@ -119,6 +121,17 @@ public class PhotoPicker extends Activity {
 
 
 		gridView = (GridView) findViewById(R.id.gridView);
+		
+		ArrayList<byte[]> byteArrays  = new ArrayList<byte[]>();
+		int numPhotos = getIntent().getIntExtra("numPhotos", 0);
+
+		System.out.println("PPrec"+numPhotos);
+		for(int i = 0; numPhotos>i; i++){
+			byte[] compressedPhoto = getIntent().getByteArrayExtra("photo"+i);	
+			//bytes[i] = photoCompression;
+			byteArrays.add(compressedPhoto);
+		}
+		myAdapter.decompressPhotos(byteArrays);
 		gridView.setAdapter(myAdapter);
 
 		gridView.setOnItemClickListener(new OnItemClickListener() {
