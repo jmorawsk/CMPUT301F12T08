@@ -1,5 +1,6 @@
 package tasktracker.view;
 
+import java.awt.Color;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -546,10 +547,12 @@ public class TaskView extends Activity {
 				Log.d("TaskView", "Deleted Like: " + success);
 				_voteCount--;
 				_voteLink.setText("Like");
+				_voteLink.setTextColor(getResources().getColor(R.color.link));
 			} else {
 				_dbHelper.createVote(_taskID, _user);
 				_voteCount++;
 				_voteLink.setText("Unlike");
+				_voteLink.setTextColor(getResources().getColor(R.color.liked));
 			}
 
 			_voted = !_voted;

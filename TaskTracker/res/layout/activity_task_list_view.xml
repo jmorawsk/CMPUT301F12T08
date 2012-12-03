@@ -7,30 +7,32 @@
         android:id="@+id/buttons"
         layout="@layout/toolbar" />
 
+    <TextView
+        android:id="@+id/myTasks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/buttons"
+        android:background="@color/background"
+        android:padding="8dp"
+        android:text="@string/myTasks"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:layout_below="@+id/buttons"
+        android:layout_below="@+id/myTasks"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
         android:orientation="vertical" >
-		<!-- Pretty hint text, and maxLines -->
-    	<EditText android:id="@+id/search_box" 
-        	android:layout_width="fill_parent"
-        	android:layout_height="wrap_content"
-        	android:hint="type to filter"
-        	android:inputType="text"
-        	android:maxLines="1"/>
-        <TextView
-            android:id="@+id/myTasks"
-            android:layout_width="match_parent"
+
+        <EditText
+            android:id="@+id/search_box"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="@string/myTasks"
-            android:textSize="20dp"
-            android:textStyle="bold" />
+            android:hint="Search... (separate with commas)"
+            android:inputType="text" />
 
         <ListView
             android:id="@+id/taskList"

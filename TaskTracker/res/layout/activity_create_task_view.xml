@@ -13,7 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/buttons"
-        android:layout_margin="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
         android:orientation="vertical"
         android:padding="8dp" >
 
@@ -66,8 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:checked="true"
-                android:text="@string/text"
-                android:textSize="12dp" />
+                android:text="@string/text" />
 
             <CheckBox
                 android:id="@+id/checkbox_photo"
@@ -75,8 +76,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="16dp"
-                android:text="@string/photo"
-                android:textSize="12dp" />
+                android:text="@string/photo" />
         </LinearLayout>
 
         <TextView
@@ -89,11 +89,11 @@
         <EditText
             android:id="@+id/otherMembers"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="58dp"
             android:gravity="center_vertical|top"
             android:hint="@string/hint_otherMembers"
             android:inputType="textMultiLine"
-            android:textSize="14dp" />
+            android:textSize="16dp" />
 
         <CheckBox
             android:id="@+id/checkbox_private"
@@ -101,7 +101,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:text="@string/private_task"
-            android:textSize="12dp" />
+            android:textSize="16dp" />
 
         <Button
             android:id="@+id/saveButton"

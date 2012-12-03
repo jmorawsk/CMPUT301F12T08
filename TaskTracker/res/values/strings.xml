@@ -4,15 +4,15 @@
     <string name="app_name">TaskTracker</string>
     <string name="menu_settings">Settings</string>
     <string name="home">Home</string>
-    <string name="myTasks">My Tasks</string>
-    <string name="create_a_task">Create a Task</string>
-    <string name="notifications">Notifications</string>
+    <string name="myTasks">Tasks</string>
+    <string name="create_a_task">Create</string>
+    <string name="notifications">Messages</string>
     <string name="camera">Camera</string>
     <string name="photo_picker">Photo Picker</string>
     
     <!-- Login -->
     <string name="tasktracker_login">TaskTracker Login</string>
-    <string name="tasktracker_create_account">Create a New Account</string>
+    <string name="tasktracker_create_account">New to TaskTracker?</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="email">Email</string>

@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:gravity="center_vertical|center_horizontal"
         android:text="@string/myTasks"
-        android:textSize="12dp" />
+         />
 
     <Button
         android:id="@+id/buttonCreateTask"
@@ -20,7 +20,7 @@
         android:layout_toRightOf="@+id/buttonMyTasks"
         android:gravity="center_vertical|center_horizontal"
         android:text="@string/create_a_task"
-        android:textSize="12dp" />
+         />
 
     <Button
         android:id="@+id/buttonNotifications"
@@ -30,6 +30,6 @@
         android:layout_toRightOf="@+id/buttonCreateTask"
         android:gravity="center_vertical|center_horizontal"
         android:text="@string/notifications"
-        android:textSize="12dp" />
+         />
 
 </RelativeLayout>

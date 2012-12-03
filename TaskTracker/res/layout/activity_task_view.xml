@@ -42,16 +42,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="12dp"
-                    android:text="0 likes"
-                    android:textSize="12dp" />
+                    android:text="0 likes" />
 
                 <TextView
                     android:id="@+id/text_vote"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Like"
-                    android:textColor="@color/color_link"
-                    android:textSize="12dp"
+                    android:textColor="@color/link"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -65,18 +63,15 @@
             <TextView
                 android:id="@+id/description"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="8dp"
                 android:gravity="center_vertical|top"
                 android:hint="@string/default_description"
-                android:maxHeight="80dp"
-                android:minHeight="30dp"
                 android:scrollbarAlwaysDrawVerticalTrack="true"
                 android:scrollbarStyle="insideInset"
                 android:scrollbars="vertical"
-                android:singleLine="false"
-                android:textSize="14dp" />
+                android:singleLine="false" />
 
             <TextView
                 android:id="@+id/viewRequirements"
@@ -95,8 +90,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:enabled="false"
-                    android:text="@string/text"
-                    android:textSize="12dp" />
+                    android:text="@string/text" />
 
                 <CheckBox
                     android:id="@+id/checkbox_photo"
@@ -104,8 +98,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:enabled="false"
-                    android:text="@string/photo"
-                    android:textSize="12dp" />
+                    android:text="@string/photo" />
             </LinearLayout>
 
             <TextView
@@ -136,7 +129,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"
                 android:text="@string/default_creationInfo"
-                android:textSize="12dp"
                 android:textStyle="italic" />
 
             <TextView
@@ -144,9 +136,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:padding="8dp"
                 android:text="@string/button_expand"
-                android:textColor="@color/color_link"
-                android:textSize="12dp"
+                android:textColor="@color/link"
                 android:textStyle="bold" />
 
             <TextView
@@ -154,9 +146,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:padding="8dp"
                 android:text="@string/button_collapse"
-                android:textColor="@color/color_link"
-                android:textSize="12dp"
+                android:textColor="@color/link"
                 android:textStyle="bold"
                 android:visibility="gone" />
 
@@ -181,14 +173,13 @@
                 android:scrollbarStyle="insideInset"
                 android:scrollbars="vertical"
                 android:singleLine="false"
-                android:textSize="14dp"
                 android:visibility="gone" />
 
             <Button
                 android:id="@+id/button_photo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Photos..."
+                android:text="Select Photos..."
                 android:visibility="gone" />
 
             <Button
