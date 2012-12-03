@@ -542,7 +542,8 @@ public class TaskView extends Activity {
 		public void onClick(View v) {
 
 			if (_voted) {
-				_dbHelper.deleteVote(_taskID, _user);
+				boolean success = _dbHelper.deleteVote(_taskID, _user);
+				Log.d("TaskView", "Deleted Like: " + success);
 				_voteCount--;
 				_voteLink.setText("Like");
 			} else {

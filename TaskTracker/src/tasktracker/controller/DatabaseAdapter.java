@@ -216,11 +216,9 @@ public class DatabaseAdapter {
 		return mDb.insert(TABLE_VOTES, null, initialValues);
 	}
 
-	public void deleteVote(String taskID, String user) {
-		Cursor cursor = mDb.rawQuery("DELETE FROM " + TABLE_VOTES + " WHERE "
-				+ TASK_ID + "= ?" + " AND " + USER + " = ?", new String[] {
-				taskID, user });
-		Log.d("DatabaseAdapter", "Cursor Delete Vote: " + cursor.toString());
+	public boolean deleteVote(String taskID, String user) {
+		return mDb.delete(TABLE_VOTES, TASK_ID + "= ? AND " + USER + "= ?",
+				new String[] { taskID, user }) > 0;
 	}
 
 	/**
@@ -331,8 +329,9 @@ public class DatabaseAdapter {
 								+ " LEFT JOIN "
 								+ taskVoteCount
 								+ " ON available._id = votecount.task_id "
-								+ keywordFilter + secondaryConditions + " ORDER BY date DESC",
-						selectionArgs);
+								+ keywordFilter
+								+ secondaryConditions
+								+ " ORDER BY date DESC", selectionArgs);
 	}
 
 	private static String[] cuteWords = new String[] { "kitty", "kitten",
