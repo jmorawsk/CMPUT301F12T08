@@ -131,9 +131,10 @@ public class DatabaseAdapter {
 	}
 
 	public long createNotification(String taskID, String recipient,
-			String message) {
+			String message, String date) {
 		ContentValues initialValues = new ContentValues();
 
+		initialValues.put(ID, date);
 		initialValues.put(TASK_ID, taskID);
 		initialValues.put(USER, recipient);
 		initialValues.put(TEXT, message);

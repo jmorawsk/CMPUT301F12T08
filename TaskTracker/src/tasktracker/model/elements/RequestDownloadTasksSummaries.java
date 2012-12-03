@@ -130,10 +130,6 @@ public class RequestDownloadTasksSummaries implements NetworkRequestModel {
 		_dbHelper.createMember(task.getID(),
 				Preferences.getUsername(context));
 	
-		for (String member : others) {
-			_dbHelper.createMember(task.getID(), member);
-			_dbHelper.createNotification(task.getID(), member, message);
-		}
 	}
     
     /*

@@ -32,6 +32,7 @@ import android.view.View;
 import java.util.*;
 
 import tasktracker.model.Preferences;
+import tasktracker.model.elements.RequestGetAllNotifications;
 import tasktracker.controller.DatabaseAdapter;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
@@ -65,6 +66,8 @@ public class NotificationListView extends Activity {
 		// handleList_Click());
 
 		setupToolbarButtons();
+		
+		RequestGetAllNotifications notifications = new RequestGetAllNotifications(this);
 
 	}
 

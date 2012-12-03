@@ -54,9 +54,14 @@ public class RequestGetAllNotifications implements NetworkRequestModel {
 
 			String message = AccessURL.getTag("<Notification>", line, pos);
 			String taskId = AccessURL.getTag("<TaskID>", line, pos);
+			String date = AccessURL.getTag("<Date>", line, pos);
 			String recipientsString = AccessURL.getTag("<Recipients>", line,
 					pos);
-
+			if (recipientsString == null){
+				Log.d("RequestGetAllNotifications", "null recipients string");
+				continue;
+			}
+			
 			Notification notification = new Notification(message);
 			notification.setTaskId(taskId);
 			notification.setRecipients(recipientsString);
@@ -64,7 +69,7 @@ public class RequestGetAllNotifications implements NetworkRequestModel {
 			String[] recipients = notification.getRecipientsArray();
 			for (String recipient : recipients) {
 				long rowId = dbHelper.createNotification(taskId, recipient,
-						message);
+						message, date);
 				Log.d("RequestGetAllNotifications", "recipient: " + recipient
 						+ " rowId: " + rowId);
 			}

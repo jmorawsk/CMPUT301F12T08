@@ -36,6 +36,8 @@ import android.view.View.OnClickListener;
 import android.widget.*;
 import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.*;
+import tasktracker.model.elements.Notification;
+import tasktracker.model.elements.RequestCreateNotification;
 import tasktracker.model.elements.RequestCreateTask;
 import tasktracker.model.elements.Task;
 
@@ -54,7 +56,7 @@ public class CreateTaskView extends Activity {
 	private CheckBox _photo;
 	private CheckBox _private;
 	private Button _saveButton;
-	//private WebDBManager _webManager;
+	// private WebDBManager _webManager;
 
 	private String _user;
 
@@ -65,7 +67,7 @@ public class CreateTaskView extends Activity {
 		setContentView(R.layout.activity_create_task_view);
 
 		// Initialize our webManager
-		//_webManager = new WebDBManager();
+		// _webManager = new WebDBManager();
 		_user = Preferences.getUsername(this);
 
 		// Assign EditText fields
@@ -173,39 +175,9 @@ public class CreateTaskView extends Activity {
 
 			Task task = createTask();
 
-//			if (task.isPrivate()) {
-//				/*
-//				 * List<String> others = task.getOtherMembers();
-//				 * 
-//				 * // Add to SQL server _dbHelper.open(); //long taskID =
-//				 * _dbHelper.createTask(task); _dbHelper.createTask(task);
-//				 * 
-//				 * String taskName = task.getName(); String message =
-//				 * Notification.getMessage(_user, taskName,
-//				 * Notification.Type.InformMembership);
-//				 * 
-//				 * _dbHelper.createMember(task.getID(),
-//				 * Preferences.getUsername(getBaseContext()));
-//				 * 
-//				 * for (String member : others) {
-//				 * _dbHelper.createMember(task.getID(), member);
-//				 * _dbHelper.createNotification(task.getID(), member, message);
-//				 * } _dbHelper.close();
-//				 */
-//				// TODO: How can we store to the local SQL without a
-//				// Crowdsourcer ID?
-//				Toast toast = Toast.makeText(getBaseContext(),
-//						"Failed: Cannot currently create local-only users",
-//						Toast.LENGTH_SHORT);
-//				toast.show();
-//			} //else {
-
-				// Mikes new system nov30
-				RequestCreateTask createTask = new RequestCreateTask(
-						getBaseContext(), task);
-
-				startActivity(TaskListView.class);
-			//}
+			// Mikes new system nov30
+			RequestCreateTask createTask = new RequestCreateTask(
+					getBaseContext(), task);
 
 			ToastCreator.showLongToast(CreateTaskView.this, "Task created!");
 			finish();
@@ -213,7 +185,7 @@ public class CreateTaskView extends Activity {
 
 			// Mikes experiments nov26
 			String[] msg;
-			//msg = _webManager.insertTask(task);
+			// msg = _webManager.insertTask(task);
 			// ReadFromURL myReadFromURL = new ReadFromURL();
 			// myReadFromURL.execute("http://crowdsourcer.softwareprocess.es/F12/CMPUT301F12T08/?action=post&summary=%3CTask%3ETest3FromMikenov28&content={%22_creationDate%22:%22Nov%2028,%202012%20|%2022:38%22,%22_creator%22:%22mike%22,%22_otherMembersList%22:[],%22_description%22:%22test%20from%20mike%22,%22_name%22:%22nov28%22,%22_creatorID%22:0,%22_private%22:false,%22_requiresPhoto%22:false,%22_requiresText%22:true}&description=nov28");
 			// ToastCreator.showLongToast(CreateTaskView.this,
@@ -222,7 +194,6 @@ public class CreateTaskView extends Activity {
 			// "Task created! DB summary: n/a");
 
 		}
-
 	}
 
 	/**

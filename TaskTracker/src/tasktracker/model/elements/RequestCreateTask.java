@@ -12,6 +12,8 @@ import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.AccessURL;
 import tasktracker.model.NetworkRequestModel;
 import tasktracker.model.Preferences;
+import tasktracker.view.CreateTaskView;
+import tasktracker.view.TaskListView;
 
 /*
  * Creates an object to add a Task to Crowdsourcer when passed to ReadFromURL, THEN adds
@@ -62,30 +64,29 @@ public class RequestCreateTask implements NetworkRequestModel {
 
 		// Add to SQL server
 		_dbHelper.open();
-		
+
 		task.setID(taskID);
-		
-		//taskID = _dbHelper.createTask(task);
+
+		// taskID = _dbHelper.createTask(task);
 		_dbHelper.createTask(task);
-		
+
 		String taskName = task.getName();
 		String message = Notification.getMessage(
 				Preferences.getUsername(context), taskName,
 				Notification.Type.InformMembership);
-		
-		//TODO: Waiting on refactor, taskID needs to be type String not long
-		
-		_dbHelper.createMember(taskID,
-				Preferences.getUsername(context));
+		Notification notification = new Notification(message);
+		notification.setRecipients(task.getOtherMembers());
+		notification.setTaskId(taskID);
 
-		for (String member : others) {
-			_dbHelper.createMember(taskID, member);
-			_dbHelper.createNotification(taskID, member, message);
-		}
-		
+		RequestCreateNotification request = new RequestCreateNotification(
+				this.context, notification);
+
+		// TODO: Waiting on refactor, taskID needs to be type String not long
+
+		_dbHelper.createMember(taskID, Preferences.getUsername(context));
+
 		_dbHelper.close();
-		
-		
+
 		Toast toast = Toast.makeText(context,
 				"Win! Task added to crowdSourcer: " + task.getName(),
 				Toast.LENGTH_SHORT);

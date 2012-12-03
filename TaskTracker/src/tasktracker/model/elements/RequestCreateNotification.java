@@ -36,8 +36,8 @@ public class RequestCreateNotification implements NetworkRequestModel {
 		this.context = context;
 
 		String command = "action=" + "post" + "&summary=" + "<Notification>"
-				+ notification.getMessage() + "<TaskID>"
-				+ notification.getTaskId() + "<Recipients>"
+				+ notification.getMessage() + "<TaskID>" 
+				+ notification.getTaskId() + "<Date>" + notification.getDate() + "<Recipients>"
 				+ notification.getRecipientsString();
 
 		requestString = AccessURL.turnCommandIntoURL(command);

@@ -53,10 +53,10 @@ public class DatabaseModel {
 			+ "user TEXT NOT NULL, "
 			+ "date TEXT NOT NULL, " + "photo BLOB NOT NULL);";
 
-	private static final String NOTIFICATIONS = "CREATE TABLE notifications(_id INTEGER autoincrement, "
+	private static final String NOTIFICATIONS = "CREATE TABLE notifications(_id TEXT NOT NULL, "
 			+ "task_id TEXT NOT NULL,"
 			+ "user TEXT NOT NULL,"
-			+ "text TEXT NOT NULL, " + "viewed INTEGER, PRIMARY KEY(task_id, user);";
+			+ "text TEXT NOT NULL, " + "viewed INTEGER, PRIMARY KEY(task_id, user));";
 
 	public static final String[] CREATE_TABLES = new String[] {//
 	USERS, TASKS, MEMBERS, FULFILLMENTS, PHOTOS, NOTIFICATIONS, VOTES };

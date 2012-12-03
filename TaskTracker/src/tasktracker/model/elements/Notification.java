@@ -50,59 +50,64 @@ public final class Notification {
 		// User has become a member of a task.
 		InformMembership
 	};
-	
+
 	private String taskID;
 	private String[] recipients;
 	private String message;
 	private long date;
-	
-	public Notification(String message){
+
+	public Notification(String message) {
 		this.date = System.currentTimeMillis() / 1000;
 		this.message = message;
 	}
-	
-	public long getDate(){
+
+	public long getDate() {
 		return this.date;
 	}
-	
-	public String getMessage(){
+
+	public String getMessage() {
 		return this.message;
 	}
-	
-	public String getRecipientsString(){
+
+	public String getRecipientsString() {
 		String value = recipients[0];
-		
-		for (int i = 1; i < recipients.length; i++){
+
+		for (int i = 1; i < recipients.length; i++) {
 			value += "," + recipients[i];
 		}
-		
+
 		return value;
 	}
-	
-	public String[] getRecipientsArray(){
+
+	public String[] getRecipientsArray() {
 		return this.recipients;
 	}
-	
-	public String getTaskId(){
+
+	public String getTaskId() {
 		return this.taskID;
 	}
-	
-	public void setDate(long value){
+
+	public void setDate(long value) {
 		this.date = value;
 	}
-	
-	public void setRecipients(String[] values){
+
+	public void setRecipients(List<String> values) {
+		this.recipients = new String[values.size()];
+		values.toArray(this.recipients);
+	}
+
+	public void setRecipients(String[] values) {
 		this.recipients = values;
 	}
-	
-	public void setRecipients(String values){
+
+	public void setRecipients(String values) {
 		this.recipients = values.split(",");
 	}
-	
-	public void setTaskId(String value){
+
+	public void setTaskId(String value) {
 		this.taskID = value;
 	}
-	
+
 	/**
 	 * Sets the notification's message string according to the notification's
 	 * type.
@@ -115,19 +120,18 @@ public final class Notification {
 		case FulfillmentReport:
 			String date = new SimpleDateFormat("yyyy-MM-dd | HH:mm")
 					.format(Calendar.getInstance().getTime());
-			return String.format("\"%s\" was fulfilled by %s on %s.",
-					taskName, sender, date);
+			return String.format("\"%s\" was fulfilled by %s on %s.", taskName,
+					sender, date);
 		case InformDelete:
 			return String.format("%s deleted \"%s\".", sender, taskName);
 		case InformEdit:
-			return String.format("%s made changes to \"%s\".", sender,
-					taskName);
+			return String
+					.format("%s made changes to \"%s\".", sender, taskName);
 		case InformMembership:
-			return String.format("%s has made you a member of \"%s\".",
-					sender, taskName);
-		default:
-			return String.format("Unknown notification for \"%s\".",
+			return String.format("%s has made you a member of \"%s\".", sender,
 					taskName);
+		default:
+			return String.format("Unknown notification for \"%s\".", taskName);
 		}
 	}
 

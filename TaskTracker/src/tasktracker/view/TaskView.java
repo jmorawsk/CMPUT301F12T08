@@ -10,6 +10,7 @@ import java.util.HashMap;
 import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.Preferences;
 import tasktracker.model.elements.Notification;
+import tasktracker.model.elements.RequestCreateNotification;
 import tasktracker.model.elements.RequestCreateTask;
 import tasktracker.model.elements.Task;
 import android.net.Uri;
@@ -349,8 +350,10 @@ public class TaskView extends Activity {
 	 * Send a notification report of the task fulfillment to the creator.
 	 */
 	private void sendFulfillmentNotification(String message) {
-
-		_dbHelper.createNotification(_taskID, _taskCreator, message);
+		Notification notification = new Notification(message);
+		notification.setRecipients(new String[]{_taskCreator});
+		RequestCreateNotification request = new RequestCreateNotification(this, notification);
+//		_dbHelper.createNotification(_taskID, _taskCreator, message);
 	}
 
 	/**
