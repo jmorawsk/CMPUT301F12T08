@@ -1,6 +1,7 @@
 package tasktracker.view;
 
 import java.io.File;
+import java.sql.Array;
 import java.util.ArrayList;
 
 import android.app.Activity;
@@ -88,8 +89,20 @@ public class PhotoPicker extends Activity {
 				
 				//TODO for web
 				ArrayList<byte[]> compressed = myAdapter.getCompressedPhotos();
+				Array[] bytes = new Array[compressed.size()];
 				//photoBundle.
-				//photoBundle.putByteArray("compressed", compressed);
+
+				intent.putExtra("numPhotos", compressed.size());
+				for(int i = 0; compressed.size()>i; i++){
+					byte[] photoCompression = compressed.get(i);	
+					//bytes[i] = photoCompression;
+
+					intent.putExtra("photo"+i, photoCompression);
+				}
+				
+				//Toast.makeText(PhotoPicker.this, "Photo", 2000).show();
+				
+				//photoBundle.putByteArray("compressed", photoCompression);
 				String[] pathArray = new String[imageUrls.size()];
 				imageUrls.toArray(pathArray);
 				intent.putExtra("PhotoPaths", pathArray);

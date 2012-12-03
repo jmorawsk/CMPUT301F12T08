@@ -586,6 +586,18 @@ public class TaskView extends Activity {
 			if (resultCode == RESULT_OK) {
 				_photoFilePaths = data.getStringArrayExtra("PhotoPaths");
 				_fulfillmentButton.setEnabled(requirementsFulfilled());
+				
+				ArrayList<byte[]> byteArrays  = new ArrayList<byte[]>();
+				int frogs = data.getIntExtra("numPhotos", 0);
+				
+				for(int i = 0; frogs>i; i++){
+					byte[] compressedPhoto = data.getByteArrayExtra("photo"+i);	
+					//bytes[i] = photoCompression;
+					byteArrays.add(compressedPhoto);
+				}
+				
+				
+				
 				// Toast.makeText(TaskView.this,
 				// data.getStringArrayExtra("PhotoPaths")[0], 2000).show();
 				_scrollview.post(new Runnable() {
