@@ -391,11 +391,13 @@ public class TaskView extends Activity {
 				"TaskTracker : Task Fulfillment Report");
 		i.putExtra(Intent.EXTRA_TEXT, message + "\n\n" + textFulfillment);
 
+		
 		ArrayList<Uri> uris = new ArrayList<Uri>();
-		for (String file : _photoFilePaths) {
+		if (_photoFilePaths!=null){
+		    for (String file : _photoFilePaths) {
 			uris.add(Uri.parse("file://" + file));
+		    }
 		}
-
 		i.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
 
 		try {
