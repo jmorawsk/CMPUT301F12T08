@@ -577,8 +577,11 @@ public class TaskView extends Activity {
 			}
 
 			_voted = !_voted;
-
+			
 			_voteInfo.setText(_voteCount + " likes");
+			task.setLikes(_voteCount);
+			RequestModifyTask updateTask = new RequestModifyTask(
+                                getBaseContext(), task);
 		}
 
 	}
