@@ -113,7 +113,7 @@ public class TaskListView extends Activity {
 
 	private void setupToolbarButtons() {
 		filterText = (EditText) findViewById(R.id.search_box);
-		filterText.addTextChangedListener(filterTextWatcher);
+		//filterText.addTextChangedListener(filterTextWatcher);
 		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
 		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
 		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
@@ -234,9 +234,6 @@ public class TaskListView extends Activity {
 				//Log.d("TaskListView", filterText.getText().toString());
 
 				//fillData(keywords);
-				
-				
-
 			}
 
 			public void beforeTextChanged(CharSequence s, int start, int count,
@@ -303,19 +300,19 @@ public class TaskListView extends Activity {
 	// taskListView.setFilterText("photo");
 	// }
 
-	private TextWatcher filterTextWatcher = new TextWatcher() {
-
-		public void afterTextChanged(Editable s) {
-		}
-
-		public void beforeTextChanged(CharSequence s, int start, int count,
-				int after) {
-		}
-
-		public void onTextChanged(CharSequence s, int start, int before,
-				int count) {
-			//adapter.getFilter().filter(s);
-		}
-
-	};
+//	private TextWatcher filterTextWatcher = new TextWatcher() {
+//
+//		public void afterTextChanged(Editable s) {
+//		}
+//
+//		public void beforeTextChanged(CharSequence s, int start, int count,
+//				int after) {
+//		}
+//
+//		public void onTextChanged(CharSequence s, int start, int before,
+//				int count) {
+//			//adapter.getFilter().filter(s);
+//		}
+//
+//	};
 }
