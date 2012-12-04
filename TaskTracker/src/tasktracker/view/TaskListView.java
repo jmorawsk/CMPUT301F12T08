@@ -54,7 +54,7 @@ public class TaskListView extends Activity {
 	private String[] tasks = new String[0];
 	private String _user;
 	// private PreferencesManager preferences;
-
+	private String[] _keywords = new String[0];
 	private EditText filterText;
 	// private WebDBManager webManager;
 	private DatabaseAdapter _dbHelper;
@@ -109,6 +109,7 @@ public class TaskListView extends Activity {
 
 		});
 	}
+	
 
 	private void setupToolbarButtons() {
 		filterText = (EditText) findViewById(R.id.search_box);
@@ -141,6 +142,16 @@ public class TaskListView extends Activity {
 				Intent intent = new Intent(getApplicationContext(),
 						NotificationListView.class);
 				startActivity(intent);
+			}
+		});
+		
+		Button buttonSearch = (Button) findViewById(R.id.search_tasks);
+		
+		buttonSearch.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View v) {
+				
+				fillData(_keywords);
 			}
 		});
 	}
@@ -215,14 +226,16 @@ public class TaskListView extends Activity {
 
 			public void afterTextChanged(Editable s) {
 
-				String[] keywords = filterText.getText().toString()
+				_keywords = filterText.getText().toString()
 						.split("(\\s+)?,(\\s+)?");
-				if (keywords[0].matches("")) {
-					keywords = new String[0];
+				if (_keywords[0].matches("")) {
+					_keywords = new String[0];
 				}
-				Log.d("TaskListView", filterText.getText().toString());
+				//Log.d("TaskListView", filterText.getText().toString());
 
-				fillData(keywords);
+				//fillData(keywords);
+				
+				
 
 			}
 
@@ -301,7 +314,7 @@ public class TaskListView extends Activity {
 
 		public void onTextChanged(CharSequence s, int start, int before,
 				int count) {
-			adapter.getFilter().filter(s);
+			//adapter.getFilter().filter(s);
 		}
 
 	};

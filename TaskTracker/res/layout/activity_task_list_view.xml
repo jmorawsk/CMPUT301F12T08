@@ -27,13 +27,28 @@
         android:layout_marginRight="8dp"
         android:orientation="vertical" >
 
+        
+        
+       <LinearLayout 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:orientation="horizontal" >
         <EditText
             android:id="@+id/search_box"
-            android:layout_width="fill_parent"
+            android:layout_width="185dp"
             android:layout_height="wrap_content"
             android:hint="Search... (separate with commas)"
             android:inputType="text" />
-
+        <Button
+            android:id="@+id/search_tasks"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:text="Search" />
+		</LinearLayout>
+        
         <ListView
             android:id="@+id/taskList"
             android:layout_width="fill_parent"
