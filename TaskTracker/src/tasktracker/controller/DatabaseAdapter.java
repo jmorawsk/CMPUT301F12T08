@@ -122,8 +122,10 @@ public class DatabaseAdapter {
 		initialValues.put(REQS_TEXT, task.requiresText() ? 1 : 0);
 		initialValues.put(PRIVATE, task.isPrivate() ? 1 : 0);
 		initialValues.put(DOWNLOADED, task.getDownloaded()); // Added nov29
-																// -mike
-
+		
+		for (int n=0;n<task.getLikes();n++)
+		    createVote(task.getID(),"");
+		// -mike
 		// Log.d("DatabaseAdapter",
 		// "PRIVATE = " + Boolean.toString(task.isPrivate()));
 
