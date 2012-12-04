@@ -7,15 +7,14 @@
         android:id="@+id/buttons"
         layout="@layout/toolbar" />
 
-
     <LinearLayout
         android:id="@+id/relativelayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/buttons"
+        android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
         android:orientation="vertical"
         android:padding="8dp" >
 
@@ -40,7 +39,7 @@
         <EditText
             android:id="@+id/editDescription"
             android:layout_width="match_parent"
-            android:layout_height="90dp"
+            android:layout_height="160dp"
             android:layout_marginBottom="8dp"
             android:gravity="center_vertical|top"
             android:hint="@string/hint_taskDescription"
@@ -48,8 +47,7 @@
             android:scrollbarAlwaysDrawVerticalTrack="true"
             android:scrollbarStyle="insideInset"
             android:scrollbars="vertical"
-            android:singleLine="false"
-            android:textSize="14dp" />
+            android:singleLine="false" />
 
         <TextView
             android:id="@+id/viewRequirements"
@@ -84,7 +82,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/heading_otherMembers"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone" />
 
         <EditText
             android:id="@+id/otherMembers"
@@ -93,15 +92,15 @@
             android:gravity="center_vertical|top"
             android:hint="@string/hint_otherMembers"
             android:inputType="textMultiLine"
-            android:textSize="16dp" />
+            android:textSize="16dp"
+            android:visibility="gone" />
 
         <CheckBox
             android:id="@+id/checkbox_private"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="@string/private_task"
-            android:textSize="16dp" />
+            android:text="@string/private_task" />
 
         <Button
             android:id="@+id/saveButton"

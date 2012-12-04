@@ -109,11 +109,10 @@ public class CreateTaskView extends Activity {
 		case R.id.logout:
 
 			Intent intent = new Intent(getApplicationContext(), Login.class);
-			finish();
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
 			return true;
 		default:
-			ToastCreator.showShortToast(this, "Not Yet Implemented");
 			return super.onOptionsItemSelected(item);
 		}
 	}

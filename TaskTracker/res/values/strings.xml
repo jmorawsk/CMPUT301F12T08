@@ -30,7 +30,7 @@
     <string name="heading_requirements">Requirements:</string>
     <string name="text">Text</string>
     <string name="photo">Photo</string>
-    <string name="private_task">This task is private.  Only members may view and fulfill it.</string>
+    <string name="private_task">This task is private.  Only I may view and fulfill it.</string>
 
     <!-- Task Hints -->
     <string name="hint_taskName">New Task Name</string>

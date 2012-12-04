@@ -84,7 +84,7 @@ public class Login extends Activity {
 
 				//TODO Compare against password when signing in
 				RequestGetAUser downloadUserAndSignIn = new RequestGetAUser(getBaseContext(), true, username);
-				
+				Preferences.setUsername(Login.this, username, true);
 				/*	//Old code to validate password against SQL table
 				_cursor = _dbHelper.fetchUser(_loginUsername.getText()
 						.toString(), _loginPassword.getText().toString());
@@ -187,9 +187,10 @@ public class Login extends Activity {
 	}
 
 	private void proceedToHomePage(String user) {
-		ToastCreator.showLongToast(this, "Signing in , " + user + "...");
+//		ToastCreator.showLongToast(this, "Signing in , " + user + "...");
 
 		Intent intent = new Intent(getApplicationContext(), TaskListView.class);
+		finish();
 		startActivity(intent);
 	}
 

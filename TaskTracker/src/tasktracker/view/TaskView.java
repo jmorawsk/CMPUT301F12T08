@@ -168,10 +168,10 @@ public class TaskView extends Activity {
 		case R.id.logout:
 
 			Intent intent = new Intent(getApplicationContext(), Login.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
 			return true;
 		default:
-			ToastCreator.showShortToast(this, "Not Yet Implemented");
 			return super.onOptionsItemSelected(item);
 		}
 	}
@@ -401,8 +401,8 @@ public class TaskView extends Activity {
 		i.setType("text/plain");
 		i.putExtra(Intent.EXTRA_EMAIL, new String[] { email });
 		i.putExtra(Intent.EXTRA_SUBJECT,
-				"TaskTracker : Task Fulfillment Report");
-		i.putExtra(Intent.EXTRA_TEXT, message + "\n\n" + textFulfillment);
+				"TaskTracker : " + message);
+		i.putExtra(Intent.EXTRA_TEXT, textFulfillment);
 
 		ArrayList<Uri> uris = new ArrayList<Uri>();
 		if (_photoFilePaths != null) {
@@ -563,8 +563,8 @@ public class TaskView extends Activity {
 				sendFulfillmentEmail(message, textFulfillment);
 				// }
 
-				ToastCreator.showLongToast(TaskView.this, "\"" + _taskName
-						+ "\" was fulfilled!");
+//				ToastCreator.showLongToast(TaskView.this, "\"" + _taskName
+//						+ "\" was fulfilled!");
 				// TODO: Does task need to be updated on web?
 				RequestModifyTask updateTask = new RequestModifyTask(
 						getBaseContext(), task);

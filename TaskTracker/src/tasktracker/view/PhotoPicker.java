@@ -4,6 +4,8 @@ import java.io.File;
 import java.sql.Array;
 import java.util.ArrayList;
 
+import tasktracker.model.Preferences;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -14,6 +16,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -264,8 +268,29 @@ public class PhotoPicker extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_main, menu);
+
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.account_menu, menu);
+
+		MenuItem account = menu.findItem(R.id.Account_menu);
+		account.setTitle(Preferences.getUsername(this));
+
 		return true;
 	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
 
+		// Handle item selection
+		switch (item.getItemId()) {
+		case R.id.logout:
+
+			Intent intent = new Intent(getApplicationContext(), Login.class);
+			finish();
+			startActivity(intent);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
 }
