@@ -124,7 +124,7 @@ public class DatabaseAdapter {
 		initialValues.put(DOWNLOADED, task.getDownloaded()); // Added nov29
 		
 		for (int n=0;n<task.getLikes();n++)
-		    createVote(task.getID(),"");
+		    createVote(task.getID(),""+n);
 		// -mike
 		// Log.d("DatabaseAdapter",
 		// "PRIVATE = " + Boolean.toString(task.isPrivate()));
