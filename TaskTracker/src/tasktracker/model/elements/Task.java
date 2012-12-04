@@ -51,7 +51,7 @@ public class Task implements Serializable {
 	private String _isDownloaded; // added nov29 by Mike
 	private int _likes;
 	private ArrayList<byte[]> _photos; 
-
+	private ArrayList<String[]> _texts;
 	// SQL ids
 	private String _creatorID;
 
@@ -97,6 +97,7 @@ public class Task implements Serializable {
 		_private = false;
 		_likes = 0;
 		_photos = new ArrayList<byte[]>();
+		_texts = new ArrayList<String[]>();
 	}
 
 	// Setters
@@ -148,10 +149,11 @@ public class Task implements Serializable {
 	public void setPhotos(ArrayList<byte[]> photos){
 		_photos = new ArrayList<byte[]>();
 		_photos.addAll(photos);
-//		for(int i = 0; photos.size()>i; i++){
-//			_photos.add(photos.get(i));
-//		}
 	}
+	public void setTextReqs(ArrayList<String[]> texts){
+            _texts = new ArrayList<String[]>();
+            _texts.addAll(texts);
+        }
 
 	// Getters
 	public String getCreator() {
@@ -202,6 +204,9 @@ public class Task implements Serializable {
 	public ArrayList<byte[]> getPhotos(){
 		return _photos;
 	}
+	public ArrayList<String[]> getTextReqs(){
+            return _texts;
+        }
 
 	/** Gets the string summary for CrowdSourcer */
 	public String getSummary() {

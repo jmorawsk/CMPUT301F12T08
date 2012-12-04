@@ -315,7 +315,10 @@ public class TaskView extends Activity {
 			TextView fulfiller = (TextView) view.findViewById(R.id.item_title);
 			TextView text = (TextView) view.findViewById(R.id.item_text);
 			TextView date = (TextView) view.findViewById(R.id.item_top_right);
-
+			//TODO send to web
+			text.getText().toString();
+			fulfiller.getText().toString();
+			date.getText().toString();
 			fulfiller.setText("Fulfilled by "
 					+ _cursor.getString(fulfillerIndex));
 			text.setText(_cursor.getString(textIndex));
