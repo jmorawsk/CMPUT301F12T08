@@ -528,7 +528,7 @@ public class TaskView extends Activity {
 					String message = Notification.getMessage(_user, _taskName,
 							Notification.Type.FulfillmentReport);
 					sendFulfillmentNotification(message);
-					sendFulfillmentEmail(message, textFulfillment);
+//					sendFulfillmentEmail(message, textFulfillment);
 				}
 
 				ToastCreator.showLongToast(TaskView.this, "\"" + _taskName

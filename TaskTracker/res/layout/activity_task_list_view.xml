@@ -1,65 +1,63 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
 
     <include
         android:id="@+id/buttons"
         layout="@layout/toolbar" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_below="@+id/buttons"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        android:orientation="vertical" >
+    <TextView
+        android:id="@+id/myTasks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background"
+        android:padding="8dp"
+        android:text="@string/myTasks"
+        android:textColor="@color/dark_navy"
+        android:textSize="20dp"
+        android:textStyle="bold" />
 
-        <!-- Pretty hint text, and maxLines -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:gravity="bottom"
+        android:orientation="horizontal" >
 
         <EditText
             android:id="@+id/search_box"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:hint="type to filter"
+            android:hint="Search tasks (e.g., kitty cat, puppy, cute)"
             android:inputType="text"
-            android:maxLines="1" />
+            android:textSize="16dp" />
 
-        <TextView
-            android:id="@+id/myTasks"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="@string/myTasks"
-            android:textSize="20dp"
-            android:textStyle="bold" />
-
-        <ListView
-            android:id="@+id/taskList"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
-        </ListView>
+        <Button
+            android:id="@+id/search_tasks"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="right"
+            android:text="Search"
+            android:textSize="16dp" />
     </LinearLayout>
 
     <Button
         android:id="@+id/button_clearSQL"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:text="Clear SQL Database"
         android:textSize="12dp"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
-    <Button
-        android:id="@+id/button_nukeCrowdSourcer"
-        android:layout_width="wrap_content"
+    <ListView
+        android:id="@+id/taskList"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:text="Nuke CrowdSourcer"
-        android:textSize="12dp"
-        android:visibility="invisible" />
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp" >
+    </ListView>
 
-</RelativeLayout>
+</LinearLayout>

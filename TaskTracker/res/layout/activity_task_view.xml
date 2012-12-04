@@ -42,16 +42,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="12dp"
-                    android:text="0 likes"
-                    android:textSize="12dp" />
+                    android:text="0 likes" />
 
                 <TextView
                     android:id="@+id/text_vote"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Like"
-                    android:textColor="@color/color_link"
-                    android:textSize="12dp"
+                    android:textColor="@color/link"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -65,13 +63,11 @@
             <TextView
                 android:id="@+id/description"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="8dp"
                 android:gravity="center_vertical|top"
                 android:hint="@string/default_description"
-                android:maxHeight="80dp"
-                android:minHeight="30dp"
                 android:scrollbarAlwaysDrawVerticalTrack="true"
                 android:scrollbarStyle="insideInset"
                 android:scrollbars="vertical"
@@ -86,7 +82,7 @@
                 android:textStyle="bold" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp" >
 
@@ -134,9 +130,9 @@
                 android:id="@+id/creationInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical|center_horizontal"
+                android:gravity="center"
+                android:textColor="@color/gray"
                 android:text="@string/default_creationInfo"
-                android:textSize="12dp"
                 android:textStyle="italic" />
 
             <TextView
@@ -144,9 +140,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:padding="8dp"
                 android:text="@string/button_expand"
-                android:textColor="@color/color_link"
-                android:textSize="12dp"
+                android:textColor="@color/dark_navy"
                 android:textStyle="bold" />
 
             <TextView
@@ -154,9 +150,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:padding="8dp"
                 android:text="@string/button_collapse"
-                android:textColor="@color/color_link"
-                android:textSize="12dp"
+                android:textColor="@color/dark_navy"
                 android:textStyle="bold"
                 android:visibility="gone" />
 

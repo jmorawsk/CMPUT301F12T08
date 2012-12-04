@@ -42,7 +42,10 @@ public class Login extends Activity {
 		// TODO Delete before release
 		_dbHelper.open();
 		_dbHelper.createUser("Debugger", "cmput301f12t08@gmail.com", "");
-		_dbHelper.createUser("jbonot", "jbonot@ualberta.ca", "");
+		_dbHelper.createUser("jbonot", "jbonot@ualberta.ca", "tasktracker");
+		_dbHelper.createUser("jmorawsk", "cmput301f12t08@gmail.com", "tasktracker");
+		_dbHelper.createUser("jasiewsk", "cmput301f12t08@gmail.com", "tasktracker");
+		_dbHelper.createUser("dardis", "cmput301f12t08@gmail.com", "tasktracker");
 		_dbHelper.close();
 		// End to-do
 		

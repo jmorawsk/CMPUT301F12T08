@@ -1,222 +1,202 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="30dp" >
+    android:gravity="right"
+    android:orientation="vertical"
+    android:paddingTop="10dp" >
 
     <!-- Account Login -->
 
-    <RelativeLayout
-        android:id="@+id/login"
+    <TextView
+        android:id="@+id/tasktracker_login_headline"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true" >
+        android:background="@color/dark_navy"
+        android:gravity="right"
+        android:paddingBottom="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="30dp"
+        android:paddingTop="8dp"
+        android:text="@string/tasktracker_login"
+        android:textColor="@color/bright_yellow"
+        android:textSize="20dp"
+        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tasktracker_login_headline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tasktracker_login"
-            android:textSize="20dp"
-            android:textStyle="bold" />
-
-        <RelativeLayout
-            android:id="@+id/login_fields"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tasktracker_login_headline"
-            android:layout_marginTop="28dp" >
-
-            <RelativeLayout
-                android:layout_width="100dp"
-                android:layout_height="wrap_content" >
-
-                <TextView
-                    android:id="@+id/heading_username"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginTop="12dp"
-                    android:text="@string/username"
-                    android:textSize="12dp" />
-
-                <TextView
-                    android:id="@+id/heading_password"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@+id/heading_username"
-                    android:layout_marginTop="12dp"
-                    android:text="@string/password"
-                    android:textSize="12dp" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="110dp" >
-
-                <EditText
-                    android:id="@+id/username"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:textSize="12dp" />
-
-                <EditText
-                    android:id="@+id/password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/username"
-                    android:inputType="textWebPassword"
-                    android:textSize="12dp" />
-            </RelativeLayout>
-        </RelativeLayout>
-
-        <Button
-            android:id="@+id/button_login"
-            android:layout_width="90dp"
-            android:layout_height="30dp"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/login_fields"
-            android:layout_marginTop="12dp"
-            android:text="@string/button_login"
-            android:textSize="12dp" />
-        
-        
-        <!-- DEBUGGING BUTTON.  DELETE BEFORE RELEASE -->
-
-        <Button
-            android:id="@+id/button_debug"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_below="@+id/login_fields"
-            android:layout_marginTop="12dp"
-            android:text="Enter Debug Mode"
-            android:textSize="12dp" />
-        
-        <!-- END OF DEBUG -->
-        
-    </RelativeLayout>
-
-    <!-- Create an Account -->
-
-    <RelativeLayout
-        android:id="@+id/create_account"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" >
+        android:orientation="vertical"
+        android:paddingRight="30dp" >
 
-        <TextView
-            android:id="@+id/title_new_account"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:text="@string/tasktracker_create_account"
-            android:textSize="14dp"
-            android:textStyle="bold" />
-
-        <RelativeLayout
-            android:id="@+id/new_user_headings"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/title_new_account"
-            android:layout_marginTop="12dp" >
+            android:gravity="right" >
 
-            <RelativeLayout
-                android:layout_width="100dp"
-                android:layout_height="wrap_content" >
-
-                <TextView
-                    android:id="@+id/heading_username_new"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginTop="12dp"
-                    android:text="@string/username"
-                    android:textSize="12dp" />
-
-                <TextView
-                    android:id="@+id/heading_email_new"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@+id/heading_username_new"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginTop="12dp"
-                    android:text="@string/email"
-                    android:textSize="12dp" />
-
-                <TextView
-                    android:id="@+id/heading_password_new"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@+id/heading_email_new"
-                    android:layout_marginTop="12dp"
-                    android:text="@string/password"
-                    android:textSize="12dp" />
-
-                <TextView
-                    android:id="@+id/heading_password_new_confirm"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@+id/heading_password_new"
-                    android:layout_marginTop="12dp"
-                    android:text="@string/confirm_password"
-                    android:textSize="12dp" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/heading_username"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="110dp" >
+                android:text="@string/username" />
 
-                <EditText
-                    android:id="@+id/new_username"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:textSize="12dp" />
+            <EditText
+                android:id="@+id/username"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+        </LinearLayout>
 
-                <EditText
-                    android:id="@+id/new_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/new_username"
-                    android:inputType="textWebEmailAddress"
-                    android:textSize="12dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right" >
 
-                <EditText
-                    android:id="@+id/new_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/new_email"
-                    android:inputType="textWebPassword"
-                    android:textSize="12dp" />
+            <TextView
+                android:id="@+id/heading_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/password" />
 
-                <EditText
-                    android:id="@+id/new_password_confirm"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/new_password"
-                    android:inputType="textWebPassword"
-                    android:textSize="12dp" />
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:inputType="textWebPassword" />
+        </LinearLayout>
 
-                <Button
-                    android:id="@+id/button_create_account"
-                    android:layout_width="90dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@+id/new_password_confirm"
-                    android:layout_marginTop="12dp"
-                    android:text="@string/button_create_account"
-                    android:textSize="12dp" />
-            </RelativeLayout>
-        </RelativeLayout>
-    </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right" >
 
-</RelativeLayout>
+            <!-- DEBUGGING BUTTON.  DELETE BEFORE RELEASE -->
+
+            <Button
+                android:id="@+id/button_debug"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enter Debug Mode"
+                android:textSize="12dp"
+                android:visibility="gone" />
+
+            <!-- END OF DEBUG -->
+
+            <Button
+                android:id="@+id/button_login"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:layout_gravity="right"
+                android:layout_marginTop="12dp"
+                android:text="@string/button_login"
+                android:textSize="18dp" />
+        </LinearLayout>
+
+        <!-- Create an Account -->
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/title_new_account"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="right"
+        android:paddingBottom="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="30dp"
+        android:paddingTop="8dp"
+        android:text="@string/tasktracker_create_account"
+        android:textColor="@color/dark_navy"
+        android:textSize="16dp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingRight="30dp" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right" >
+
+            <TextView
+                android:id="@+id/heading_username_new"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/username" />
+
+            <EditText
+                android:id="@+id/new_username"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right" >
+
+            <TextView
+                android:id="@+id/heading_email_new"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/email" />
+
+            <EditText
+                android:id="@+id/new_email"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:inputType="textWebEmailAddress" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right" >
+
+            <TextView
+                android:id="@+id/heading_password_new"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/password" />
+
+            <EditText
+                android:id="@+id/new_password"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:inputType="textWebPassword" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right" >
+
+            <TextView
+                android:id="@+id/heading_password_new_confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/confirm_password"
+                android:textSize="12dp" />
+
+            <EditText
+                android:id="@+id/new_password_confirm"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:inputType="textWebPassword" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/button_create_account"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:layout_gravity="right"
+            android:layout_marginTop="12dp"
+            android:text="@string/button_create_account"
+            android:textSize="18dp" />
+    </LinearLayout>
+
+</LinearLayout>

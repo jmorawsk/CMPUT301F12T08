@@ -1,42 +1,41 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
 
-    <include layout="@layout/toolbar"
-        android:id="@+id/buttons"/>
+    <include
+        android:id="@+id/buttons"
+        layout="@layout/toolbar" />
+
+    <TextView
+        android:id="@+id/myTasks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:background="@color/background"
+        android:padding="8dp"
+        android:text="@string/notifications"
+        android:textColor="@color/dark_navy"
+        android:textSize="20dp"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@+id/buttons"
         android:layout_marginLeft="8dp"
-        android:orientation="vertical"
-        android:layout_marginRight="8dp" >
-
-        <TextView
-            android:id="@+id/myTasks"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="@string/notifications"
-            android:textSize="20dp"
-            android:textStyle="bold" />
+        android:layout_marginRight="8dp"
+        android:orientation="vertical" >
 
         <ListView
             android:id="@+id/notificationsList"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </ListView>
-
-        <ImageButton
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:contentDescription="@string/descr_overflow_button"
-            android:onClick="showPopup"
-            android:src="@drawable/ic_action_search" />
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp" >
+        </ListView>
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>
