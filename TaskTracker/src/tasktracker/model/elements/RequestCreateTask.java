@@ -1,8 +1,11 @@
 package tasktracker.model.elements;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.zip.GZIPOutputStream;
 
 import com.google.gson.Gson;
 
@@ -63,16 +66,16 @@ public class RequestCreateTask implements NetworkRequestModel {
 		List<String> others = task.getOtherMembers();
 
 		task.setID(taskID);
-		
+
 		// Add to SQL server
 		_dbHelper.open();
 		_dbHelper.createTask(task);
 		_dbHelper.close();
 
-//		Toast toast = Toast.makeText(context,
-//				"Win! Task added to crowdSourcer: " + task.getName(),
-//				Toast.LENGTH_SHORT);
-//		toast.show();
+		// Toast toast = Toast.makeText(context,
+		// "Win! Task added to crowdSourcer: " + task.getName(),
+		// Toast.LENGTH_SHORT);
+		// toast.show();
 	}
 
 	private void createNotifications() {
@@ -87,10 +90,25 @@ public class RequestCreateTask implements NetworkRequestModel {
 		RequestCreateNotification request = new RequestCreateNotification(
 				this.context, notification);
 	}
-	
-	private void createMembers(DatabaseAdapter dbHelper){
+
+	private void createMembers(DatabaseAdapter dbHelper) {
 		dbHelper.open();
 		dbHelper.createMember(task.getID(), Preferences.getUsername(context));
 		dbHelper.close();
+	}
+
+	public static String compress(String input) {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		try {
+			GZIPOutputStream gzip = new GZIPOutputStream(out);
+			gzip.write(input.getBytes("UTF-8"));
+			input = out.toString();
+			gzip.close();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return input;
 	}
 }
