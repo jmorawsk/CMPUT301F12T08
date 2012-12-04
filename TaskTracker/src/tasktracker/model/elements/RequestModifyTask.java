@@ -80,9 +80,9 @@ public class RequestModifyTask implements NetworkRequestModel {
         _dbHelper.close();
         */
 
-        Toast toast = Toast.makeText(context,
-                "Updated crowdSourcer task: " + task.getName(),
-                Toast.LENGTH_SHORT);
-        toast.show();
+		// Toast toast = Toast.makeText(context,
+		// "Updated crowdSourcer task: " + task.getName(),
+		// Toast.LENGTH_SHORT);
+		// toast.show();
     }
 }

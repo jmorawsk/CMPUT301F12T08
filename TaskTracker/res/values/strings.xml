@@ -4,8 +4,8 @@
     <string name="app_name">TaskTracker</string>
     <string name="menu_settings">Settings</string>
     <string name="home">Home</string>
-    <string name="myTasks">Tasks</string>
-    <string name="create_a_task">Create</string>
+    <string name="myTasks">Task Dash</string>
+    <string name="create_a_task">Create a Task</string>
     <string name="notifications">Messages</string>
     <string name="camera">Camera</string>
     <string name="photo_picker">Photo Picker</string>

@@ -27,9 +27,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.KeyListener;
 import android.util.Log;
 import android.view.*;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import tasktracker.controller.DatabaseAdapter;
@@ -87,6 +89,11 @@ public class TaskListView extends Activity {
 
 	protected void onStart() {
 		super.onStart();
+		// Now call an asynchronous method to populate the Database with items
+		// from Crowdsourcer
+		RequestDownloadTasksSummaries downloader = new RequestDownloadTasksSummaries(
+				getBaseContext());
+		
 		_dbHelper.open();
 		fillData(new String[0]);
 	}
@@ -173,12 +180,12 @@ public class TaskListView extends Activity {
 		// An Action Menu or Help menu item was selected
 		// By Mike
 		switch (item.getItemId()) {
-		case R.id.change_name:
-			changeName();
-			return true;
-		case R.id.help:
-			showHelp();
-			return true;
+		// case R.id.change_name:
+		// changeName();
+		// return true;
+		// case R.id.help:
+		// showHelp();
+		// return true;
 		case R.id.logout:
 			Intent intent = new Intent(getApplicationContext(), Login.class);
 			startActivity(intent);
@@ -194,11 +201,6 @@ public class TaskListView extends Activity {
 				"Old username was " + Preferences.getUsername(getBaseContext())
 						+ ". Please, keep it clean.", this,
 				InputPopup.Type.username);
-	}
-
-	private void showHelp() {
-		// TODO Create a help menu
-		showToast("Show help clicked");
 	}
 
 	private void setupTaskList() {
@@ -222,14 +224,32 @@ public class TaskListView extends Activity {
 		Log.d("TaskListView",
 				"null filtertext = " + Boolean.toString(filterText == null));
 
+		filterText.setOnKeyListener(new OnKeyListener(){
+
+			public boolean onKey(View view, int keyCode, KeyEvent event) {
+		        // If the event is a key-down event on the "enter" button
+		        if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+		            (keyCode == KeyEvent.KEYCODE_ENTER)) {
+		          // Perform action on key press
+		          fillData(_keywords);
+		          filterText.requestFocus();
+		          return true;
+		        }
+		        return false;
+			}
+			
+		});
+		
 		filterText.addTextChangedListener(new TextWatcher() {
 
 			public void afterTextChanged(Editable s) {
 
 				_keywords = filterText.getText().toString()
 						.split("(\\s+)?,(\\s+)?");
+				
 				if (_keywords[0].matches("")) {
 					_keywords = new String[0];
+					fillData(_keywords);
 				}
 				//Log.d("TaskListView", filterText.getText().toString());
 
@@ -249,18 +269,7 @@ public class TaskListView extends Activity {
 		});
 	}
 
-	private void showToast(String message) {
-		Toast toast = Toast.makeText(getApplicationContext(), message,
-				Toast.LENGTH_LONG);
-		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-		toast.show();
-	}
-
 	private void fillData(String[] filterWords) {
-		// Now call an asynchronous method to populate the Database with items
-		// from Crowdsourcer
-		RequestDownloadTasksSummaries downloader = new RequestDownloadTasksSummaries(
-				getBaseContext());
 		
 		_cursor = _dbHelper.fetchTasksAvailableToUser(_user, filterWords);
 		startManagingCursor(_cursor);

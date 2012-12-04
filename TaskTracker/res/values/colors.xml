@@ -3,5 +3,7 @@
     <color name="link">#00aaff</color>
     <color name="liked">#7700aaff</color>
     <color name="background">#2000aaff</color>
-    <color name="main">#00aaff</color>
+    <color name="dark_navy">#004162</color>
+    <color name="bright_yellow">#ffd70c</color>
+    
 </resources>

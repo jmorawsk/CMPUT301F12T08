@@ -135,8 +135,8 @@ public class TaskView extends Activity {
 		_dbHelper.open();
 
 		setTaskInfo();
-		setMembersList();
-		setFulfillmentsList();
+		// setMembersList();
+		// setFulfillmentsList();
 		setVoteInfo();
 	}
 
@@ -291,6 +291,18 @@ public class TaskView extends Activity {
 		photoRequirement.setChecked(_requiresPhoto);
 		if (task == null)
 			task = new Task(_taskCreator);
+
+		if (_requiresText) {
+			_textFulfillment.setVisibility(View.VISIBLE);
+			// _textFulfillment.requestFocus();
+		}
+
+		if (_requiresPhoto)
+			_photoButton.setVisibility(View.VISIBLE);
+
+		if (!(_requiresText || _requiresPhoto))
+			_fulfillmentButton.setEnabled(true);
+
 		createTask();
 	}
 
@@ -547,7 +559,7 @@ public class TaskView extends Activity {
 				// if (!_user.equals(_taskCreator)) {
 				String message = Notification.getMessage(_user, _taskName,
 						Notification.Type.FulfillmentReport);
-				sendFulfillmentNotification(message);
+				// sendFulfillmentNotification(message);
 				sendFulfillmentEmail(message, textFulfillment);
 				// }
 

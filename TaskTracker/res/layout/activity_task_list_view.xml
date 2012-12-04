@@ -1,7 +1,8 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
 
     <include
         android:id="@+id/buttons"
@@ -15,8 +16,33 @@
         android:background="@color/background"
         android:padding="8dp"
         android:text="@string/myTasks"
+        android:textColor="@color/dark_navy"
         android:textSize="20dp"
         android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:gravity="bottom"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/search_box"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="e.g., kitty cat, puppy, cute"
+            android:inputType="text"
+            android:textSize="16dp" />
+        <Button
+            android:id="@+id/search_tasks"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="right"
+            android:text="Search"
+            android:textSize="16dp" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -27,28 +53,6 @@
         android:layout_marginRight="8dp"
         android:orientation="vertical" >
 
-        
-        
-       <LinearLayout 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:orientation="horizontal" >
-        <EditText
-            android:id="@+id/search_box"
-            android:layout_width="185dp"
-            android:layout_height="wrap_content"
-            android:hint="Search... (separate with commas)"
-            android:inputType="text" />
-        <Button
-            android:id="@+id/search_tasks"
-            android:layout_width="110dp"
-            android:layout_height="wrap_content"
-            android:text="Search" />
-		</LinearLayout>
-        
         <ListView
             android:id="@+id/taskList"
             android:layout_width="fill_parent"
@@ -63,6 +67,6 @@
         android:layout_alignParentBottom="true"
         android:text="Clear SQL Database"
         android:textSize="12dp"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
-</RelativeLayout>
+</LinearLayout>

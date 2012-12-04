@@ -101,19 +101,22 @@
                     android:text="@string/photo" />
             </LinearLayout>
 
-            <TextView
+                <TextView
                 android:id="@+id/heading_Members"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/heading_allMembers"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone" />
 
             <ListView
                 android:id="@+id/membersList"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_margin="12dp"
-                android:maxHeight="200dp" />
+                android:maxHeight="200dp"
+                android:visibility="gone" />
+           
 
             <TextView
                 android:id="@+id/private_task"
@@ -139,7 +142,8 @@
                 android:padding="8dp"
                 android:text="@string/button_expand"
                 android:textColor="@color/link"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/button_collapse"
@@ -188,7 +192,7 @@
                 android:layout_height="wrap_content"
                 android:enabled="false"
                 android:text="@string/button_fulfill"
-                android:visibility="gone" />
+                android:visibility="visible" />
         </LinearLayout>
     </ScrollView>
 

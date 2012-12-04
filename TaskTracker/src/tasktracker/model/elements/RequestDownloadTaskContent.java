@@ -110,8 +110,8 @@ public class RequestDownloadTaskContent implements NetworkRequestModel {
         //}
         //Toast toast = Toast.makeText(context, "Last item found at " + pos + ", it starts with " + task.getDescription(), Toast.LENGTH_SHORT);
         //toast.show();
-        Toast toast = Toast.makeText(context, "Downloaded tasks from online", Toast.LENGTH_SHORT);
-        toast.show();
+//        Toast toast = Toast.makeText(context, "Downloaded tasks from online", Toast.LENGTH_SHORT);
+//        toast.show();
 
         //TODO refresh current page (TaskListView?)
 
@@ -145,8 +145,8 @@ public class RequestDownloadTaskContent implements NetworkRequestModel {
         //TODO: Put the user object in the database with the ID from crowdsourcer
 
         //_dbHelper.createUser(username, email, password);
-        Toast toast = Toast.makeText(context, "Downloaded task summaries", Toast.LENGTH_SHORT);
-        toast.show();
+//        Toast toast = Toast.makeText(context, "Downloaded task summaries", Toast.LENGTH_SHORT);
+//        toast.show();
 
         _dbHelper.close();
     }

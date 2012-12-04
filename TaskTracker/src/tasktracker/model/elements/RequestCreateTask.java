@@ -69,10 +69,10 @@ public class RequestCreateTask implements NetworkRequestModel {
 		_dbHelper.createTask(task);
 		_dbHelper.close();
 
-		Toast toast = Toast.makeText(context,
-				"Win! Task added to crowdSourcer: " + task.getName(),
-				Toast.LENGTH_SHORT);
-		toast.show();
+//		Toast toast = Toast.makeText(context,
+//				"Win! Task added to crowdSourcer: " + task.getName(),
+//				Toast.LENGTH_SHORT);
+//		toast.show();
 	}
 
 	private void createNotifications() {
