@@ -69,6 +69,8 @@ public class AccessURL extends AsyncTask<String, Void, String> {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+	        System.out.println(uri.toASCIIString());
 		return uri.toASCIIString();
 	}
 

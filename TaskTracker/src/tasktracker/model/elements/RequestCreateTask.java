@@ -1,8 +1,11 @@
 package tasktracker.model.elements;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.zip.GZIPOutputStream;
 
 import com.google.gson.Gson;
 
@@ -22,74 +25,99 @@ import tasktracker.view.TaskListView;
  * Run by creating an instance.
  */
 public class RequestCreateTask implements NetworkRequestModel {
-	private Context context;
-	private Task task;
-	private String requestString;
+    private Context context;
+    private Task task;
+    private String requestString;
 
-	static final Gson gson = new Gson();
+    static final Gson gson = new Gson();
 
-	/** index of 'content' for objects in database */
+    /** index of 'content' for objects in database */
 
-	public RequestCreateTask(Context contex, Task theTask) {
-		context = contex;
-		task = theTask;
-		String content = gson.toJson(task);
-		String command = "action=" + "post" + "&summary=" + task.getSummary()
-				+ "&content=" + content.toString();
+    public RequestCreateTask(Context contex, Task theTask) {
+        context = contex;
+        task = theTask;
+        
+        String content = gson.toJson(task);
 
-		requestString = AccessURL.turnCommandIntoURL(command);
+        System.out.println(content);
+        //TODO: fix for photos
+        //content = compress(content);
+        System.out.println(content);
 
-		AccessURL access = new AccessURL(this);
-		access.execute(getCrowdsourcerCommand());
-	}
+        String command = "action=" + "post" + "&summary=" + task.getSummary()
+                + "&content=" + content.toString();
 
-	public Context getContext() {
-		return context;
-	}
+        System.out.println(command);
+        requestString = AccessURL.turnCommandIntoURL(command);
 
-	public String getCrowdsourcerCommand() {
-		// System.out.println("Request to network: " + requestString);
-		return requestString;
-	}
+        AccessURL access = new AccessURL(this);
+        access.execute(getCrowdsourcerCommand());
+    }
 
-	public void runAfterExecution(String line) {
-		DatabaseAdapter _dbHelper = new DatabaseAdapter(context);
+    public Context getContext() {
+        return context;
+    }
 
-		String taskID = AccessURL.getTag("id\":\"", line,
-				line.indexOf('}', 0) + 1);
-		// long taskID;
+    public String getCrowdsourcerCommand() {
+        // System.out.println("Request to network: " + requestString);
+        return requestString;
+    }
 
-		// Save task to local SQL
-		List<String> others = task.getOtherMembers();
+    public void runAfterExecution(String line) {
+        DatabaseAdapter _dbHelper = new DatabaseAdapter(context);
+        System.out.println("Check:"+line);
+        String taskID = AccessURL.getTag("id\":\"", line,
+                line.indexOf('}', 0) + 1);
+        // long taskID;
 
-		// Add to SQL server
-		_dbHelper.open();
+        // Save task to local SQL
+        List<String> others = task.getOtherMembers();
 
-		task.setID(taskID);
+        // Add to SQL server
+        _dbHelper.open();
 
-		// taskID = _dbHelper.createTask(task);
-		_dbHelper.createTask(task);
+        task.setID(taskID);
 
-		String taskName = task.getName();
-		String message = Notification.getMessage(
-				Preferences.getUsername(context), taskName,
-				Notification.Type.InformMembership);
-		Notification notification = new Notification(message);
-		notification.setRecipients(task.getOtherMembers());
-		notification.setTaskId(taskID);
+        // taskID = _dbHelper.createTask(task);
+        _dbHelper.createTask(task);
 
-		RequestCreateNotification request = new RequestCreateNotification(
-				this.context, notification);
+        String taskName = task.getName();
+        String message = Notification.getMessage(
+                Preferences.getUsername(context), taskName,
+                Notification.Type.InformMembership);
+        Notification notification = new Notification(message);
+        notification.setRecipients(task.getOtherMembers());
+        notification.setTaskId(taskID);
 
-		// TODO: Waiting on refactor, taskID needs to be type String not long
+        RequestCreateNotification request = new RequestCreateNotification(
+                this.context, notification);
 
-		_dbHelper.createMember(taskID, Preferences.getUsername(context));
+        // TODO: Waiting on refactor, taskID needs to be type String not long
 
-		_dbHelper.close();
+        _dbHelper.createMember(taskID, Preferences.getUsername(context));
 
-		Toast toast = Toast.makeText(context,
-				"Win! Task added to crowdSourcer: " + task.getName(),
-				Toast.LENGTH_SHORT);
-		toast.show();
-	}
+        _dbHelper.close();
+
+        Toast toast = Toast.makeText(context,
+                "Win! Task added to crowdSourcer: " + task.getName(),
+                Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    public static String compress(String input){
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try
+        {
+            GZIPOutputStream gzip = new GZIPOutputStream(out);
+            gzip.write(input.getBytes("UTF-8"));
+            input = out.toString();
+            gzip.close();
+
+        } catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return input;
+    }
 }
