@@ -13,7 +13,8 @@ public class Filters {
 					
 					if ( (source.charAt(i)=='<') || (source.charAt(i)=='>')
 							|| (source.charAt(i)=='{')|| (source.charAt(i)=='}')
-							|| (source.charAt(i)=='"')|| (source.charAt(i)=='"')) { 
+							|| (source.charAt(i)=='"')|| (source.charAt(i)=='%')
+							|| (source.charAt(i)=='&')) { 
 						return ""; 
 					} 
 					//!Character.isLetterOrDigit(source.charAt(i))
