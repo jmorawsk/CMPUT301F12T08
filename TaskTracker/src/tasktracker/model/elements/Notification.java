@@ -70,6 +70,11 @@ public final class Notification {
 	}
 
 	public String getRecipientsString() {
+		if (recipients == null || recipients.length == 0)
+		{
+			return null;
+		}
+					
 		String value = recipients[0];
 
 		for (int i = 1; i < recipients.length; i++) {
