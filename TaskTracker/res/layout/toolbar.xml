@@ -6,7 +6,7 @@
 
     <Button
         android:id="@+id/buttonMyTasks"
-        android:layout_width="106dp"
+        android:layout_width="160dp"
         android:layout_height="match_parent"
         android:gravity="center_vertical|center_horizontal"
         android:text="@string/myTasks"
@@ -14,7 +14,7 @@
 
     <Button
         android:id="@+id/buttonCreateTask"
-        android:layout_width="106dp"
+        android:layout_width="160dp"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:layout_toRightOf="@+id/buttonMyTasks"
@@ -30,6 +30,7 @@
         android:layout_toRightOf="@+id/buttonCreateTask"
         android:gravity="center_vertical|center_horizontal"
         android:text="@string/notifications"
+        android:visibility="gone"
          />
 
 </RelativeLayout>

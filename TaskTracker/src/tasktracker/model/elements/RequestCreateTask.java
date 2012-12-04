@@ -62,34 +62,35 @@ public class RequestCreateTask implements NetworkRequestModel {
 		// Save task to local SQL
 		List<String> others = task.getOtherMembers();
 
+		task.setID(taskID);
+		
 		// Add to SQL server
 		_dbHelper.open();
-
-		task.setID(taskID);
-
-		// taskID = _dbHelper.createTask(task);
 		_dbHelper.createTask(task);
-
-		String taskName = task.getName();
-		String message = Notification.getMessage(
-				Preferences.getUsername(context), taskName,
-				Notification.Type.InformMembership);
-		Notification notification = new Notification(message);
-		notification.setRecipients(task.getOtherMembers());
-		notification.setTaskId(taskID);
-
-		RequestCreateNotification request = new RequestCreateNotification(
-				this.context, notification);
-
-		// TODO: Waiting on refactor, taskID needs to be type String not long
-
-		_dbHelper.createMember(taskID, Preferences.getUsername(context));
-
 		_dbHelper.close();
 
 		Toast toast = Toast.makeText(context,
 				"Win! Task added to crowdSourcer: " + task.getName(),
 				Toast.LENGTH_SHORT);
 		toast.show();
+	}
+
+	private void createNotifications() {
+		String taskName = task.getName();
+		String message = Notification.getMessage(
+				Preferences.getUsername(context), taskName,
+				Notification.Type.InformMembership);
+		Notification notification = new Notification(message);
+		notification.setRecipients(task.getOtherMembers());
+		notification.setTaskId(task.getID());
+
+		RequestCreateNotification request = new RequestCreateNotification(
+				this.context, notification);
+	}
+	
+	private void createMembers(DatabaseAdapter dbHelper){
+		dbHelper.open();
+		dbHelper.createMember(task.getID(), Preferences.getUsername(context));
+		dbHelper.close();
 	}
 }

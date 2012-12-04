@@ -181,15 +181,15 @@ public class TaskView extends Activity {
 
 		Intent intent = new Intent(this, PhotoPicker.class);
 		intent.putExtra("sampleData", 0);
-		ArrayList<byte[]> byteArrays  = new ArrayList<byte[]>();
+		ArrayList<byte[]> byteArrays = new ArrayList<byte[]>();
 		byteArrays.addAll(task.getPhotos());
 		int numPhotos = byteArrays.size();
-		System.out.println("TVsend"+numPhotos);
+		System.out.println("TVsend" + numPhotos);
 		intent.putExtra("numPhotos", numPhotos);
-		
-		for(int i = 0; numPhotos>i; i++){
-			intent.putExtra("photo"+i,byteArrays.get(i));	
-			//bytes[i] = photoCompression;
+
+		for (int i = 0; numPhotos > i; i++) {
+			intent.putExtra("photo" + i, byteArrays.get(i));
+			// bytes[i] = photoCompression;
 		}
 		startActivityForResult(intent, 500);
 
@@ -289,7 +289,7 @@ public class TaskView extends Activity {
 
 		textRequirement.setChecked(_requiresText);
 		photoRequirement.setChecked(_requiresPhoto);
-		if (task==null)
+		if (task == null)
 			task = new Task(_taskCreator);
 		createTask();
 	}
@@ -360,9 +360,10 @@ public class TaskView extends Activity {
 	 */
 	private void sendFulfillmentNotification(String message) {
 		Notification notification = new Notification(message);
-		notification.setRecipients(new String[]{_taskCreator});
-		RequestCreateNotification request = new RequestCreateNotification(this, notification);
-//		_dbHelper.createNotification(_taskID, _taskCreator, message);
+		notification.setRecipients(new String[] { _taskCreator });
+		// RequestCreateNotification request = new
+		// RequestCreateNotification(this, notification);
+		// _dbHelper.createNotification(_taskID, _taskCreator, message);
 	}
 
 	/**
@@ -391,12 +392,11 @@ public class TaskView extends Activity {
 				"TaskTracker : Task Fulfillment Report");
 		i.putExtra(Intent.EXTRA_TEXT, message + "\n\n" + textFulfillment);
 
-		
 		ArrayList<Uri> uris = new ArrayList<Uri>();
-		if (_photoFilePaths!=null){
-		    for (String file : _photoFilePaths) {
-			uris.add(Uri.parse("file://" + file));
-		    }
+		if (_photoFilePaths != null) {
+			for (String file : _photoFilePaths) {
+				uris.add(Uri.parse("file://" + file));
+			}
 		}
 		i.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
 
@@ -418,15 +418,16 @@ public class TaskView extends Activity {
 
 		if (_requiresPhoto
 				&& (_photoFilePaths == null || _photoFilePaths.length == 0)) {
-//			ToastCreator
-//					.showLongToast(this,
-//							"You must add a photo before marking this task as fulfilled.");
+			// ToastCreator
+			// .showLongToast(this,
+			// "You must add a photo before marking this task as fulfilled.");
 			return false;
 
 		}
 
 		if (_requiresText && !_validTextFulfillment) {
-//			ToastCreator.showLongToast(this, "You must supply some text before marking this task as fulfilled");
+			// ToastCreator.showLongToast(this,
+			// "You must supply some text before marking this task as fulfilled");
 			return false;
 		}
 
@@ -449,7 +450,8 @@ public class TaskView extends Activity {
 
 		public void afterTextChanged(Editable s) {
 
-			_validTextFulfillment = (s.length() > 0) && !s.toString().matches("\\s+");
+			_validTextFulfillment = (s.length() > 0)
+					&& !s.toString().matches("\\s+");
 			_fulfillmentButton.setEnabled(requirementsFulfilled());
 		}
 
@@ -552,8 +554,8 @@ public class TaskView extends Activity {
 				ToastCreator.showLongToast(TaskView.this, "\"" + _taskName
 						+ "\" was fulfilled!");
 				// TODO: Does task need to be updated on web?
-				 RequestModifyTask updateTask = new RequestModifyTask(
-				 getBaseContext(), task);
+				RequestModifyTask updateTask = new RequestModifyTask(
+						getBaseContext(), task);
 				finish();
 			}
 		}
@@ -577,11 +579,11 @@ public class TaskView extends Activity {
 			}
 
 			_voted = !_voted;
-			
+
 			_voteInfo.setText(_voteCount + " likes");
 			task.setLikes(_voteCount);
 			RequestModifyTask updateTask = new RequestModifyTask(
-                                getBaseContext(), task);
+					getBaseContext(), task);
 		}
 
 	}
@@ -600,19 +602,20 @@ public class TaskView extends Activity {
 			if (resultCode == RESULT_OK) {
 				_photoFilePaths = data.getStringArrayExtra("PhotoPaths");
 				_fulfillmentButton.setEnabled(requirementsFulfilled());
-				
-				ArrayList<byte[]> byteArrays  = new ArrayList<byte[]>();
+
+				ArrayList<byte[]> byteArrays = new ArrayList<byte[]>();
 				int numPhotos = data.getIntExtra("numPhotos", 0);
 
-				System.out.println("TVrec"+numPhotos);
-				for(int i = 0; numPhotos>i; i++){
-					byte[] compressedPhoto = data.getByteArrayExtra("photo"+i);	
-					//bytes[i] = photoCompression;
+				System.out.println("TVrec" + numPhotos);
+				for (int i = 0; numPhotos > i; i++) {
+					byte[] compressedPhoto = data
+							.getByteArrayExtra("photo" + i);
+					// bytes[i] = photoCompression;
 					byteArrays.add(compressedPhoto);
 				}
-				
+
 				task.setPhotos(byteArrays);
-				
+
 				// Toast.makeText(TaskView.this,
 				// data.getStringArrayExtra("PhotoPaths")[0], 2000).show();
 				_scrollview.post(new Runnable() {
