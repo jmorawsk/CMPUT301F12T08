@@ -44,7 +44,6 @@ public class PhotoPicker extends Activity {
 	private ArrayList<String> imageUrls = new ArrayList<String>();
 	private ImageAdapter myAdapter = new ImageAdapter(this);
 	private GridView gridView;
-	//private DisplayImageOptions options;
 
 	public static final int PICK_PICTURE_FROM_GALLERY = 1; 
 	public static final int TAKE_PICTURE = 2;
@@ -61,6 +60,7 @@ public class PhotoPicker extends Activity {
 
 		setupToolbarButtons();
 
+		//Select photo from gallery option
 		galleryPhoto.setOnClickListener(new OnClickListener(){
 
 
@@ -86,32 +86,21 @@ public class PhotoPicker extends Activity {
 
 			public void onClick(View v) {
 				intent= getIntent();
-				Bundle photoBundle = new Bundle();
-				//Bitmap[] photos = myAdapter.getPhotos();
-				//ArrayList<Bitmap> photos = myAdapter.getPhotoList();
 				
 				//TODO for web
 				ArrayList<byte[]> compressed = myAdapter.getCompressedPhotos();
-				Array[] bytes = new Array[compressed.size()];
-				//photoBundle.
 				int numPhotos = compressed.size();
 				intent.putExtra("numPhotos", numPhotos);
 
-				System.out.println("PPsend"+numPhotos);
+				//System.out.println("PPsend"+numPhotos);
 				for(int i = 0; numPhotos>i; i++){
 					byte[] photoCompression = compressed.get(i);	
-					//bytes[i] = photoCompression;
-
 					intent.putExtra("photo"+i, photoCompression);
 				}
 				
-				//Toast.makeText(PhotoPicker.this, "Photo", 2000).show();
-				
-				//photoBundle.putByteArray("compressed", photoCompression);
 				String[] pathArray = new String[imageUrls.size()];
 				imageUrls.toArray(pathArray);
 				intent.putExtra("PhotoPaths", pathArray);
-				//intent.putParcelableArrayListExtra("Photos", compressed);
 				setResult(RESULT_OK, intent);
 				
 				Toast.makeText(PhotoPicker.this, "Photos Saved", 2000).show();
@@ -128,10 +117,9 @@ public class PhotoPicker extends Activity {
 		ArrayList<byte[]> byteArrays  = new ArrayList<byte[]>();
 		int numPhotos = getIntent().getIntExtra("numPhotos", 0);
 
-		System.out.println("PPrec"+numPhotos);
+		//System.out.println("PPrec"+numPhotos);
 		for(int i = 0; numPhotos>i; i++){
 			byte[] compressedPhoto = getIntent().getByteArrayExtra("photo"+i);	
-			//bytes[i] = photoCompression;
 			byteArrays.add(compressedPhoto);
 		}
 		myAdapter.decompressPhotos(byteArrays);
@@ -145,6 +133,10 @@ public class PhotoPicker extends Activity {
 		});
 
 	}
+	
+	/*
+	 * Sets up the buttons that make up the tool bar.
+	 * */
 
 	private void setupToolbarButtons() {
 		// Assign Buttons
@@ -185,6 +177,7 @@ public class PhotoPicker extends Activity {
 		Intent intent = new Intent(Intent.ACTION_PICK,
 				android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
+		//returns the path of the photo selected from gallery
 		startActivityForResult(intent, PICK_PICTURE_FROM_GALLERY);
 
 	}
@@ -195,7 +188,7 @@ public class PhotoPicker extends Activity {
 		String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp";
 		File folderF = new File(folder);
 
-		//if file doesn't exist create it
+		//if file doesn't exist create a file
 		if(!folderF.exists()){
 
 			folderF.mkdir();
@@ -209,7 +202,7 @@ public class PhotoPicker extends Activity {
 		//refresh
 		sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
 
-		//intent has information about image
+		//intentC has information about image and is set to start the camera
 		Intent intentC = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		intentC.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
 
@@ -235,12 +228,14 @@ public class PhotoPicker extends Activity {
 					String filePath = cursor.getString(columnIndex);
 					cursor.close();
 
-
+					//decodes the file path into a bitmap
 					Bitmap theSelectedImage = BitmapFactory.decodeFile(filePath);
 
-					Toast.makeText(PhotoPicker.this, "photo selected", 2000).show();
+					Toast.makeText(PhotoPicker.this, "Photo Selected", 2000).show();
+					//send a bitmap to ImageAdapter so that it can be added to array of photos
 					myAdapter.addPhoto(theSelectedImage);
 
+					//file path of photo is added to list of photo paths for e-mailing
 					imageUrls.add(filePath);
 					gridView.setAdapter(myAdapter);
 				}
@@ -253,6 +248,7 @@ public class PhotoPicker extends Activity {
 				if(resultCode == RESULT_OK){
 
 					String path = imageFileUri.toString();
+					//removes the first part of file path so that it can be used
 					path = path.replace("file://", "");
 					Bitmap newPhoto = BitmapFactory.decodeFile(path);
 					myAdapter.addPhoto(newPhoto);
