@@ -20,7 +20,6 @@ package tasktracker.model.elements;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.List;
 import java.util.zip.GZIPOutputStream;
 import com.google.gson.Gson;
 import android.content.Context;
@@ -28,7 +27,6 @@ import android.util.Log;
 import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.AccessURL;
 import tasktracker.model.NetworkRequestModel;
-import tasktracker.model.Preferences;
 
 /**
  * Creates an object to add a Task to Crowdsourcer when passed to ReadFromURL, THEN adds
@@ -75,8 +73,6 @@ public class RequestCreateTask implements NetworkRequestModel {
 		// long taskID;
 
 		// Save task to local SQL
-		List<String> others = task.getOtherMembers();
-
 		task.setID(taskID);
 
 		// Add to SQL server
@@ -85,25 +81,6 @@ public class RequestCreateTask implements NetworkRequestModel {
 		Log.d("RequestCreateTask", "create: " + value);
 		_dbHelper.close();
 
-	}
-
-	private void createNotifications() {
-		String taskName = task.getName();
-		String message = Notification.getMessage(
-				Preferences.getUsername(context), taskName,
-				Notification.Type.InformMembership);
-		Notification notification = new Notification(message);
-		notification.setRecipients(task.getOtherMembers());
-		notification.setTaskId(task.getID());
-
-		RequestCreateNotification request = new RequestCreateNotification(
-				this.context, notification);
-	}
-
-	private void createMembers(DatabaseAdapter dbHelper) {
-		dbHelper.open();
-		dbHelper.createMember(task.getID(), Preferences.getUsername(context));
-		dbHelper.close();
 	}
 
 	public static String compress(String input) {

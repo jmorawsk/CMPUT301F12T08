@@ -27,7 +27,6 @@ package tasktracker.model.elements;
  * 
  */
 public class User {
-	private static int _userCount = 0;
 
 	private String name;
 	private String email;

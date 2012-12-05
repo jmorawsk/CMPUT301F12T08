@@ -67,7 +67,6 @@ public class RequestCreateUser implements NetworkRequestModel {
 		_dbHelper.open();
 		
 		String taskIDString = AccessURL.getTag("id\":\"", line, line.indexOf('}', 0) + 1);
-		long taskID;
 		
 		user.setID(taskIDString);
 		

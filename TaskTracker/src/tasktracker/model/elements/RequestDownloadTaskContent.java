@@ -65,7 +65,7 @@ public class RequestDownloadTaskContent implements NetworkRequestModel {
         _dbHelper.open();
 
         Task task = new Task("null");
-        String taskName, description, date, creator, likes, content, id = "";
+        String taskName, description, date, creator, likes, content, id = "";	//content is not actually unused
         boolean requiresPhoto, requiresText;
         int pos = 0;
 
@@ -132,13 +132,11 @@ public class RequestDownloadTaskContent implements NetworkRequestModel {
     }
 
     private void addNewTask(Task task, String _user, DatabaseAdapter _dbHelper){
-        List<String> others = task.getOtherMembers();
         // Add to SQL server
         _dbHelper.open();
         //long taskID = _dbHelper.createTask(task);
         long rowId = _dbHelper.createTask(task);
         Log.d("RequestDownloadTaskContent", "Create: " + rowId);
-        String taskName = task.getName();
 //        String message = Notification.getMessage(_user, taskName,
 //                Notification.Type.InformMembership);
 //
@@ -147,20 +145,4 @@ public class RequestDownloadTaskContent implements NetworkRequestModel {
 
     }
 
-    /*
-     * Puts the new user into the SQL table with the crowdsourcer ID as the user ID
-     */
-    private void addUserToSQL(String line){
-        DatabaseAdapter _dbHelper = new DatabaseAdapter(context);
-        // Add to SQL server
-        _dbHelper.open();
-
-        //TODO: Put the user object in the database with the ID from crowdsourcer
-
-        //_dbHelper.createUser(username, email, password);
-//        Toast toast = Toast.makeText(context, "Downloaded task summaries", Toast.LENGTH_SHORT);
-//        toast.show();
-
-        _dbHelper.close();
-    }
 }
