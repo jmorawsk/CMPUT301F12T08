@@ -179,17 +179,15 @@ public class TaskView extends Activity {
 	// Receives the images from photo picker
 	public void getImages() {
 
+		ArrayList<byte[]> byteArrays = task.getPhotos();
+		int numPhotos = byteArrays.size();
+		
 		Intent intent = new Intent(this, PhotoPicker.class);
 		intent.putExtra("sampleData", 0);
-		ArrayList<byte[]> byteArrays = new ArrayList<byte[]>();
-		byteArrays.addAll(task.getPhotos());
-		int numPhotos = byteArrays.size();
-		System.out.println("TVsend" + numPhotos);
 		intent.putExtra("numPhotos", numPhotos);
 
-		for (int i = 0; numPhotos > i; i++) {
+		for (int i = 0; i < numPhotos; i++) {
 			intent.putExtra("photo" + i, byteArrays.get(i));
-			// bytes[i] = photoCompression;
 		}
 		startActivityForResult(intent, 500);
 
