@@ -1,5 +1,23 @@
 package tasktracker.view;
 
+/**
+ * TaskTracker
+ * 
+ * Copyright 2012 Jeanine Bonot, Michael Dardis, Katherine Jasniewski,
+ * Jason Morawski
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may 
+ * not use this file except in compliance with the License. You may obtain
+ * a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+ * specific language governing permissions and limitations under the License.
+ */
+
 import tasktracker.model.Preferences;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -7,7 +25,7 @@ import android.content.DialogInterface;
 import android.text.Editable;
 import android.widget.EditText;
 
-/*
+/**
  * Allows one to create popups with a single text input field, and ok/cancel.
  * Only works for pre-defined string-handling methods triggered by parameter
  * @author Mike Dardis
@@ -18,7 +36,7 @@ public class InputPopup {
 		username, password, email
 	}
 	
-	/*
+	/**
 	 * Call make to create a popup, Activity will continue to execute underneath.
 	 * When the user finally responds to it a method will be executed according to the
 	 * value in the type parameter.

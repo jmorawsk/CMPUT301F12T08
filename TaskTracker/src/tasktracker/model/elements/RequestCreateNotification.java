@@ -24,31 +24,30 @@ import tasktracker.model.AccessURL;
 import tasktracker.model.NetworkRequestModel;
 
 /**
- * Creates an object to add a Task to Crowdsourcer when passed to ReadFromURL, THEN adds
- * the given task to the local SQL database with Crowdsourcer's returned ID.
- * 
- * @param changeCurrentUser 	Whether to change the current user settigns/Preferences to this
- * newly created user
+ * Creates an object to add a Notification to Crowdsourcer
  * 
  * Run by creating an instance.
  */
 public class RequestCreateNotification implements NetworkRequestModel {
-	private Context context;
-	private String requestString;
-	static final Gson gson = new Gson();
+        private Context context;
+        private String requestString;
+        static final Gson gson = new Gson();
 
-	/** index of 'content' for objects in database */
-
-	public RequestCreateNotification(Context context, Notification notification) {
-		this.context = context;
-
+        /**
+         * 
+         * @param context the current context
+         * @param notification the notification to create
+         */
+        public RequestCreateNotification(Context context, Notification notification) {
+                this.context = context;
+                //construct the command
 		String command = "action=" + "post" + "&summary=" + "<Notification>"
 				+ notification.getMessage() + "<TaskID>" 
 				+ notification.getTaskId() + "<Date>" + notification.getDate() + "<Recipients>"
 				+ notification.getRecipientsString();
-
+		//turn command to url
 		requestString = AccessURL.turnCommandIntoURL(command);
-
+		//send url
 		AccessURL access = new AccessURL(this);
 		access.execute(getCrowdsourcerCommand());
 	}

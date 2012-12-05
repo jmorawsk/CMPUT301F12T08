@@ -18,16 +18,12 @@ package tasktracker.view;
  * specific language governing permissions and limitations under the License.
  */
 
-import java.util.*;
-
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.method.KeyListener;
 import android.util.Log;
 import android.view.*;
 import android.view.View.OnClickListener;
@@ -36,8 +32,6 @@ import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.Preferences;
-//import tasktracker.model.ReadFromURL;
-//import tasktracker.model.WebDBManager;
 import tasktracker.model.elements.*;
 
 /**
