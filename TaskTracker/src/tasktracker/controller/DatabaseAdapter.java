@@ -30,9 +30,24 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 /**
- * Class for interacting with the local SQL database
- *
+ * DatabaseAdapter<br>
+ * A simple SQLite database helper class. Gives the abilities needed by the main
+ * application to access photos and available folders.
+ * 
+ * 
+ * Much of the code of this class is from the Notepad Tutorial on the Android
+ * Developer website. Found at:
+ * http://developer.android.com/resources/tutorials/notepad/index.html
+ * 
+ * @author Andrea Budac: abudac
+ * @author Christian Jukna: jukna
+ * @author Kurtis Morin: kmorin1
+ * @author Jeanine Bonot<br>
+ * <br>
+ * 
  */
+// October 2012 - J Bonot - Modified Database Adapter to suit TaskTracker
+// project
 public class DatabaseAdapter {
 
 	public DatabaseModel databaseModel = new DatabaseModel();
@@ -52,7 +67,6 @@ public class DatabaseAdapter {
 	public static final String PRIVATE = "private";
 	public static final String COUNT = "count";
 	public static final String DOWNLOADED = "downloaded";
-	// public static final String DESCRIPTION = "description";
 
 	private SQLiteDatabase mDb;
 
@@ -63,6 +77,9 @@ public class DatabaseAdapter {
 	private static final String TABLE_FULFILLMENTS = "fulfillments";
 	private static final String TABLE_NOTIFICATIONS = "notifications";
 	private static final String TABLE_VOTES = "votes";
+
+	private static final String[] cuteWords = new String[] { "kitty", "kitten",
+			"cat", "baby", "puppy", "teddy", "cuddly", "aww" };
 
 	/**
 	 * Constructor - takes the context to allow the database to be
@@ -103,7 +120,7 @@ public class DatabaseAdapter {
 	 * return a -1 to indicate failure.
 	 * 
 	 * @param date
-	 *            the date (in yyyy-mm-dd format)
+	 *            the date (in yyyy-MM-dd | hh:mm format)
 	 * @param folder
 	 *            the folder the photo is in
 	 * @param tag
@@ -133,12 +150,6 @@ public class DatabaseAdapter {
 	 */
 	public long createTask(Task task) {
 		ContentValues initialValues = new ContentValues();
-
-		Log.d("DatabaseAdapater", "taskID: " + task.getID());
-		Log.d("DatabaseAdapater", "taskName: " + task.getName());
-		Log.d("DatabaseAdapater", "taskCreator: " + task.getCreator());
-		Log.d("DatabaseAdapater", "getDateCreated: " + task.getDateCreated());
-		Log.d("DatabaseAdapater", "getDownloaded: " + task.getDownloaded());
 		initialValues.put(ID, task.getID());
 		initialValues.put(TASK, task.getName());
 		initialValues.put(DATE, task.getDateCreated());
@@ -147,17 +158,23 @@ public class DatabaseAdapter {
 		initialValues.put(REQS_PHOTO, task.requiresPhoto() ? 1 : 0);
 		initialValues.put(REQS_TEXT, task.requiresText() ? 1 : 0);
 		initialValues.put(PRIVATE, task.isPrivate() ? 1 : 0);
-		initialValues.put(DOWNLOADED, task.getDownloaded()); // Added nov29
+		initialValues.put(DOWNLOADED, task.getDownloaded());
 
 		for (int n = 0; n < task.getLikes(); n++)
 			createVote(task.getID(), "" + n);
-		// -mike
-		// Log.d("DatabaseAdapter",
-		// "PRIVATE = " + Boolean.toString(task.isPrivate()));
 
 		return mDb.insert(TABLE_TASKS, null, initialValues);
 	}
 
+	/**
+	 * Create a new entry using the information provided. If the entry is
+	 * successfully created return the new rowId for that entry, otherwise
+	 * return a -1 to indicate failure.
+	 * 
+	 * @param folder
+	 *            the folder
+	 * @return rowId or -1 if failed
+	 */
 	public long createNotification(String taskID, String recipient,
 			String message, String date) {
 		ContentValues initialValues = new ContentValues();
@@ -170,8 +187,14 @@ public class DatabaseAdapter {
 		return mDb.insert(TABLE_NOTIFICATIONS, null, initialValues);
 	}
 
-	/*
-	 * For creating a new user entry in the local SQL DB at the given ID
+	/**
+	 * Create a new entry using the information provided. If the entry is
+	 * successfully created return the new rowId for that entry, otherwise
+	 * return a -1 to indicate failure.
+	 * 
+	 * @param folder
+	 *            the folder
+	 * @return rowId or -1 if failed
 	 */
 	public long createUser(String user, String email, String password, String id) {
 		ContentValues initialValues = new ContentValues();
@@ -180,11 +203,19 @@ public class DatabaseAdapter {
 		initialValues.put(USER, user);
 		initialValues.put(EMAIL, email);
 		initialValues.put(PASSWORD, password);
-		// TODO enter this user under the given ID
 
 		return mDb.insert(TABLE_USERS, null, initialValues);
 	}
 
+	/**
+	 * Create a new entry using the information provided. If the entry is
+	 * successfully created return the new rowId for that entry, otherwise
+	 * return a -1 to indicate failure.
+	 * 
+	 * @param folder
+	 *            the folder
+	 * @return rowId or -1 if failed
+	 */
 	public long createUser(String userID, String username) {
 		ContentValues initialValues = new ContentValues();
 
@@ -193,7 +224,15 @@ public class DatabaseAdapter {
 		return mDb.insert(TABLE_USERS, null, initialValues);
 	}
 
-	// TODO: Remove all references to this and delete it
+	/**
+	 * Create a new entry using the information provided. If the entry is
+	 * successfully created return the new rowId for that entry, otherwise
+	 * return a -1 to indicate failure.
+	 * 
+	 * @param folder
+	 *            the folder
+	 * @return rowId or -1 if failed
+	 */
 	public long createUser(String user, String email, String password) {
 		ContentValues initialValues = new ContentValues();
 
@@ -204,15 +243,8 @@ public class DatabaseAdapter {
 		return mDb.insert(TABLE_USERS, null, initialValues);
 	}
 
-	// TODO Method should be moved out of the create__() section of this module
 	public long updateUser(String user, String username, String email,
 			String password) {
-		// Untested!
-		// TODO Not used; Need to rearrange user system so that each user has a
-		// key corresponding to
-		// the Crowdsourcer ID key given to that user item; currently, it just
-		// uses an incrementing
-		// integer
 		ContentValues newValues = new ContentValues();
 
 		newValues.put(USER, user);
@@ -223,6 +255,15 @@ public class DatabaseAdapter {
 				null);
 	}
 
+	/**
+	 * Create a new entry using the information provided. If the entry is
+	 * successfully created return the new rowId for that entry, otherwise
+	 * return a -1 to indicate failure.
+	 * 
+	 * @param folder
+	 *            the folder
+	 * @return rowId or -1 if failed
+	 */
 	public long createFulfillment(String taskID, String date, String fulfiller,
 			String text) {
 		ContentValues initialValues = new ContentValues();
@@ -235,6 +276,15 @@ public class DatabaseAdapter {
 		return mDb.insert(TABLE_FULFILLMENTS, null, initialValues);
 	}
 
+	/**
+	 * Create a new entry using the information provided. If the entry is
+	 * successfully created return the new rowId for that entry, otherwise
+	 * return a -1 to indicate failure.
+	 * 
+	 * @param folder
+	 *            the folder
+	 * @return rowId or -1 if failed
+	 */
 	public long createMember(String taskID, String user) {
 		ContentValues initialValues = new ContentValues();
 
@@ -244,6 +294,15 @@ public class DatabaseAdapter {
 		return mDb.insert(TABLE_MEMBERS, null, initialValues);
 	}
 
+	/**
+	 * Create a new entry using the information provided. If the entry is
+	 * successfully created return the new rowId for that entry, otherwise
+	 * return a -1 to indicate failure.
+	 * 
+	 * @param folder
+	 *            the folder
+	 * @return rowId or -1 if failed
+	 */
 	public long createVote(String taskID, String user) {
 		ContentValues initialValues = new ContentValues();
 
@@ -293,7 +352,7 @@ public class DatabaseAdapter {
 	}
 
 	/**
-	 * Return a Cursor over the list of all folders in the table
+	 * Return a Cursor over the list of all tasks in the table
 	 * 
 	 * @return Cursor over all folders
 	 */
@@ -302,42 +361,30 @@ public class DatabaseAdapter {
 				null, null, null, null, null);
 	}
 
+	/**
+	 * Return a Cursor over the list of all tasks in the table that are either
+	 * public or created by the user. Tasks will be filtered based on the list
+	 * of filtered words provided by the user on an AND basis. If the filter
+	 * words contains a key category word (e.g., "cute"), the additional words
+	 * will be added to the filter on an OR basis.
+	 * 
+	 * @return Cursor over all folders
+	 */
 	public Cursor fetchTasksAvailableToUser(String user, String[] filterWords) {
 		String[] selectionArgs;
 		String keywordFilter = "";
-		String secondaryConditions = "";
+
 		if (filterWords.length > 0) {
 
-			String likeComparison = TASK + " LIKE '%'|| ? || '%' OR " + TEXT
-					+ " LIKE '%'|| ? || '%'";
-
-			keywordFilter = "WHERE " + likeComparison;
-
+			Log.d("DatabaseAdapter", "here1");
 			List<String[]> wordGroups = new ArrayList<String[]>();
 			int groupWordsCount = getSimilarWords(filterWords, wordGroups);
 
 			// args has two iterations of keyword (like comparison) and the user
 			// info
 			selectionArgs = new String[(filterWords.length + groupWordsCount) * 2 + 1];
-
-			int argsIndex = 0;
-			selectionArgs[argsIndex++] = user;
-			selectionArgs[argsIndex++] = filterWords[0];
-			selectionArgs[argsIndex++] = filterWords[0];
-
-			for (int i = 1; i < filterWords.length; i++) {
-				keywordFilter += " AND " + likeComparison;
-				selectionArgs[argsIndex++] = filterWords[i];
-				selectionArgs[argsIndex++] = filterWords[i];
-			}
-
-			for (String[] group : wordGroups) {
-				for (String word : group) {
-					secondaryConditions += " OR " + likeComparison;
-					selectionArgs[argsIndex++] = word;
-					selectionArgs[argsIndex++] = word;
-				}
-			}
+			keywordFilter = produceConditions(filterWords, wordGroups,
+					selectionArgs, user);
 
 		} else {
 			selectionArgs = new String[] { user };
@@ -346,8 +393,6 @@ public class DatabaseAdapter {
 		for (String word : filterWords) {
 			Log.d("DatabaseAdapter", "word: " + word);
 		}
-
-		// Log.d("DatabaseAdapter", "KeywordFilter = " + keywordFilter);
 
 		String availableToUser = "(SELECT t._id, t.task, t.user, t.date, t.downloaded, t.text"
 				+ " FROM tasks as t"
@@ -366,35 +411,28 @@ public class DatabaseAdapter {
 								+ " LEFT JOIN "
 								+ taskVoteCount
 								+ " ON available._id = votecount.task_id "
-								+ keywordFilter
-								+ secondaryConditions
-								+ " ORDER BY date DESC", selectionArgs);
+								+ keywordFilter + " ORDER BY date DESC",
+						selectionArgs);
 	}
 
-	private static String[] cuteWords = new String[] { "kitty", "kitten",
-			"cat", "baby", "puppy", "teddy", "cuddly", "aww" };
-
-	private int getSimilarWords(String[] keywords, List<String[]> wordGroups) {
-		int count = 0;
-
-		for (int i = 0; i < keywords.length; i++) {
-			if (keywords[i].equalsIgnoreCase("cute")) {
-				wordGroups.add(cuteWords);
-				count += cuteWords.length;
-			}
-
-		}
-
-		return count;
-
-	}
-
+	/**
+	 * Return a Cursor over the list of all notifications belonging to the user.
+	 * 
+	 * @return Cursor over all folders
+	 */
 	public Cursor fetchUserNotifications(String recipient) {
 		return mDb.rawQuery("SELECT * FROM " + TABLE_NOTIFICATIONS + " WHERE "
 				+ USER + " = ? ORDER BY " + ID + " DESC",
 				new String[] { recipient });
 	}
 
+	/**
+	 * Get the list of text fulfillments of a task.
+	 * 
+	 * @param taskID
+	 *            the hexadecimal string ID of a task.
+	 * @return a cursor over the list of text fulfillments for a task
+	 */
 	public Cursor fetchFulfillment(String taskID) {
 
 		return mDb.query(TABLE_FULFILLMENTS, new String[] { ID, TASK_ID, DATE,
@@ -402,23 +440,41 @@ public class DatabaseAdapter {
 				null, null);
 	}
 
-	public Cursor fetchTask(String rowId) {
+	/**
+	 * Get the cursor for the task with the provided task ID
+	 * 
+	 * @param taskID
+	 *            the hexadecimal string ID of the task in the table
+	 * @return a cursor over a list of tasks with the provided task ID
+	 */
+	public Cursor fetchTask(String taskID) {
 		return mDb.query(TABLE_TASKS, new String[] { ID, TASK, DATE, USER,
-				TEXT, REQS_PHOTO, REQS_TEXT, PRIVATE },
-				ID + "='" + rowId + "'", null, null, null, null, null);
+				TEXT, REQS_PHOTO, REQS_TEXT, PRIVATE }, ID + "='" + taskID
+				+ "'", null, null, null, null, null);
 	}
 
+	/**
+	 * Get the cursor for the user with the provided row ID
+	 * 
+	 * @param rowId
+	 *            the row ID of the user in the table
+	 * @return a cursor over a list of users with the given rowId
+	 */
 	public Cursor fetchUserViaID(String rowId) {
 		return mDb.query(TABLE_USERS, new String[] { ID, USER, EMAIL }, ID
 				+ "='" + rowId + "'", null, null, null, null, null);
 	}
 
 	/**
-	 * To validate login
+	 * Return a cursor over the list of users matching the username and
+	 * password. Should contain at most one entry.
 	 * 
 	 * @param user
+	 *            the login username
 	 * @param password
-	 * @return
+	 *            the login password
+	 * @return a cursor over the list of user matching the provided username and
+	 *         password
 	 */
 	public Cursor fetchUser(String user, String password) {
 		return mDb.rawQuery("SELECT * FROM " + TABLE_USERS + " WHERE " + USER
@@ -452,20 +508,41 @@ public class DatabaseAdapter {
 		return mCursor;
 	}
 
+	/**
+	 * Return a cursor over the list of members of a task.
+	 * 
+	 * @param taskID
+	 *            the hexadecimal string ID of a task
+	 * @return a cursor over the list of members of a task
+	 */
 	public Cursor fetchTaskMembers(String taskID) {
 		return mDb.rawQuery("SELECT * FROM " + TABLE_MEMBERS + " WHERE "
 				+ TASK_ID + " = ?", new String[] { taskID });
 	}
 
-	public Cursor countAllVotes(String taskID) {
-		return mDb.rawQuery("SELECT COUNT(*) FROM " + TABLE_VOTES + " WHERE "
-				+ TASK_ID + " = ?", new String[] { taskID });
-	}
-
+	/**
+	 * Return a Cursor over the the list of votes that a user has made for a
+	 * task (should contain at most one entry).
+	 * 
+	 * @return Cursor over the the list of votes that a user has made for a task
+	 *         (should contain at most one entry).
+	 */
 	public Cursor fetchVote(String taskID, String user) {
 		return mDb.rawQuery("SELECT * FROM " + TABLE_VOTES + " WHERE "
 				+ TASK_ID + " = ?" + " AND " + USER + " = ?", new String[] {
 				taskID, user });
+	}
+
+	/**
+	 * Return a cursor over the count of votes for a task.
+	 * 
+	 * @param taskID
+	 *            the task ID has a hexadecimal string
+	 * @return a cursor over the count of votes for a task.
+	 */
+	public Cursor countAllVotes(String taskID) {
+		return mDb.rawQuery("SELECT COUNT(*) FROM " + TABLE_VOTES + " WHERE "
+				+ TASK_ID + " = ?", new String[] { taskID });
 	}
 
 	/**
@@ -478,6 +555,9 @@ public class DatabaseAdapter {
 		this.mDb = mDb;
 	}
 
+	/**
+	 * Clear all the tables and restart them.
+	 */
 	public void resetDatabase() {
 
 		for (String table : DatabaseModel.TABLE_NAMES) {
@@ -489,6 +569,71 @@ public class DatabaseAdapter {
 			mDb.execSQL(createTable);
 			Log.d("CREATE", createTable);
 		}
+	}
+
+	/**
+	 * 
+	 * @param keywordFilter the condition that will be added to the SQL query
+	 * @param filterWords the list of words/terms the user has supplied for filtering
+	 * @param wordGroups the groups of words that are relevane to the user's search
+	 * @param selectionArgs the list of selection arguments that will be used for binding
+	 * @param user the current app user
+	 */
+	private String produceConditions( String[] filterWords,
+			List<String[]> wordGroups, String[] selectionArgs, String user) {
+
+		String likeComparison = "(" + TASK + " LIKE '%'|| ? || '%' OR " + TEXT
+				+ " LIKE '%'|| ? || '%'" + ")";
+
+		String keywordFilter = "WHERE " + likeComparison;
+
+		int argsIndex = 0;
+		selectionArgs[argsIndex++] = user;
+		selectionArgs[argsIndex++] = filterWords[0];
+		selectionArgs[argsIndex++] = filterWords[0];
+
+		for (int i = 1; i < filterWords.length; i++) {
+			keywordFilter += " AND " + likeComparison;
+			selectionArgs[argsIndex++] = filterWords[i];
+			selectionArgs[argsIndex++] = filterWords[i];
+		}
+
+		for (String[] group : wordGroups) {
+			for (String word : group) {
+				keywordFilter += " OR " + likeComparison;
+				selectionArgs[argsIndex++] = word;
+				selectionArgs[argsIndex++] = word;
+			}
+		}
+		
+		return keywordFilter;
+	}
+
+	/**
+	 * Parses through each comma-delimited string from the user and checks if
+	 * any match a category word. If a match is found, then the words in the
+	 * matching category are added to the list of wordGroups. This method can be
+	 * expanded to other word categories (e.g., science, music).
+	 * 
+	 * @param keywords
+	 *            the comma-delimited words input from the user
+	 * @param wordGroups
+	 *            the list of word groups that will be added to the keyword
+	 *            filter
+	 * @return the total number of words that have been added to the list
+	 */
+	private int getSimilarWords(String[] keywords, List<String[]> wordGroups) {
+		int count = 0;
+
+		for (int i = 0; i < keywords.length; i++) {
+			if (keywords[i].equalsIgnoreCase("cute")) {
+				wordGroups.add(cuteWords);
+				count += cuteWords.length;
+			}
+		}
+
+		return count;
+
 	}
 
 }

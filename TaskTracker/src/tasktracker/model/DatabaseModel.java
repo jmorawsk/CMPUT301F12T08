@@ -25,7 +25,23 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.content.ContentValues;
 import android.content.Context;
-
+/** 
+ * DatabaseModel<br>
+ * Creates the tables in the database and opens and closes it to allow
+ * it to be queried.
+ * 
+ * Much of the code of this class is from the Notepad Tutorial on
+ * the Android Developer website.<br>
+ * Found at:
+ * http://developer.android.com/resources/tutorials/notepad/index.html
+ * 
+ * @author Andrea Budac: abudac
+ * @author Christian Jukna: jukna
+ * @author Kurtis Morin: kmorin1
+ * @author Jeanine Bonot: jbonot<br><br>
+ * 
+ */
+// October 2012 - J Bonot - Made changes to suit TaskTracker application
 public class DatabaseModel {
 
 	private DatabaseHelper mDbHelper;
@@ -34,9 +50,6 @@ public class DatabaseModel {
 	/**
 	 * Database creation SQL statement.
 	 */
-
-	// private static final String USERS =
-	// "CREATE TABLE users (_id INTEGER primary key autoincrement, "
 	private static final String USERS = "CREATE TABLE users (_id TEXT NOT NULL PRIMARY KEY, "
 			+ "user TEXT NOT NULL, "
 			+ "email TEXT, "
@@ -53,9 +66,7 @@ public class DatabaseModel {
 			+ "text TEXT NOT NULL, "
 			+ "requiresPhoto INTEGER, "
 			+ "requiresText INTEGER, "
-			+ "private INTEGER, " + "downloaded TEXT NOT NULL);"; // Added by
-																	// mike Nov
-																	// 29
+			+ "private INTEGER, " + "downloaded TEXT NOT NULL);";
 
 	private static final String MEMBERS = "CREATE TABLE members(_id INTEGER, "
 			+ "task_id INTEGER, " + "user TEXT NOT NULL,"
@@ -84,12 +95,8 @@ public class DatabaseModel {
 			"votes" };
 
 	private static final String DATABASE_NAME = "data";
-	// private static final int DATABASE_VERSION = 2;
-	// private static final int DATABASE_VERSION = 4; //Added downloaded column
-	// to Tasks table. -Mike, nov26
-	private static final int DATABASE_VERSION = 5; // Changed USER table primary
-													// key ID to string. -Mike
-													// nov30
+	
+	private static final int DATABASE_VERSION = 5;
 
 	private static final String NAME = "dbAdapter";
 

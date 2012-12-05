@@ -7,6 +7,11 @@ import tasktracker.view.CreateTaskView;
 import android.database.Cursor;
 import android.test.ActivityInstrumentationTestCase2;
 
+/**
+ * Runs tests for the DatabaseAdapter.
+ * @author Jeanine Bonot
+ *
+ */
 public class DatabaseAdapterTests extends
 		ActivityInstrumentationTestCase2<CreateTaskView> {
 
