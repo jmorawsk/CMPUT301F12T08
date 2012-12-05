@@ -23,7 +23,6 @@ import java.util.List;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 
 import android.text.Editable;
@@ -123,12 +122,12 @@ public class CreateTaskView extends Activity {
 		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
 		buttonCreate.setEnabled(false);
 
-		Context context = getApplicationContext();
-		
-		buttonMyTasks.setOnClickListener(new ActivityNagivator(context,
-				TaskListView.class));
-		buttonNotifications.setOnClickListener(new ActivityNagivator(context,
-				NotificationListView.class));
+		buttonMyTasks
+				.setOnClickListener(new StartActivityHandler<TaskListView>(
+						TaskListView.class));
+		buttonNotifications
+				.setOnClickListener(new StartActivityHandler<NotificationListView>(
+						NotificationListView.class));
 	}
 
 	/**
@@ -147,8 +146,8 @@ public class CreateTaskView extends Activity {
 		task.setTextRequirement(_text.isChecked());
 		task.setOtherMembers(_otherMembers.getText().toString());
 		task.setIsPrivate(_private.isChecked());
-		task.setIsDownloaded("Yes");
-		// task.setCreatorID(Preferences.getUserID(getBaseContext()));
+		task.setIsDownloaded("Yes"); 
+//		task.setCreatorID(Preferences.getUserID(getBaseContext()));
 
 		return task;
 	}

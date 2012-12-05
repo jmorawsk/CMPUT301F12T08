@@ -45,7 +45,6 @@ public class PhotoPicker extends Activity {
 	private ArrayList<String> imageUrls = new ArrayList<String>();
 	private ImageAdapter myAdapter = new ImageAdapter(this);
 	private GridView gridView;
-	// private DisplayImageOptions options;
 
 	public static final int PICK_PICTURE_FROM_GALLERY = 1;
 	public static final int TAKE_PICTURE = 2;
@@ -62,6 +61,7 @@ public class PhotoPicker extends Activity {
 
 		setupToolbarButtons();
 
+		// Select photo from gallery option
 		galleryPhoto.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
@@ -86,22 +86,15 @@ public class PhotoPicker extends Activity {
 
 			public void onClick(View v) {
 				intent = getIntent();
-				Bundle photoBundle = new Bundle();
-				// Bitmap[] photos = myAdapter.getPhotos();
-				// ArrayList<Bitmap> photos = myAdapter.getPhotoList();
 
 				// TODO for web
 				ArrayList<byte[]> compressed = myAdapter.getCompressedPhotos();
-				Array[] bytes = new Array[compressed.size()];
-				// photoBundle.
 				int numPhotos = compressed.size();
 				intent.putExtra("numPhotos", numPhotos);
 
-				System.out.println("PPsend" + numPhotos);
+				// System.out.println("PPsend"+numPhotos);
 				for (int i = 0; numPhotos > i; i++) {
 					byte[] photoCompression = compressed.get(i);
-					// bytes[i] = photoCompression;
-
 					intent.putExtra("photo" + i, photoCompression);
 				}
 
@@ -109,7 +102,6 @@ public class PhotoPicker extends Activity {
 				String[] pathArray = new String[imageUrls.size()];
 				imageUrls.toArray(pathArray);
 				intent.putExtra("PhotoPaths", pathArray);
-				// intent.putParcelableArrayListExtra("Photos", compressed);
 				setResult(RESULT_OK, intent);
 
 				Toast.makeText(PhotoPicker.this, "Photos Saved", 2000).show();
@@ -125,16 +117,19 @@ public class PhotoPicker extends Activity {
 		ArrayList<byte[]> byteArrays = new ArrayList<byte[]>();
 		int numPhotos = getIntent().getIntExtra("numPhotos", 0);
 
-		System.out.println("PPrec" + numPhotos);
+		// System.out.println("PPrec"+numPhotos);
 		for (int i = 0; numPhotos > i; i++) {
 			byte[] compressedPhoto = getIntent().getByteArrayExtra("photo" + i);
-			// bytes[i] = photoCompression;
 			byteArrays.add(compressedPhoto);
 		}
 		myAdapter.decompressPhotos(byteArrays);
 		gridView.setAdapter(myAdapter);
 
 	}
+
+	/*
+	 * Sets up the buttons that make up the tool bar.
+	 */
 
 	private void setupToolbarButtons() {
 		// Assign Buttons
@@ -151,6 +146,7 @@ public class PhotoPicker extends Activity {
 
 		buttonNotifications.setOnClickListener(new ActivityNagivator(context,
 				NotificationListView.class));
+
 	}
 
 	// User can select a photo from the android gallery
@@ -159,6 +155,7 @@ public class PhotoPicker extends Activity {
 		Intent intent = new Intent(Intent.ACTION_PICK,
 				android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
+		// returns the path of the photo selected from gallery
 		startActivityForResult(intent, PICK_PICTURE_FROM_GALLERY);
 
 	}
@@ -170,7 +167,7 @@ public class PhotoPicker extends Activity {
 				.getAbsolutePath() + "/tmp";
 		File folderF = new File(folder);
 
-		// if file doesn't exist create it
+		// if file doesn't exist create a file
 		if (!folderF.exists()) {
 			folderF.mkdir();
 		}
@@ -186,7 +183,7 @@ public class PhotoPicker extends Activity {
 				Intent.ACTION_MEDIA_MOUNTED,
 				Uri.parse("file://" + Environment.getExternalStorageDirectory())));
 
-		// intent has information about image
+		// intentC has information about image and is set to start the camera
 		Intent intentC = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		intentC.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
 
@@ -205,7 +202,6 @@ public class PhotoPicker extends Activity {
 
 			Cursor cursor = getContentResolver().query(data.getData(),
 					new String[] { Media.DATA }, null, null, null);
-
 			if (!cursor.moveToFirst())
 				return;
 

@@ -21,7 +21,6 @@ package tasktracker.view;
 //import android.R;
 import android.os.Bundle;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.util.Log;
@@ -159,11 +158,25 @@ public class NotificationListView extends Activity {
 		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
 		buttonNotifications.setEnabled(false);
 
-		Context context = getApplicationContext();
-		buttonMyTasks.setOnClickListener(new ActivityNagivator(context,
-				TaskListView.class));
+		buttonMyTasks.setOnClickListener(new View.OnClickListener() {
 
-		buttonCreate.setOnClickListener(new ActivityNagivator(context,
-				CreateTaskView.class));
+			public void onClick(View v) {
+
+				Intent intent = new Intent(getApplicationContext(),
+						TaskListView.class);
+				startActivity(intent);
+
+			}
+		});
+
+		buttonCreate.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View v) {
+
+				Intent intent = new Intent(getApplicationContext(),
+						CreateTaskView.class);
+				startActivity(intent);
+			}
+		});
 	}
 }

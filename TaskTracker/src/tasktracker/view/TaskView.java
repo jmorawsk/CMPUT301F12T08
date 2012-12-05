@@ -121,17 +121,7 @@ public class TaskView extends Activity {
 
 			public void onClick(View v) {
 
-				ArrayList<byte[]> byteArrays = task.getPhotos();
-				int numPhotos = byteArrays.size();
-				
-				Intent intent = new Intent(getApplicationContext(), PhotoPicker.class);
-				intent.putExtra("sampleData", 0);
-				intent.putExtra("numPhotos", numPhotos);
-
-				for (int i = 0; i < numPhotos; i++) {
-					intent.putExtra("photo" + i, byteArrays.get(i));
-				}
-				startActivityForResult(intent, 500);
+				getImages();
 			}
 
 		});
@@ -186,6 +176,25 @@ public class TaskView extends Activity {
 		}
 	}
 
+	// Receives the images from photo picker
+	public void getImages() {
+
+		Intent intent = new Intent(this, PhotoPicker.class);
+		intent.putExtra("sampleData", 0);
+		ArrayList<byte[]> byteArrays = new ArrayList<byte[]>();
+		byteArrays.addAll(task.getPhotos());
+		int numPhotos = byteArrays.size();
+		System.out.println("TVsend" + numPhotos);
+		intent.putExtra("numPhotos", numPhotos);
+
+		for (int i = 0; numPhotos > i; i++) {
+			intent.putExtra("photo" + i, byteArrays.get(i));
+			// bytes[i] = photoCompression;
+		}
+		startActivityForResult(intent, 500);
+
+	}
+
 	private void setVoteInfo() {
 
 		_cursor = _dbHelper.countAllVotes(_taskID);
@@ -213,15 +222,29 @@ public class TaskView extends Activity {
 		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
 		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
 
-		Context context = getApplicationContext();
-		buttonMyTasks.setOnClickListener(new ActivityNagivator(context,
-				TaskListView.class));
+		buttonMyTasks.setOnClickListener(new OnClickListener() {
 
-		buttonCreate.setOnClickListener(new ActivityNagivator(context,
-				CreateTaskView.class));
+			public void onClick(View v) {
 
-		buttonNotifications.setOnClickListener(new ActivityNagivator(context,
-				NotificationListView.class));
+				startActivity(TaskListView.class);
+			}
+		});
+
+		buttonCreate.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+
+				startActivity(CreateTaskView.class);
+			}
+		});
+
+		buttonNotifications.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+
+				startActivity(NotificationListView.class);
+			}
+		});
 	}
 
 	/**
