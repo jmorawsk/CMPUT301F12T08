@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.MediaStore.Images.Media;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -104,8 +105,6 @@ public class PhotoPicker extends Activity {
 					intent.putExtra("photo" + i, photoCompression);
 				}
 
-				// Toast.makeText(PhotoPicker.this, "Photo", 2000).show();
-
 				// photoBundle.putByteArray("compressed", photoCompression);
 				String[] pathArray = new String[imageUrls.size()];
 				imageUrls.toArray(pathArray);
@@ -182,13 +181,12 @@ public class PhotoPicker extends Activity {
 
 		// if file doesn't exist create it
 		if (!folderF.exists()) {
-
 			folderF.mkdir();
 		}
 
 		// save file with the current time
-		String imageFilePath = folder + "/"
-				+ String.valueOf(System.currentTimeMillis() + ".jpg");
+		String imageFilePath = folder + "/" + System.currentTimeMillis()
+				+ ".jpg";
 		File imageFile = new File(imageFilePath);
 		imageFileUri = Uri.fromFile(imageFile);
 
@@ -209,46 +207,35 @@ public class PhotoPicker extends Activity {
 
 		super.onActivityResult(requestCode, resultCode, data);
 
-		switch (requestCode) {
-		case PICK_PICTURE_FROM_GALLERY: {
-			if (resultCode == RESULT_OK) {
-				Uri selectedImage = data.getData();
-				String[] filePathColumn = { MediaStore.Images.Media.DATA };
+		if (resultCode != RESULT_OK)
+			return;
 
-				Cursor cursor = getContentResolver().query(selectedImage,
-						filePathColumn, null, null, null);
-				cursor.moveToFirst();
+		if (requestCode == PICK_PICTURE_FROM_GALLERY) {
 
-				int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-				String filePath = cursor.getString(columnIndex);
-				cursor.close();
+			Cursor cursor = getContentResolver().query(data.getData(),
+					new String[] { Media.DATA }, null, null, null);
 
-				Bitmap theSelectedImage = BitmapFactory.decodeFile(filePath);
+			if (!cursor.moveToFirst())
+				return;
 
-				Toast.makeText(PhotoPicker.this, "photo selected", 2000).show();
-				myAdapter.addPhoto(theSelectedImage);
+			String filePath = cursor.getString(cursor
+					.getColumnIndex(Media.DATA));
+			cursor.close();
 
-				imageUrls.add(filePath);
-				gridView.setAdapter(myAdapter);
-			}
-			break;
+			this.fillData(filePath);
 
+		} else if (requestCode == TAKE_PICTURE) {
+			String path = imageFileUri.toString();
+			this.fillData(path.replace("file://", ""));
 		}
 
-		case TAKE_PICTURE: {
+	}
 
-			if (resultCode == RESULT_OK) {
+	private void fillData(String filePath) {
 
-				String path = imageFileUri.toString();
-				path = path.replace("file://", "");
-				Bitmap newPhoto = BitmapFactory.decodeFile(path);
-				myAdapter.addPhoto(newPhoto);
-				imageUrls.add(path);
-				gridView.setAdapter(myAdapter);
-			}
-		}
-			break;
-		}
+		this.imageUrls.add(filePath);
+		this.myAdapter.addPhoto(BitmapFactory.decodeFile(filePath));
+		this.gridView.setAdapter(myAdapter);
 	}
 
 	@Override
