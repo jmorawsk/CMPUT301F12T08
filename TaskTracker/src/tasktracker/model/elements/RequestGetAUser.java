@@ -90,10 +90,8 @@ public class RequestGetAUser implements NetworkRequestModel {
 			boolean foundUser = false;
 			String id = "", aFoundName;
 			int pos = 0;
-			int i = 0;
 			// Search based on userName for userID
 			while (pos < line.length()) {
-				i++;
 				pos = line.indexOf("{\"summary\":\"", pos);
 				// pos = line.indexOf("s", pos);
 				if (pos == -1)
