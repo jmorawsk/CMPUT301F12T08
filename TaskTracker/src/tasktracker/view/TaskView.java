@@ -327,7 +327,7 @@ public class TaskView extends Activity {
 			TextView fulfiller = (TextView) view.findViewById(R.id.item_title);
 			TextView text = (TextView) view.findViewById(R.id.item_text);
 			TextView date = (TextView) view.findViewById(R.id.item_top_right);
-			//TODO send to web
+			// TODO send to web
 			text.getText().toString();
 			fulfiller.getText().toString();
 			date.getText().toString();
@@ -403,8 +403,7 @@ public class TaskView extends Activity {
 		Intent i = new Intent(Intent.ACTION_SEND_MULTIPLE);
 		i.setType("text/plain");
 		i.putExtra(Intent.EXTRA_EMAIL, new String[] { email });
-		i.putExtra(Intent.EXTRA_SUBJECT,
-				"TaskTracker : " + message);
+		i.putExtra(Intent.EXTRA_SUBJECT, "TaskTracker : " + message);
 		i.putExtra(Intent.EXTRA_TEXT, textFulfillment);
 
 		ArrayList<Uri> uris = new ArrayList<Uri>();
@@ -433,16 +432,11 @@ public class TaskView extends Activity {
 
 		if (_requiresPhoto
 				&& (_photoFilePaths == null || _photoFilePaths.length == 0)) {
-			// ToastCreator
-			// .showLongToast(this,
-			// "You must add a photo before marking this task as fulfilled.");
 			return false;
 
 		}
 
 		if (_requiresText && !_validTextFulfillment) {
-			// ToastCreator.showLongToast(this,
-			// "You must supply some text before marking this task as fulfilled");
 			return false;
 		}
 
@@ -461,6 +455,10 @@ public class TaskView extends Activity {
 		startActivity(intent);
 	}
 
+	/**
+	 * A text watch that will check if the user has input text into the edit
+	 * text field, then check to see if the fulfillment button can be enabled.
+	 */
 	class TextFulfillmentSetup implements TextWatcher {
 
 		public void afterTextChanged(Editable s) {
@@ -559,16 +557,10 @@ public class TaskView extends Activity {
 
 				Log.d("Task Fulfillment",
 						"fulfillment id: " + Long.toString(id));
-				// if (!_user.equals(_taskCreator)) {
 				String message = Notification.getMessage(_user, _taskName,
 						Notification.Type.FulfillmentReport);
-				// sendFulfillmentNotification(message);
 				sendFulfillmentEmail(message, textFulfillment);
-				// }
-
-//				ToastCreator.showLongToast(TaskView.this, "\"" + _taskName
-//						+ "\" was fulfilled!");
-				// TODO: Does task need to be updated on web?
+				
 				RequestModifyTask updateTask = new RequestModifyTask(
 						getBaseContext(), task);
 				finish();

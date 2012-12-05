@@ -18,7 +18,6 @@ package tasktracker.view;
  * specific language governing permissions and limitations under the License.
  */
 
-//import android.R;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -28,8 +27,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-
-import java.util.*;
 
 import tasktracker.model.Preferences;
 import tasktracker.model.elements.RequestGetAllNotifications;
@@ -60,10 +57,6 @@ public class NotificationListView extends Activity {
 		_dbHelper = new DatabaseAdapter(this);
 		_user = Preferences.getUsername(this);
 		Log.d("Notifications", "user = " + _user);
-
-		// Assign ListView and its item click listener
-		// this.notificationsList.setOnItemClickListener(new
-		// handleList_Click());
 
 		setupToolbarButtons();
 
@@ -115,6 +108,9 @@ public class NotificationListView extends Activity {
 		}
 	}
 
+	/**
+	 * Navigate to the task the corresponds to the selected notification.
+	 */
 	private void setupNotificationList() {
 
 		_notificationsList = (ListView) findViewById(R.id.notificationsList);
@@ -135,6 +131,9 @@ public class NotificationListView extends Activity {
 		});
 	}
 
+	/**
+	 * Fill the list view with notifications from the local database.
+	 */
 	private void fillData() {
 
 		_cursor = _dbHelper.fetchUserNotifications(_user);
@@ -151,6 +150,10 @@ public class NotificationListView extends Activity {
 
 	}
 
+	/**
+	 * Sets up the toolbar buttons so that they navigate to their corresponding
+	 * activities.
+	 */
 	private void setupToolbarButtons() {
 
 		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);

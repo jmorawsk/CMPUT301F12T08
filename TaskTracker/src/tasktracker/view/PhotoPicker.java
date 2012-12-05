@@ -127,10 +127,9 @@ public class PhotoPicker extends Activity {
 
 	}
 
-	/*
+	/**
 	 * Sets up the buttons that make up the tool bar.
 	 */
-
 	private void setupToolbarButtons() {
 		// Assign Buttons
 		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
@@ -149,7 +148,9 @@ public class PhotoPicker extends Activity {
 
 	}
 
-	// User can select a photo from the android gallery
+	/**
+	 * Start an activity that selects a photo from the gallery.
+	 */
 	public void selectPhoto() {
 
 		Intent intent = new Intent(Intent.ACTION_PICK,
@@ -160,7 +161,10 @@ public class PhotoPicker extends Activity {
 
 	}
 
-	// TODO: Should start the camera class.
+	/**
+	 * Create a file where the camera will save the picture and start the
+	 * camera.
+	 */
 	public void takeAPhoto() {
 
 		String folder = Environment.getExternalStorageDirectory()
@@ -191,6 +195,10 @@ public class PhotoPicker extends Activity {
 
 	}
 
+	/**
+	 * Fill the grid view with the picture obtained from the gallery or from the
+	 * camera.
+	 */
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 		super.onActivityResult(requestCode, resultCode, data);
@@ -218,6 +226,12 @@ public class PhotoPicker extends Activity {
 
 	}
 
+	/**
+	 * Add the file path to the list of URLs and add the corresponding photo to
+	 * the grid view.
+	 * 
+	 * @param filePath
+	 */
 	private void fillData(String filePath) {
 
 		this.imageUrls.add(filePath);

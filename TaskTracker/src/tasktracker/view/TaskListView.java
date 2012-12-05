@@ -97,7 +97,11 @@ public class TaskListView extends Activity {
 		_cursor.close();
 	}
 
-	private void setupDebugFeatures() {
+	/**
+	 * Code for the hidden debug button that allows for the programmer to easily
+	 * refresh their local database.
+	 */
+	void setupDebugFeatures() {
 		Button clearSQL = (Button) findViewById(R.id.button_clearSQL);
 		clearSQL.setOnClickListener(new View.OnClickListener() {
 
@@ -108,41 +112,46 @@ public class TaskListView extends Activity {
 
 		});
 	}
-	
 
+	/**
+	 * Set up toolbar buttons so that they navigate to their corresponding
+	 * activities.
+	 */
 	private void setupToolbarButtons() {
 		filterText = (EditText) findViewById(R.id.search_box);
 		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
 		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
 		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
-		
-		buttonMyTasks.setOnClickListener(new OnClickListener(){
+
+		buttonMyTasks.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
 				onStart();
 			}
-			
+
 		});
-		
-		// Cannot call ActivityNavigator because we need to close the database adapter first.
-		buttonCreate.setOnClickListener(new OnClickListener(){
+
+		// Cannot call ActivityNavigator because we need to close the database
+		// adapter first.
+		buttonCreate.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				Intent intent = new Intent(getApplicationContext(), CreateTaskView.class);
+				Intent intent = new Intent(getApplicationContext(),
+						CreateTaskView.class);
 				startActivity(intent);
 			}
-			
+
 		});
-		
+
 		buttonNotifications.setOnClickListener(new ActivityNagivator(
 				getApplicationContext(), NotificationListView.class));
-		
+
 		Button buttonSearch = (Button) findViewById(R.id.search_tasks);
-		
+
 		buttonSearch.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
-				
+
 				fillData(_keywords);
 			}
 		});
@@ -180,11 +189,19 @@ public class TaskListView extends Activity {
 				InputPopup.Type.username);
 	}
 
+	/**
+	 * Set up the handlers of the edit text (for task filtering) and the on item
+	 * click listeners.
+	 */
 	private void setupTaskList() {
 		// Assign ListView and its on item click listener.
 		taskListView = (ListView) findViewById(R.id.taskList);
+
 		taskListView.setOnItemClickListener(new OnItemClickListener() {
 
+			/**
+			 * Navigate to the TaskView activity with the task ID
+			 */
 			public void onItemClick(AdapterView<?> a, View v, int i, long id) {
 				TextView taskID = (TextView) ((LinearLayout) v)
 						.findViewById(R.id.id);
@@ -198,29 +215,37 @@ public class TaskListView extends Activity {
 
 		filterText = (EditText) findViewById(R.id.search_box);
 
-		filterText.setOnKeyListener(new OnKeyListener(){
+		filterText.setOnKeyListener(new OnKeyListener() {
 
+			/**
+			 * Reset the task list view when the user has hit ENTER
+			 */
 			public boolean onKey(View view, int keyCode, KeyEvent event) {
-		        // If the event is a key-down event on the "enter" button
-		        if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-		            (keyCode == KeyEvent.KEYCODE_ENTER)) {
-		          // Perform action on key press
-		          fillData(_keywords);
-		          filterText.requestFocus();
-		          return true;
-		        }
-		        return false;
+				// If the event is a key-down event on the "enter" button
+				if ((event.getAction() == KeyEvent.ACTION_DOWN)
+						&& (keyCode == KeyEvent.KEYCODE_ENTER)) {
+					// Perform action on key press
+					fillData(_keywords);
+					filterText.requestFocus();
+					return true;
+				}
+				return false;
 			}
-			
+
 		});
-		
+
 		filterText.addTextChangedListener(new TextWatcher() {
 
+			/**
+			 * Split the text provided in the edit text view. If the edit text
+			 * is empty (or has only whitespace), the task list view will
+			 * refresh its data.
+			 */
 			public void afterTextChanged(Editable s) {
 
 				_keywords = filterText.getText().toString()
 						.split("(\\s+)?,(\\s+)?");
-				
+
 				if (_keywords[0].matches("")) {
 					_keywords = new String[0];
 					fillData(_keywords);
@@ -240,8 +265,15 @@ public class TaskListView extends Activity {
 		});
 	}
 
+	/**
+	 * Fill the task list view with tasks available to the user and with the
+	 * constraints defined by the filter words.
+	 * 
+	 * @param filterWords
+	 *            the list of words to filter the tasks the user will see
+	 */
 	private void fillData(String[] filterWords) {
-		
+
 		_cursor = _dbHelper.fetchTasksAvailableToUser(_user, filterWords);
 		startManagingCursor(_cursor);
 
@@ -259,7 +291,6 @@ public class TaskListView extends Activity {
 		taskListView.setAdapter(adapter);
 
 		stopManagingCursor(_cursor);
-
 
 	}
 }
