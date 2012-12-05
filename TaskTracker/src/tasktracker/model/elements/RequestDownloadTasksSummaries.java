@@ -1,18 +1,14 @@
 package tasktracker.model.elements;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 
 import com.google.gson.Gson;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.AccessURL;
 import tasktracker.model.NetworkRequestModel;
-import tasktracker.model.Preferences;
 
 /*
  * Creates an object to add a Task to Crowdsourcer when passed to ReadFromURL, THEN adds
@@ -22,7 +18,6 @@ import tasktracker.model.Preferences;
  */
 public class RequestDownloadTasksSummaries implements NetworkRequestModel {
 	private Context context;
-	// private User user;
 	private String requestString;
 
 	static final Gson gson = new Gson();
@@ -31,9 +26,6 @@ public class RequestDownloadTasksSummaries implements NetworkRequestModel {
 
 	public RequestDownloadTasksSummaries(Context contex) {
 		context = contex;
-		// user = use;
-		// String content = gson.toJson(user);
-		// http://crowdsourcer.softwareprocess.es/F12/CMPUT301F12T08/?action=list
 		String command = "action=" + "list";
 
 		requestString = AccessURL.turnCommandIntoURL(command);
@@ -47,7 +39,6 @@ public class RequestDownloadTasksSummaries implements NetworkRequestModel {
 	}
 
 	public String getCrowdsourcerCommand() {
-		// System.out.println("Request to network: " + requestString);
 		return requestString;
 	}
 
@@ -99,7 +90,6 @@ public class RequestDownloadTasksSummaries implements NetworkRequestModel {
 					task.setDate(date);
 					task.setPhotoRequirement(requiresPhoto);
 					task.setTextRequirement(requiresText);
-					// TODO set likes
 					task.setLikes(Integer.parseInt(likes));
 					// TODO set other members? Is this relevent for a downloaded
 					// task?
@@ -113,17 +103,8 @@ public class RequestDownloadTasksSummaries implements NetworkRequestModel {
 					Log.d("RequestDownloadTaskSummaries", "Create: " + rowId);
 					_dbHelper.close();
 				}
-				// break;
 			}
 		}
-		// Toast toast = Toast.makeText(context, "Last item found at " + pos +
-		// ", it starts with " + task.getDescription(), Toast.LENGTH_SHORT);
-		// toast.show();
-		// Toast toast = Toast.makeText(context, "Downloaded tasks from online",
-		// Toast.LENGTH_SHORT);
-		// toast.show();
-
-		// TODO refresh current page (TaskListView?)
 
 		_dbHelper.close();
 	}
@@ -157,9 +138,6 @@ public class RequestDownloadTasksSummaries implements NetworkRequestModel {
 		// crowdsourcer
 
 		// _dbHelper.createUser(username, email, password);
-		// Toast toast = Toast.makeText(context, "Downloaded task summaries",
-		// Toast.LENGTH_SHORT);
-		// toast.show();
 
 		_dbHelper.close();
 	}

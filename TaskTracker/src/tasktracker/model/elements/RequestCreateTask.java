@@ -2,8 +2,6 @@ package tasktracker.model.elements;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
@@ -11,13 +9,10 @@ import com.google.gson.Gson;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.AccessURL;
 import tasktracker.model.NetworkRequestModel;
 import tasktracker.model.Preferences;
-import tasktracker.view.CreateTaskView;
-import tasktracker.view.TaskListView;
 
 /*
  * Creates an object to add a Task to Crowdsourcer when passed to ReadFromURL, THEN adds
@@ -74,10 +69,6 @@ public class RequestCreateTask implements NetworkRequestModel {
 		Log.d("RequestCreateTask", "create: " + value);
 		_dbHelper.close();
 
-		// Toast toast = Toast.makeText(context,
-		// "Win! Task added to crowdSourcer: " + task.getName(),
-		// Toast.LENGTH_SHORT);
-		// toast.show();
 	}
 
 	private void createNotifications() {
