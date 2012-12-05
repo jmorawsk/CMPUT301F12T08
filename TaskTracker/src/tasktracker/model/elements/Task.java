@@ -34,7 +34,8 @@ import android.util.Log;
  */
 public class Task implements Serializable {
 
-	public static final String DATABASE_TABLE = "tasks"; // For SQL table
+	private TaskMembers taskMembers = new TaskMembers();
+    public static final String DATABASE_TABLE = "tasks"; // For SQL table
 	private static final long serialVersionUID = 1L;
 
 	private final String _creator;
@@ -44,7 +45,6 @@ public class Task implements Serializable {
 	private String _name;
 	private String _creationDate;
 	private String _description;
-	private List<String> _otherMembersList;
 	private boolean _requiresText;
 	private boolean _requiresPhoto;
 	private boolean _private;
@@ -93,7 +93,7 @@ public class Task implements Serializable {
 		_name = name;
 		_requiresText = requiresText;
 		_requiresPhoto = requiresPhoto;
-		_otherMembersList = new ArrayList<String>();
+		taskMembers.set_otherMembersList(new ArrayList<String>());
 		_private = false;
 		_likes = 0;
 		_photos = new ArrayList<byte[]>();
@@ -227,22 +227,11 @@ public class Task implements Serializable {
 	 */
 	public void setOtherMembers(String value) {
 
-		_otherMembersList = new ArrayList<String>();
-
-		if (value.matches(""))
-			return;
-
-		String[] others = value.split("(\\s+)?,(\\s+)?");
-
-		for (String member : others) {
-			_otherMembersList.add(member);
-		}
-
-		Collections.sort(_otherMembersList);
+		taskMembers.setOtherMembers(value);
 	}
 
 	public List<String> getOtherMembers() {
-		return _otherMembersList;
+		return taskMembers.get_otherMembersList();
 	}
 
 }
