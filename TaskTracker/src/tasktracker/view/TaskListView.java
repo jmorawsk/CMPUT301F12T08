@@ -50,15 +50,11 @@ import tasktracker.model.elements.*;
 public class TaskListView extends Activity {
 
 	private ListView taskListView;
-	private List<Task> taskList;
-	// public List<Task> webTaskList;
-	// public List<Task> oldWebTaskList;
-	// private List<String> tasks;
-	private String[] tasks = new String[0];
 	private String _user;
-	// private PreferencesManager preferences;
+
 	private String[] _keywords = new String[0];
 	private EditText filterText;
+
 	// private WebDBManager webManager;
 	private DatabaseAdapter _dbHelper;
 	private Cursor _cursor;
@@ -66,9 +62,6 @@ public class TaskListView extends Activity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// webManager = new WebDBManager();
-		// oldWebTaskList = new ArrayList<Task>();
-		// webTaskList = new ArrayList<Task>();
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_list_view);
@@ -110,7 +103,6 @@ public class TaskListView extends Activity {
 		clearSQL.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
-				System.out.println("Button click");
 				_dbHelper.resetDatabase();
 				onStart();
 			}
@@ -134,6 +126,9 @@ public class TaskListView extends Activity {
 
 		buttonCreate.setOnClickListener(new ActivityNagivator(
 				getApplicationContext(), CreateTaskView.class));
+		
+		buttonNotifications.setOnClickListener(new ActivityNagivator(
+				getApplicationContext(), NotificationListView.class));
 
 	}
 
@@ -175,20 +170,17 @@ public class TaskListView extends Activity {
 		taskListView.setOnItemClickListener(new OnItemClickListener() {
 
 			public void onItemClick(AdapterView<?> a, View v, int i, long id) {
-				Intent intent = new Intent(getApplicationContext(),
-						TaskView.class);
 				TextView taskID = (TextView) ((LinearLayout) v)
 						.findViewById(R.id.id);
-				System.out.println("Bug (Task ID passed)= "
-						+ taskID.getText().toString());
+
+				Intent intent = new Intent(getApplicationContext(),
+						TaskView.class);
 				intent.putExtra("TASK_ID", taskID.getText().toString());
 				startActivity(intent);
 			}
 		});
 
 		filterText = (EditText) findViewById(R.id.search_box);
-		Log.d("TaskListView",
-				"null filtertext = " + Boolean.toString(filterText == null));
 
 		filterText.setOnKeyListener(new OnKeyListener() {
 
