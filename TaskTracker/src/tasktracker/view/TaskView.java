@@ -121,7 +121,17 @@ public class TaskView extends Activity {
 
 			public void onClick(View v) {
 
-				getImages();
+				ArrayList<byte[]> byteArrays = task.getPhotos();
+				int numPhotos = byteArrays.size();
+				
+				Intent intent = new Intent(getApplicationContext(), PhotoPicker.class);
+				intent.putExtra("sampleData", 0);
+				intent.putExtra("numPhotos", numPhotos);
+
+				for (int i = 0; i < numPhotos; i++) {
+					intent.putExtra("photo" + i, byteArrays.get(i));
+				}
+				startActivityForResult(intent, 500);
 			}
 
 		});
@@ -174,23 +184,6 @@ public class TaskView extends Activity {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
-	}
-
-	// Receives the images from photo picker
-	public void getImages() {
-
-		ArrayList<byte[]> byteArrays = task.getPhotos();
-		int numPhotos = byteArrays.size();
-		
-		Intent intent = new Intent(this, PhotoPicker.class);
-		intent.putExtra("sampleData", 0);
-		intent.putExtra("numPhotos", numPhotos);
-
-		for (int i = 0; i < numPhotos; i++) {
-			intent.putExtra("photo" + i, byteArrays.get(i));
-		}
-		startActivityForResult(intent, 500);
-
 	}
 
 	private void setVoteInfo() {
