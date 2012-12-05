@@ -1,6 +1,6 @@
 package tasktracker.view;
 
-import java.awt.Color;
+//import java.awt.Color;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

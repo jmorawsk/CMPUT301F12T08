@@ -106,6 +106,7 @@
             android:id="@+id/saveButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/buttongreen"
             android:enabled="false"
             android:text="@string/createTask" />
     </LinearLayout>

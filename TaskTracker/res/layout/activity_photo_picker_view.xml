@@ -27,8 +27,8 @@
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:layout_above="@+id/cameraButtons"
-            android:layout_marginBottom="8dp"
             android:layout_gravity="center"
+            android:layout_marginBottom="8dp"
             android:background="@color/background"
             android:numColumns="3" >
         </GridView>
@@ -44,18 +44,21 @@
                 android:id="@+id/takeAPhoto"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
+                android:background="@drawable/buttongreen"
                 android:text="Take a Picture" />
 
             <Button
                 android:id="@+id/galleryPhoto"
                 android:layout_width="110dp"
                 android:layout_height="match_parent"
+                android:background="@drawable/buttongreen"
                 android:text="Select from Gallery" />
 
             <Button
                 android:id="@+id/saveChanges"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
+                android:background="@drawable/buttongreen"
                 android:text="Save Changes" />
         </LinearLayout>
     </RelativeLayout>
