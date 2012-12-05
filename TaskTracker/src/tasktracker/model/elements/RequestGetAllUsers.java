@@ -23,7 +23,6 @@ public class RequestGetAllUsers implements NetworkRequestModel {
 	}
 
 	public String getCrowdsourcerCommand() {
-		// System.out.println("Request to network: " + requestString);
 		return requestString;
 	}
 
