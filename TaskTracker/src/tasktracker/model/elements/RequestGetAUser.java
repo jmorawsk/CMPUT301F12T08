@@ -62,7 +62,6 @@ public class RequestGetAUser implements NetworkRequestModel {
 		// http://crowdsourcer.softwareprocess.es/F12/CMPUT301F12T08/?action=get&id=d5b6af608d1d5008887a10d2da5095779a6e257f
 		String command = "action=" + "get&id=" + userID;
 
-		// TODO using ID, search based on ID
 
 		requestString = AccessURL.turnCommandIntoURL(command);
 
@@ -76,8 +75,6 @@ public class RequestGetAUser implements NetworkRequestModel {
 		context = contex;
 		setToCurrentUser = setToCurrentUser1;
 
-		// ID not known, start by listing all of the items and searching for an
-		// ID
 		String command = "action=" + "list";
 
 		requestString = AccessURL.turnCommandIntoURL(command);
@@ -91,7 +88,6 @@ public class RequestGetAUser implements NetworkRequestModel {
 	}
 
 	public String getCrowdsourcerCommand() {
-		// System.out.println("Request to network: " + requestString);
 		return requestString;
 	}
 
@@ -101,12 +97,9 @@ public class RequestGetAUser implements NetworkRequestModel {
 			boolean foundUser = false;
 			String id = "", aFoundName;
 			int pos = 0;
-			int i = 0;
 			// Search based on userName for userID
 			while (pos < line.length()) {
-				i++;
 				pos = line.indexOf("{\"summary\":\"", pos);
-				// pos = line.indexOf("s", pos);
 				if (pos == -1)
 					break;
 
