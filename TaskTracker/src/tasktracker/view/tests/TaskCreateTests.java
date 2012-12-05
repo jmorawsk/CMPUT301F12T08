@@ -10,7 +10,7 @@ import android.widget.*;
 public class TaskCreateTests extends ActivityInstrumentationTestCase2 {
 
 	// Button Indices / Names
-	private static final String NAME_TOOLBAR_CREATE = "Create"; //
+	private static final String NAME_TOOLBAR_CREATE = "Create a Task"; //
 	// "Create a Task"
 	private static final String TASK_CREATE = "Create Task"; // "Create Task"
 	private static final int TASK_NAME = 0;
@@ -37,8 +37,9 @@ public class TaskCreateTests extends ActivityInstrumentationTestCase2 {
 	protected void setUp() throws Exception {
 
 		_solo = new Solo(getInstrumentation(), getActivity());
-		_solo.clickOnButton("Enter Debug Mode");
-		_solo.clickOnButton("Clear SQL Database");
+		_solo.enterText(0, "tracker");
+		_solo.enterText(1, "tasktracker");
+		_solo.clickOnButton(0);
 	}
 
 	public void testCreateButtonEnable() {
@@ -110,7 +111,6 @@ public class TaskCreateTests extends ActivityInstrumentationTestCase2 {
 		_solo.clickOnButton(NAME_TOOLBAR_CREATE);
 		_solo.enterText(TASK_NAME, privateTaskWithMember);
 		_solo.enterText(TASK_DESCRIPTION, "Description");
-		_solo.enterText(2, USER2);
 		_solo.clickOnCheckBox(2); // Click privacy check box
 		_solo.clickOnButton(TASK_CREATE);
 
