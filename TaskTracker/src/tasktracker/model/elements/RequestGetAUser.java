@@ -8,7 +8,7 @@ import tasktracker.model.NetworkRequestModel;
 import tasktracker.model.Preferences;
 import tasktracker.view.Login;
 
-/*
+/**
  * Creates an object to locate a user in the Crowdsourcer database via either their username
  * or userID (depending on which constructor is called), then adds that user to the local user
  * SQL table and optionally sets the current user to them.

@@ -6,7 +6,13 @@ import tasktracker.model.AccessURL;
 import tasktracker.model.NetworkRequestModel;
 import android.content.Context;
 
-
+/**
+ * Initiates request to load a webtask
+ * Incomplete - content will be too large with photos
+ * Need to compress content such that it can be sent over html
+ * @author Jason
+ *
+ */
 public class RequestModifyTask implements NetworkRequestModel {
     private Context context;
     private Task task;
@@ -19,7 +25,6 @@ public class RequestModifyTask implements NetworkRequestModel {
         context = contex;
         task = theTask;
         String content = gson.toJson(task);
-        //String content = gson.toJson(task.getPhotos());
         String command = "action=" + "update" + "&summary=" + task.getSummary()
                 + "&content=" + content.toString()
                 + "&id=" + task.getID();
