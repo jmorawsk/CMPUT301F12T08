@@ -123,9 +123,16 @@ public class TaskListView extends Activity {
 			}
 			
 		});
+		
+		// Cannot call ActivityNavigator because we need to close the database adapter first.
+		buttonCreate.setOnClickListener(new OnClickListener(){
 
-		buttonCreate.setOnClickListener(new ActivityNagivator(
-				getApplicationContext(), CreateTaskView.class));
+			public void onClick(View v) {
+				Intent intent = new Intent(getApplicationContext(), CreateTaskView.class);
+				startActivity(intent);
+			}
+			
+		});
 		
 		buttonNotifications.setOnClickListener(new ActivityNagivator(
 				getApplicationContext(), NotificationListView.class));
@@ -156,12 +163,6 @@ public class TaskListView extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		// case R.id.change_name:
-		// changeName();
-		// return true;
-		// case R.id.help:
-		// showHelp();
-		// return true;
 		case R.id.logout:
 			Intent intent = new Intent(getApplicationContext(), Login.class);
 			startActivity(intent);
