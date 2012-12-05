@@ -49,7 +49,6 @@ public class RequestGetAUser implements NetworkRequestModel {
 	private String userName = "";
 	private boolean setToCurrentUser;
 
-	// static final Gson gson = new Gson();
 	/** index of 'content' for objects in database */
 
 	public RequestGetAUser(Context contex, String userid,
@@ -59,7 +58,6 @@ public class RequestGetAUser implements NetworkRequestModel {
 		context = contex;
 		setToCurrentUser = setToCurrentUser1;
 
-		// http://crowdsourcer.softwareprocess.es/F12/CMPUT301F12T08/?action=get&id=d5b6af608d1d5008887a10d2da5095779a6e257f
 		String command = "action=" + "get&id=" + userID;
 
 
@@ -115,45 +113,28 @@ public class RequestGetAUser implements NetworkRequestModel {
 
 						// Run new search to get details for this userID and add
 						// to local DB etc
-						// id = AccessURL.getTag(",\"id\":\"", line,
-						// line.indexOf('}', pos) + 1);
 						id = AccessURL.getTag(",\"id\":\"", line, pos);
 
 						break;
-					} // end of if statement
+					}
 				}
-			} // end of while statement
+			}
 			if (foundUser) {
 
-				// (Debug toasts)
-				// Toast toast = Toast.makeText(context, "User " + userName +
-				// "found, ID = " + id +
-				// ", passing it to ID search for user info.",
-				// Toast.LENGTH_SHORT);
-				// toast.show();
 
 				System.out.println("Buggy ID=" + id);
 				RequestGetAUser getDetails = new RequestGetAUser(context, id,
 						setToCurrentUser);
 
 			} else {
-				// Toast toast = Toast.makeText(context, "ERROR: Username " +
-				// userName + " not found in online Database",
-				// Toast.LENGTH_SHORT);
-				// toast.show();
 
 				Intent intent = new Intent(context, Login.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				// context.startActivity(intent);
 				// TODO user not found! Create?
 			}
 		} else {
 			if (userID == "") {
 				// TODO report error here, no userName or userID given
-				// Toast toast = Toast.makeText(context,
-				// "ERROR: No username or ID given for crowdsourcer search.",
-				// Toast.LENGTH_SHORT);
-				// toast.show();
 				return;
 			}
 			// Get user info based on on userID
@@ -184,23 +165,9 @@ public class RequestGetAUser implements NetworkRequestModel {
 
 				// TODO Refresh the current page, probably TaskListView, as the
 				// username has changed
-
-				// Toast toast = Toast.makeText(context,
-				// "Downloaded user info: " + user.getName() +
-				// ". Added to login list.", Toast.LENGTH_SHORT);
-				// toast.show();
 			} else {
 				// User gotten but not enough info
 				// TODO error?
-				// System.out.println("Buggy ID Gotten Line=" + line);
-				// Toast toast = Toast.makeText(context,
-				// "ERROR: User found in crowdsourcer, but lacking required info: "
-				// + line, Toast.LENGTH_SHORT);
-				// //Toast toast = Toast.makeText(context,
-				// "ERROR: User entry with inadequate info: name=" + name +
-				// " email=" + email + " password=" + password,
-				// Toast.LENGTH_SHORT);
-				// toast.show();
 			}
 		}
 

@@ -55,7 +55,6 @@ public class RequestDownloadTaskContent implements NetworkRequestModel {
     }
 
     public String getCrowdsourcerCommand(){
-        //System.out.println("Request to network: " + requestString);
         return requestString;
     }
 
@@ -70,11 +69,9 @@ public class RequestDownloadTaskContent implements NetworkRequestModel {
         int pos = 0;
 
         //Get all of the Tasks from the downloaded string
-        //while(pos < line.length()){
         requiresPhoto = false;
         requiresText = false;
         pos = line.indexOf("{\"summary\":\"", pos);
-        //if (pos == -1) break;
         pos = pos + "{\"summary\":\"".length();
 
         taskName = AccessURL.getTag("<Task>", line, pos);
@@ -85,7 +82,6 @@ public class RequestDownloadTaskContent implements NetworkRequestModel {
             description = AccessURL.getTag("<Description>", line, pos);
             date = AccessURL.getTag("<Date>", line, pos);
             likes = AccessURL.getTag("<Likes>", line, pos);
-            //content = AccessURL.getTag("<Content>", line, pos);
             id = AccessURL.getTag(",\"id\":\"", line, pos);
             if ("true".equalsIgnoreCase(AccessURL.getTag("<RequiresPhoto>", line, pos)))
                 requiresPhoto = true;
@@ -105,7 +101,6 @@ public class RequestDownloadTaskContent implements NetworkRequestModel {
                 task.setDate(date);
                 task.setPhotoRequirement(requiresPhoto);
                 task.setTextRequirement(requiresText);
-                //TODO set likes
                 task.setLikes(Integer.parseInt(likes));
                 //TODO set other members? Is this relevent for a downloaded task?
                 task.setOtherMembers("");
@@ -113,19 +108,12 @@ public class RequestDownloadTaskContent implements NetworkRequestModel {
                 //Add to local SQL database
                 addNewTask(task, task.getCreator(), _dbHelper);
             }
-            //break;
 
             pos = line.indexOf("\"content\":\"", pos);
-            //if (pos == -1) break;
             pos = pos + "\"content\":\"".length();
             content = line.substring(pos);
         }
-        //}
-        //Toast toast = Toast.makeText(context, "Last item found at " + pos + ", it starts with " + task.getDescription(), Toast.LENGTH_SHORT);
-        //toast.show();
-//        Toast toast = Toast.makeText(context, "Downloaded tasks from online", Toast.LENGTH_SHORT);
-//        toast.show();
-
+        
         //TODO refresh current page (TaskListView?)
 
         _dbHelper.close();
@@ -134,14 +122,8 @@ public class RequestDownloadTaskContent implements NetworkRequestModel {
     private void addNewTask(Task task, String _user, DatabaseAdapter _dbHelper){
         // Add to SQL server
         _dbHelper.open();
-        //long taskID = _dbHelper.createTask(task);
         long rowId = _dbHelper.createTask(task);
         Log.d("RequestDownloadTaskContent", "Create: " + rowId);
-//        String message = Notification.getMessage(_user, taskName,
-//                Notification.Type.InformMembership);
-//
-//        _dbHelper.createMember(task.getID(),
-//                Preferences.getUsername(context));
 
     }
 

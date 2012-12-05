@@ -87,7 +87,6 @@ public class RequestDownloadTasksSummaries implements NetworkRequestModel {
 				description = AccessURL.getTag("<Description>", line, pos);
 				date = AccessURL.getTag("<Date>", line, pos);
 				likes = AccessURL.getTag("<Likes>", line, pos);
-				// content = AccessURL.getTag("<Content>", line, pos);
 				id = AccessURL.getTag(",\"id\":\"", line, pos);
 				if ("true".equalsIgnoreCase(AccessURL.getTag("<RequiresPhoto>",
 						line, pos)))
@@ -116,7 +115,6 @@ public class RequestDownloadTasksSummaries implements NetworkRequestModel {
 					// Add to local SQL database
 
 					_dbHelper.open();
-					// long taskID = _dbHelper.createTask(task);
 					long rowId = _dbHelper.createTask(task);
 					Log.d("RequestDownloadTaskSummaries", "Create: " + rowId);
 					_dbHelper.close();

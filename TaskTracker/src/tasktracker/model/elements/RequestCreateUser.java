@@ -58,7 +58,6 @@ public class RequestCreateUser implements NetworkRequestModel {
 	}
 	
 	public String getCrowdsourcerCommand(){
-		//System.out.println("Request to network: " + requestString);
 		return requestString;
 	}
 	
@@ -76,9 +75,6 @@ public class RequestCreateUser implements NetworkRequestModel {
 			Preferences.setPreferences(context, user.getName(), user.getEmail(), user.getPassword(), taskIDString, true);
 		}
 		_dbHelper.close();
-		
-//		Toast toast = Toast.makeText(context, "User added to crowdSourcer: " + user.getName(), Toast.LENGTH_SHORT);
-//		toast.show();
 		
 	}
 }
