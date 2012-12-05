@@ -44,43 +44,26 @@ public class Login extends Activity {
 
 		_dbHelper = new DatabaseAdapter(this);
 		
+		// Import users from the web server to the local database.
 		RequestGetAllUsers request = new RequestGetAllUsers(getBaseContext());
 		
 		setupLogin();
 		setupCreateAccount();
 	}
 
+	/**
+	 * Validate a user's login and continue to the homepage.
+	 */
 	private void setupLogin() {
 		Button login = (Button) findViewById(R.id.button_login);
 		login.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				//_dbHelper.open();
 				String username = _loginUsername.getText().toString();
 				String password = _loginPassword.getText().toString();
 
-				//TODO Compare against password when signing in
 				RequestGetAUser downloadUserAndSignIn = new RequestGetAUser(getBaseContext(), true, username);
 				Preferences.setUsername(Login.this, username, true);
-				/*	//Old code to validate password against SQL table
-				_cursor = _dbHelper.fetchUser(_loginUsername.getText()
-						.toString(), _loginPassword.getText().toString());
-
-				if (_cursor.moveToFirst()) {
-
-					String email = _cursor.getString(_cursor
-							.getColumnIndex(DatabaseAdapter.EMAIL));
-					_cursor.close();
-					_dbHelper.close();
-					setPreferences(username, email, password, id, true);
-					proceedToHomePage(username);
-
-				} else {
-					// User not found in database.
-					ToastCreator.showShortToast(Login.this,
-							"Invalid username/password combination.");
-				}
-				*/
 				proceedToHomePage(username);
 			}
 
@@ -88,6 +71,9 @@ public class Login extends Activity {
 
 	}
 
+	/**
+	 * Validate the creation of a new account and sign in.
+	 */
 	private void setupCreateAccount() {
 
 		Button create = (Button) findViewById(R.id.button_create_account);
@@ -125,10 +111,8 @@ public class Login extends Activity {
 				user.setPassword(password);
 				
 				//Add user to crowdsourcer, and then local SQL db using crowdsourcer's returned ID
-				RequestCreateUser creater = new RequestCreateUser(getBaseContext(), user, true);
+				RequestCreateUser creator = new RequestCreateUser(getBaseContext(), user, true);
 				
-				//ToastCreator.showLongToast(Login.this, "Creation successful!");
-				//setPreferences(username, email, password, true);
 				proceedToHomePage(username);
 			}
 
@@ -153,9 +137,13 @@ public class Login extends Activity {
 
 	}
 
+	/**
+	 * Navigate to the home page, TaskListView
+	 * @param user the username of the actor signing in.
+	 */
 	private void proceedToHomePage(String user) {
-//		ToastCreator.showLongToast(this, "Signing in , " + user + "...");
 
+		ToastCreator.showShortToast(getApplicationContext(), "Welcome, " + user + "!");
 		Intent intent = new Intent(getApplicationContext(), TaskListView.class);
 		finish();
 		startActivity(intent);

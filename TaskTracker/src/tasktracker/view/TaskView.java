@@ -398,7 +398,7 @@ public class TaskView extends Activity {
 		// String email = _cursor.getString(_cursor
 		// .getColumnIndexOrThrow(DatabaseAdapter.EMAIL));
 
-		String email = "cmput301f12t08@gmail.com"; // TODO remove hardcode
+		String email = "cmput301.tasktracker@gmail.com"; // TODO remove hardcode
 
 		Intent i = new Intent(Intent.ACTION_SEND_MULTIPLE);
 		i.setType("text/plain");

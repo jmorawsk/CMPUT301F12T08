@@ -1,7 +1,8 @@
-package tasktracker.controller;
+package tasktracker.controller.tests;
 
 import org.junit.*;
 
+import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.elements.Task;
 import tasktracker.view.CreateTaskView;
 import android.database.Cursor;
