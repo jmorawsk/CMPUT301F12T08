@@ -1,18 +1,14 @@
 package tasktracker.model.elements;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 
 import com.google.gson.Gson;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.AccessURL;
 import tasktracker.model.NetworkRequestModel;
-import tasktracker.model.Preferences;
 
 /*
  * Creates an object to add a Task to Crowdsourcer when passed to ReadFromURL, THEN adds

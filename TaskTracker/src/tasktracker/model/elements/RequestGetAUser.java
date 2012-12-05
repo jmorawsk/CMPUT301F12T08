@@ -1,14 +1,7 @@
 package tasktracker.model.elements;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-
-import com.google.gson.Gson;
-
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.AccessURL;
 import tasktracker.model.NetworkRequestModel;
