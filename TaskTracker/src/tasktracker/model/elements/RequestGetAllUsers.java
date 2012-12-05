@@ -6,6 +6,10 @@ import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.AccessURL;
 import tasktracker.model.NetworkRequestModel;
 
+/**
+ * Initiates request to load all users from the web
+ *
+ */
 public class RequestGetAllUsers implements NetworkRequestModel {
 	private Context context;
 	private String requestString;

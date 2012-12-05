@@ -14,7 +14,7 @@ import tasktracker.model.AccessURL;
 import tasktracker.model.NetworkRequestModel;
 import tasktracker.model.Preferences;
 
-/*
+/**
  * Creates an object to add a Task to Crowdsourcer when passed to ReadFromURL, THEN adds
  * the given task to the local SQL database with Crowdsourcer's returned ID.
  * 

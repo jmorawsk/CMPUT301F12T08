@@ -21,8 +21,6 @@ package tasktracker.model.elements;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import android.content.ContentValues;
-
 /**
  * NotificationElement class
  * 

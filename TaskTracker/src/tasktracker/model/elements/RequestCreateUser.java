@@ -8,17 +8,9 @@ import tasktracker.model.AccessURL;
 import tasktracker.model.NetworkRequestModel;
 import tasktracker.model.Preferences;
 
-/*
- * Creates an object to add a Task to Crowdsourcer when passed to ReadFromURL, THEN adds
- * the given task to the local SQL database with Crowdsourcer's returned ID.
- * 
-<<<<<<< HEAD
-=======
- * @param changeCurrentUser 	Whether to change the current user settigns/Preferences to this
- * newly created user
- * 
->>>>>>> Recommitting previous commit with ignored files (in elements folder) added.
- * Run by creating an instance.
+/**
+ * Creates a request to add a user to the webserver
+ *  
  */
 public class RequestCreateUser implements NetworkRequestModel {
 	private Context context;
