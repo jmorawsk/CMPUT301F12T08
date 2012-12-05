@@ -134,15 +134,6 @@ public class PhotoPicker extends Activity {
 		myAdapter.decompressPhotos(byteArrays);
 		gridView.setAdapter(myAdapter);
 
-		gridView.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View v,
-					int position, long id) {
-				Toast.makeText(PhotoPicker.this, "" + position,
-						Toast.LENGTH_SHORT).show();
-
-			}
-		});
-
 	}
 
 	private void setupToolbarButtons() {
