@@ -86,39 +86,6 @@ public class TaskListView extends Activity {
 		setupTaskList();
 		setupDebugFeatures();
 	}
-	
-	void createDemoTasks(){
-
-		RequestCreateTask request;
-		Task task;
-
-		task = new Task("pennycandy", "Aww! I found a tiny shoe!", "Is it yours? Let me know!");
-		request = new RequestCreateTask(getBaseContext(), task);
-		
-		task = new Task("bobby7", "Lost: cuddly teddy bear", "He protects me from the scary monsters!");
-		request = new RequestCreateTask(getBaseContext(), task);
-
-		task = new Task("go4brny", "Wait for dairy", "What is uuuupppp!");
-		request = new RequestCreateTask(getBaseContext(), task);
-
-		task = new Task("felinehothothot", "Google \'Cats\'", "Just do it.");
-		request = new RequestCreateTask(getBaseContext(), task);
-		
-		task = new Task("hun-grie", "Find a kitty cat-themed lunchbox", "Meeow!");
-		request = new RequestCreateTask(getBaseContext(), task);
-
-		task = new Task("2H1P", "Photograph Your Lunches", "I want to know what you guys eat.");
-		request = new RequestCreateTask(getBaseContext(), task);
-		
-		task = new Task("lay-z", "Someone do my homework plz.", "99 problems and I won't do one.");
-		request = new RequestCreateTask(getBaseContext(), task);
-		
-		task = new Task("litricher", "Need book suggestions", "Send me some suggestions of books to read.");
-		request = new RequestCreateTask(getBaseContext(), task);
-		
-		task = new Task("qwerty", "Buy groceries", "Broke my leg and I can't walk to the market.  Take pictures of food you're going to buy me.  Thanks");
-		request = new RequestCreateTask(getBaseContext(), task);
-	}
 
 	protected void onStart() {
 		super.onStart();
@@ -127,7 +94,6 @@ public class TaskListView extends Activity {
 		RequestDownloadTasksSummaries downloader = new RequestDownloadTasksSummaries(
 				getBaseContext());
 
-//		createDemoTasks();
 		_dbHelper.open();
 		fillData(new String[0]);
 	}
@@ -158,7 +124,6 @@ public class TaskListView extends Activity {
 		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
 		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
 		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
-//		buttonMyTasks.setEnabled(false);
 		
 		buttonMyTasks.setOnClickListener(new OnClickListener(){
 
@@ -176,15 +141,6 @@ public class TaskListView extends Activity {
 				startActivity(intent);
 			}
 		});
-
-//		buttonNotifications.setOnClickListener(new View.OnClickListener() {
-//
-//			public void onClick(View v) {
-//				Intent intent = new Intent(getApplicationContext(),
-//						NotificationListView.class);
-//				startActivity(intent);
-//			}
-//		});
 		
 		Button buttonSearch = (Button) findViewById(R.id.search_tasks);
 		
@@ -211,8 +167,6 @@ public class TaskListView extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// An Action Menu or Help menu item was selected
-		// By Mike
 		switch (item.getItemId()) {
 		// case R.id.change_name:
 		// changeName();
@@ -285,9 +239,6 @@ public class TaskListView extends Activity {
 					_keywords = new String[0];
 					fillData(_keywords);
 				}
-				//Log.d("TaskListView", filterText.getText().toString());
-
-				//fillData(keywords);
 			}
 
 			public void beforeTextChanged(CharSequence s, int start, int count,
@@ -318,19 +269,6 @@ public class TaskListView extends Activity {
 
 		adapter = new SimpleCursorAdapter(this, R.layout.list_item, _cursor,
 				from, to);
-		// adapter.getFilter().filter('p');
-		// adapter.setStringConversionColumn(_cursor.getColumnIndex(DatabaseAdapter.TASK));
-		// adapter.setFilterQueryProvider(new FilterQueryProvider() {
-		//
-		// public Cursor runQuery(CharSequence constraint) {
-		// String partialItemName = null;
-		// if (constraint != null) {
-		// partialItemName = constraint.toString();
-		// }
-		// _dbHelper.
-		// return groceryDb.suggestItemCompletions(partialItemName);
-		// }
-		// });
 
 		taskListView.setAdapter(adapter);
 
@@ -338,24 +276,4 @@ public class TaskListView extends Activity {
 
 
 	}
-
-	// private void filterTasks(String filterText){
-	// taskListView.setFilterText("photo");
-	// }
-
-//	private TextWatcher filterTextWatcher = new TextWatcher() {
-//
-//		public void afterTextChanged(Editable s) {
-//		}
-//
-//		public void beforeTextChanged(CharSequence s, int start, int count,
-//				int after) {
-//		}
-//
-//		public void onTextChanged(CharSequence s, int start, int before,
-//				int count) {
-//			//adapter.getFilter().filter(s);
-//		}
-//
-//	};
 }

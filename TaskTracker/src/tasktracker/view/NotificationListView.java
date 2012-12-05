@@ -66,8 +66,9 @@ public class NotificationListView extends Activity {
 		// handleList_Click());
 
 		setupToolbarButtons();
-		
-		RequestGetAllNotifications notifications = new RequestGetAllNotifications(this);
+
+		RequestGetAllNotifications notifications = new RequestGetAllNotifications(
+				this);
 
 	}
 
@@ -89,7 +90,7 @@ public class NotificationListView extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		
+
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.account_menu, menu);
 
@@ -110,7 +111,6 @@ public class NotificationListView extends Activity {
 			startActivity(intent);
 			return true;
 		default:
-			ToastCreator.showShortToast(this, "Not Yet Implemented");
 			return super.onOptionsItemSelected(item);
 		}
 	}
@@ -178,36 +178,5 @@ public class NotificationListView extends Activity {
 				startActivity(intent);
 			}
 		});
-	}
-
-	/**
-	 * A handler for the ListView. Shows a popup menu for a given notification.
-	 */
-	class handleList_Click implements OnItemClickListener {
-
-		public void onItemClick(AdapterView<?> myAdapter, View myView,
-				int myItemInt, long mylng) {
-
-			// TODO Auto-generated method stub
-			showItemMenu(myView, myItemInt);
-		}
-
-		/**
-		 * Displays the menu for a notification.
-		 * 
-		 * @param view
-		 *            The selected notification item.
-		 * @param index
-		 *            The index of the notification in the ListView.
-		 */
-		private void showItemMenu(View view, final int index) {
-
-			PopupMenu menu = new PopupMenu(NotificationListView.this, view);
-			// menu.getMenuInflater().inflate(R.menu.popup, menu.getMenu());
-
-			// TODO: Create menu content, set OnMenuItemClickListener, update
-			// notifications upon deletion
-		}
-
 	}
 }

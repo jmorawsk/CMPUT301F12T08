@@ -74,7 +74,6 @@ public class PhotoPicker extends Activity {
 		OnClickListener takephotoListener = new OnClickListener(){
 
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				takeAPhoto();
 			}
 

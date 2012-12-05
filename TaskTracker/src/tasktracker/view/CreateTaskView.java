@@ -67,8 +67,6 @@ public class CreateTaskView extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_task_view);
 
-		// Initialize our webManager
-		// _webManager = new WebDBManager();
 		_user = Preferences.getUsername(this);
 
 		// Assign EditText fields
@@ -148,8 +146,7 @@ public class CreateTaskView extends Activity {
 		task.setTextRequirement(_text.isChecked());
 		task.setOtherMembers(_otherMembers.getText().toString());
 		task.setIsPrivate(_private.isChecked());
-		task.setIsDownloaded("Yes"); // Since it was created on this phone, it's
-										// already in the SQL table
+		task.setIsDownloaded("Yes"); 
 //		task.setCreatorID(Preferences.getUserID(getBaseContext()));
 
 		return task;
@@ -177,22 +174,11 @@ public class CreateTaskView extends Activity {
 
 			Task task = createTask();
 
-			// Mikes new system nov30
 			RequestCreateTask createTask = new RequestCreateTask(
 					getBaseContext(), task);
 			// ToastCreator.showLongToast(CreateTaskView.this, "Task created!");
 			finish();
 			startActivity(TaskListView.class);
-
-			// Mikes experiments nov26
-			String[] msg;
-			// msg = _webManager.insertTask(task);
-			// ReadFromURL myReadFromURL = new ReadFromURL();
-			// myReadFromURL.execute("http://crowdsourcer.softwareprocess.es/F12/CMPUT301F12T08/?action=post&summary=%3CTask%3ETest3FromMikenov28&content={%22_creationDate%22:%22Nov%2028,%202012%20|%2022:38%22,%22_creator%22:%22mike%22,%22_otherMembersList%22:[],%22_description%22:%22test%20from%20mike%22,%22_name%22:%22nov28%22,%22_creatorID%22:0,%22_private%22:false,%22_requiresPhoto%22:false,%22_requiresText%22:true}&description=nov28");
-			// ToastCreator.showLongToast(CreateTaskView.this,
-			// "Task created! DB summary: "+msg[0]);
-			// ToastCreator.showLongToast(CreateTaskView.this,
-			// "Task created! DB summary: n/a");
 
 		}
 	}

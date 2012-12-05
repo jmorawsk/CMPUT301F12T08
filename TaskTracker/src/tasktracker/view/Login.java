@@ -44,14 +44,6 @@ public class Login extends Activity {
 
 		_dbHelper = new DatabaseAdapter(this);
 		
-		// TODO Delete before release
-		_dbHelper.open();
-		_dbHelper.createUser("Debugger", "cmput301f12t08@gmail.com", "");
-		_dbHelper.createUser("jbonot", "cmput301.tasktracker@gmail.com", "secretpassword"); //Aw that's cheating! -Mike
-		_dbHelper.createUser("tacker", "cmput301.tasktracke@gmail.com", "tasktracker");
-		_dbHelper.close();
-		// End to-do
-		
 		RequestGetAllUsers request = new RequestGetAllUsers(getBaseContext());
 		
 		setupLogin();
@@ -142,21 +134,11 @@ public class Login extends Activity {
 							"Your passwords do not match.");
 					return;
 				}
-
-				/*	//This is now being done in module ReadFromURL
-				_dbHelper.open();
-				_dbHelper.createUser(username, email, password);
-				_dbHelper.close();
-				*/
 				
 				User user = new User();
 				user.setEmail(email);
 				user.setName(username);
 				user.setPassword(password);
-				
-				//WebDBManager _webManager = new WebDBManager();
-				//Add this user to crowdsourcer database
-				//_webManager.insertUser(user, getBaseContext());
 				
 				//Add user to crowdsourcer, and then local SQL db using crowdsourcer's returned ID
 				RequestCreateUser creater = new RequestCreateUser(getBaseContext(), user, true);
