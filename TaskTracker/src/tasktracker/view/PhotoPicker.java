@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import tasktracker.model.Preferences;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -144,26 +145,16 @@ public class PhotoPicker extends Activity {
 		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
 		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
 
-		buttonMyTasks.setOnClickListener(new OnClickListener() {
+		Context context = getApplicationContext();
+		buttonMyTasks.setOnClickListener(new ActivityNagivator(context,
+				TaskListView.class));
+		
+		buttonCreate.setOnClickListener(new ActivityNagivator(context,
+				CreateTaskView.class));
 
-			public void onClick(View v) {
-				startActivity(TaskListView.class);
-			}
-		});
+		buttonNotifications.setOnClickListener(new ActivityNagivator(context,
+				NotificationListView.class));
 
-		buttonCreate.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View v) {
-				startActivity(CreateTaskView.class);
-			}
-		});
-
-		buttonNotifications.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View v) {
-				startActivity(NotificationListView.class);
-			}
-		});
 	}
 
 	private void startActivity(Class<?> destination) {
