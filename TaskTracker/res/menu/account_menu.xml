@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/Account_menu"
+        android:showAsAction="ifRoom"
+        android:title="@string/Account">
+
+        <!-- "file" submenu -->
+        <menu>
+            <item
+                android:id="@+id/change_name"
+                android:title="@string/change_name"/>
+            <item
+                android:id="@+id/change_password"
+                android:title="@string/change_password"/>
+            <item
+                android:id="@+id/change_email"
+                android:title="@string/change_email"/>
+            <item
+                android:id="@+id/logout"
+                android:title="@string/logout"/>
+        </menu>
+    </item>
+    <!--
+    <item
+        android:id="@+id/help"
+        android:title="@string/help"/>
+    -->
+
+</menu>
