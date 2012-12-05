@@ -1,15 +1,10 @@
 package tasktracker.model.elements;
 
-import java.util.List;
-
 import com.google.gson.Gson;
 
-import tasktracker.controller.DatabaseAdapter;
 import tasktracker.model.AccessURL;
 import tasktracker.model.NetworkRequestModel;
-import tasktracker.model.Preferences;
 import android.content.Context;
-import android.widget.Toast;
 
 
 public class RequestModifyTask implements NetworkRequestModel {
