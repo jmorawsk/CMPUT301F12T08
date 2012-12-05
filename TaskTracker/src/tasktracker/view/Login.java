@@ -48,22 +48,6 @@ public class Login extends Activity {
 		
 		setupLogin();
 		setupCreateAccount();
-		setupDebugStuff();
-	}
-
-	/**
-	 * Skip database checks and use app with username "Debugger"
-	 */
-	void setupDebugStuff() {
-		Button debug = (Button) findViewById(R.id.button_debug);
-		debug.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View v) {
-				Preferences.setPreferences(getBaseContext(), "Debugger", "cmput301f12t08@gmail.com", "", "DEBUGGER ID", true);
-				proceedToHomePage("Debugger");
-			}
-
-		});
 	}
 
 	private void setupLogin() {
@@ -177,12 +161,7 @@ public class Login extends Activity {
 		startActivity(intent);
 	}
 
-	/**
-	 * from
-	 * http://stackoverflow.com/questions/1819142/how-should-i-validate-an-e
-	 * -mail-address-on-android
-	 */
-	public final static boolean isValidEmail(CharSequence target) {
+	private final static boolean isValidEmail(CharSequence target) {
 		if (target == null) {
 			return false;
 		} else {
