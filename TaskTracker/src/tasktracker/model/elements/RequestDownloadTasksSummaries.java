@@ -38,8 +38,10 @@ public class RequestDownloadTasksSummaries implements NetworkRequestModel {
 
 	static final Gson gson = new Gson();
 
-	/** index of 'content' for objects in database */
-
+	/**
+	 * Constructor - use to create this request from the current context
+	 * @param contex - the current context
+	 */
 	public RequestDownloadTasksSummaries(Context contex) {
 		context = contex;
 		String command = "action=" + "list";
