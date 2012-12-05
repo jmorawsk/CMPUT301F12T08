@@ -23,6 +23,7 @@ public class ActivityNagivator implements OnClickListener {
 
 	public void onClick(View v) {
 		Intent intent = new Intent(this.applicationContext, this.destination);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		applicationContext.startActivity(intent);
 	}
 	

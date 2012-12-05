@@ -222,29 +222,15 @@ public class TaskView extends Activity {
 		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
 		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
 
-		buttonMyTasks.setOnClickListener(new OnClickListener() {
+		Context context = getApplicationContext();
+		buttonMyTasks.setOnClickListener(new ActivityNagivator(context,
+				TaskListView.class));
 
-			public void onClick(View v) {
+		buttonCreate.setOnClickListener(new ActivityNagivator(context,
+				CreateTaskView.class));
 
-				startActivity(TaskListView.class);
-			}
-		});
-
-		buttonCreate.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View v) {
-
-				startActivity(CreateTaskView.class);
-			}
-		});
-
-		buttonNotifications.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View v) {
-
-				startActivity(NotificationListView.class);
-			}
-		});
+		buttonNotifications.setOnClickListener(new ActivityNagivator(context,
+				NotificationListView.class));
 	}
 
 	/**

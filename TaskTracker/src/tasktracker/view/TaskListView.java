@@ -23,6 +23,7 @@ import java.util.*;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.text.Editable;
@@ -116,41 +117,24 @@ public class TaskListView extends Activity {
 
 		});
 	}
-	
 
 	private void setupToolbarButtons() {
 		filterText = (EditText) findViewById(R.id.search_box);
-		//filterText.addTextChangedListener(filterTextWatcher);
 		Button buttonMyTasks = (Button) findViewById(R.id.buttonMyTasks);
 		Button buttonCreate = (Button) findViewById(R.id.buttonCreateTask);
 		Button buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
-		
-		buttonMyTasks.setOnClickListener(new OnClickListener(){
+
+		buttonMyTasks.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
 				onStart();
 			}
-			
+
 		});
 
-		buttonCreate.setOnClickListener(new View.OnClickListener() {
+		buttonCreate.setOnClickListener(new ActivityNagivator(
+				getApplicationContext(), CreateTaskView.class));
 
-			public void onClick(View v) {
-				Intent intent = new Intent(getApplicationContext(),
-						CreateTaskView.class);
-				startActivity(intent);
-			}
-		});
-		
-		Button buttonSearch = (Button) findViewById(R.id.search_tasks);
-		
-		buttonSearch.setOnClickListener(new View.OnClickListener() {
-
-			public void onClick(View v) {
-				
-				fillData(_keywords);
-			}
-		});
 	}
 
 	@Override
@@ -168,12 +152,6 @@ public class TaskListView extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		// case R.id.change_name:
-		// changeName();
-		// return true;
-		// case R.id.help:
-		// showHelp();
-		// return true;
 		case R.id.logout:
 			Intent intent = new Intent(getApplicationContext(), Login.class);
 			startActivity(intent);
@@ -212,29 +190,31 @@ public class TaskListView extends Activity {
 		Log.d("TaskListView",
 				"null filtertext = " + Boolean.toString(filterText == null));
 
-		filterText.setOnKeyListener(new OnKeyListener(){
+		filterText.setOnKeyListener(new OnKeyListener() {
 
 			public boolean onKey(View view, int keyCode, KeyEvent event) {
-		        // If the event is a key-down event on the "enter" button
-		        if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-		            (keyCode == KeyEvent.KEYCODE_ENTER)) {
-		          // Perform action on key press
-		          fillData(_keywords);
-		          filterText.requestFocus();
-		          return true;
-		        }
-		        return false;
+
+				if ((event.getAction() == KeyEvent.ACTION_DOWN)
+						&& (keyCode == KeyEvent.KEYCODE_ENTER)) {
+
+					// Perform search based on keywords found in filter text
+					// field
+					fillData(_keywords);
+					filterText.requestFocus();
+					return true;
+				}
+				return false;
 			}
-			
+
 		});
-		
+
 		filterText.addTextChangedListener(new TextWatcher() {
 
 			public void afterTextChanged(Editable s) {
 
 				_keywords = filterText.getText().toString()
 						.split("(\\s+)?,(\\s+)?");
-				
+
 				if (_keywords[0].matches("")) {
 					_keywords = new String[0];
 					fillData(_keywords);
@@ -255,7 +235,7 @@ public class TaskListView extends Activity {
 	}
 
 	private void fillData(String[] filterWords) {
-		
+
 		_cursor = _dbHelper.fetchTasksAvailableToUser(_user, filterWords);
 		startManagingCursor(_cursor);
 
@@ -273,7 +253,6 @@ public class TaskListView extends Activity {
 		taskListView.setAdapter(adapter);
 
 		stopManagingCursor(_cursor);
-
 
 	}
 }
